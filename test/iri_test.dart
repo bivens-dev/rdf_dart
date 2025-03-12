@@ -98,31 +98,31 @@ void main() {
     });
     group('Equality', () {
       test('equal IRIs', () {
-        IRI iri1 = IRI("http://example.com");
-        IRI iri2 = IRI("http://example.com");
+        final iri1 = IRI('http://example.com');
+        final iri2 = IRI('http://example.com');
         expect(iri1 == iri2, true);
       });
       test('different IRIs', () {
-        IRI iri1 = IRI("http://example.com");
-        IRI iri2 = IRI("https://example.com");
+        final iri1 = IRI('http://example.com');
+        final iri2 = IRI('https://example.com');
         expect(iri1 == iri2, false);
       });
     });
     group('HashCode', () {
       test('equal IRIs', () {
-        IRI iri1 = IRI("http://example.com");
-        IRI iri2 = IRI("http://example.com");
+        final iri1 = IRI('http://example.com');
+        final iri2 = IRI('http://example.com');
         expect(iri1.hashCode == iri2.hashCode, true);
       });
       test('different IRIs', () {
-        IRI iri1 = IRI("http://example.com");
-        IRI iri2 = IRI("https://example.com");
+        final iri1 = IRI('http://example.com');
+        final iri2 = IRI('https://example.com');
         expect(iri1.hashCode == iri2.hashCode, false);
       });
     });
     group('TermType', () {
       test('term type is IRI', () {
-        IRI iri = IRI("http://example.com");
+        final iri = IRI('http://example.com');
         expect(iri.termType, TermType.iri);
       });
     });
