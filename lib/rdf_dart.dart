@@ -66,7 +66,7 @@
 ///   final blankNode = BlankNode();
 ///   print(blankNode);
 ///
-///   // create a Literal
+///   // Create a Literal
 ///   final literal = Literal("Hello", IRI('http://www.w3.org/2001/XMLSchema#string'));
 ///   print(literal);
 ///
