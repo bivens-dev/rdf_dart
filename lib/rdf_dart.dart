@@ -3,6 +3,11 @@
 /// More dartdocs go here.
 library;
 
-export 'src/rdf_dart_base.dart';
-
-// TODO: Export any libraries intended for clients of this package.
+export 'src/rdf_term.dart';
+export 'src/term_type.dart';
+export 'src/iri.dart';
+export 'src/blank_node.dart';
+export 'src/literal.dart';
+export 'src/triple.dart';
+export 'src/graph.dart';
+export 'src/dataset.dart';
