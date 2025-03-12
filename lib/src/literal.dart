@@ -72,7 +72,7 @@ class Literal extends RdfTerm {
 
   @override
   String toString() {
-    String result = '"$lexicalForm"';
+    var result = '"$lexicalForm"';
     if (language != null) {
       result += '@$language';
     }
