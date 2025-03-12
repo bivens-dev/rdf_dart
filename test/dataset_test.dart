@@ -53,14 +53,14 @@ void main() {
     });
 
     group('defaultGraph', () {
-        test('can add triple to the default graph', () {
-            final subject = IRI('http://example.com/subject');
-            final predicate = IRI('http://example.com/predicate');
-            final object = IRI('http://example.com/object');
-            final triple = Triple(subject, predicate, object);
-            dataset.defaultGraph.add(triple);
-            expect(dataset.defaultGraph.triples, contains(triple));
-        });
+      test('can add triple to the default graph', () {
+        final subject = IRI('http://example.com/subject');
+        final predicate = IRI('http://example.com/predicate');
+        final object = IRI('http://example.com/object');
+        final triple = Triple(subject, predicate, object);
+        dataset.defaultGraph.add(triple);
+        expect(dataset.defaultGraph.triples, contains(triple));
+      });
     });
   });
 }

@@ -32,17 +32,28 @@ void main() {
 
     group('addAll', () {
       test('adds multiple triples to the graph', () {
-        final triple2 = Triple(subject, predicate, IRI('http://example.com/object2'));
+        final triple2 = Triple(
+          subject,
+          predicate,
+          IRI('http://example.com/object2'),
+        );
         graph.addAll([triple, triple2]);
         expect(graph.triples, containsAll([triple, triple2]));
         expect(graph.triples.length, 2);
       });
 
-      test('does not add the same triple twice when adding multiple triples', () {
-        final triple2 = Triple(subject, predicate, IRI('http://example.com/object2'));
-        graph.addAll([triple, triple, triple2, triple2]);
-        expect(graph.triples.length, 2);
-      });
+      test(
+        'does not add the same triple twice when adding multiple triples',
+        () {
+          final triple2 = Triple(
+            subject,
+            predicate,
+            IRI('http://example.com/object2'),
+          );
+          graph.addAll([triple, triple, triple2, triple2]);
+          expect(graph.triples.length, 2);
+        },
+      );
     });
 
     group('remove', () {
@@ -68,10 +79,10 @@ void main() {
         expect(graph.contains(triple), false);
       });
     });
-      group('triples', () {
-        test('returns an unmodifiable set', () {
-          expect(() => graph.triples.add(triple), throwsUnsupportedError);
-        });
+    group('triples', () {
+      test('returns an unmodifiable set', () {
+        expect(() => graph.triples.add(triple), throwsUnsupportedError);
+      });
     });
   });
 }

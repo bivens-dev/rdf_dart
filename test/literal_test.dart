@@ -28,7 +28,7 @@ void main() {
         expect(literal.datatype, stringDatatype);
         expect(literal.language, 'fr');
       });
-        test('with boolean datatype', () {
+      test('with boolean datatype', () {
         final literal = Literal('true', booleanDatatype);
         expect(literal.lexicalForm, 'true');
         expect(literal.datatype, booleanDatatype);
@@ -73,11 +73,17 @@ void main() {
 
       test('integer literal', () {
         final literal = Literal('42', integerDatatype);
-        expect(literal.toString(), '"42"^^<http://www.w3.org/2001/XMLSchema#integer>');
+        expect(
+          literal.toString(),
+          '"42"^^<http://www.w3.org/2001/XMLSchema#integer>',
+        );
       });
       test('boolean literal', () {
         final literal = Literal('true', booleanDatatype);
-        expect(literal.toString(), '"true"^^<http://www.w3.org/2001/XMLSchema#boolean>');
+        expect(
+          literal.toString(),
+          '"true"^^<http://www.w3.org/2001/XMLSchema#boolean>',
+        );
       });
     });
 

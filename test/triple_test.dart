@@ -21,7 +21,10 @@ void main() {
       test('with Literal as object', () {
         final subject = IRI('http://example.com/subject');
         final predicate = IRI('http://example.com/predicate');
-        final object = Literal('value', IRI('http://www.w3.org/2001/XMLSchema#string'));
+        final object = Literal(
+          'value',
+          IRI('http://www.w3.org/2001/XMLSchema#string'),
+        );
         expect(() => Triple(subject, predicate, object), returnsNormally);
       });
 
@@ -46,22 +49,34 @@ void main() {
         final predicate = IRI('http://example.com/predicate');
         final object = IRI('http://example.com/object');
         final triple = Triple(subject, predicate, object);
-        expect(triple.toString(), 'http://example.com/subject http://example.com/predicate http://example.com/object .');
+        expect(
+          triple.toString(),
+          'http://example.com/subject http://example.com/predicate http://example.com/object .',
+        );
       });
 
-       test('returns correct string representation with blank node', () {
+      test('returns correct string representation with blank node', () {
         final subject = BlankNode('someId');
         final predicate = IRI('http://example.com/predicate');
         final object = IRI('http://example.com/object');
         final triple = Triple(subject, predicate, object);
-        expect(triple.toString(), '_:someId http://example.com/predicate http://example.com/object .');
+        expect(
+          triple.toString(),
+          '_:someId http://example.com/predicate http://example.com/object .',
+        );
       });
       test('returns correct string representation with literal', () {
         final subject = IRI('http://example.com/subject');
         final predicate = IRI('http://example.com/predicate');
-        final object = Literal('Hello', IRI('http://www.w3.org/2001/XMLSchema#string'));
+        final object = Literal(
+          'Hello',
+          IRI('http://www.w3.org/2001/XMLSchema#string'),
+        );
         final triple = Triple(subject, predicate, object);
-        expect(triple.toString(), 'http://example.com/subject http://example.com/predicate "Hello" .');
+        expect(
+          triple.toString(),
+          'http://example.com/subject http://example.com/predicate "Hello" .',
+        );
       });
     });
 
