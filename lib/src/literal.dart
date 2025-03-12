@@ -1,3 +1,4 @@
+import 'package:meta/meta.dart';
 import 'package:rdf_dart/src/iri.dart';
 import 'package:rdf_dart/src/rdf_term.dart';
 import 'package:rdf_dart/src/term_type.dart';
@@ -24,6 +25,7 @@ import 'package:rdf_dart/src/term_type.dart';
 /// // A string literal with language tag
 /// final frenchLiteral = Literal('Bonjour le monde!', IRI('http://www.w3.org/2001/XMLSchema#string'), 'fr');
 /// ```
+@immutable
 class Literal extends RdfTerm {
   /// The lexical form of the literal.
   ///

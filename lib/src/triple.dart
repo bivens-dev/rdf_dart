@@ -1,6 +1,7 @@
 // Comments contain known references to identifiers not imported to this file 
 // ignore_for_file: comment_references
 
+import 'package:meta/meta.dart';
 import 'package:rdf_dart/src/iri.dart';
 import 'package:rdf_dart/src/rdf_term.dart';
 
@@ -25,6 +26,7 @@ import 'package:rdf_dart/src/rdf_term.dart';
 /// final triple = Triple(subject, predicate, object);
 /// print(triple); // Output: http://example.com/person/john http://example.com/relation/knows http://example.com/person/jane .
 /// ```
+@immutable
 class Triple {
   /// The subject of this triple.
   ///

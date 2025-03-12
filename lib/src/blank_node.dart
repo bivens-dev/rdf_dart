@@ -1,3 +1,4 @@
+import 'package:meta/meta.dart';
 import 'package:rdf_dart/src/rdf_term.dart';
 import 'package:rdf_dart/src/term_type.dart';
 import 'package:uuid/uuid.dart';
@@ -12,6 +13,7 @@ import 'package:uuid/uuid.dart';
 /// Blank nodes are identified by a unique string identifier, which can be
 /// provided by the user or automatically generated as a UUID. The identifier
 /// is only unique within the scope of the data it is defined, not globally.
+@immutable
 class BlankNode extends RdfTerm {
   /// The unique identifier for this blank node.
   ///

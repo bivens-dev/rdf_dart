@@ -1,3 +1,4 @@
+import 'package:meta/meta.dart';
 import 'package:rdf_dart/src/rdf_term.dart';
 import 'package:rdf_dart/src/term_type.dart';
 
@@ -27,6 +28,7 @@ class InvalidIRIException implements Exception {
 ///
 /// This class is immutable. Once an IRI object is created, its value cannot
 /// be changed.
+@immutable
 class IRI extends RdfTerm {
   /// The string value of this IRI.
   final String value;

@@ -1,6 +1,7 @@
 // Comments contain known references to identifiers not imported to this file 
 // ignore_for_file: comment_references
 
+import 'package:meta/meta.dart';
 import 'package:rdf_dart/src/term_type.dart';
 
 /// The abstract base class for all RDF terms.
@@ -11,6 +12,7 @@ import 'package:rdf_dart/src/term_type.dart';
 ///
 /// All concrete RDF term classes (such as [IRI], [BlankNode], and [Literal])
 /// must extend this class and implement its abstract members.
+@immutable
 abstract class RdfTerm {
   /// Returns `true` if this term is an IRI, `false` otherwise.
   ///
