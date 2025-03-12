@@ -61,7 +61,7 @@ class Triple {
   Triple(this.subject, this.predicate, this.object);
 
   @override
-  String toString() => "$subject $predicate $object .";
+  String toString() => '$subject $predicate $object .';
 
   @override
   int get hashCode => Object.hash(subject, predicate, object);

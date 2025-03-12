@@ -44,7 +44,7 @@ class BlankNode extends RdfTerm {
   TermType get termType => TermType.blankNode;
 
   @override
-  String toString() => "_:$id";
+  String toString() => '_:$id';
 
   @override
   int get hashCode => id.hashCode;

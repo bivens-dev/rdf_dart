@@ -72,10 +72,10 @@ class Literal extends RdfTerm {
   String toString() {
     String result = '"$lexicalForm"';
     if (language != null) {
-      result += "@$language";
+      result += '@$language';
     }
     if (datatype.value != 'http://www.w3.org/2001/XMLSchema#string') {
-      result += "^^<$datatype>";
+      result += '^^<$datatype>';
     }
     return result;
   }
