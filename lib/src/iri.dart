@@ -1,5 +1,5 @@
-import 'rdf_term.dart';
-import 'term_type.dart';
+import 'package:rdf_dart/src/rdf_term.dart';
+import 'package:rdf_dart/src/term_type.dart';
 
 class InvalidIRIException implements Exception {
   final String message;

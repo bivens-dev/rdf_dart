@@ -1,5 +1,5 @@
-import 'rdf_term.dart';
-import 'iri.dart';
+import 'package:rdf_dart/src/iri.dart';
+import 'package:rdf_dart/src/rdf_term.dart';
 
 class Triple {
   final RdfTerm subject;

@@ -1,7 +1,7 @@
 // lib/src/literal.dart
-import 'rdf_term.dart';
-import 'iri.dart';
-import 'term_type.dart';
+import 'package:rdf_dart/src/iri.dart';
+import 'package:rdf_dart/src/rdf_term.dart';
+import 'package:rdf_dart/src/term_type.dart';
 
 class Literal extends RdfTerm {
   final String lexicalForm;

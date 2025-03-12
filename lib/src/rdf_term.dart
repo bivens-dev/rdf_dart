@@ -1,4 +1,4 @@
-import 'term_type.dart';
+import 'package:rdf_dart/src/term_type.dart';
 
 abstract class RdfTerm {
   bool get isIRI;

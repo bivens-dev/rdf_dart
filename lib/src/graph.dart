@@ -1,4 +1,4 @@
-import 'triple.dart';
+import 'package:rdf_dart/src/triple.dart';
 
 class Graph {
   final Set<Triple> _triples = {};

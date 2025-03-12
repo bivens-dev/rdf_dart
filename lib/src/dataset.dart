@@ -1,5 +1,5 @@
-import 'graph.dart';
-import 'iri.dart';
+import 'package:rdf_dart/src/graph.dart';
+import 'package:rdf_dart/src/iri.dart';
 
 class Dataset {
   final Graph defaultGraph = Graph();

@@ -1,7 +1,6 @@
-import 'rdf_term.dart';
+import 'package:rdf_dart/src/rdf_term.dart';
+import 'package:rdf_dart/src/term_type.dart';
 import 'package:uuid/uuid.dart';
-
-import 'term_type.dart';
 
 class BlankNode extends RdfTerm {
   final String id;
