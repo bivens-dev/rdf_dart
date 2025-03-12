@@ -29,9 +29,7 @@ class Dataset {
   ///
   /// The dataset is initialized with an empty [defaultGraph] and an empty
   /// set of [namedGraphs].
-  Dataset()
-      : defaultGraph = Graph(),
-        namedGraphs = {};
+  Dataset() : defaultGraph = Graph(), namedGraphs = {};
 
   /// Adds a named graph to the dataset.
   ///

@@ -1,4 +1,4 @@
-// Comments contain known references to identifiers not imported to this file 
+// Comments contain known references to identifiers not imported to this file
 // ignore_for_file: comment_references
 
 /// Support for working with RDF (Resource Description Framework) data in Dart.
@@ -85,4 +85,3 @@ export 'src/literal.dart';
 export 'src/rdf_term.dart';
 export 'src/term_type.dart';
 export 'src/triple.dart';
-

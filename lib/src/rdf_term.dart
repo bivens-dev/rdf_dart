@@ -1,4 +1,4 @@
-// Comments contain known references to identifiers not imported to this file 
+// Comments contain known references to identifiers not imported to this file
 // ignore_for_file: comment_references
 
 import 'package:meta/meta.dart';

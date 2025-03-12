@@ -36,17 +36,29 @@ void main() {
         expect(() => IRI('http://example.com:8080'), returnsNormally);
       });
       test('with path', () {
-        expect(() => IRI('http://example.com/path/to/resource'), returnsNormally);
+        expect(
+          () => IRI('http://example.com/path/to/resource'),
+          returnsNormally,
+        );
       });
       test('internationalized', () {
-        expect(() => IRI('http://www.example.com/r\u00e9sum\u00e9'), returnsNormally);
+        expect(
+          () => IRI('http://www.example.com/r\u00e9sum\u00e9'),
+          returnsNormally,
+        );
       });
       test('percent encoded', () {
-        expect(() => IRI('http://www.example.com/res%20ource'), returnsNormally);
+        expect(
+          () => IRI('http://www.example.com/res%20ource'),
+          returnsNormally,
+        );
       });
 
       test('with complex characters', () {
-        expect(() => IRI('http://example.com/path/to/resource?query=value#fragment'), returnsNormally);
+        expect(
+          () => IRI('http://example.com/path/to/resource?query=value#fragment'),
+          returnsNormally,
+        );
       });
     });
 
@@ -91,9 +103,15 @@ void main() {
       // });
       test('only :', () {
         expect(
-            () => IRI(':'),
-            throwsA(isA<InvalidIRIException>()
-                .having((e) => e.message, 'message', contains('Invalid IRI: : - Error:'))));
+          () => IRI(':'),
+          throwsA(
+            isA<InvalidIRIException>().having(
+              (e) => e.message,
+              'message',
+              contains('Invalid IRI: : - Error:'),
+            ),
+          ),
+        );
       });
     });
     group('Equality', () {

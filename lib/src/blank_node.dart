@@ -21,7 +21,7 @@ class BlankNode extends RdfTerm {
   /// it is defined. If no identifier is provided when creating the [BlankNode],
   /// a new UUID will be generated and used as the identifier.
   final String id;
-  
+
   /// Creates a new Blank Node.
   ///
   /// If no [id] is provided, a new UUID will be generated.
