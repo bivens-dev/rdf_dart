@@ -62,7 +62,6 @@ void main() {
       });
     });
 
-    
     group('Valid Percent-Encoded IRIs', () {
       test('with correct spaces', () {
         expect(
@@ -89,7 +88,9 @@ void main() {
             isA<InvalidIRIException>().having(
               (e) => e.message,
               'message',
-              contains('Invalid IRI: http://example.com/path%2 with spaces - Error: Invalid percent-encoding'),
+              contains(
+                'Invalid IRI: http://example.com/path%2 with spaces - Error: Invalid percent-encoding',
+              ),
             ),
           ),
         );
@@ -101,7 +102,9 @@ void main() {
             isA<InvalidIRIException>().having(
               (e) => e.message,
               'message',
-              contains('Invalid IRI: http://example.com/path%2G - Error: Invalid percent-encoding'),
+              contains(
+                'Invalid IRI: http://example.com/path%2G - Error: Invalid percent-encoding',
+              ),
             ),
           ),
         );
@@ -113,7 +116,9 @@ void main() {
             isA<InvalidIRIException>().having(
               (e) => e.message,
               'message',
-              contains('Invalid IRI: http://example.com/path%GG - Error: Invalid percent-encoding'),
+              contains(
+                'Invalid IRI: http://example.com/path%GG - Error: Invalid percent-encoding',
+              ),
             ),
           ),
         );
@@ -125,7 +130,9 @@ void main() {
             isA<InvalidIRIException>().having(
               (e) => e.message,
               'message',
-              contains('Invalid IRI: http://example.com/path% - Error: Invalid percent-encoding'),
+              contains(
+                'Invalid IRI: http://example.com/path% - Error: Invalid percent-encoding',
+              ),
             ),
           ),
         );
@@ -137,7 +144,9 @@ void main() {
             isA<InvalidIRIException>().having(
               (e) => e.message,
               'message',
-              contains('Invalid IRI: http://example.com/%2 - Error: Invalid percent-encoding'),
+              contains(
+                'Invalid IRI: http://example.com/%2 - Error: Invalid percent-encoding',
+              ),
             ),
           ),
         );
@@ -149,7 +158,9 @@ void main() {
             isA<InvalidIRIException>().having(
               (e) => e.message,
               'message',
-              contains('Invalid IRI: http://example.com/%a%b - Error: Invalid percent-encoding'),
+              contains(
+                'Invalid IRI: http://example.com/%a%b - Error: Invalid percent-encoding',
+              ),
             ),
           ),
         );
@@ -161,12 +172,131 @@ void main() {
             isA<InvalidIRIException>().having(
               (e) => e.message,
               'message',
-              contains('Invalid IRI: http://example.com/path%2GH - Error: Invalid percent-encoding'),
+              contains(
+                'Invalid IRI: http://example.com/path%2GH - Error: Invalid percent-encoding',
+              ),
             ),
           ),
         );
       });
     });
+
+    group('Invalid Control Character IRIs', () {
+      test('with U+0000 (NUL)', () {
+        expect(
+          () => IRI('http://example.com/\u0000'),
+          throwsA(
+            isA<InvalidIRIException>().having(
+              (e) => e.message,
+              'message',
+              contains(
+                'Invalid IRI: http://example.com/\u0000 - Error: Invalid control character',
+              ),
+            ),
+          ),
+        );
+      });
+
+      test('with U+0001 (SOH)', () {
+        expect(
+          () => IRI('http://example.com/\u0001'),
+          throwsA(
+            isA<InvalidIRIException>().having(
+              (e) => e.message,
+              'message',
+              contains(
+                'Invalid IRI: http://example.com/\u0001 - Error: Invalid control character',
+              ),
+            ),
+          ),
+        );
+      });
+
+      test('with U+001F (US)', () {
+        expect(
+          () => IRI('http://example.com/\u001F'),
+          throwsA(
+            isA<InvalidIRIException>().having(
+              (e) => e.message,
+              'message',
+              contains(
+                'Invalid IRI: http://example.com/\u001F - Error: Invalid control character',
+              ),
+            ),
+          ),
+        );
+      });
+
+      test('with U+007F (DEL)', () {
+        expect(
+          () => IRI('http://example.com/\u007F'),
+          throwsA(
+            isA<InvalidIRIException>().having(
+              (e) => e.message,
+              'message',
+              contains(
+                'Invalid IRI: http://example.com/\u007F - Error: Invalid control character',
+              ),
+            ),
+          ),
+        );
+      });
+
+      test('with U+0080', () {
+        expect(
+          () => IRI('http://example.com/\u0080'),
+          throwsA(
+            isA<InvalidIRIException>().having(
+              (e) => e.message,
+              'message',
+              contains(
+                'Invalid IRI: http://example.com/\u0080 - Error: Invalid control character',
+              ),
+            ),
+          ),
+        );
+      });
+
+      test('with U+009F', () {
+        expect(
+          () => IRI('http://example.com/\u009F'),
+          throwsA(
+            isA<InvalidIRIException>().having(
+              (e) => e.message,
+              'message',
+              contains(
+                'Invalid IRI: http://example.com/\u009F - Error: Invalid control character',
+              ),
+            ),
+          ),
+        );
+      });
+
+      test('with U+0000 in percent-encoded sequence', () {
+        expect(() => IRI('http://example.com/%00'), returnsNormally);
+      });
+
+      test('with U+007F in percent-encoded sequence', () {
+        expect(() => IRI('http://example.com/%7F'), returnsNormally);
+      });
+
+      test('with U+0080 in percent-encoded sequence', () {
+        expect(() => IRI('http://example.com/%C2%80'), returnsNormally);
+      });
+      test('with U+009F in percent-encoded sequence', () {
+        expect(() => IRI('http://example.com/%C2%9F'), returnsNormally);
+      });
+      test('with TAB', () {
+        expect(() => IRI('http://example.com/\t'), returnsNormally);
+      });
+      test('with CR', () {
+        expect(() => IRI('http://example.com/\r'), returnsNormally);
+      });
+      test('with LF', () {
+        expect(() => IRI('http://example.com/\n'), returnsNormally);
+      });
+    });
+
     group('Invalid IRIs', () {
       // test('with space', () {
       //   expect(() => IRI('http://example.com /path'), throwsA(isA<InvalidIRIException>()));
