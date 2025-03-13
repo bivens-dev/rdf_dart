@@ -76,6 +76,12 @@ class IRI extends RdfTerm {
           'Invalid IRI: $unvalidatedIri - Error: Invalid percent-encoding',
         );
       }
+
+      if (!_isValidControlCharacters(unvalidatedIri)) {
+        throw InvalidIRIException(
+          'Invalid IRI: $unvalidatedIri - Error: Invalid control character',
+        );
+      }
       // TODO: Use more robust IRI validation here in the future but this is sufficient for now.
       return validatedUri.toString();
     } on FormatException catch (e) {
@@ -110,6 +116,34 @@ class IRI extends RdfTerm {
           return false;
         }
         if (!RegExp('[0-9A-Fa-f]{2}').hasMatch(iri.substring(i + 1, i + 3))) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  /// Checks if the IRI contains any invalid control characters.
+  ///
+  /// According to RFC 3987, control characters (U+0000 to U+001F, U+007F,
+  /// U+0080 to U+009F) are not allowed directly in IRIs (they must be
+  /// percent-encoded).
+  ///
+  /// This function checks for the presence of such characters.
+  static bool _isValidControlCharacters(String iri) {
+    for (var i = 0; i < iri.length; i++) {
+      final codeUnit = iri.codeUnitAt(i);
+
+      // Check for control characters (excluding TAB, CR, LF)
+      if ((codeUnit >= 0x0000 &&
+              codeUnit <= 0x001F &&
+              codeUnit != 0x09 &&
+              codeUnit != 0x0D &&
+              codeUnit != 0x0A) ||
+          codeUnit == 0x007F ||
+          (codeUnit >= 0x0080 && codeUnit <= 0x009F)) {
+        // if the character is a control character, check that it is not percent-encoded
+        if (i < 2 || iri[i - 2] != '%') {
           return false;
         }
       }
