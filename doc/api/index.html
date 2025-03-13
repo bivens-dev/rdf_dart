@@ -46,34 +46,100 @@
   <div id="dartdoc-main-content" class="main-content">
       
 <section class="desc markdown">
-  <!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
-
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages). 
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages). 
--->
-<p>TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.</p>
+  <h1 id="rdfdart-a-dart-library-for-working-with-rdf">RDF.dart: A Dart Library for Working with RDF</h1>
+<p><a href="https://pub.dev/packages/rdf_dart"><img src="https://img.shields.io/pub/v/rdf_dart" alt="Pub Version"></a>
+<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License"></a></p>
+<p>RDF.dart is a Dart library designed to make it easy to work with <a href="https://www.w3.org/RDF/">RDF (Resource Description Framework)</a> data structures and concepts. It provides core data structures for representing RDF triples, graphs, datasets, and literals, along with utilities for managing datatypes and IRIs.</p>
 <h2 id="features">Features</h2>
-<p>TODO: List what your package can do. Maybe include images, gifs, or videos.</p>
-<h2 id="getting-started">Getting started</h2>
-<p>TODO: List prerequisites and provide or point to information on how to
-start using the package.</p>
-<h2 id="usage">Usage</h2>
-<p>TODO: Include short and useful examples for package users. Add longer examples
-to <code>/example</code> folder.</p>
-<pre class="language-dart"><code class="language-dart">const like = 'sample';
+<ul>
+<li><strong>Core RDF Data Structures:</strong>
+<ul>
+<li><code>IRI</code>: Represents an Internationalized Resource Identifier (IRI).</li>
+<li><code>Literal</code>: Represents an RDF literal with datatype and optional language tag.</li>
+<li><code>BlankNode</code>: Represents an RDF blank node.</li>
+<li><code>RdfTerm</code>:  Represent an abstract RDF term.</li>
+<li><code>Triple</code>: Represents an RDF triple (subject, predicate, object).</li>
+<li><code>Graph</code>: Represents a collection of RDF triples.</li>
+<li><code>Dataset</code>: Represents a collection of named graphs.</li>
+</ul>
+</li>
+<li><strong>Datatype Handling:</strong>
+<ul>
+<li>A <code>DatatypeRegistry</code> for managing different datatypes and their parsers/formatters.</li>
+<li>Built-in support for common datatypes like <code>xsd:string</code>, <code>xsd:integer</code>, <code>xsd:double</code>, <code>xsd:dateTime</code>, and <code>xsd:boolean</code>.</li>
+<li>Extensible: Register your custom datatypes easily.</li>
+</ul>
+</li>
+<li><strong>IRI Validation:</strong>
+<ul>
+<li><code>IriValidator</code>: provide a way to validate IRI.</li>
+<li>Parse an IRI string to get the different parts.</li>
+<li>Check if an IRI is valid or not.</li>
+<li>Check if a specific part of the IRI is valid or not.</li>
+</ul>
+</li>
+<li><strong>Error Handling:</strong>
+<ul>
+<li>Clear exceptions (e.g., <code>InvalidIRIException</code>, <code>FormatException</code>) for invalid data.</li>
+</ul>
+</li>
+<li><strong>Immutable</strong>
+<ul>
+<li><code>Literal</code> objects are immutable.</li>
+</ul>
+</li>
+<li><strong>Well tested</strong>
+<ul>
+<li>The core features are well tested.</li>
+</ul>
+</li>
+</ul>
+<h2 id="getting-started">Getting Started</h2>
+<ol>
+<li>
+<p><strong>Add the Dependency:</strong>
+Open your <code>pubspec.yaml</code> file and add <code>rdf_dart</code> to your dependencies:</p>
+<pre class="language-yaml"><code class="language-yaml">dependencies:
+  rdf_dart: ^1.0.0 # Replace with the latest version
 </code></pre>
-<h2 id="additional-information">Additional information</h2>
-<p>TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.</p>
+</li>
+<li>
+<p><strong>Install the Package:</strong>
+Run this command in your terminal:</p>
+<pre class="language-bash"><code class="language-bash">dart pub get
+</code></pre>
+</li>
+<li>
+<p><strong>Import the Library:</strong>
+In your Dart code, import the <code>rdf_dart</code> library:</p>
+<pre class="language-dart"><code class="language-dart">import 'package:rdf_dart/rdf_dart.dart';
+</code></pre>
+</li>
+</ol>
+<h2 id="usage">Usage</h2>
+<p>Here's a simple example demonstrating how to create RDF objects:</p>
+<pre class="language-dart"><code class="language-dart">import 'package:rdf_dart/rdf_dart.dart';
+
+void main() {
+  // Create some IRIs
+  final subject = IRI('http://example.org/subject');
+  final predicate = IRI('http://example.org/predicate');
+  final object = IRI('http://example.org/object');
+
+  // Create a string literal
+  final stringLiteral = Literal('Hello, world!', IRI('http://www.w3.org/2001/XMLSchema#string'));
+  print(stringLiteral); // Output: "Hello, world!"
+
+  // Create a triple
+  final triple = Triple(subject, predicate, object);
+
+  // Create a Dataset
+  final dataset = Dataset();
+
+  // Add the Triple to the Dataset
+  dataset.defaultGraph.add(triple);
+}
+</code></pre>
 </section>
 
 
