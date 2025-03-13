@@ -68,14 +68,53 @@ class IRI extends RdfTerm {
   /// robust validation could be implemented.
   static String _validateIri(String unvalidatedIri) {
     try {
-      // TODO: Use more robust IRI validation here in the future but URI.parse is sufficient for now.
       final validatedUri = Uri.parse(unvalidatedIri);
+
+      // Additional checks after Uri.parse
+      if (!_isValidPercentEncoding(validatedUri, unvalidatedIri)) {
+        throw InvalidIRIException(
+          'Invalid IRI: $unvalidatedIri - Error: Invalid percent-encoding',
+        );
+      }
+      // TODO: Use more robust IRI validation here in the future but this is sufficient for now.
       return validatedUri.toString();
     } on FormatException catch (e) {
       throw InvalidIRIException(
         'Invalid IRI: $unvalidatedIri - Error: ${e.message}',
       );
     }
+  }
+
+  /// Checks if the uri has valid percent-encoding.
+  ///
+  /// According to RFC 3987, each percent-encoded sequence must consist of a
+  /// percent sign ("%") followed by two hexadecimal digits ([0-9A-Fa-f]).
+  ///
+  /// This function checks for this.
+  static bool _isValidPercentEncoding(Uri uri, String iri) {
+    final pattern = RegExp('%[0-9A-Fa-f]{2}');
+
+    final allMatches = pattern.allMatches(iri);
+    // check that the percent encoding matches a correct form.
+    for (final match in allMatches) {
+      if (match.group(0)!.length != 3) {
+        return false;
+      }
+    }
+
+    // Check that a percent is always followed by two hex digits
+    // iterate over the string and check that every % is followed by two hex digits.
+    for (var i = 0; i < iri.length; i++) {
+      if (iri[i] == '%') {
+        if (i + 2 >= iri.length) {
+          return false;
+        }
+        if (!RegExp('[0-9A-Fa-f]{2}').hasMatch(iri.substring(i + 1, i + 3))) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   @override

@@ -62,6 +62,111 @@ void main() {
       });
     });
 
+    
+    group('Valid Percent-Encoded IRIs', () {
+      test('with correct spaces', () {
+        expect(
+          () => IRI('http://example.com/path%20with%20spaces'),
+          returnsNormally,
+        );
+      });
+      test('with correct upper case', () {
+        expect(() => IRI('http://example.com/%41bc'), returnsNormally);
+      });
+      test('with several percent-encoding', () {
+        expect(() => IRI('http://example.com/%41%42%43'), returnsNormally);
+      });
+      test('with simple encoding', () {
+        expect(() => IRI('http://example.com/%4a'), returnsNormally);
+      });
+    });
+
+    group('Invalid Percent-Encoded IRIs', () {
+      test('with invalid character after percent', () {
+        expect(
+          () => IRI('http://example.com/path%2 with spaces'),
+          throwsA(
+            isA<InvalidIRIException>().having(
+              (e) => e.message,
+              'message',
+              contains('Invalid IRI: http://example.com/path%2 with spaces - Error: Invalid percent-encoding'),
+            ),
+          ),
+        );
+      });
+      test('with invalid hex character', () {
+        expect(
+          () => IRI('http://example.com/path%2G'),
+          throwsA(
+            isA<InvalidIRIException>().having(
+              (e) => e.message,
+              'message',
+              contains('Invalid IRI: http://example.com/path%2G - Error: Invalid percent-encoding'),
+            ),
+          ),
+        );
+      });
+      test('with invalid hex characters', () {
+        expect(
+          () => IRI('http://example.com/path%GG'),
+          throwsA(
+            isA<InvalidIRIException>().having(
+              (e) => e.message,
+              'message',
+              contains('Invalid IRI: http://example.com/path%GG - Error: Invalid percent-encoding'),
+            ),
+          ),
+        );
+      });
+      test('with missing hex digits', () {
+        expect(
+          () => IRI('http://example.com/path%'),
+          throwsA(
+            isA<InvalidIRIException>().having(
+              (e) => e.message,
+              'message',
+              contains('Invalid IRI: http://example.com/path% - Error: Invalid percent-encoding'),
+            ),
+          ),
+        );
+      });
+      test('with only one hex digit', () {
+        expect(
+          () => IRI('http://example.com/%2'),
+          throwsA(
+            isA<InvalidIRIException>().having(
+              (e) => e.message,
+              'message',
+              contains('Invalid IRI: http://example.com/%2 - Error: Invalid percent-encoding'),
+            ),
+          ),
+        );
+      });
+      test('with only one hex digit', () {
+        expect(
+          () => IRI('http://example.com/%a%b'),
+          throwsA(
+            isA<InvalidIRIException>().having(
+              (e) => e.message,
+              'message',
+              contains('Invalid IRI: http://example.com/%a%b - Error: Invalid percent-encoding'),
+            ),
+          ),
+        );
+      });
+      test('with incorrect hex encoding', () {
+        expect(
+          () => IRI('http://example.com/path%2GH'),
+          throwsA(
+            isA<InvalidIRIException>().having(
+              (e) => e.message,
+              'message',
+              contains('Invalid IRI: http://example.com/path%2GH - Error: Invalid percent-encoding'),
+            ),
+          ),
+        );
+      });
+    });
     group('Invalid IRIs', () {
       // test('with space', () {
       //   expect(() => IRI('http://example.com /path'), throwsA(isA<InvalidIRIException>()));
