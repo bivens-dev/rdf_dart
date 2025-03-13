@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:rdf_dart/src/data_types.dart';
 import 'package:rdf_dart/src/iri.dart';
 import 'package:rdf_dart/src/rdf_term.dart';
 import 'package:rdf_dart/src/term_type.dart';
@@ -45,6 +46,11 @@ class Literal extends RdfTerm {
   /// specified, it's `null`.
   final String? language;
 
+  /// The parsed value of the literal.
+  ///
+  /// This is an object of the type specified by the datatype.
+  final Object? value;
+
   /// Creates a new Literal with the given [lexicalForm], [datatype], and
   /// optional [language].
   ///
@@ -56,7 +62,19 @@ class Literal extends RdfTerm {
   /// ```dart
   /// final myLiteral = Literal('example', IRI('http://www.w3.org/2001/XMLSchema#string'));
   /// ```
-  Literal(this.lexicalForm, this.datatype, [this.language]);
+  Literal(this.lexicalForm, this.datatype, [this.language])
+    : value = _parseValue(lexicalForm, datatype);
+
+  static Object? _parseValue(String lexicalForm, IRI datatype) {
+    try {
+      // Gets the appropriate parser function from the DatatypeRegistry
+      final parser = DatatypeRegistry().getDatatypeInfo(datatype).parser;
+      // Calls the parser function to perform the actual parsing.
+      return parser(lexicalForm);
+    } on Exception {
+      return null;
+    }
+  }
 
   @override
   bool get isIRI => false;
@@ -72,22 +90,31 @@ class Literal extends RdfTerm {
 
   @override
   String toString() {
-    var result = '"$lexicalForm"';
     if (language != null) {
-      result += '@$language';
+      return '"$lexicalForm"@$language';
     }
-    if (datatype.value != 'http://www.w3.org/2001/XMLSchema#string') {
-      result += '^^<$datatype>';
+    if (datatype == IRI('http://www.w3.org/2001/XMLSchema#string')) {
+      return '"$lexicalForm"';
     }
-    return result;
+    return '"${toLexicalForm()}"^^<$datatype>';
+  }
+
+  /// Returns the lexical form of the literal.
+  String toLexicalForm() {
+    if (value == null) {
+      return lexicalForm;
+    }
+    final formatter = DatatypeRegistry().getDatatypeInfo(datatype).formatter;
+    return formatter(value!);
   }
 
   @override
-  int get hashCode => Object.hash(lexicalForm, datatype, language);
+  int get hashCode => Object.hash(termType, lexicalForm, datatype, language);
 
   @override
   bool operator ==(Object other) =>
       other is Literal &&
+      termType == other.termType &&
       lexicalForm == other.lexicalForm &&
       datatype == other.datatype &&
       language == other.language;
