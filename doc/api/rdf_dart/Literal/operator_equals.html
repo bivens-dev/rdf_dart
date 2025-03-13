@@ -107,6 +107,7 @@ the <a href="../../rdf_dart/Literal/hashCode.html">hashCode</a> method as well t
   <pre class="language-dart"><code class="language-dart">@override
 bool operator ==(Object other) =&gt;
     other is Literal &amp;&amp;
+    termType == other.termType &amp;&amp;
     lexicalForm == other.lexicalForm &amp;&amp;
     datatype == other.datatype &amp;&amp;
     language == other.language;</code></pre>

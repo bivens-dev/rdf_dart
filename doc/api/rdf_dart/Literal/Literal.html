@@ -78,7 +78,8 @@ The optional <code>language</code> is a language tag for text literals.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Literal(this.lexicalForm, this.datatype, [this.language]);</code></pre>
+  <pre class="language-dart"><code class="language-dart">Literal(this.lexicalForm, this.datatype, [this.language])
+  : value = _parseValue(lexicalForm, datatype);</code></pre>
 </section>
 
 
