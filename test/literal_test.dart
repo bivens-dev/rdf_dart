@@ -25,7 +25,7 @@ void main() {
         expect(literal.lexicalForm, '42');
         expect(literal.datatype, integerDatatype);
         expect(literal.language, isNull);
-        expect(literal.value, 42);
+        expect(literal.value, BigInt.from(42));
       });
       test('with invalid integer datatype', () {
         final literal = Literal('abc', integerDatatype);
@@ -143,7 +143,7 @@ void main() {
         final literal = Literal('3.14', doubleDatatype);
         expect(
           literal.toString(),
-          '"3.14"^^<http://www.w3.org/2001/XMLSchema#double>',
+          '"3.14E0"^^<http://www.w3.org/2001/XMLSchema#double>',
         );
       });
       test('date time literal', () {
@@ -166,7 +166,7 @@ void main() {
       });
       test('double', () {
         final literal = Literal('3.14', doubleDatatype);
-        expect(literal.toLexicalForm(), '3.14');
+        expect(literal.toLexicalForm(), '3.14E0');
       });
       test('date time', () {
         final now = DateTime.utc(2025, 03, 12, 23, 30, 38, 917614);

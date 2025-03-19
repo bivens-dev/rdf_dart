@@ -1,6 +1,10 @@
-// lib/src/data_types.dart
-
+import 'package:decimal/decimal.dart';
 import 'package:rdf_dart/rdf_dart.dart';
+import 'package:rdf_dart/src/data_type_facets.dart';
+import 'package:rdf_dart/src/data_types/xsd_boolean.dart';
+import 'package:rdf_dart/src/data_types/xsd_decimal.dart';
+import 'package:rdf_dart/src/data_types/xsd_double.dart';
+import 'package:rdf_dart/src/data_types/xsd_integer.dart';
 
 /// A function that takes a lexical form (a string) and returns a Dart object.
 ///
@@ -67,47 +71,90 @@ class DatatypeRegistry {
   ///
   /// This constructor registers the default datatypes.
   DatatypeRegistry._internal() {
+    final xsdBoolean = const XSDBoolean();
+    final xsdInteger = const XSDInteger();
+    final xsdDouble = const XSDDouble();
+    final xsdDecimal = const XSDDecimal();
+
     // Register default datatypes
     registerDatatype(
-      IRI('http://www.w3.org/2001/XMLSchema#string'),
+      IRI(XMLDataType.string.iri),
       String,
       (lexicalForm) => lexicalForm,
       (value) => value.toString(),
     );
     registerDatatype(
-      IRI('http://www.w3.org/2001/XMLSchema#integer'),
-      int,
-      int.parse,
-      (value) => value.toString(),
+      IRI(XMLDataType.integer.iri),
+      BigInt,
+      xsdInteger.lexicalToValue,
+      xsdInteger.valueToLexical as LiteralFormatter,
     );
     registerDatatype(
-      IRI('http://www.w3.org/2001/XMLSchema#double'),
+      IRI(XMLDataType.decimal.iri),
+      Decimal,
+      xsdDecimal.lexicalToValue,
+      xsdDecimal.valueToLexical as LiteralFormatter,
+    );
+    registerDatatype(
+      IRI(XMLDataType.double.iri),
       double,
-      double.parse,
-      (value) => value.toString(),
+      xsdDouble.lexicalToValue,
+      xsdDouble.valueToLexical as LiteralFormatter,
     );
     registerDatatype(
-      IRI('http://www.w3.org/2001/XMLSchema#dateTime'),
+      IRI(XMLDataType.dateTime.iri),
       DateTime,
       DateTime.parse,
       (value) => (value as DateTime).toUtc().toIso8601String(),
     );
     registerDatatype(
-      IRI('http://www.w3.org/2001/XMLSchema#boolean'),
+      IRI(XMLDataType.boolean.iri),
       bool,
-      (lexicalForm) {
-        final lowerCaseLexicalForm = lexicalForm.toLowerCase();
-        if (lowerCaseLexicalForm == 'true' || lowerCaseLexicalForm == '1') {
-          return true;
-        } else if (lowerCaseLexicalForm == 'false' ||
-            lowerCaseLexicalForm == '0') {
-          return false;
-        } else {
-          throw FormatException('Invalid xsd:boolean value: $lexicalForm');
-        }
-      },
-      (value) => value.toString(),
+      xsdBoolean.lexicalToValue,
+      xsdBoolean.valueToLexical as LiteralFormatter,
     );
+    registerDatatype(IRI(XMLDataType.unsignedByte.iri), int, (lexicalForm) {
+      final value = int.parse(lexicalForm);
+      if (value < 0 || value > 255) {
+        throw RangeError('Invalid xsd:unsignedByte value: $lexicalForm');
+      }
+      return value;
+    }, (value) => value.toString());
+    registerDatatype(IRI(XMLDataType.byte.iri), int, (lexicalForm) {
+      final value = int.parse(lexicalForm);
+      if (value < -128 || value > 127) {
+        throw RangeError('Invalid xsd:byte value: $lexicalForm');
+      }
+      return value;
+    }, (value) => value.toString());
+    registerDatatype(IRI(XMLDataType.unsignedShort.iri), int, (lexicalForm) {
+      final value = int.parse(lexicalForm);
+      if (value < 0 || value > 65535) {
+        throw RangeError('Invalid xsd:unsignedShort value: $lexicalForm');
+      }
+      return value;
+    }, (value) => value.toString());
+    registerDatatype(IRI(XMLDataType.short.iri), int, (lexicalForm) {
+      final value = int.parse(lexicalForm);
+      if (value < -32768 || value > 32767) {
+        throw RangeError('Invalid xsd:short value: $lexicalForm');
+      }
+      return value;
+    }, (value) => value.toString());
+    registerDatatype(IRI(XMLDataType.int.iri), int, (lexicalForm) {
+      final value = int.parse(lexicalForm);
+      if (value < -2147483648 || value > 2147483647) {
+        throw RangeError('Invalid xsd:int value: $lexicalForm');
+      }
+      return value;
+    }, (value) => value.toString());
+    registerDatatype(IRI(XMLDataType.unsignedInt.iri), int, (lexicalForm) {
+      final value = int.parse(lexicalForm);
+      if (value < 0 || value > 4294967295) {
+        throw RangeError('Invalid xsd:int unsignedInt value: $lexicalForm');
+      }
+      return value;
+    }, (value) => value.toString());
   }
 
   /// The map that holds the registered datatypes.
