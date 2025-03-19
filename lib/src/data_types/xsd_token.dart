@@ -1,4 +1,4 @@
-import 'data_type.dart';
+import 'package:rdf_dart/src/data_types/data_type.dart';
 
 /// Represents the `xsd:token` datatype.
 ///
