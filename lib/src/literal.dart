@@ -66,14 +66,18 @@ class Literal extends RdfTerm {
     : value = _parseValue(lexicalForm, datatype);
 
   static Object? _parseValue(String lexicalForm, IRI datatype) {
-    try {
-      // Gets the appropriate parser function from the DatatypeRegistry
-      final parser = DatatypeRegistry().getDatatypeInfo(datatype).parser;
-      // Calls the parser function to perform the actual parsing.
-      return parser(lexicalForm);
-    } on Exception {
-      return null;
-    }
+    // try {
+    //   // Gets the appropriate parser function from the DatatypeRegistry
+    //   final parser = DatatypeRegistry().getDatatypeInfo(datatype).parser;
+    //   // Calls the parser function to perform the actual parsing.
+    //   return parser(lexicalForm);
+    // } on Exception {
+    //   return null;
+    // }
+    // Gets the appropriate parser function from the DatatypeRegistry
+    final parser = DatatypeRegistry().getDatatypeInfo(datatype).parser;
+    // Calls the parser function to perform the actual parsing.
+    return parser(lexicalForm);
   }
 
   @override

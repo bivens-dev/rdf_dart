@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:decimal/decimal.dart';
 import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/data_type_facets.dart';
@@ -113,7 +115,16 @@ class DatatypeRegistry {
       xsdBoolean.lexicalToValue,
       xsdBoolean.valueToLexical as LiteralFormatter,
     );
+    registerDatatype(
+      IRI(XMLDataType.base64Binary.iri),
+      String,
+      (lexicalForm) => Base64Codec().normalize(lexicalForm),
+      (value) => Base64Codec().normalize(value as String),
+    );
     registerDatatype(IRI(XMLDataType.unsignedByte.iri), int, (lexicalForm) {
+      if (lexicalForm.startsWith('+') || lexicalForm.startsWith('-')) {
+        throw FormatException('Invalid xsd:unsignedByte value: $lexicalForm');
+      }
       final value = int.parse(lexicalForm);
       if (value < 0 || value > 255) {
         throw RangeError('Invalid xsd:unsignedByte value: $lexicalForm');
@@ -128,6 +139,9 @@ class DatatypeRegistry {
       return value;
     }, (value) => value.toString());
     registerDatatype(IRI(XMLDataType.unsignedShort.iri), int, (lexicalForm) {
+      if (lexicalForm.startsWith('+') || lexicalForm.startsWith('-')) {
+        throw FormatException('Invalid xsd:unsignedShort value: $lexicalForm');
+      }
       final value = int.parse(lexicalForm);
       if (value < 0 || value > 65535) {
         throw RangeError('Invalid xsd:unsignedShort value: $lexicalForm');
@@ -149,6 +163,9 @@ class DatatypeRegistry {
       return value;
     }, (value) => value.toString());
     registerDatatype(IRI(XMLDataType.unsignedInt.iri), int, (lexicalForm) {
+      if (lexicalForm.startsWith('+') || lexicalForm.startsWith('-')) {
+        throw FormatException('Invalid xsd:unsignedInt value: $lexicalForm');
+      }
       final value = int.parse(lexicalForm);
       if (value < 0 || value > 4294967295) {
         throw RangeError('Invalid xsd:int unsignedInt value: $lexicalForm');
