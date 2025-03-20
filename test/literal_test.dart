@@ -1,3 +1,4 @@
+import 'package:intl/locale.dart';
 import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/data_type_facets.dart';
 import 'package:test/test.dart';
@@ -6,6 +7,66 @@ void main() {
   group('Literal', () {
     group('Creation', () {
       group('XML Schema Datatypes', () {
+        group('language', () {
+          group('with valid data', () {
+            test('language tag with private extensions', () {
+              final literal = Literal(
+                'de-Latn-DE-1996-x-private-test',
+                IRI(XMLDataType.language.iri),
+              );
+              expect(literal.toLexicalForm(), 'de-Latn-DE-1996-x-private-test');
+              expect(literal.datatype, IRI(XMLDataType.language.iri));
+              expect(
+                literal.value,
+                Locale.parse('de-Latn-DE-1996-x-private-test'),
+              );
+            });
+
+            test('language tag with multiple variants', () {
+              final literal = Literal(
+                'sl-Latn-IT-rozaj-nedis-1996',
+                IRI(XMLDataType.language.iri),
+              );
+              expect(literal.toLexicalForm(), 'sl-Latn-IT-1996-nedis-rozaj');
+              expect(literal.datatype, IRI(XMLDataType.language.iri));
+              expect(
+                literal.value,
+                Locale.parse('sl-Latn-IT-rozaj-nedis-1996'),
+              );
+            });
+
+            test('simple language tag', () {
+              final literal = Literal('en', IRI(XMLDataType.language.iri));
+              expect(literal.toLexicalForm(), 'en');
+              expect(literal.datatype, IRI(XMLDataType.language.iri));
+              expect(literal.value, Locale.parse('en'));
+            });
+
+            test('language tag with country', () {
+              final literal = Literal('en-AU', IRI(XMLDataType.language.iri));
+              expect(literal.toLexicalForm(), 'en-AU');
+              expect(literal.datatype, IRI(XMLDataType.language.iri));
+              expect(literal.value, Locale.parse('en-AU'));
+            });
+          });
+
+          group('with invalid data', () {
+            test('cantbethislong is not a valid value', () {
+              expect(
+                () => Literal('cantbethislong', IRI(XMLDataType.language.iri)),
+                throwsFormatException,
+              );
+            });
+
+            test('does not accept empty extensions', () {
+              expect(
+                () => Literal('ja-t-i-ami', IRI(XMLDataType.language.iri)),
+                throwsFormatException,
+              );
+            });
+          });
+        });
+
         group('boolean', () {
           group('using valid data', () {
             test('true is a valid boolean data type', () {

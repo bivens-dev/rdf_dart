@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:decimal/decimal.dart';
+import 'package:intl/locale.dart';
 import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/data_type_facets.dart';
 import 'package:rdf_dart/src/data_types/xsd_boolean.dart';
@@ -172,6 +173,12 @@ class DatatypeRegistry {
       }
       return value;
     }, (value) => value.toString());
+    registerDatatype(
+      IRI(XMLDataType.language.iri),
+      Locale,
+      Locale.parse,
+      (value) => value.toString(),
+    );
   }
 
   /// The map that holds the registered datatypes.
