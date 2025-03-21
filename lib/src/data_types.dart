@@ -6,6 +6,7 @@ import 'package:decimal/decimal.dart';
 import 'package:intl/locale.dart';
 import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/data_type_facets.dart';
+import 'package:rdf_dart/src/data_types/boolean.dart';
 import 'package:rdf_dart/src/data_types/byte.dart';
 import 'package:rdf_dart/src/data_types/int.dart';
 import 'package:rdf_dart/src/data_types/negative_integer.dart';
@@ -14,7 +15,6 @@ import 'package:rdf_dart/src/data_types/short.dart';
 import 'package:rdf_dart/src/data_types/unsigned_byte.dart';
 import 'package:rdf_dart/src/data_types/unsigned_int.dart';
 import 'package:rdf_dart/src/data_types/unsigned_short.dart';
-import 'package:rdf_dart/src/data_types/xsd_boolean.dart';
 import 'package:rdf_dart/src/data_types/xsd_decimal.dart';
 import 'package:rdf_dart/src/data_types/xsd_double.dart';
 import 'package:rdf_dart/src/data_types/xsd_integer.dart';
@@ -84,7 +84,6 @@ class DatatypeRegistry {
   ///
   /// This constructor registers the default datatypes.
   DatatypeRegistry._internal() {
-    final xsdBoolean = const XSDBoolean();
     final xsdInteger = const XSDInteger();
     final xsdDouble = const XSDDouble();
     final xsdDecimal = const XSDDecimal();
@@ -150,8 +149,8 @@ class DatatypeRegistry {
     registerDatatype(
       IRI(XMLDataType.boolean.iri),
       bool,
-      xsdBoolean.lexicalToValue,
-      xsdBoolean.valueToLexical as LiteralFormatter,
+      booleanCodec.encoder.convert,
+      booleanCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
       IRI(XMLDataType.base64Binary.iri),
