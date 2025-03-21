@@ -9,6 +9,7 @@ import 'package:rdf_dart/src/data_type_facets.dart';
 import 'package:rdf_dart/src/data_types/boolean.dart';
 import 'package:rdf_dart/src/data_types/byte.dart';
 import 'package:rdf_dart/src/data_types/int.dart';
+import 'package:rdf_dart/src/data_types/integer.dart';
 import 'package:rdf_dart/src/data_types/negative_integer.dart';
 import 'package:rdf_dart/src/data_types/non_negative_integer.dart';
 import 'package:rdf_dart/src/data_types/short.dart';
@@ -17,7 +18,6 @@ import 'package:rdf_dart/src/data_types/unsigned_int.dart';
 import 'package:rdf_dart/src/data_types/unsigned_short.dart';
 import 'package:rdf_dart/src/data_types/xsd_decimal.dart';
 import 'package:rdf_dart/src/data_types/xsd_double.dart';
-import 'package:rdf_dart/src/data_types/xsd_integer.dart';
 
 /// A function that takes a lexical form (a string) and returns a Dart object.
 ///
@@ -84,7 +84,6 @@ class DatatypeRegistry {
   ///
   /// This constructor registers the default datatypes.
   DatatypeRegistry._internal() {
-    final xsdInteger = const XSDInteger();
     final xsdDouble = const XSDDouble();
     final xsdDecimal = const XSDDecimal();
 
@@ -125,8 +124,8 @@ class DatatypeRegistry {
     registerDatatype(
       IRI(XMLDataType.integer.iri),
       BigInt,
-      xsdInteger.lexicalToValue,
-      xsdInteger.valueToLexical as LiteralFormatter,
+      bigIntCodec.encoder.convert,
+      bigIntCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
       IRI(XMLDataType.decimal.iri),
