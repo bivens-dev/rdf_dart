@@ -6,6 +6,7 @@ import 'package:decimal/decimal.dart';
 import 'package:intl/locale.dart';
 import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/data_type_facets.dart';
+import 'package:rdf_dart/src/data_types/unsigned_byte.dart';
 import 'package:rdf_dart/src/data_types/xsd_boolean.dart';
 import 'package:rdf_dart/src/data_types/xsd_decimal.dart';
 import 'package:rdf_dart/src/data_types/xsd_double.dart';
@@ -161,16 +162,12 @@ class DatatypeRegistry {
       hex.decode,
       hex.encode as LiteralFormatter,
     );
-    registerDatatype(IRI(XMLDataType.unsignedByte.iri), int, (lexicalForm) {
-      if (lexicalForm.startsWith('+') || lexicalForm.startsWith('-')) {
-        throw FormatException('Invalid xsd:unsignedByte value: $lexicalForm');
-      }
-      final value = int.parse(lexicalForm);
-      if (value < 0 || value > 255) {
-        throw RangeError('Invalid xsd:unsignedByte value: $lexicalForm');
-      }
-      return value;
-    }, (value) => value.toString());
+    registerDatatype(
+      IRI(XMLDataType.unsignedByte.iri),
+      int,
+      unsignedByte.encoder.convert,
+      unsignedByte.decoder.convert as LiteralFormatter,
+    );
     registerDatatype(IRI(XMLDataType.byte.iri), int, (lexicalForm) {
       final value = int.parse(lexicalForm);
       if (value < -128 || value > 127) {

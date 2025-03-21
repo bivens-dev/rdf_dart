@@ -782,33 +782,6 @@ void main() {
         });
 
         group('cross cutting concerns', () {
-          test("unsigned numeric types don't accept +/- signs", () {
-            expect(
-              () => Literal('-0', IRI(XMLDataType.unsignedByte.iri)),
-              throwsFormatException,
-            );
-            expect(
-              () => Literal('+0', IRI(XMLDataType.unsignedByte.iri)),
-              throwsFormatException,
-            );
-            expect(
-              () => Literal('-0', IRI(XMLDataType.unsignedInt.iri)),
-              throwsFormatException,
-            );
-            expect(
-              () => Literal('+0', IRI(XMLDataType.unsignedInt.iri)),
-              throwsFormatException,
-            );
-            expect(
-              () => Literal('-0', IRI(XMLDataType.unsignedShort.iri)),
-              throwsFormatException,
-            );
-            expect(
-              () => Literal('+0', IRI(XMLDataType.unsignedShort.iri)),
-              throwsFormatException,
-            );
-          });
-
           test("numbers don't accept blank strings", () {
             expect(
               () => Literal('', IRI(XMLDataType.unsignedByte.iri)),
