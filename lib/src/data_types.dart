@@ -8,8 +8,10 @@ import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/data_type_facets.dart';
 import 'package:rdf_dart/src/data_types/byte.dart';
 import 'package:rdf_dart/src/data_types/int.dart';
+import 'package:rdf_dart/src/data_types/non_negative_integer.dart';
 import 'package:rdf_dart/src/data_types/short.dart';
 import 'package:rdf_dart/src/data_types/unsigned_byte.dart';
+import 'package:rdf_dart/src/data_types/unsigned_int.dart';
 import 'package:rdf_dart/src/data_types/unsigned_short.dart';
 import 'package:rdf_dart/src/data_types/xsd_boolean.dart';
 import 'package:rdf_dart/src/data_types/xsd_decimal.dart';
@@ -99,15 +101,12 @@ class DatatypeRegistry {
       (lexicalForm) => lexicalForm,
       (value) => value.toString(),
     );
-    registerDatatype(IRI(XMLDataType.nonNegativeInteger.iri), int, (
-      lexicalForm,
-    ) {
-      final value = int.parse(lexicalForm);
-      if (value < 0) {
-        throw RangeError('Invalid nonNegativeInteger value: $lexicalForm');
-      }
-      return value;
-    }, (value) => value.toString());
+    registerDatatype(
+      IRI(XMLDataType.nonNegativeInteger.iri),
+      int,
+      nonNegativeInteger.encoder.convert,
+      nonNegativeInteger.decoder.convert as LiteralFormatter,
+    );
     registerDatatype(IRI(XMLDataType.negativeInteger.iri), int, (lexicalForm) {
       final value = int.parse(lexicalForm);
       if (value >= 0) {
@@ -196,16 +195,13 @@ class DatatypeRegistry {
       intCodec.encoder.convert,
       intCodec.decoder.convert as LiteralFormatter,
     );
-    registerDatatype(IRI(XMLDataType.unsignedInt.iri), int, (lexicalForm) {
-      if (lexicalForm.startsWith('+') || lexicalForm.startsWith('-')) {
-        throw FormatException('Invalid xsd:unsignedInt value: $lexicalForm');
-      }
-      final value = int.parse(lexicalForm);
-      if (value < 0 || value > 4294967295) {
-        throw RangeError('Invalid xsd:int unsignedInt value: $lexicalForm');
-      }
-      return value;
-    }, (value) => value.toString());
+    registerDatatype(
+      IRI(XMLDataType.unsignedInt.iri),
+      int,
+      unsignedInt.encoder.convert,
+      unsignedInt.decoder.convert as LiteralFormatter,
+    );
+
     registerDatatype(
       IRI(XMLDataType.language.iri),
       Locale,
