@@ -1,3 +1,4 @@
+import 'package:intl/locale.dart';
 import 'package:meta/meta.dart';
 import 'package:rdf_dart/src/data_types.dart';
 import 'package:rdf_dart/src/iri.dart';
@@ -44,7 +45,7 @@ class Literal extends RdfTerm {
   /// This is a string representing the language of the literal's text, if
   /// applicable. For example, 'en' for English or 'fr' for French. If not
   /// specified, it's `null`.
-  final String? language;
+  final Locale? language;
 
   /// The parsed value of the literal.
   ///
@@ -62,8 +63,9 @@ class Literal extends RdfTerm {
   /// ```dart
   /// final myLiteral = Literal('example', IRI('http://www.w3.org/2001/XMLSchema#string'));
   /// ```
-  Literal(String lexicalForm, this.datatype, [this.language])
-    : value = _parseValue(lexicalForm, datatype);
+  Literal(String lexicalForm, this.datatype, [String? language])
+    : value = _parseValue(lexicalForm, datatype),
+      language = _parseLanguage(language, datatype);
 
   static Object _parseValue(String lexicalForm, IRI datatype) {
     // try {
@@ -78,6 +80,49 @@ class Literal extends RdfTerm {
     final parser = DatatypeRegistry().getDatatypeInfo(datatype).parser;
     // Calls the parser function to perform the actual parsing.
     return parser(lexicalForm);
+  }
+
+  static Locale? _parseLanguage(String? language, IRI datatype) {
+    _validateLangStringDataType(language, datatype);
+    if (language == null) {
+      return null;
+    }
+    return Locale.parse(language);
+  }
+
+  /// From the RDF 1.2 specification: if and only if the datatype IRI is
+  /// http://www.w3.org/1999/02/22-rdf-syntax-ns#langString, a non-empty
+  /// language tag as defined by `BCP47`. The language tag MUST be well-formed
+  /// according to section 2.2.9 of `BCP47`, and MUST be treated consistently,
+  /// that is, in a case insensitive manner. Two language tags are the same
+  /// if they only differ by case.
+  static void _validateLangStringDataType(String? language, IRI datatype) {
+    final langStringDataType = IRI(
+      'http://www.w3.org/1999/02/22-rdf-syntax-ns#langString',
+    );
+
+    if (datatype != langStringDataType) {
+      return;
+    }
+
+    if (datatype == langStringDataType && language == null) {
+      throw ArgumentError.value(
+        language,
+        'language',
+        'Must not be null for langString datatype',
+      );
+    }
+
+    if (datatype == langStringDataType && language != null) {
+      final result = Locale.tryParse(language);
+      if (result == null) {
+        throw ArgumentError.value(
+          language,
+          'language',
+          'Is not a valid BCP47 language tag',
+        );
+      }
+    }
   }
 
   @override

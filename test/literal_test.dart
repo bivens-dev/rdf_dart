@@ -919,7 +919,7 @@ void main() {
         final literal = Literal('bonjour', IRI(XMLDataType.string.iri), 'fr');
         expect(literal.lexicalForm, 'bonjour');
         expect(literal.datatype, IRI(XMLDataType.string.iri));
-        expect(literal.language, 'fr');
+        expect(literal.language, Locale.parse('fr'));
         expect(literal.value, 'bonjour');
       });
       test('with double datatype', () {
