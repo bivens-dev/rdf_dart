@@ -5,18 +5,18 @@ import 'dart:convert';
 /// The canonical instance of [UnsignedShortCodec].
 const unsignedShort = UnsignedShortCodec._();
 
-// Values taken from the specification
-final _constraints = (
-  minInclusive: 0,
-  maxInclusive: 65535,
-  pattern: RegExp(r'[\-+]?[0-9]+'),
-);
-
 /// A [Codec] for working with XML Schema Unsigned Short data
 /// as defined by https://www.w3.org/TR/xmlschema11-2/#unsignedShort
 class UnsignedShortCodec extends Codec<String, int> {
   final Converter<String, int> _encoder;
   final Converter<int, String> _decoder;
+
+  /// Values taken from the specification
+  static final constraints = (
+    minInclusive: 0,
+    maxInclusive: 65535,
+    pattern: RegExp(r'[\-+]?[0-9]+'),
+  );
 
   const UnsignedShortCodec._()
     : _decoder = const UnsignedShortDecoder._(),
@@ -39,16 +39,16 @@ class UnsignedShortEncoder extends Converter<String, int> {
   int convert(String input) => _convert(input);
 
   int _convert(String input) {
-    if (!_constraints.pattern.hasMatch(input)) {
+    if (!UnsignedShortCodec.constraints.pattern.hasMatch(input)) {
       throw FormatException('invalid format');
     }
     final parsedValue = int.parse(input);
-    if (parsedValue < _constraints.minInclusive ||
-        parsedValue > _constraints.maxInclusive) {
+    if (parsedValue < UnsignedShortCodec.constraints.minInclusive ||
+        parsedValue > UnsignedShortCodec.constraints.maxInclusive) {
       throw RangeError.range(
         parsedValue,
-        _constraints.minInclusive,
-        _constraints.maxInclusive,
+        UnsignedShortCodec.constraints.minInclusive,
+        UnsignedShortCodec.constraints.maxInclusive,
       );
     }
     return parsedValue;
@@ -64,12 +64,12 @@ class UnsignedShortDecoder extends Converter<int, String> {
   String convert(int input) => _convert(input);
 
   String _convert(int input) {
-    if (input < _constraints.minInclusive ||
-        input > _constraints.maxInclusive) {
+    if (input < UnsignedShortCodec.constraints.minInclusive ||
+        input > UnsignedShortCodec.constraints.maxInclusive) {
       throw RangeError.range(
         input,
-        _constraints.minInclusive,
-        _constraints.maxInclusive,
+        UnsignedShortCodec.constraints.minInclusive,
+        UnsignedShortCodec.constraints.maxInclusive,
       );
     }
     return input.toString();

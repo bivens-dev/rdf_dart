@@ -5,18 +5,18 @@ import 'dart:convert';
 /// The canonical instance of [UnsignedByteCodec].
 const unsignedByte = UnsignedByteCodec._();
 
-// Values taken from the specification
-final _constraints = (
-  minInclusive: 0,
-  maxInclusive: 255,
-  pattern: RegExp(r'[\-+]?[0-9]+'),
-);
-
 /// A [Codec] for working with XML Schema Unsigned Byte data
 /// as defined by https://www.w3.org/TR/xmlschema11-2/#unsignedByte
 class UnsignedByteCodec extends Codec<String, int> {
   final Converter<String, int> _encoder;
   final Converter<int, String> _decoder;
+
+  /// Values taken from the specification
+  static final constraints = (
+    minInclusive: 0,
+    maxInclusive: 255,
+    pattern: RegExp(r'[\-+]?[0-9]+'),
+  );
 
   const UnsignedByteCodec._()
     : _decoder = const UnsignedByteDecoder._(),
@@ -39,16 +39,16 @@ class UnsignedByteEncoder extends Converter<String, int> {
   int convert(String input) => _convert(input);
 
   int _convert(String input) {
-    if (!_constraints.pattern.hasMatch(input)) {
+    if (!UnsignedByteCodec.constraints.pattern.hasMatch(input)) {
       throw FormatException('invalid format');
     }
     final parsedValue = int.parse(input);
-    if (parsedValue < _constraints.minInclusive ||
-        parsedValue > _constraints.maxInclusive) {
+    if (parsedValue < UnsignedByteCodec.constraints.minInclusive ||
+        parsedValue > UnsignedByteCodec.constraints.maxInclusive) {
       throw RangeError.range(
         parsedValue,
-        _constraints.minInclusive,
-        _constraints.maxInclusive,
+        UnsignedByteCodec.constraints.minInclusive,
+        UnsignedByteCodec.constraints.maxInclusive,
       );
     }
     return parsedValue;
@@ -64,12 +64,12 @@ class UnsignedByteDecoder extends Converter<int, String> {
   String convert(int input) => _convert(input);
 
   String _convert(int input) {
-    if (input < _constraints.minInclusive ||
-        input > _constraints.maxInclusive) {
+    if (input < UnsignedByteCodec.constraints.minInclusive ||
+        input > UnsignedByteCodec.constraints.maxInclusive) {
       throw RangeError.range(
         input,
-        _constraints.minInclusive,
-        _constraints.maxInclusive,
+        UnsignedByteCodec.constraints.minInclusive,
+        UnsignedByteCodec.constraints.maxInclusive,
       );
     }
     return input.toString();
