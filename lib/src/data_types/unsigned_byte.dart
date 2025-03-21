@@ -43,7 +43,8 @@ class UnsignedByteEncoder extends Converter<String, int> {
       throw FormatException('invalid format');
     }
     final parsedValue = int.parse(input);
-    if (parsedValue > 255) {
+    if (parsedValue < _constraints.minInclusive ||
+        parsedValue > _constraints.maxInclusive) {
       throw RangeError.range(
         parsedValue,
         _constraints.minInclusive,
@@ -63,7 +64,8 @@ class UnsignedByteDecoder extends Converter<int, String> {
   String convert(int input) => _convert(input);
 
   String _convert(int input) {
-    if (input > 255) {
+    if (input < _constraints.minInclusive ||
+        input > _constraints.maxInclusive) {
       throw RangeError.range(
         input,
         _constraints.minInclusive,
