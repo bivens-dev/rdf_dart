@@ -7,6 +7,7 @@ import 'package:intl/locale.dart';
 import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/data_type_facets.dart';
 import 'package:rdf_dart/src/data_types/byte.dart';
+import 'package:rdf_dart/src/data_types/short.dart';
 import 'package:rdf_dart/src/data_types/unsigned_byte.dart';
 import 'package:rdf_dart/src/data_types/unsigned_short.dart';
 import 'package:rdf_dart/src/data_types/xsd_boolean.dart';
@@ -182,13 +183,12 @@ class DatatypeRegistry {
       unsignedShort.encoder.convert,
       unsignedShort.decoder.convert as LiteralFormatter,
     );
-    registerDatatype(IRI(XMLDataType.short.iri), int, (lexicalForm) {
-      final value = int.parse(lexicalForm);
-      if (value < -32768 || value > 32767) {
-        throw RangeError('Invalid xsd:short value: $lexicalForm');
-      }
-      return value;
-    }, (value) => value.toString());
+    registerDatatype(
+      IRI(XMLDataType.short.iri),
+      int,
+      shortCodec.encoder.convert,
+      shortCodec.decoder.convert as LiteralFormatter,
+    );
     registerDatatype(IRI(XMLDataType.int.iri), int, (lexicalForm) {
       final value = int.parse(lexicalForm);
       if (value < -2147483648 || value > 2147483647) {
