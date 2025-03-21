@@ -31,7 +31,7 @@ class Literal extends RdfTerm {
   /// The lexical form of the literal.
   ///
   /// This is the string representation of the literal's value.
-  final String lexicalForm;
+  String get lexicalForm => _toLexicalForm();
 
   /// The datatype of the literal.
   ///
@@ -49,7 +49,7 @@ class Literal extends RdfTerm {
   /// The parsed value of the literal.
   ///
   /// This is an object of the type specified by the datatype.
-  final Object? value;
+  final Object value;
 
   /// Creates a new Literal with the given [lexicalForm], [datatype], and
   /// optional [language].
@@ -62,10 +62,10 @@ class Literal extends RdfTerm {
   /// ```dart
   /// final myLiteral = Literal('example', IRI('http://www.w3.org/2001/XMLSchema#string'));
   /// ```
-  Literal(this.lexicalForm, this.datatype, [this.language])
+  Literal(String lexicalForm, this.datatype, [this.language])
     : value = _parseValue(lexicalForm, datatype);
 
-  static Object? _parseValue(String lexicalForm, IRI datatype) {
+  static Object _parseValue(String lexicalForm, IRI datatype) {
     // try {
     //   // Gets the appropriate parser function from the DatatypeRegistry
     //   final parser = DatatypeRegistry().getDatatypeInfo(datatype).parser;
@@ -100,16 +100,13 @@ class Literal extends RdfTerm {
     if (datatype == IRI('http://www.w3.org/2001/XMLSchema#string')) {
       return '"$lexicalForm"';
     }
-    return '"${toLexicalForm()}"^^<$datatype>';
+    return '"${_toLexicalForm()}"^^<$datatype>';
   }
 
   /// Returns the lexical form of the literal.
-  String toLexicalForm() {
-    if (value == null) {
-      return lexicalForm;
-    }
+  String _toLexicalForm() {
     final formatter = DatatypeRegistry().getDatatypeInfo(datatype).formatter;
-    return formatter(value!);
+    return formatter(value);
   }
 
   @override
