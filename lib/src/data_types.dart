@@ -152,18 +152,15 @@ class DatatypeRegistry {
     registerDatatype(
       IRI(XMLDataType.base64Binary.iri),
       Uint8List,
-      (lexicalForm) => base64.decode(lexicalForm),
-      (value) {
-        final bytes = value as Uint8List;
-        return base64.encode(bytes);
-      },
+      base64.decode,
+      base64.encode as LiteralFormatter,
     );
-    registerDatatype(IRI(XMLDataType.hexBinary.iri), Uint8List, hex.decode, (
-      value,
-    ) {
-      final bytes = value as Uint8List;
-      return hex.encode(bytes);
-    });
+    registerDatatype(
+      IRI(XMLDataType.hexBinary.iri),
+      Uint8List,
+      hex.decode,
+      hex.encode as LiteralFormatter,
+    );
     registerDatatype(IRI(XMLDataType.unsignedByte.iri), int, (lexicalForm) {
       if (lexicalForm.startsWith('+') || lexicalForm.startsWith('-')) {
         throw FormatException('Invalid xsd:unsignedByte value: $lexicalForm');
