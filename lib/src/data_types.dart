@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:decimal/decimal.dart';
 import 'package:intl/locale.dart';
@@ -118,9 +119,12 @@ class DatatypeRegistry {
     );
     registerDatatype(
       IRI(XMLDataType.base64Binary.iri),
-      String,
-      (lexicalForm) => Base64Codec().normalize(lexicalForm),
-      (value) => Base64Codec().normalize(value as String),
+      Uint8List,
+      (lexicalForm) => Base64Codec().decode(lexicalForm),
+      (value) {
+        final bytes = value as Uint8List;
+        return Base64Codec().encode(bytes);
+      },
     );
     registerDatatype(IRI(XMLDataType.unsignedByte.iri), int, (lexicalForm) {
       if (lexicalForm.startsWith('+') || lexicalForm.startsWith('-')) {

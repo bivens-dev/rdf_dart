@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:intl/locale.dart';
 import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/data_type_facets.dart';
@@ -636,6 +639,33 @@ void main() {
               expect(
                 () => Literal('-2147483649', IRI(XMLDataType.short.iri)),
                 throwsRangeError,
+              );
+            });
+          });
+        });
+
+        group('base64Binary', () {
+          group('with valid data', () {
+            test('it decodes the data correctly', () {
+              final literal = Literal(
+                'SGVsbG8gV29ybGQ=',
+                IRI(XMLDataType.base64Binary.iri),
+              );
+
+              expect(literal.toLexicalForm(), 'SGVsbG8gV29ybGQ=');
+              expect(literal.language, isNull);
+              expect(utf8.decode(literal.value as Uint8List), 'Hello World');
+            });
+          });
+
+          group('with invalid data', () {
+            test('rejects invalid characters', () {
+              expect(
+                () => Literal(
+                  '^not a valid string^',
+                  IRI(XMLDataType.base64Binary.iri),
+                ),
+                throwsFormatException,
               );
             });
           });
