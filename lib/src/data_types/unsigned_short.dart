@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 
+import 'package:rdf_dart/src/data_types/helper.dart';
+
 /// The canonical instance of [UnsignedShortCodec].
 const unsignedShort = UnsignedShortCodec._();
 
@@ -16,6 +18,7 @@ class UnsignedShortCodec extends Codec<String, int> {
     minInclusive: 0,
     maxInclusive: 65535,
     pattern: RegExp(r'[\-+]?[0-9]+'),
+    whitespace: Whitespace.collapse,
   );
 
   const UnsignedShortCodec._()
@@ -39,10 +42,14 @@ class UnsignedShortEncoder extends Converter<String, int> {
   int convert(String input) => _convert(input);
 
   int _convert(String input) {
+    input = processWhiteSpace(input, UnsignedShortCodec.constraints.whitespace);
+
     if (!UnsignedShortCodec.constraints.pattern.hasMatch(input)) {
       throw FormatException('invalid format');
     }
+
     final parsedValue = int.parse(input);
+
     if (parsedValue < UnsignedShortCodec.constraints.minInclusive ||
         parsedValue > UnsignedShortCodec.constraints.maxInclusive) {
       throw RangeError.range(
@@ -51,6 +58,7 @@ class UnsignedShortEncoder extends Converter<String, int> {
         UnsignedShortCodec.constraints.maxInclusive,
       );
     }
+
     return parsedValue;
   }
 }
@@ -72,6 +80,7 @@ class UnsignedShortDecoder extends Converter<int, String> {
         UnsignedShortCodec.constraints.maxInclusive,
       );
     }
+
     return input.toString();
   }
 }

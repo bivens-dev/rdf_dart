@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 
+import 'package:rdf_dart/src/data_types/helper.dart';
+
 /// The canonical instance of [BooleanCodec].
 const booleanCodec = BooleanCodec._();
 
@@ -12,7 +14,10 @@ class BooleanCodec extends Codec<String, bool> {
   final Converter<bool, String> _decoder;
 
   /// Values taken from the specification
-  static final constraints = (pattern: RegExp(r'^(true|false|1|0)$'));
+  static final constraints = (
+    pattern: RegExp(r'^(true|false|1|0)$'),
+    whitespace: Whitespace.collapse,
+  );
 
   const BooleanCodec._()
     : _decoder = const BooleanDecoder._(),
@@ -33,9 +38,12 @@ class BooleanEncoder extends Converter<String, bool> {
   bool convert(String input) => _convert(input);
 
   bool _convert(String input) {
+    input = processWhiteSpace(input, BooleanCodec.constraints.whitespace);
+
     if (!BooleanCodec.constraints.pattern.hasMatch(input)) {
       throw FormatException('invalid format xsd:bool format');
     }
+
     switch (input) {
       case 'true':
       case '1':

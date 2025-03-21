@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 
+import 'package:rdf_dart/src/data_types/helper.dart';
+
 /// The canonical instance of [ShortCodec].
 const shortCodec = ShortCodec._();
 
@@ -16,6 +18,7 @@ class ShortCodec extends Codec<String, int> {
     minInclusive: -32768,
     maxInclusive: 32767,
     pattern: RegExp(r'[\-+]?[0-9]+'),
+    whitespace: Whitespace.collapse,
   );
 
   const ShortCodec._()
@@ -39,10 +42,14 @@ class ShortEncoder extends Converter<String, int> {
   int convert(String input) => _convert(input);
 
   int _convert(String input) {
+    input = processWhiteSpace(input, ShortCodec.constraints.whitespace);
+
     if (!ShortCodec.constraints.pattern.hasMatch(input)) {
       throw FormatException('invalid xsd:short format');
     }
+
     final parsedValue = int.parse(input);
+
     if (parsedValue < ShortCodec.constraints.minInclusive ||
         parsedValue > ShortCodec.constraints.maxInclusive) {
       throw RangeError.range(
@@ -51,6 +58,7 @@ class ShortEncoder extends Converter<String, int> {
         ShortCodec.constraints.maxInclusive,
       );
     }
+
     return parsedValue;
   }
 }
@@ -72,6 +80,7 @@ class ShortDecoder extends Converter<int, String> {
         ShortCodec.constraints.maxInclusive,
       );
     }
+
     return input.toString();
   }
 }

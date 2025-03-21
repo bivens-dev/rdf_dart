@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 
+import 'package:rdf_dart/src/data_types/helper.dart';
+
 /// The canonical instance of [NonNegativeIntegerCodec].
 const nonNegativeInteger = NonNegativeIntegerCodec._();
 
@@ -15,6 +17,7 @@ class NonNegativeIntegerCodec extends Codec<String, int> {
   static final constraints = (
     minInclusive: 0,
     pattern: RegExp(r'[\-+]?[0-9]+'),
+    whitespace: Whitespace.collapse,
   );
 
   const NonNegativeIntegerCodec._()
@@ -38,10 +41,17 @@ class NonNegativeIntegerEncoder extends Converter<String, int> {
   int convert(String input) => _convert(input);
 
   int _convert(String input) {
+    input = processWhiteSpace(
+      input,
+      NonNegativeIntegerCodec.constraints.whitespace,
+    );
+
     if (!NonNegativeIntegerCodec.constraints.pattern.hasMatch(input)) {
       throw FormatException('invalid xsd:nonNegativeInteger format');
     }
+
     final parsedValue = int.parse(input);
+
     if (parsedValue < NonNegativeIntegerCodec.constraints.minInclusive) {
       throw RangeError.value(
         parsedValue,
@@ -49,6 +59,7 @@ class NonNegativeIntegerEncoder extends Converter<String, int> {
         'must be greater than ${NonNegativeIntegerCodec.constraints.minInclusive}',
       );
     }
+
     return parsedValue;
   }
 }
@@ -69,6 +80,7 @@ class NonNegativeIntegerDecoder extends Converter<int, String> {
         'must be greater than ${NonNegativeIntegerCodec.constraints.minInclusive}',
       );
     }
+
     return input.toString();
   }
 }

@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 
+import 'package:rdf_dart/src/data_types/helper.dart';
+
 /// The canonical instance of [UnsignedIntCodec].
 const unsignedInt = UnsignedIntCodec._();
 
@@ -16,6 +18,7 @@ class UnsignedIntCodec extends Codec<String, int> {
     minInclusive: 0,
     maxInclusive: 4294967295,
     pattern: RegExp(r'[\-+]?[0-9]+'),
+    whitespace: Whitespace.collapse,
   );
 
   const UnsignedIntCodec._()
@@ -39,10 +42,14 @@ class UnsignedIntEncoder extends Converter<String, int> {
   int convert(String input) => _convert(input);
 
   int _convert(String input) {
+    input = processWhiteSpace(input, UnsignedIntCodec.constraints.whitespace);
+
     if (!UnsignedIntCodec.constraints.pattern.hasMatch(input)) {
       throw FormatException('invalid xsd:unsignedInt format');
     }
+
     final parsedValue = int.parse(input);
+
     if (parsedValue < UnsignedIntCodec.constraints.minInclusive ||
         parsedValue > UnsignedIntCodec.constraints.maxInclusive) {
       throw RangeError.range(
@@ -51,6 +58,7 @@ class UnsignedIntEncoder extends Converter<String, int> {
         UnsignedIntCodec.constraints.maxInclusive,
       );
     }
+
     return parsedValue;
   }
 }

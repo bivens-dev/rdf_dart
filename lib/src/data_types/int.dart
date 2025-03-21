@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 
+import 'package:rdf_dart/src/data_types/helper.dart';
+
 /// The canonical instance of [IntCodec].
 const intCodec = IntCodec._();
 
@@ -16,6 +18,7 @@ class IntCodec extends Codec<String, int> {
     minInclusive: -2147483648,
     maxInclusive: 2147483647,
     pattern: RegExp(r'[\-+]?[0-9]+'),
+    whitespace: Whitespace.collapse,
   );
 
   const IntCodec._()
@@ -39,10 +42,14 @@ class IntEncoder extends Converter<String, int> {
   int convert(String input) => _convert(input);
 
   int _convert(String input) {
+    input = processWhiteSpace(input, IntCodec.constraints.whitespace);
+
     if (!IntCodec.constraints.pattern.hasMatch(input)) {
       throw FormatException('invalid xsd:int format');
     }
+
     final parsedValue = int.parse(input);
+
     if (parsedValue < IntCodec.constraints.minInclusive ||
         parsedValue > IntCodec.constraints.maxInclusive) {
       throw RangeError.range(
@@ -51,6 +58,7 @@ class IntEncoder extends Converter<String, int> {
         IntCodec.constraints.maxInclusive,
       );
     }
+
     return parsedValue;
   }
 }
@@ -72,6 +80,7 @@ class IntDecoder extends Converter<int, String> {
         IntCodec.constraints.maxInclusive,
       );
     }
+
     return input.toString();
   }
 }

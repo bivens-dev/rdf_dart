@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 
+import 'package:rdf_dart/src/data_types/helper.dart';
+
 /// The canonical instance of [ByteCodec].
 const byte = ByteCodec._();
 
@@ -16,6 +18,7 @@ class ByteCodec extends Codec<String, int> {
     minInclusive: -128,
     maxInclusive: 127,
     pattern: RegExp(r'[\-+]?[0-9]+'),
+    whitespace: Whitespace.collapse,
   );
 
   const ByteCodec._()
@@ -39,10 +42,14 @@ class ByteEncoder extends Converter<String, int> {
   int convert(String input) => _convert(input);
 
   int _convert(String input) {
+    input = processWhiteSpace(input, ByteCodec.constraints.whitespace);
+
     if (!ByteCodec.constraints.pattern.hasMatch(input)) {
       throw FormatException('invalid xsd:byte format');
     }
+
     final parsedValue = int.parse(input);
+
     if (parsedValue < ByteCodec.constraints.minInclusive ||
         parsedValue > ByteCodec.constraints.maxInclusive) {
       throw RangeError.range(
@@ -51,6 +58,7 @@ class ByteEncoder extends Converter<String, int> {
         ByteCodec.constraints.maxInclusive,
       );
     }
+
     return parsedValue;
   }
 }
@@ -72,6 +80,7 @@ class ByteDecoder extends Converter<int, String> {
         ByteCodec.constraints.maxInclusive,
       );
     }
+
     return input.toString();
   }
 }

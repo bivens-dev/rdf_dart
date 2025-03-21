@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 
+import 'package:rdf_dart/src/data_types/helper.dart';
+
 /// The canonical instance of [NegativeIntegerCodec].
 const negativeInteger = NegativeIntegerCodec._();
 
@@ -15,6 +17,7 @@ class NegativeIntegerCodec extends Codec<String, int> {
   static final constraints = (
     maxInclusive: -1,
     pattern: RegExp(r'[\-+]?[0-9]+'),
+    whitespace: Whitespace.collapse,
   );
 
   const NegativeIntegerCodec._()
@@ -38,13 +41,21 @@ class NegativeIntegerEncoder extends Converter<String, int> {
   int convert(String input) => _convert(input);
 
   int _convert(String input) {
+    input = processWhiteSpace(
+      input,
+      NegativeIntegerCodec.constraints.whitespace,
+    );
+
     if (!NegativeIntegerCodec.constraints.pattern.hasMatch(input)) {
       throw FormatException('invalid xsd:negativeInteger format');
     }
+
     final parsedValue = int.parse(input);
+
     if (parsedValue > NegativeIntegerCodec.constraints.maxInclusive) {
       throw RangeError.value(parsedValue, null, 'must be a negative number');
     }
+
     return parsedValue;
   }
 }
@@ -61,6 +72,7 @@ class NegativeIntegerDecoder extends Converter<int, String> {
     if (input > NegativeIntegerCodec.constraints.maxInclusive) {
       throw RangeError.value(input, null, 'must be a negative number');
     }
+
     return input.toString();
   }
 }
