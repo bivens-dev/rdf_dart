@@ -50,7 +50,7 @@ class NegativeIntegerEncoder extends Converter<String, int> {
 }
 
 /// A [Converter] for translating from Dart's [int] data type back into a
-/// [String] that represents a valid XML Schema `nonNegativeInteger` data type.
+/// [String] that represents a valid XML Schema `negativeInteger` data type.
 class NegativeIntegerDecoder extends Converter<int, String> {
   const NegativeIntegerDecoder._();
 
