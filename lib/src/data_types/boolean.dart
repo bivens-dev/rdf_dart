@@ -26,8 +26,6 @@ class BooleanCodec extends Codec<String, bool> {
 }
 
 /// A [Converter] for working with XML Schema `boolean` data
-/// It uses Dart's built in [int.parse] and applies additional checks
-/// to ensure that the value is within the specified range requirements.
 class BooleanEncoder extends Converter<String, bool> {
   const BooleanEncoder._();
 
@@ -51,7 +49,7 @@ class BooleanEncoder extends Converter<String, bool> {
   }
 }
 
-/// A [Converter] for translating from Dart's [int] data type back into a
+/// A [Converter] for translating from Dart's [bool] data type back into a
 /// [String] that represents a valid XML Schema `boolean` data type.
 class BooleanDecoder extends Converter<bool, String> {
   const BooleanDecoder._();
