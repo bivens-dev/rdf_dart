@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:convert/convert.dart';
 import 'package:decimal/decimal.dart';
 import 'package:intl/locale.dart';
 import 'package:rdf_dart/rdf_dart.dart';
@@ -126,6 +127,12 @@ class DatatypeRegistry {
         return Base64Codec().encode(bytes);
       },
     );
+    registerDatatype(IRI(XMLDataType.hexBinary.iri), Uint8List, hex.decode, (
+      value,
+    ) {
+      final bytes = value as Uint8List;
+      return hex.encode(bytes);
+    });
     registerDatatype(IRI(XMLDataType.unsignedByte.iri), int, (lexicalForm) {
       if (lexicalForm.startsWith('+') || lexicalForm.startsWith('-')) {
         throw FormatException('Invalid xsd:unsignedByte value: $lexicalForm');

@@ -671,6 +671,55 @@ void main() {
           });
         });
 
+        group('hexBinary', () {
+          group('with valid data', () {
+            test('it decodes the data correctly with lowercase hex', () {
+              final literal = Literal(
+                '48656c6c6f20576f726c64',
+                IRI(XMLDataType.hexBinary.iri),
+              );
+
+              expect(literal.toLexicalForm(), '48656c6c6f20576f726c64');
+              expect(literal.language, isNull);
+              expect(utf8.decode(literal.value as Uint8List), 'Hello World');
+            });
+
+            test('it decodes the data correctly with uppercase hex', () {
+              final literal = Literal(
+                '48656C6C6F20576F726C64',
+                IRI(XMLDataType.hexBinary.iri),
+              );
+
+              expect(literal.toLexicalForm(), '48656c6c6f20576f726c64');
+              expect(literal.language, isNull);
+              expect(utf8.decode(literal.value as Uint8List), 'Hello World');
+            });
+
+            test('it decodes the data correctly with mixed case hex', () {
+              final literal = Literal(
+                '48656c6C6f20576F726C64',
+                IRI(XMLDataType.hexBinary.iri),
+              );
+
+              expect(literal.toLexicalForm(), '48656c6c6f20576f726c64');
+              expect(literal.language, isNull);
+              expect(utf8.decode(literal.value as Uint8List), 'Hello World');
+            });
+          });
+
+          group('with invalid data', () {
+            test('rejects invalid characters', () {
+              expect(
+                () => Literal(
+                  '^not a valid hex string^',
+                  IRI(XMLDataType.hexBinary.iri),
+                ),
+                throwsFormatException,
+              );
+            });
+          });
+        });
+
         group('cross cutting concerns', () {
           test("unsigned numeric types don't accept +/- signs", () {
             expect(
