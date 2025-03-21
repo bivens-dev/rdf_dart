@@ -89,6 +89,12 @@ class DatatypeRegistry {
       (value) => value.toString(),
     );
     registerDatatype(
+      IRI('http://www.w3.org/1999/02/22-rdf-syntax-ns#langString'),
+      String,
+      (lexicalForm) => lexicalForm,
+      (value) => value.toString(),
+    );
+    registerDatatype(
       IRI(XMLDataType.integer.iri),
       BigInt,
       xsdInteger.lexicalToValue,

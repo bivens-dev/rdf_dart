@@ -68,6 +68,13 @@ class Literal extends RdfTerm {
       language = _parseLanguage(language, datatype);
 
   static Object _parseValue(String lexicalForm, IRI datatype) {
+    if (lexicalForm.isEmpty) {
+      throw ArgumentError.value(
+        lexicalForm,
+        'lexicalForm',
+        'Must not be empty',
+      );
+    }
     // try {
     //   // Gets the appropriate parser function from the DatatypeRegistry
     //   final parser = DatatypeRegistry().getDatatypeInfo(datatype).parser;

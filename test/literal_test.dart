@@ -720,6 +720,67 @@ void main() {
           });
         });
 
+        group('langString', () {
+          final langStringIri = IRI(
+            'http://www.w3.org/1999/02/22-rdf-syntax-ns#langString',
+          );
+
+          group('with valid data', () {
+            test('with a simple language tag', () {
+              final literal = Literal('bonjour', langStringIri, 'fr');
+              expect(literal.lexicalForm, 'bonjour');
+              expect(literal.datatype, langStringIri);
+              expect(literal.language, Locale.parse('fr'));
+              expect(literal.value, 'bonjour');
+            });
+
+            test('with a language and country tag', () {
+              final literal = Literal('tudo bem', langStringIri, 'pt-PT');
+              expect(literal.lexicalForm, 'tudo bem');
+              expect(literal.datatype, langStringIri);
+              expect(literal.language, Locale.parse('pt-PT'));
+              expect(literal.value, 'tudo bem');
+            });
+
+            test('language tags are case insensitive', () {
+              final literal1 = Literal("G'day Mate", langStringIri, 'en-AU');
+              final literal2 = Literal("G'day Mate", langStringIri, 'en-au');
+              expect(literal1.language, literal2.language);
+              expect(
+                literal1.language.toString(),
+                literal2.language.toString(),
+              );
+            });
+          });
+
+          group('with invalid data', () {
+            test('with an invalid language tag', () {
+              expect(
+                () => Literal(
+                  'hello world',
+                  langStringIri,
+                  'invalid_language_tag',
+                ),
+                throwsArgumentError,
+              );
+            });
+
+            test('without a language tag', () {
+              expect(
+                () => Literal('hello world', langStringIri),
+                throwsArgumentError,
+              );
+            });
+
+            test('with an empty string', () {
+              expect(
+                () => Literal('', langStringIri, 'en-AU'),
+                throwsArgumentError,
+              );
+            });
+          });
+        });
+
         group('cross cutting concerns', () {
           test("unsigned numeric types don't accept +/- signs", () {
             expect(
@@ -751,31 +812,31 @@ void main() {
           test("numbers don't accept blank strings", () {
             expect(
               () => Literal('', IRI(XMLDataType.unsignedByte.iri)),
-              throwsFormatException,
+              throwsArgumentError,
             );
             expect(
               () => Literal('', IRI(XMLDataType.byte.iri)),
-              throwsFormatException,
+              throwsArgumentError,
             );
             expect(
               () => Literal('', IRI(XMLDataType.unsignedInt.iri)),
-              throwsFormatException,
+              throwsArgumentError,
             );
             expect(
               () => Literal('', IRI(XMLDataType.int.iri)),
-              throwsFormatException,
+              throwsArgumentError,
             );
             expect(
               () => Literal('', IRI(XMLDataType.short.iri)),
-              throwsFormatException,
+              throwsArgumentError,
             );
             expect(
               () => Literal('', IRI(XMLDataType.unsignedShort.iri)),
-              throwsFormatException,
+              throwsArgumentError,
             );
             expect(
               () => Literal('', IRI(XMLDataType.integer.iri)),
-              throwsFormatException,
+              throwsArgumentError,
             );
           });
 
@@ -922,6 +983,7 @@ void main() {
         expect(literal.language, Locale.parse('fr'));
         expect(literal.value, 'bonjour');
       });
+
       test('with double datatype', () {
         final literal = Literal('3.14', IRI(XMLDataType.double.iri));
         expect(literal.lexicalForm, '3.14E0');
