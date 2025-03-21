@@ -5,7 +5,7 @@ import 'dart:convert';
 /// The canonical instance of [ShortCodec].
 const shortCodec = ShortCodec._();
 
-/// A [Codec] for working with XML Schema Short data
+/// A [Codec] for working with XML Schema `short` data
 /// as defined by https://www.w3.org/TR/xmlschema11-2/#short
 class ShortCodec extends Codec<String, int> {
   final Converter<String, int> _encoder;
@@ -29,7 +29,7 @@ class ShortCodec extends Codec<String, int> {
   Converter<String, int> get encoder => _encoder;
 }
 
-/// A [Converter] for working with XML Schema Short data
+/// A [Converter] for working with XML Schema `short` data
 /// It uses Dart's built in [int.parse] and applies additional checks
 /// to ensure that the value is within the specified range requirements.
 class ShortEncoder extends Converter<String, int> {
@@ -56,7 +56,7 @@ class ShortEncoder extends Converter<String, int> {
 }
 
 /// A [Converter] for translating from Dart's [int] data type back into a
-/// [String] that represents a valid XML Schema Short data type.
+/// [String] that represents a valid XML Schema `short` data type.
 class ShortDecoder extends Converter<int, String> {
   const ShortDecoder._();
 

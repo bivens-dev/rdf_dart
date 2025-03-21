@@ -5,7 +5,7 @@ import 'dart:convert';
 /// The canonical instance of [ByteCodec].
 const byte = ByteCodec._();
 
-/// A [Codec] for working with XML Schema Byte data
+/// A [Codec] for working with XML Schema `byte` data
 /// as defined by https://www.w3.org/TR/xmlschema11-2/#byte
 class ByteCodec extends Codec<String, int> {
   final Converter<String, int> _encoder;
@@ -29,7 +29,7 @@ class ByteCodec extends Codec<String, int> {
   Converter<String, int> get encoder => _encoder;
 }
 
-/// A [Converter] for working with XML Schema Byte data
+/// A [Converter] for working with XML Schema `byte` data
 /// It uses Dart's built in [int.parse] and applies additional checks
 /// to ensure that the value is within the specified range requirements.
 class ByteEncoder extends Converter<String, int> {
@@ -40,7 +40,7 @@ class ByteEncoder extends Converter<String, int> {
 
   int _convert(String input) {
     if (!ByteCodec.constraints.pattern.hasMatch(input)) {
-      throw FormatException('invalid format');
+      throw FormatException('invalid xsd:byte format');
     }
     final parsedValue = int.parse(input);
     if (parsedValue < ByteCodec.constraints.minInclusive ||
@@ -56,7 +56,7 @@ class ByteEncoder extends Converter<String, int> {
 }
 
 /// A [Converter] for translating from Dart's [int] data type back into a
-/// [String] that represents a valid XML Schema Byte data type.
+/// [String] that represents a valid XML Schema `byte` data type.
 class ByteDecoder extends Converter<int, String> {
   const ByteDecoder._();
 

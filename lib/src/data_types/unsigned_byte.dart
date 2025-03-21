@@ -5,7 +5,7 @@ import 'dart:convert';
 /// The canonical instance of [UnsignedByteCodec].
 const unsignedByte = UnsignedByteCodec._();
 
-/// A [Codec] for working with XML Schema Unsigned Byte data
+/// A [Codec] for working with XML Schema `unsignedByte` data
 /// as defined by https://www.w3.org/TR/xmlschema11-2/#unsignedByte
 class UnsignedByteCodec extends Codec<String, int> {
   final Converter<String, int> _encoder;
@@ -29,7 +29,7 @@ class UnsignedByteCodec extends Codec<String, int> {
   Converter<String, int> get encoder => _encoder;
 }
 
-/// A [Converter] for working with XML Schema Unsigned Byte data
+/// A [Converter] for working with XML Schema `unsignedByte` data
 /// It uses Dart's built in [int.parse] and applies additional checks
 /// to ensure that the value is within the specified range requirements.
 class UnsignedByteEncoder extends Converter<String, int> {
@@ -40,7 +40,7 @@ class UnsignedByteEncoder extends Converter<String, int> {
 
   int _convert(String input) {
     if (!UnsignedByteCodec.constraints.pattern.hasMatch(input)) {
-      throw FormatException('invalid format');
+      throw FormatException('invalid xsd:unsignedByte format');
     }
     final parsedValue = int.parse(input);
     if (parsedValue < UnsignedByteCodec.constraints.minInclusive ||
@@ -56,7 +56,7 @@ class UnsignedByteEncoder extends Converter<String, int> {
 }
 
 /// A [Converter] for translating from Dart's [int] data type back into a
-/// [String] that represents a valid XML Schema Unsigned byte data type.
+/// [String] that represents a valid XML Schema `unsignedByte` data type.
 class UnsignedByteDecoder extends Converter<int, String> {
   const UnsignedByteDecoder._();
 

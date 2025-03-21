@@ -40,7 +40,7 @@ class UnsignedIntEncoder extends Converter<String, int> {
 
   int _convert(String input) {
     if (!UnsignedIntCodec.constraints.pattern.hasMatch(input)) {
-      throw FormatException('invalid format');
+      throw FormatException('invalid xsd:unsignedInt format');
     }
     final parsedValue = int.parse(input);
     if (parsedValue < UnsignedIntCodec.constraints.minInclusive ||
