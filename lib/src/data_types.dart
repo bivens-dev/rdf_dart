@@ -121,10 +121,10 @@ class DatatypeRegistry {
     registerDatatype(
       IRI(XMLDataType.base64Binary.iri),
       Uint8List,
-      (lexicalForm) => Base64Codec().decode(lexicalForm),
+      (lexicalForm) => base64.decode(lexicalForm),
       (value) {
         final bytes = value as Uint8List;
-        return Base64Codec().encode(bytes);
+        return base64.encode(bytes);
       },
     );
     registerDatatype(IRI(XMLDataType.hexBinary.iri), Uint8List, hex.decode, (
