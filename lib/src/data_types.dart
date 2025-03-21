@@ -94,6 +94,22 @@ class DatatypeRegistry {
       (lexicalForm) => lexicalForm,
       (value) => value.toString(),
     );
+    registerDatatype(IRI(XMLDataType.nonNegativeInteger.iri), int, (
+      lexicalForm,
+    ) {
+      final value = int.parse(lexicalForm);
+      if (value < 0) {
+        throw RangeError('Invalid nonNegativeInteger value: $lexicalForm');
+      }
+      return value;
+    }, (value) => value.toString());
+    registerDatatype(IRI(XMLDataType.negativeInteger.iri), int, (lexicalForm) {
+      final value = int.parse(lexicalForm);
+      if (value >= 0) {
+        throw RangeError('Invalid negativeInteger value: $lexicalForm');
+      }
+      return value;
+    }, (value) => value.toString());
     registerDatatype(
       IRI(XMLDataType.integer.iri),
       BigInt,
