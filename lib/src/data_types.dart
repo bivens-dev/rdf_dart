@@ -110,6 +110,15 @@ class DatatypeRegistry {
       }
       return value;
     }, (value) => value.toString());
+    registerDatatype(IRI(XMLDataType.nonPositiveInteger.iri), int, (
+      lexicalForm,
+    ) {
+      final value = int.parse(lexicalForm);
+      if (value > 0) {
+        throw RangeError('Invalid nonPositiveInteger value: $lexicalForm');
+      }
+      return value;
+    }, (value) => value.toString());
     registerDatatype(
       IRI(XMLDataType.integer.iri),
       BigInt,

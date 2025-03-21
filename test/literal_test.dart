@@ -1075,6 +1075,66 @@ void main() {
             });
           });
         });
+
+        group('nonPositiveInteger', () {
+          group('with valid data', () {
+            test('0 is a valid value', () {
+              final literal = Literal(
+                '0',
+                IRI(XMLDataType.nonPositiveInteger.iri),
+              );
+              expect(literal.lexicalForm, '0');
+              expect(literal.language, isNull);
+              expect(literal.value, 0);
+            });
+
+            test('-1 is a valid value', () {
+              final literal = Literal(
+                '-1',
+                IRI(XMLDataType.nonPositiveInteger.iri),
+              );
+              expect(literal.lexicalForm, '-1');
+              expect(literal.language, isNull);
+              expect(literal.value, -1);
+            });
+
+            test('value with leading space is a valid value', () {
+              final literal = Literal(
+                ' -1',
+                IRI(XMLDataType.nonPositiveInteger.iri),
+              );
+              expect(literal.lexicalForm, '-1');
+              expect(literal.language, isNull);
+              expect(literal.value, -1);
+            });
+
+            test('value with trailing space is a valid value', () {
+              final literal = Literal(
+                '-1 ',
+                IRI(XMLDataType.nonPositiveInteger.iri),
+              );
+              expect(literal.lexicalForm, '-1');
+              expect(literal.language, isNull);
+              expect(literal.value, -1);
+            });
+          });
+
+          group('with invalid data', () {
+            test('1 is not a valid value', () {
+              expect(
+                () => Literal('1', IRI(XMLDataType.nonPositiveInteger.iri)),
+                throwsRangeError,
+              );
+            });
+
+            test('-1.5 is not a valid value', () {
+              expect(
+                () => Literal('-1.5', IRI(XMLDataType.nonPositiveInteger.iri)),
+                throwsFormatException,
+              );
+            });
+          });
+        });
       });
 
       test('with string datatype', () {
