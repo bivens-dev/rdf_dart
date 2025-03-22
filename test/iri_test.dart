@@ -84,192 +84,52 @@ void main() {
       test('with invalid character after percent', () {
         expect(
           () => IRI('http://example.com/path%2 with spaces'),
-          throwsA(
-            isA<InvalidIRIException>().having(
-              (e) => e.message,
-              'message',
-              contains(
-                'Invalid IRI: http://example.com/path%2 with spaces - Error: Invalid percent-encoding',
-              ),
-            ),
-          ),
+          throwsFormatException,
         );
       });
       test('with invalid hex character', () {
-        expect(
-          () => IRI('http://example.com/path%2G'),
-          throwsA(
-            isA<InvalidIRIException>().having(
-              (e) => e.message,
-              'message',
-              contains(
-                'Invalid IRI: http://example.com/path%2G - Error: Invalid percent-encoding',
-              ),
-            ),
-          ),
-        );
+        expect(() => IRI('http://example.com/path%2G'), throwsFormatException);
       });
       test('with invalid hex characters', () {
-        expect(
-          () => IRI('http://example.com/path%GG'),
-          throwsA(
-            isA<InvalidIRIException>().having(
-              (e) => e.message,
-              'message',
-              contains(
-                'Invalid IRI: http://example.com/path%GG - Error: Invalid percent-encoding',
-              ),
-            ),
-          ),
-        );
+        expect(() => IRI('http://example.com/path%GG'), throwsFormatException);
       });
       test('with missing hex digits', () {
-        expect(
-          () => IRI('http://example.com/path%'),
-          throwsA(
-            isA<InvalidIRIException>().having(
-              (e) => e.message,
-              'message',
-              contains(
-                'Invalid IRI: http://example.com/path% - Error: Invalid percent-encoding',
-              ),
-            ),
-          ),
-        );
+        expect(() => IRI('http://example.com/path%'), throwsFormatException);
       });
       test('with only one hex digit', () {
-        expect(
-          () => IRI('http://example.com/%2'),
-          throwsA(
-            isA<InvalidIRIException>().having(
-              (e) => e.message,
-              'message',
-              contains(
-                'Invalid IRI: http://example.com/%2 - Error: Invalid percent-encoding',
-              ),
-            ),
-          ),
-        );
+        expect(() => IRI('http://example.com/%2'), throwsFormatException);
       });
       test('with only one hex digit', () {
-        expect(
-          () => IRI('http://example.com/%a%b'),
-          throwsA(
-            isA<InvalidIRIException>().having(
-              (e) => e.message,
-              'message',
-              contains(
-                'Invalid IRI: http://example.com/%a%b - Error: Invalid percent-encoding',
-              ),
-            ),
-          ),
-        );
+        expect(() => IRI('http://example.com/%a%b'), throwsFormatException);
       });
       test('with incorrect hex encoding', () {
-        expect(
-          () => IRI('http://example.com/path%2GH'),
-          throwsA(
-            isA<InvalidIRIException>().having(
-              (e) => e.message,
-              'message',
-              contains(
-                'Invalid IRI: http://example.com/path%2GH - Error: Invalid percent-encoding',
-              ),
-            ),
-          ),
-        );
+        expect(() => IRI('http://example.com/path%2GH'), throwsFormatException);
       });
     });
 
     group('Invalid Control Character IRIs', () {
       test('with U+0000 (NUL)', () {
-        expect(
-          () => IRI('http://example.com/\u0000'),
-          throwsA(
-            isA<InvalidIRIException>().having(
-              (e) => e.message,
-              'message',
-              contains(
-                'Invalid IRI: http://example.com/\u0000 - Error: Invalid control character',
-              ),
-            ),
-          ),
-        );
+        expect(() => IRI('http://example.com/\u0000'), throwsFormatException);
       });
 
       test('with U+0001 (SOH)', () {
-        expect(
-          () => IRI('http://example.com/\u0001'),
-          throwsA(
-            isA<InvalidIRIException>().having(
-              (e) => e.message,
-              'message',
-              contains(
-                'Invalid IRI: http://example.com/\u0001 - Error: Invalid control character',
-              ),
-            ),
-          ),
-        );
+        expect(() => IRI('http://example.com/\u0001'), throwsFormatException);
       });
 
       test('with U+001F (US)', () {
-        expect(
-          () => IRI('http://example.com/\u001F'),
-          throwsA(
-            isA<InvalidIRIException>().having(
-              (e) => e.message,
-              'message',
-              contains(
-                'Invalid IRI: http://example.com/\u001F - Error: Invalid control character',
-              ),
-            ),
-          ),
-        );
+        expect(() => IRI('http://example.com/\u001F'), throwsFormatException);
       });
 
       test('with U+007F (DEL)', () {
-        expect(
-          () => IRI('http://example.com/\u007F'),
-          throwsA(
-            isA<InvalidIRIException>().having(
-              (e) => e.message,
-              'message',
-              contains(
-                'Invalid IRI: http://example.com/\u007F - Error: Invalid control character',
-              ),
-            ),
-          ),
-        );
+        expect(() => IRI('http://example.com/\u007F'), throwsFormatException);
       });
 
       test('with U+0080', () {
-        expect(
-          () => IRI('http://example.com/\u0080'),
-          throwsA(
-            isA<InvalidIRIException>().having(
-              (e) => e.message,
-              'message',
-              contains(
-                'Invalid IRI: http://example.com/\u0080 - Error: Invalid control character',
-              ),
-            ),
-          ),
-        );
+        expect(() => IRI('http://example.com/\u0080'), throwsFormatException);
       });
 
       test('with U+009F', () {
-        expect(
-          () => IRI('http://example.com/\u009F'),
-          throwsA(
-            isA<InvalidIRIException>().having(
-              (e) => e.message,
-              'message',
-              contains(
-                'Invalid IRI: http://example.com/\u009F - Error: Invalid control character',
-              ),
-            ),
-          ),
-        );
+        expect(() => IRI('http://example.com/\u009F'), throwsFormatException);
       });
 
       test('with U+0000 in percent-encoded sequence', () {
@@ -287,66 +147,31 @@ void main() {
         expect(() => IRI('http://example.com/%C2%9F'), returnsNormally);
       });
       test('with TAB', () {
-        expect(() => IRI('http://example.com/\t'), returnsNormally);
+        expect(() => IRI('http://example.com/\t'), throwsFormatException);
       });
       test('with CR', () {
-        expect(() => IRI('http://example.com/\r'), returnsNormally);
+        expect(() => IRI('http://example.com/\r'), throwsFormatException);
       });
       test('with LF', () {
-        expect(() => IRI('http://example.com/\n'), returnsNormally);
+        expect(() => IRI('http://example.com/\n'), throwsFormatException);
       });
     });
 
     group('Invalid IRIs', () {
-      // test('with space', () {
-      //   expect(() => IRI('http://example.com /path'), throwsA(isA<InvalidIRIException>()));
-      //   try{
-      //     IRI('http://example.com /path');
-      //   } on InvalidIRIException catch (e){
-      //     expect(e.message, contains('Invalid IRI: http://example.com /path - Error:'));
-      //   }
-      // });
-      // test('with newline', () {
-      //   expect(
-      //       () => IRI('http://example.com\n'),
-      //       throwsA(isA<InvalidIRIException>()
-      //           .having((e) => e.message, 'message', contains('Invalid IRI: http://example.com\n - Error:'))));
-      // });
-      // test('relative without base', () {
-      //   expect(
-      //       () => IRI('/path'),
-      //       throwsA(isA<InvalidIRIException>()
-      //           .having((e) => e.message, 'message', contains('Invalid IRI: /path - Error:'))));
-      // });
-      // test('empty string', () {
-      //   expect(
-      //       () => IRI(''),
-      //       throwsA(isA<InvalidIRIException>()
-      //           .having((e) => e.message, 'message', contains('Invalid IRI:  - Error:'))));
-      // });
-      // test('invalid character', () {
-      //   expect(
-      //       () => IRI('http://example.com/{path}'),
-      //       throwsA(isA<InvalidIRIException>()
-      //           .having((e) => e.message, 'message', contains('Invalid IRI: http://example.com/{path} - Error:'))));
-      // });
-      // test('without scheme', () {
-      //   expect(
-      //       () => IRI('example.com'),
-      //       throwsA(isA<InvalidIRIException>()
-      //           .having((e) => e.message, 'message', contains('Invalid IRI: example.com - Error:'))));
-      // });
+      test('with space', () {
+        expect(() => IRI('http://example.com /path'), throwsFormatException);
+      });
+      test('with newline', () {
+        expect(() => IRI('http://example.com\n'), throwsFormatException);
+      });
+      test('empty string', () {
+        expect(() => IRI(''), throwsFormatException);
+      });
+      test('invalid character', () {
+        expect(() => IRI('http://example.com/{path}'), throwsFormatException);
+      });
       test('only :', () {
-        expect(
-          () => IRI(':'),
-          throwsA(
-            isA<InvalidIRIException>().having(
-              (e) => e.message,
-              'message',
-              contains('Invalid IRI: : - Error:'),
-            ),
-          ),
-        );
+        expect(() => IRI(':'), throwsFormatException);
       });
     });
     group('Equality', () {
