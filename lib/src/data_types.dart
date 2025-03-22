@@ -1,6 +1,29 @@
-// lib/src/data_types.dart
+import 'dart:convert';
+import 'dart:typed_data';
 
+import 'package:convert/convert.dart';
+import 'package:decimal/decimal.dart';
+import 'package:intl/locale.dart';
 import 'package:rdf_dart/rdf_dart.dart';
+import 'package:rdf_dart/src/data_type_facets.dart';
+import 'package:rdf_dart/src/data_types/boolean.dart';
+import 'package:rdf_dart/src/data_types/byte.dart';
+import 'package:rdf_dart/src/data_types/decimal.dart';
+import 'package:rdf_dart/src/data_types/double.dart';
+import 'package:rdf_dart/src/data_types/duration.dart';
+import 'package:rdf_dart/src/data_types/helper.dart';
+import 'package:rdf_dart/src/data_types/int.dart';
+import 'package:rdf_dart/src/data_types/integer.dart';
+import 'package:rdf_dart/src/data_types/long.dart';
+import 'package:rdf_dart/src/data_types/negative_integer.dart';
+import 'package:rdf_dart/src/data_types/non_negative_integer.dart';
+import 'package:rdf_dart/src/data_types/non_positive_integer.dart';
+import 'package:rdf_dart/src/data_types/positive_integer.dart';
+import 'package:rdf_dart/src/data_types/short.dart';
+import 'package:rdf_dart/src/data_types/unsigned_byte.dart';
+import 'package:rdf_dart/src/data_types/unsigned_int.dart';
+import 'package:rdf_dart/src/data_types/unsigned_long.dart';
+import 'package:rdf_dart/src/data_types/unsigned_short.dart';
 
 /// A function that takes a lexical form (a string) and returns a Dart object.
 ///
@@ -69,43 +92,169 @@ class DatatypeRegistry {
   DatatypeRegistry._internal() {
     // Register default datatypes
     registerDatatype(
-      IRI('http://www.w3.org/2001/XMLSchema#string'),
+      IRI(XMLDataType.string.iri),
       String,
-      (lexicalForm) => lexicalForm,
-      (value) => value.toString(),
+      (lexicalForm) => processWhiteSpace(lexicalForm, Whitespace.preserve),
+      (value) => processWhiteSpace(value.toString(), Whitespace.preserve),
     );
     registerDatatype(
-      IRI('http://www.w3.org/2001/XMLSchema#integer'),
+      IRI(XMLDataType.anyURI.iri),
+      Uri,
+      (lexicalForm) =>
+          Uri.parse(processWhiteSpace(lexicalForm, Whitespace.collapse)),
+      (value) => processWhiteSpace(value.toString(), Whitespace.collapse),
+    );
+    registerDatatype(
+      IRI(XMLDataType.normalizedString.iri),
+      String,
+      (lexicalForm) => processWhiteSpace(lexicalForm, Whitespace.replace),
+      (value) => processWhiteSpace(value.toString(), Whitespace.replace),
+    );
+    registerDatatype(
+      IRI(XMLDataType.token.iri),
+      String,
+      (lexicalForm) => processWhiteSpace(lexicalForm, Whitespace.collapse),
+      (value) => processWhiteSpace(value.toString(), Whitespace.collapse),
+    );
+    registerDatatype(
+      IRI('http://www.w3.org/1999/02/22-rdf-syntax-ns#langString'),
+      String,
+      (lexicalForm) => processWhiteSpace(lexicalForm, Whitespace.preserve),
+      (value) => processWhiteSpace(value.toString(), Whitespace.preserve),
+    );
+    registerDatatype(
+      IRI(XMLDataType.nonNegativeInteger.iri),
       int,
-      int.parse,
-      (value) => value.toString(),
+      nonNegativeInteger.encoder.convert,
+      nonNegativeInteger.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRI('http://www.w3.org/2001/XMLSchema#double'),
+      IRI(XMLDataType.duration.iri),
+      XSDDuration,
+      durationCodec.encoder.convert,
+      durationCodec.decoder.convert as LiteralFormatter,
+    );
+    registerDatatype(
+      IRI(XMLDataType.negativeInteger.iri),
+      int,
+      negativeInteger.encoder.convert,
+      negativeInteger.decoder.convert as LiteralFormatter,
+    );
+    registerDatatype(
+      IRI(XMLDataType.nonPositiveInteger.iri),
+      int,
+      nonPositiveInteger.encoder.convert,
+      nonPositiveInteger.decoder.convert as LiteralFormatter,
+    );
+    registerDatatype(
+      IRI(XMLDataType.positiveInteger.iri),
+      int,
+      positiveInteger.encoder.convert,
+      positiveInteger.decoder.convert as LiteralFormatter,
+    );
+    registerDatatype(
+      IRI(XMLDataType.integer.iri),
+      BigInt,
+      bigIntCodec.encoder.convert,
+      bigIntCodec.decoder.convert as LiteralFormatter,
+    );
+    registerDatatype(
+      IRI(XMLDataType.decimal.iri),
+      Decimal,
+      decimalCodec.encoder.convert,
+      decimalCodec.decoder.convert as LiteralFormatter,
+    );
+    registerDatatype(
+      IRI(XMLDataType.double.iri),
       double,
-      double.parse,
-      (value) => value.toString(),
+      doubleCodec.encoder.convert,
+      doubleCodec.decoder.convert as LiteralFormatter,
+    );
+    // Technically it only represents a 32-bit sized number compared
+    // to the 64 bit of a double but its logic to and from a Dart
+    // native [double] is otherwise the same so just reuse the double codec
+    registerDatatype(
+      IRI(XMLDataType.float.iri),
+      double,
+      doubleCodec.encoder.convert,
+      doubleCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRI('http://www.w3.org/2001/XMLSchema#dateTime'),
+      IRI(XMLDataType.dateTime.iri),
       DateTime,
       DateTime.parse,
       (value) => (value as DateTime).toUtc().toIso8601String(),
     );
     registerDatatype(
-      IRI('http://www.w3.org/2001/XMLSchema#boolean'),
+      IRI(XMLDataType.boolean.iri),
       bool,
-      (lexicalForm) {
-        final lowerCaseLexicalForm = lexicalForm.toLowerCase();
-        if (lowerCaseLexicalForm == 'true' || lowerCaseLexicalForm == '1') {
-          return true;
-        } else if (lowerCaseLexicalForm == 'false' ||
-            lowerCaseLexicalForm == '0') {
-          return false;
-        } else {
-          throw FormatException('Invalid xsd:boolean value: $lexicalForm');
-        }
-      },
+      booleanCodec.encoder.convert,
+      booleanCodec.decoder.convert as LiteralFormatter,
+    );
+    registerDatatype(
+      IRI(XMLDataType.base64Binary.iri),
+      Uint8List,
+      base64.decode,
+      base64.encode as LiteralFormatter,
+    );
+    registerDatatype(
+      IRI(XMLDataType.hexBinary.iri),
+      Uint8List,
+      hex.decode,
+      hex.encode as LiteralFormatter,
+    );
+    registerDatatype(
+      IRI(XMLDataType.unsignedByte.iri),
+      int,
+      unsignedByte.encoder.convert,
+      unsignedByte.decoder.convert as LiteralFormatter,
+    );
+    registerDatatype(
+      IRI(XMLDataType.byte.iri),
+      int,
+      byte.encoder.convert,
+      byte.decoder.convert as LiteralFormatter,
+    );
+    registerDatatype(
+      IRI(XMLDataType.unsignedShort.iri),
+      int,
+      unsignedShort.encoder.convert,
+      unsignedShort.decoder.convert as LiteralFormatter,
+    );
+    registerDatatype(
+      IRI(XMLDataType.short.iri),
+      int,
+      shortCodec.encoder.convert,
+      shortCodec.decoder.convert as LiteralFormatter,
+    );
+    registerDatatype(
+      IRI(XMLDataType.int.iri),
+      int,
+      intCodec.encoder.convert,
+      intCodec.decoder.convert as LiteralFormatter,
+    );
+    registerDatatype(
+      IRI(XMLDataType.unsignedInt.iri),
+      int,
+      unsignedInt.encoder.convert,
+      unsignedInt.decoder.convert as LiteralFormatter,
+    );
+    registerDatatype(
+      IRI(XMLDataType.unsignedLong.iri),
+      BigInt,
+      unsignedLong.encoder.convert,
+      unsignedLong.decoder.convert as LiteralFormatter,
+    );
+    registerDatatype(
+      IRI(XMLDataType.long.iri),
+      BigInt,
+      longCodec.encoder.convert,
+      longCodec.decoder.convert as LiteralFormatter,
+    );
+    registerDatatype(
+      IRI(XMLDataType.language.iri),
+      Locale,
+      Locale.parse,
       (value) => value.toString(),
     );
   }

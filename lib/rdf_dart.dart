@@ -78,6 +78,7 @@
 library;
 
 export 'src/blank_node.dart';
+export 'src/data_types/duration.dart' show XSDDuration;
 export 'src/dataset.dart';
 export 'src/graph.dart';
 export 'src/iri.dart';
