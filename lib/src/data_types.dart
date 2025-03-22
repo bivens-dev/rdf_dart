@@ -10,6 +10,7 @@ import 'package:rdf_dart/src/data_types/boolean.dart';
 import 'package:rdf_dart/src/data_types/byte.dart';
 import 'package:rdf_dart/src/data_types/decimal.dart';
 import 'package:rdf_dart/src/data_types/double.dart';
+import 'package:rdf_dart/src/data_types/duration.dart';
 import 'package:rdf_dart/src/data_types/helper.dart';
 import 'package:rdf_dart/src/data_types/int.dart';
 import 'package:rdf_dart/src/data_types/integer.dart';
@@ -126,6 +127,12 @@ class DatatypeRegistry {
       int,
       nonNegativeInteger.encoder.convert,
       nonNegativeInteger.decoder.convert as LiteralFormatter,
+    );
+    registerDatatype(
+      IRI(XMLDataType.duration.iri),
+      XSDDuration,
+      durationCodec.encoder.convert,
+      durationCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
       IRI(XMLDataType.negativeInteger.iri),
