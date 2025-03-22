@@ -82,3 +82,12 @@ void main() {
   dataset.defaultGraph.add(triple);
 }
 ```
+
+## Development
+
+```bash
+# Install dependencies
+npm install || pip install -r requirements.txt
+# Run tests
+npm test || pytest
+```
