@@ -10,6 +10,7 @@ import 'package:rdf_dart/src/data_types/boolean.dart';
 import 'package:rdf_dart/src/data_types/byte.dart';
 import 'package:rdf_dart/src/data_types/int.dart';
 import 'package:rdf_dart/src/data_types/integer.dart';
+import 'package:rdf_dart/src/data_types/long.dart';
 import 'package:rdf_dart/src/data_types/negative_integer.dart';
 import 'package:rdf_dart/src/data_types/non_negative_integer.dart';
 import 'package:rdf_dart/src/data_types/non_positive_integer.dart';
@@ -200,9 +201,15 @@ class DatatypeRegistry {
     );
     registerDatatype(
       IRI(XMLDataType.unsignedLong.iri),
-      int,
+      BigInt,
       unsignedLong.encoder.convert,
       unsignedLong.decoder.convert as LiteralFormatter,
+    );
+    registerDatatype(
+      IRI(XMLDataType.long.iri),
+      BigInt,
+      longCodec.encoder.convert,
+      longCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
       IRI(XMLDataType.language.iri),
