@@ -68,14 +68,87 @@ class IRI extends RdfTerm {
   /// robust validation could be implemented.
   static String _validateIri(String unvalidatedIri) {
     try {
-      // TODO: Use more robust IRI validation here in the future but URI.parse is sufficient for now.
       final validatedUri = Uri.parse(unvalidatedIri);
+
+      // Additional checks after Uri.parse
+      if (!_isValidPercentEncoding(validatedUri, unvalidatedIri)) {
+        throw InvalidIRIException(
+          'Invalid IRI: $unvalidatedIri - Error: Invalid percent-encoding',
+        );
+      }
+
+      if (!_isValidControlCharacters(unvalidatedIri)) {
+        throw InvalidIRIException(
+          'Invalid IRI: $unvalidatedIri - Error: Invalid control character',
+        );
+      }
+      // TODO: Use more robust IRI validation here in the future but this is sufficient for now.
       return validatedUri.toString();
     } on FormatException catch (e) {
       throw InvalidIRIException(
         'Invalid IRI: $unvalidatedIri - Error: ${e.message}',
       );
     }
+  }
+
+  /// Checks if the uri has valid percent-encoding.
+  ///
+  /// According to RFC 3987, each percent-encoded sequence must consist of a
+  /// percent sign ("%") followed by two hexadecimal digits ([0-9A-Fa-f]).
+  ///
+  /// This function checks for this.
+  static bool _isValidPercentEncoding(Uri uri, String iri) {
+    final pattern = RegExp('%[0-9A-Fa-f]{2}');
+
+    final allMatches = pattern.allMatches(iri);
+    // check that the percent encoding matches a correct form.
+    for (final match in allMatches) {
+      if (match.group(0)!.length != 3) {
+        return false;
+      }
+    }
+
+    // Check that a percent is always followed by two hex digits
+    // iterate over the string and check that every % is followed by two hex digits.
+    for (var i = 0; i < iri.length; i++) {
+      if (iri[i] == '%') {
+        if (i + 2 >= iri.length) {
+          return false;
+        }
+        if (!RegExp('[0-9A-Fa-f]{2}').hasMatch(iri.substring(i + 1, i + 3))) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  /// Checks if the IRI contains any invalid control characters.
+  ///
+  /// According to RFC 3987, control characters (U+0000 to U+001F, U+007F,
+  /// U+0080 to U+009F) are not allowed directly in IRIs (they must be
+  /// percent-encoded).
+  ///
+  /// This function checks for the presence of such characters.
+  static bool _isValidControlCharacters(String iri) {
+    for (var i = 0; i < iri.length; i++) {
+      final codeUnit = iri.codeUnitAt(i);
+
+      // Check for control characters (excluding TAB, CR, LF)
+      if ((codeUnit >= 0x0000 &&
+              codeUnit <= 0x001F &&
+              codeUnit != 0x09 &&
+              codeUnit != 0x0D &&
+              codeUnit != 0x0A) ||
+          codeUnit == 0x007F ||
+          (codeUnit >= 0x0080 && codeUnit <= 0x009F)) {
+        // if the character is a control character, check that it is not percent-encoded
+        if (i < 2 || iri[i - 2] != '%') {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   @override
