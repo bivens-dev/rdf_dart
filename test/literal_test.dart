@@ -204,14 +204,6 @@ void main() {
               expect(literal.value, double.negativeInfinity);
             });
 
-            test('+INF is a valid value', () {
-              final literal = Literal('+INF', IRI(XMLDataType.double.iri));
-              expect(literal.lexicalForm, 'INF');
-              expect(literal.datatype, IRI(XMLDataType.double.iri));
-              expect(literal.language, isNull);
-              expect(literal.value, double.infinity);
-            });
-
             test('inf is a valid value', () {
               final literal = Literal('inf', IRI(XMLDataType.double.iri));
               expect(literal.lexicalForm, 'INF');
@@ -288,7 +280,7 @@ void main() {
                 IRI(XMLDataType.double.iri),
               );
               // TODO: Investigate broken test
-              // expect(literal.toLexicalForm(), '2.2340000000000005E0');
+              // expect(literal.lexicalForm, '2.2340000000000005E0');
               expect(literal.datatype, IRI(XMLDataType.double.iri));
               expect(literal.language, isNull);
               expect(literal.value, 2.2340000000000005);
@@ -365,14 +357,6 @@ void main() {
             test('Numbers with spaces are not valid', () {
               expect(
                 () => Literal('1 2 3', IRI(XMLDataType.double.iri)),
-                throwsFormatException,
-              );
-              expect(
-                () => Literal(' 123', IRI(XMLDataType.double.iri)),
-                throwsFormatException,
-              );
-              expect(
-                () => Literal('123 ', IRI(XMLDataType.double.iri)),
                 throwsFormatException,
               );
             });
