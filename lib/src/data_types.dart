@@ -12,6 +12,7 @@ import 'package:rdf_dart/src/data_types/int.dart';
 import 'package:rdf_dart/src/data_types/integer.dart';
 import 'package:rdf_dart/src/data_types/negative_integer.dart';
 import 'package:rdf_dart/src/data_types/non_negative_integer.dart';
+import 'package:rdf_dart/src/data_types/non_positive_integer.dart';
 import 'package:rdf_dart/src/data_types/short.dart';
 import 'package:rdf_dart/src/data_types/unsigned_byte.dart';
 import 'package:rdf_dart/src/data_types/unsigned_int.dart';
@@ -112,15 +113,12 @@ class DatatypeRegistry {
       negativeInteger.encoder.convert,
       negativeInteger.decoder.convert as LiteralFormatter,
     );
-    registerDatatype(IRI(XMLDataType.nonPositiveInteger.iri), int, (
-      lexicalForm,
-    ) {
-      final value = int.parse(lexicalForm);
-      if (value > 0) {
-        throw RangeError('Invalid nonPositiveInteger value: $lexicalForm');
-      }
-      return value;
-    }, (value) => value.toString());
+    registerDatatype(
+      IRI(XMLDataType.nonPositiveInteger.iri),
+      int,
+      nonPositiveInteger.encoder.convert,
+      nonPositiveInteger.decoder.convert as LiteralFormatter,
+    );
     registerDatatype(
       IRI(XMLDataType.integer.iri),
       BigInt,
