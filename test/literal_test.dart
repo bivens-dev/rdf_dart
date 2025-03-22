@@ -162,6 +162,79 @@ void main() {
           });
         });
 
+        group('float', () {
+          group('using valid data', () {
+            test('with exponents in non-canonical form', () {
+              final literal = Literal('-3E2', IRI(XMLDataType.float.iri));
+              expect(literal.lexicalForm, '-3.0E2');
+              expect(literal.datatype, IRI(XMLDataType.float.iri));
+              expect(literal.language, isNull);
+              expect(literal.value, -3.0E2);
+            });
+
+            test('exponents with decimals', () {
+              final literal = Literal(
+                '4268.22752E11',
+                IRI(XMLDataType.float.iri),
+              );
+              expect(literal.lexicalForm, '4.26822752E14');
+              expect(literal.datatype, IRI(XMLDataType.float.iri));
+              expect(literal.language, isNull);
+              expect(literal.value, 4268.22752E11);
+              expect(literal.value, 4.26822752E14);
+            });
+
+            test('exponents with decimals and a leading plus sign', () {
+              final literal = Literal('+24.3e-3', IRI(XMLDataType.float.iri));
+              expect(literal.lexicalForm, '2.43E-2');
+              expect(literal.datatype, IRI(XMLDataType.float.iri));
+              expect(literal.language, isNull);
+              expect(literal.value, 24.3e-3);
+              expect(literal.value, 2.43E-2);
+            });
+
+            test('As an integer', () {
+              final literal = Literal('12', IRI(XMLDataType.float.iri));
+              expect(literal.lexicalForm, '1.2E1');
+              expect(literal.datatype, IRI(XMLDataType.float.iri));
+              expect(literal.language, isNull);
+              expect(literal.value, 12);
+              expect(literal.value, 1.2E1);
+            });
+
+            test('With a decimal point and a leading plus sign', () {
+              final literal = Literal('+3.5', IRI(XMLDataType.float.iri));
+              expect(literal.lexicalForm, '3.5E0');
+              expect(literal.datatype, IRI(XMLDataType.float.iri));
+              expect(literal.language, isNull);
+              expect(literal.value, 3.5);
+              expect(literal.value, 3.5E0);
+            });
+
+            test('negative infinity', () {
+              final literal = Literal('-INF', IRI(XMLDataType.float.iri));
+              expect(literal.lexicalForm, '-INF');
+              expect(literal.datatype, IRI(XMLDataType.float.iri));
+              expect(literal.language, isNull);
+              expect(literal.value, double.negativeInfinity);
+            });
+
+            test('negative infinity', () {
+              final literal = Literal('-0', IRI(XMLDataType.float.iri));
+              expect(literal.lexicalForm, '-0.0E0');
+              expect(literal.datatype, IRI(XMLDataType.float.iri));
+              expect(literal.language, isNull);
+              expect(literal.value, 0);
+            });
+
+            test('negative infinity', () {
+              final literal = Literal('NaN', IRI(XMLDataType.float.iri));
+              expect(literal.lexicalForm, 'NaN');
+              expect(literal.datatype, IRI(XMLDataType.float.iri));
+              expect(literal.language, isNull);
+            });
+          });
+        });
         group('double', () {
           group('using valid data', () {
             test('with decimal places', () {

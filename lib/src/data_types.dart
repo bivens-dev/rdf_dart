@@ -156,6 +156,15 @@ class DatatypeRegistry {
       doubleCodec.encoder.convert,
       doubleCodec.decoder.convert as LiteralFormatter,
     );
+    // Technically it only represents a 32-bit sized number compared
+    // to the 64 bit of a double but its logic to and from a Dart
+    // native [double] is otherwise the same so just reuse the double codec
+    registerDatatype(
+      IRI(XMLDataType.float.iri),
+      double,
+      doubleCodec.encoder.convert,
+      doubleCodec.decoder.convert as LiteralFormatter,
+    );
     registerDatatype(
       IRI(XMLDataType.dateTime.iri),
       DateTime,
