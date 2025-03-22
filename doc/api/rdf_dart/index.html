@@ -92,8 +92,6 @@ Each triple consists of a subject, a predicate, and an object. See <a href="../r
 <p><strong>Datasets</strong></p>
 <p>An RDF <em>dataset</em> is a collection of RDF graphs. It contains a default graph
 and zero or more named graphs. See <a href="../rdf_dart/Dataset-class.html">Dataset</a>.</p>
-<p><strong>Exceptions</strong></p>
-<p>The <a href="../rdf_dart/InvalidIRIException-class.html">InvalidIRIException</a> class is used to indicate an invalid IRI.</p>
 <p><strong>Usage</strong></p>
 <p>To use this library, add <code>rdf_dart</code> as a dependency in your <code>pubspec.yaml</code> file.</p>
 <pre class="language-yaml"><code class="language-yaml">dependencies:
@@ -182,6 +180,14 @@ void main() {
   Represents an RDF triple, which is a statement about a resource.
 </dd>
 
+          <dt id="XSDDuration">
+  <span class="name "><a href="../rdf_dart/XSDDuration-class.html">XSDDuration</a></span> 
+
+</dt>
+<dd>
+  A class which represents a duration in terms of its constituent components.
+</dd>
+
       </dl>
     </section>
 
@@ -206,19 +212,6 @@ void main() {
 
 
 
-    <section class="summary offset-anchor" id="exceptions">
-      <h2>Exceptions / Errors</h2>
-      <dl>
-          <dt id="InvalidIRIException">
-  <span class="name "><a href="../rdf_dart/InvalidIRIException-class.html">InvalidIRIException</a></span> 
-
-</dt>
-<dd>
-  Exception thrown when an invalid IRI string is encountered.
-</dd>
-
-      </dl>
-    </section>
   </div> <!-- /.main-content -->
   <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
     <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->

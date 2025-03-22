@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the toString method from the Literal class, for the Dart programming language.">
-  <title>toString method - Literal class - rdf_dart library - Dart API</title>
+  <meta name="description" content="API docs for the toString method from the XSDDuration class, for the Dart programming language.">
+  <title>toString method - XSDDuration class - rdf_dart library - Dart API</title>
 
 
   
@@ -26,7 +26,7 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">rdf_dart</a></li>
     <li><a href="../../rdf_dart">rdf_dart.dart</a></li>
-    <li><a href="../../rdf_dart/Literal-class.html">Literal</a></li>
+    <li><a href="../../rdf_dart/XSDDuration-class.html">XSDDuration</a></li>
     <li class="self-crumb">toString method</li>
   </ol>
   <div class="self-name">toString</div>
@@ -49,7 +49,7 @@
 <div
     id="dartdoc-main-content"
     class="main-content"
-    data-above-sidebar="rdf_dart&#47;Literal-class-sidebar.html"
+    data-above-sidebar="rdf_dart&#47;XSDDuration-class-sidebar.html"
     data-below-sidebar="">
     <div>
 <h1><span class="kind-method">toString</span> method 
@@ -88,13 +88,68 @@ mainly for debugging or logging.</p>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 String toString() {
-  if (language != null) {
-    return &#39;&quot;$lexicalForm&quot;@$language&#39;;
+  &#47;&#47; The following rules apply to xsd:duration values:
+  &#47;&#47;
+  &#47;&#47; 1. Any of these numbers and corresponding designators may be
+  &#47;&#47;    absent if they are equal to 0, but at least one number
+  &#47;&#47;    and designator must appear.
+  &#47;&#47; 2. The numbers may be any unsigned integer, with the exception of the
+  &#47;&#47;    number of seconds, which may be an unsigned decimal number.
+  &#47;&#47; 3. If a decimal point appears in the number of seconds, there must be
+  &#47;&#47;    at least one digit after the decimal point.
+  &#47;&#47; 4. A minus sign may appear before the P to specify a negative duration.
+  &#47;&#47; 5. If no time items (hour, minute, second) are present, the letter
+  &#47;&#47;    T must not appear.
+  &#47;&#47;
+  &#47;&#47; Source: https:&#47;&#47;www.datypic.com&#47;sc&#47;xsd&#47;t-xsd_duration.html
+
+  final isNegative =
+      (years != null &amp;&amp; years! &lt; 0) ||
+      (months != null &amp;&amp; months! &lt; 0) ||
+      (days != null &amp;&amp; days! &lt; 0) ||
+      (hours != null &amp;&amp; hours! &lt; 0) ||
+      (minutes != null &amp;&amp; minutes! &lt; 0) ||
+      (seconds != null &amp;&amp; seconds! &lt; Decimal.zero);
+
+  final buffer = StringBuffer();
+
+  if (isNegative) {
+    buffer.write(&#39;-&#39;);
   }
-  if (datatype == IRI(&#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XMLSchema#string&#39;)) {
-    return &#39;&quot;$lexicalForm&quot;&#39;;
+
+  buffer.write(&#39;P&#39;);
+
+  if (years != null &amp;&amp; years != 0) {
+    buffer.write(&#39;${years!.abs()}Y&#39;);
   }
-  return &#39;&quot;${_toLexicalForm()}&quot;^^&lt;$datatype&gt;&#39;;
+  if (months != null &amp;&amp; months != 0) {
+    buffer.write(&#39;${months!.abs()}M&#39;);
+  }
+  if (days != null &amp;&amp; days != 0) {
+    buffer.write(&#39;${days!.abs()}D&#39;);
+  }
+
+  if ((hours != null &amp;&amp; hours != 0) ||
+      (minutes != null &amp;&amp; minutes != 0) ||
+      (seconds != null &amp;&amp; seconds != Decimal.zero)) {
+    buffer.write(&#39;T&#39;);
+    if (hours != null &amp;&amp; hours != 0) {
+      buffer.write(&#39;${hours!.abs()}H&#39;);
+    }
+    if (minutes != null &amp;&amp; minutes != 0) {
+      buffer.write(&#39;${minutes!.abs()}M&#39;);
+    }
+    if (seconds != null &amp;&amp; seconds != Decimal.zero) {
+      buffer.write(&#39;${seconds!.abs()}S&#39;);
+    }
+  }
+
+  &#47;&#47; Handle the edge case of P0D, and PT0S
+  if (buffer.toString() == &#39;P&#39;) {
+    return &#39;PT0S&#39;; &#47;&#47; The specification has this as the offical format.
+  }
+
+  return buffer.toString();
 }</code></pre>
 </section>
 
@@ -110,11 +165,11 @@ String toString() {
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">rdf_dart</a></li>
     <li><a href="../../rdf_dart">rdf_dart</a></li>
-    <li><a href="../../rdf_dart/Literal-class.html">Literal</a></li>
+    <li><a href="../../rdf_dart/XSDDuration-class.html">XSDDuration</a></li>
     <li class="self-crumb">toString method</li>
 </ol>
 
-    <h5>Literal class</h5>
+    <h5>XSDDuration class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-->
   <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
