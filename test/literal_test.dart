@@ -235,6 +235,72 @@ void main() {
             });
           });
         });
+
+        group('anyURI', () {
+          group('using valid data', () {
+            test('A URL', () {
+              final literal = Literal(
+                'https://example.com',
+                IRI(XMLDataType.anyURI.iri),
+              );
+              expect(literal.lexicalForm, 'https://example.com');
+              expect(literal.datatype, IRI(XMLDataType.anyURI.iri));
+              expect(literal.language, isNull);
+              expect(literal.value, Uri.tryParse('https://example.com'));
+            });
+
+            test('absolute URI', () {
+              final literal = Literal(
+                'mailto:hello@world.com',
+                IRI(XMLDataType.anyURI.iri),
+              );
+              expect(literal.lexicalForm, 'mailto:hello@world.com');
+              expect(literal.datatype, IRI(XMLDataType.anyURI.iri));
+              expect(literal.language, isNull);
+              expect(literal.value, Uri.tryParse('mailto:hello@world.com'));
+            });
+
+            test('relative URI containing escaped non-ASCII character', () {
+              final literal = Literal(
+                '../%C3%A9dict.html',
+                IRI(XMLDataType.anyURI.iri),
+              );
+              expect(literal.lexicalForm, '../%C3%A9dict.html');
+              expect(literal.datatype, IRI(XMLDataType.anyURI.iri));
+              expect(literal.language, isNull);
+              expect(literal.value, Uri.tryParse('../%C3%A9dict.html'));
+            });
+
+            test('URI with fragment identifier', () {
+              final literal = Literal(
+                'https://www.example.com/test.html#works',
+                IRI(XMLDataType.anyURI.iri),
+              );
+              expect(
+                literal.lexicalForm,
+                'https://www.example.com/test.html#works',
+              );
+              expect(literal.datatype, IRI(XMLDataType.anyURI.iri));
+              expect(literal.language, isNull);
+              expect(
+                literal.value,
+                Uri.tryParse('https://www.example.com/test.html#works'),
+              );
+            });
+
+            test('URN value', () {
+              final literal = Literal(
+                'urn:example:org',
+                IRI(XMLDataType.anyURI.iri),
+              );
+              expect(literal.lexicalForm, 'urn:example:org');
+              expect(literal.datatype, IRI(XMLDataType.anyURI.iri));
+              expect(literal.language, isNull);
+              expect(literal.value, Uri.tryParse('urn:example:org'));
+            });
+          });
+        });
+
         group('double', () {
           group('using valid data', () {
             test('with decimal places', () {

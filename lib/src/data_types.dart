@@ -97,6 +97,13 @@ class DatatypeRegistry {
       (value) => processWhiteSpace(value.toString(), Whitespace.preserve),
     );
     registerDatatype(
+      IRI(XMLDataType.anyURI.iri),
+      Uri,
+      (lexicalForm) =>
+          Uri.parse(processWhiteSpace(lexicalForm, Whitespace.collapse)),
+      (value) => processWhiteSpace(value.toString(), Whitespace.collapse),
+    );
+    registerDatatype(
       IRI(XMLDataType.normalizedString.iri),
       String,
       (lexicalForm) => processWhiteSpace(lexicalForm, Whitespace.replace),
