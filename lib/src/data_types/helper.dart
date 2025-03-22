@@ -26,7 +26,7 @@ String processWhiteSpace(String input, Whitespace whitespace) {
     // Replaces all occurrences of tab (#x9), line feed (#xA),
     // and carriage return (#xD) characters in the input
     // string with spaces (#x20).
-    input.replaceAll(RegExp(r'[\x09\x0A\x0D]'), ' ');
+    input.replaceAll(RegExp(r'[\x09\x0A\x0D]', unicode: true), ' ');
   }
 
   if (input.isEmpty) {
@@ -38,7 +38,7 @@ String processWhiteSpace(String input, Whitespace whitespace) {
     input = input.replaceAll(RegExp(' +'), ' ');
 
     // Trim leading and trailing spaces.
-    input.trim();
+    input = input.trim();
   }
 
   return input;

@@ -149,34 +149,6 @@ void main() {
               },
             );
 
-            test(
-              'valid values with a trailing space are not a valid boolean data type',
-              () {
-                expect(
-                  () => Literal('false ', IRI(XMLDataType.boolean.iri)),
-                  throwsFormatException,
-                );
-                expect(
-                  () => Literal('true ', IRI(XMLDataType.boolean.iri)),
-                  throwsFormatException,
-                );
-              },
-            );
-
-            test(
-              'valid values with a leading space are not a valid boolean data type',
-              () {
-                expect(
-                  () => Literal(' false', IRI(XMLDataType.boolean.iri)),
-                  throwsFormatException,
-                );
-                expect(
-                  () => Literal(' true', IRI(XMLDataType.boolean.iri)),
-                  throwsFormatException,
-                );
-              },
-            );
-
             test('decimal values are not a valid boolean data type', () {
               expect(
                 () => Literal('1.0', IRI(XMLDataType.boolean.iri)),

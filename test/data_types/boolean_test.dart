@@ -32,14 +32,6 @@ void main() {
         expect(() => booleanCodec.encoder.convert('2'), throwsFormatException);
         expect(() => booleanCodec.encoder.convert(''), throwsFormatException);
         expect(() => booleanCodec.encoder.convert(' '), throwsFormatException);
-        expect(
-          () => booleanCodec.encoder.convert('true '),
-          throwsFormatException,
-        );
-        expect(
-          () => booleanCodec.encoder.convert(' false'),
-          throwsFormatException,
-        );
         expect(() => booleanCodec.encoder.convert('+1'), throwsFormatException);
         expect(() => booleanCodec.encoder.convert('-1'), throwsFormatException);
         expect(() => booleanCodec.encoder.convert('+0'), throwsFormatException);
