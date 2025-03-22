@@ -39,10 +39,6 @@
 /// An RDF *dataset* is a collection of RDF graphs. It contains a default graph
 /// and zero or more named graphs. See [Dataset].
 ///
-/// **Exceptions**
-///
-/// The [InvalidIRIException] class is used to indicate an invalid IRI.
-///
 /// **Usage**
 ///
 /// To use this library, add `rdf_dart` as a dependency in your `pubspec.yaml` file.
