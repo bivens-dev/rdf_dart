@@ -33,7 +33,7 @@ class UnsignedLongCodec extends Codec<String, BigInt> {
 }
 
 /// A [Converter] for working with XML Schema `unsignedLong` data
-/// It uses Dart's built in [int.parse] and applies additional checks
+/// It uses Dart's built in [BigInt.parse] and applies additional checks
 /// to ensure that the value is within the specified range requirements.
 class UnsignedLongEncoder extends Converter<String, BigInt> {
   const UnsignedLongEncoder._();
@@ -61,7 +61,7 @@ class UnsignedLongEncoder extends Converter<String, BigInt> {
   }
 }
 
-/// A [Converter] for translating from Dart's [int] data type back into a
+/// A [Converter] for translating from Dart's [BigInt] data type back into a
 /// [String] that represents a valid XML Schema `unsignedLong` data type.
 class UnsignedLongDecoder extends Converter<BigInt, String> {
   const UnsignedLongDecoder._();

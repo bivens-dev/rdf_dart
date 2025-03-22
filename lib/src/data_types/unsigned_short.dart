@@ -7,7 +7,7 @@ import 'package:rdf_dart/src/data_types/helper.dart';
 /// The canonical instance of [UnsignedShortCodec].
 const unsignedShort = UnsignedShortCodec._();
 
-/// A [Codec] for working with XML Schema Unsigned Short data
+/// A [Codec] for working with XML Schema `unsignedShort` data
 /// as defined by https://www.w3.org/TR/xmlschema11-2/#unsignedShort
 class UnsignedShortCodec extends Codec<String, int> {
   final Converter<String, int> _encoder;
@@ -32,7 +32,7 @@ class UnsignedShortCodec extends Codec<String, int> {
   Converter<String, int> get encoder => _encoder;
 }
 
-/// A [Converter] for working with XML Schema Unsigned Short data
+/// A [Converter] for working with XML Schema `unsignedShort` data
 /// It uses Dart's built in [int.parse] and applies additional checks
 /// to ensure that the value is within the specified range requirements.
 class UnsignedShortEncoder extends Converter<String, int> {
@@ -64,7 +64,7 @@ class UnsignedShortEncoder extends Converter<String, int> {
 }
 
 /// A [Converter] for translating from Dart's [int] data type back into a
-/// [String] that represents a valid XML Schema Unsigned Short data type.
+/// [String] that represents a valid XML Schema `unsignedShort` data type.
 class UnsignedShortDecoder extends Converter<int, String> {
   const UnsignedShortDecoder._();
 
