@@ -16,6 +16,7 @@ import 'package:rdf_dart/src/data_types/non_positive_integer.dart';
 import 'package:rdf_dart/src/data_types/short.dart';
 import 'package:rdf_dart/src/data_types/unsigned_byte.dart';
 import 'package:rdf_dart/src/data_types/unsigned_int.dart';
+import 'package:rdf_dart/src/data_types/unsigned_long.dart';
 import 'package:rdf_dart/src/data_types/unsigned_short.dart';
 import 'package:rdf_dart/src/data_types/xsd_decimal.dart';
 import 'package:rdf_dart/src/data_types/xsd_double.dart';
@@ -197,7 +198,12 @@ class DatatypeRegistry {
       unsignedInt.encoder.convert,
       unsignedInt.decoder.convert as LiteralFormatter,
     );
-
+    registerDatatype(
+      IRI(XMLDataType.unsignedLong.iri),
+      int,
+      unsignedLong.encoder.convert,
+      unsignedLong.decoder.convert as LiteralFormatter,
+    );
     registerDatatype(
       IRI(XMLDataType.language.iri),
       Locale,
