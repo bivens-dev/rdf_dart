@@ -8,6 +8,7 @@ import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/data_type_facets.dart';
 import 'package:rdf_dart/src/data_types/boolean.dart';
 import 'package:rdf_dart/src/data_types/byte.dart';
+import 'package:rdf_dart/src/data_types/helper.dart';
 import 'package:rdf_dart/src/data_types/int.dart';
 import 'package:rdf_dart/src/data_types/integer.dart';
 import 'package:rdf_dart/src/data_types/long.dart';
@@ -94,14 +95,26 @@ class DatatypeRegistry {
     registerDatatype(
       IRI(XMLDataType.string.iri),
       String,
-      (lexicalForm) => lexicalForm,
-      (value) => value.toString(),
+      (lexicalForm) => processWhiteSpace(lexicalForm, Whitespace.preserve),
+      (value) => processWhiteSpace(value.toString(), Whitespace.preserve),
+    );
+    registerDatatype(
+      IRI(XMLDataType.normalizedString.iri),
+      String,
+      (lexicalForm) => processWhiteSpace(lexicalForm, Whitespace.replace),
+      (value) => processWhiteSpace(value.toString(), Whitespace.replace),
+    );
+    registerDatatype(
+      IRI(XMLDataType.token.iri),
+      String,
+      (lexicalForm) => processWhiteSpace(lexicalForm, Whitespace.collapse),
+      (value) => processWhiteSpace(value.toString(), Whitespace.collapse),
     );
     registerDatatype(
       IRI('http://www.w3.org/1999/02/22-rdf-syntax-ns#langString'),
       String,
-      (lexicalForm) => lexicalForm,
-      (value) => value.toString(),
+      (lexicalForm) => processWhiteSpace(lexicalForm, Whitespace.preserve),
+      (value) => processWhiteSpace(value.toString(), Whitespace.preserve),
     );
     registerDatatype(
       IRI(XMLDataType.nonNegativeInteger.iri),
