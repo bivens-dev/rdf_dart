@@ -2,23 +2,6 @@ import 'package:meta/meta.dart';
 import 'package:rdf_dart/src/rdf_term.dart';
 import 'package:rdf_dart/src/term_type.dart';
 
-/// Exception thrown when an invalid IRI string is encountered.
-///
-/// This exception is thrown by the [IRI] class when attempting to
-/// create an IRI from a string that does not conform to the IRI syntax
-/// rules. The [message] property contains a detailed error message
-/// describing the nature of the invalid IRI.
-class InvalidIRIException implements Exception {
-  /// A message describing the error.
-  final String message;
-
-  /// Creates a new [InvalidIRIException] with the given [message].
-  InvalidIRIException(this.message);
-
-  @override
-  String toString() => 'InvalidIRIException: $message';
-}
-
 /// Represents an Internationalized Resource Identifier (IRI).
 ///
 /// An IRI is a string that identifies a resource. This class ensures that the
@@ -37,7 +20,7 @@ class IRI extends RdfTerm {
   ///
   /// The [value] string is validated to ensure it conforms to basic IRI
   /// syntax rules. If the string is not a valid IRI, an
-  /// [InvalidIRIException] is thrown.
+  /// [FormatException] is thrown.
   ///
   /// If the IRI is valid, the string is parsed and any necessary percent-encoding
   /// is applied to create a normalized IRI string.
@@ -50,7 +33,7 @@ class IRI extends RdfTerm {
   /// try {
   ///   final invalidIri = IRI('http://example.com /resource');
   /// } on InvalidIRIException catch (e) {
-  ///   print(e); // Output: InvalidIRIException: Invalid IRI: http://example.com /resource - Error: ...
+  ///   print(e); // Output: FormatException
   /// }
   /// ```
   IRI(String value) : value = _validateIri(value);
@@ -59,96 +42,74 @@ class IRI extends RdfTerm {
   ///
   /// If the [unvalidatedIri] string is a valid IRI, it is parsed using
   /// [Uri.parse] and any necessary percent-encoding is applied. The resulting
-  /// normalized IRI string is then returned.
+  /// normalized IRI string is then returned. However, be aware this class does
+  /// not currently do a full translation between IRIs and URIs as per the spec
   ///
   /// If the [unvalidatedIri] string is not a valid IRI, an
-  /// [InvalidIRIException] is thrown.
-  ///
-  /// For now this uses [Uri.parse] to validate the IRI. In the future, more
-  /// robust validation could be implemented.
+  /// [FormatException] is thrown.
   static String _validateIri(String unvalidatedIri) {
-    try {
-      final validatedUri = Uri.parse(unvalidatedIri);
-
-      // Additional checks after Uri.parse
-      if (!_isValidPercentEncoding(validatedUri, unvalidatedIri)) {
-        throw InvalidIRIException(
-          'Invalid IRI: $unvalidatedIri - Error: Invalid percent-encoding',
-        );
-      }
-
-      if (!_isValidControlCharacters(unvalidatedIri)) {
-        throw InvalidIRIException(
-          'Invalid IRI: $unvalidatedIri - Error: Invalid control character',
-        );
-      }
-      // TODO: Use more robust IRI validation here in the future but this is sufficient for now.
-      return validatedUri.toString();
-    } on FormatException catch (e) {
-      throw InvalidIRIException(
-        'Invalid IRI: $unvalidatedIri - Error: ${e.message}',
+    if (!_isValidIRI(unvalidatedIri)) {
+      throw FormatException(
+        'Does not match the lexical space value: $unvalidatedIri',
       );
     }
+
+    if (unvalidatedIri.isEmpty) {
+      throw FormatException('IRI cannot be empty');
+    }
+
+    // TODO: Figure out the proper mapping between IRI and URIs but will
+    // almost certainly continue to use Uri as the underlying data type
+
+    final validatedUri = Uri.parse(unvalidatedIri);
+
+    return validatedUri.toString();
   }
 
-  /// Checks if the uri has valid percent-encoding.
-  ///
-  /// According to RFC 3987, each percent-encoded sequence must consist of a
-  /// percent sign ("%") followed by two hexadecimal digits ([0-9A-Fa-f]).
-  ///
-  /// This function checks for this.
-  static bool _isValidPercentEncoding(Uri uri, String iri) {
-    final pattern = RegExp('%[0-9A-Fa-f]{2}');
-
-    final allMatches = pattern.allMatches(iri);
-    // check that the percent encoding matches a correct form.
-    for (final match in allMatches) {
-      if (match.group(0)!.length != 3) {
-        return false;
-      }
-    }
-
-    // Check that a percent is always followed by two hex digits
-    // iterate over the string and check that every % is followed by two hex digits.
-    for (var i = 0; i < iri.length; i++) {
-      if (iri[i] == '%') {
-        if (i + 2 >= iri.length) {
-          return false;
-        }
-        if (!RegExp('[0-9A-Fa-f]{2}').hasMatch(iri.substring(i + 1, i + 3))) {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
-
-  /// Checks if the IRI contains any invalid control characters.
-  ///
-  /// According to RFC 3987, control characters (U+0000 to U+001F, U+007F,
-  /// U+0080 to U+009F) are not allowed directly in IRIs (they must be
-  /// percent-encoded).
-  ///
-  /// This function checks for the presence of such characters.
-  static bool _isValidControlCharacters(String iri) {
-    for (var i = 0; i < iri.length; i++) {
-      final codeUnit = iri.codeUnitAt(i);
-
-      // Check for control characters (excluding TAB, CR, LF)
-      if ((codeUnit >= 0x0000 &&
-              codeUnit <= 0x001F &&
-              codeUnit != 0x09 &&
-              codeUnit != 0x0D &&
-              codeUnit != 0x0A) ||
-          codeUnit == 0x007F ||
-          (codeUnit >= 0x0080 && codeUnit <= 0x009F)) {
-        // if the character is a control character, check that it is not percent-encoded
-        if (i < 2 || iri[i - 2] != '%') {
-          return false;
-        }
-      }
-    }
-    return true;
+  static bool _isValidIRI(String input) {
+    const scheme = r'[a-zA-Z][a-zA-Z0-9+\-.]*';
+    const ucschar =
+        r'[\u{a0}-\u{d7ff}\u{f900}-\u{fdcf}\u{fdf0}-\u{ffef}\u{10000}-\u{1fffd}\u{20000}-\u{2fffd}\u{30000}-\u{3fffd}\u{40000}-\u{4fffd}\u{50000}-\u{5fffd}\u{60000}-\u{6fffd}\u{70000}-\u{7fffd}\u{80000}-\u{8fffd}\u{90000}-\u{9fffd}\u{a0000}-\u{afffd}\u{b0000}-\u{bfffd}\u{c0000}-\u{cfffd}\u{d0000}-\u{dfffd}\u{e1000}-\u{efffd}]';
+    const iunreserved = '([a-zA-Z0-9\\-._~]|$ucschar)';
+    const pctEncoded = '%[0-9A-Fa-f][0-9A-Fa-f]';
+    const subDelims = r"[!$&'()*+,;=]";
+    const iuserinfo = '($iunreserved|$pctEncoded|$subDelims|:)*';
+    const h16 = '[0-9A-Fa-f]{1,4}';
+    const decOctet = '([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])';
+    const ipv4address = '$decOctet\\.$decOctet\\.$decOctet\\.$decOctet';
+    const ls32 = '($h16:$h16|$ipv4address)';
+    const ipv6address =
+        '(($h16:){6}$ls32|::($h16:){5}$ls32|($h16)?::($h16:){4}$ls32|(($h16:)?$h16)?::($h16:){3}$ls32|(($h16:){0,2}$h16)?::($h16:){2}$ls32|(($h16:){0,3}$h16)?::$h16:$ls32|(($h16:){0,4}$h16)?::$ls32|(($h16:){0,5}$h16)?::$h16|(($h16:){0,6}$h16)?::)';
+    const unreserved = r'[a-zA-Z0-9\-._~]';
+    const ipvfuture = '[vV][0-9A-Fa-f]+\\.($unreserved|$subDelims|:)+';
+    const ipLiteral = '\\[($ipv6address|$ipvfuture)\\]';
+    const iregName = '($iunreserved|$pctEncoded|$subDelims)*';
+    const ihost = '($ipLiteral|$ipv4address|$iregName)';
+    const port = '[0-9]*';
+    const iauthority = '($iuserinfo@)?$ihost(:$port)?';
+    const ipchar = '($iunreserved|$pctEncoded|$subDelims|[:@])';
+    const isegment = '($ipchar)*';
+    const ipathAbempty = '(/$isegment)*';
+    const isegmentNz = '($ipchar)+';
+    const ipathAbsolute = '/($isegmentNz(/$isegment)*)?';
+    const ipathRootless = '$isegmentNz(/$isegment)*';
+    const ipathEmpty = '($ipchar){0}';
+    const ihierPart =
+        '(//$iauthority$ipathAbempty|$ipathAbsolute|$ipathRootless|$ipathEmpty)';
+    const iprivate =
+        r'[\u{e000}-\u{f8ff}\u{f0000}-\u{ffffd}\u{100000}-\u{10fffd}]';
+    const iquery = '($ipchar|$iprivate|[/?])*';
+    const ifragment = '($ipchar|[/?])*';
+    const isegmentNzNc = '($iunreserved|$pctEncoded|$subDelims|@)+';
+    const ipathNoscheme = '$isegmentNzNc(/$isegment)*';
+    const irelativePart =
+        '(//$iauthority$ipathAbempty|$ipathAbsolute|$ipathNoscheme|$ipathEmpty)';
+    const irelativeRef = '$irelativePart(\\?$iquery)?(#$ifragment)?';
+    const iri = '$scheme:$ihierPart(\\?$iquery)?(#$ifragment)?';
+    const iriReference = '($iri|$irelativeRef)';
+    const pattern = '^$iriReference\$';
+    final regex = RegExp(pattern, unicode: true);
+    return regex.hasMatch(input);
   }
 
   @override
