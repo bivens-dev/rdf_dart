@@ -90,8 +90,12 @@ void main() {
         );
       });
 
-      // https://github.com/bivens-dev/rdf_dart/issues/13
       test('Russian (Cyrillic)', () {
+        // https://github.com/bivens-dev/rdf_dart/issues/13
+        // expect(
+        //   codec.encoder.convert('почемужеонинеговорятпорусски'),
+        //   'b1abfaaepdrnnbgefbaDotcwatmq2g4l',
+        // );
         expect(
           codec.encoder.convert('почемужеонинеговорятпорусски'),
           'b1abfaaepdrnnbgefbadotcwatmq2g4l',
@@ -162,6 +166,75 @@ void main() {
         expect(
           codec.encoder.convert('\u305D\u306E\u30B9\u30D4\u30FC\u30C9\u3067'),
           'd9juau41awczczp',
+        );
+      });
+    });
+
+    group('domains and emails', () {
+      test('With IRI domain', () {
+        expect(punycodeEncoder.toAscii('ma\xF1ana.com'), 'xn--maana-pta.com');
+        expect(punycodeEncoder.toAscii('b\xFCcher.com'), 'xn--bcher-kva.com');
+        expect(punycodeEncoder.toAscii('caf\xE9.com'), 'xn--caf-dma.com');
+        expect(
+          punycodeEncoder.toAscii('\u2603-\u2318.com'),
+          'xn----dqo34k.com',
+        );
+        expect(
+          punycodeEncoder.toAscii('\uD400\u2603-\u2318.com'),
+          'xn----dqo34kn65z.com',
+        );
+        expect(punycodeEncoder.toAscii('foo\x7F.example'), 'foo\x7F.example');
+      });
+
+      test('With non-IRI domain', () {
+        expect(punycodeEncoder.toAscii('example.com.'), 'example.com.');
+      });
+
+      test('With emoji', () {
+        // TODO: Test currently fails but it's unclear why
+        expect(punycodeEncoder.toAscii('\uD83D\uDCA9.la'), 'xn--ls8h.la');
+      });
+
+      test('with non-printable ASCII', () {
+        expect(punycodeEncoder.toAscii('0\x01\x02foo.bar'), '0\x01\x02foo.bar');
+      });
+
+      test('with email address', () {
+        expect(
+          punycodeEncoder.toAscii(
+            '\u0434\u0436\u0443\u043C\u043B\u0430@\u0434\u0436p\u0443\u043C\u043B\u0430\u0442\u0435\u0441\u0442.b\u0440\u0444a',
+          ),
+          '\u0434\u0436\u0443\u043C\u043B\u0430@xn--p-8sbkgc5ag7bhce.xn--ba-lmcq',
+        );
+      });
+    });
+
+    group('separators', () {
+      test('Using U+002E as separator', () {
+        expect(
+          punycodeEncoder.toAscii('ma\xF1ana\x2Ecom'),
+          'xn--maana-pta.com',
+        );
+      });
+
+      test('Using U+3002 as separator', () {
+        expect(
+          punycodeEncoder.toAscii('ma\xF1ana\u3002com'),
+          'xn--maana-pta.com',
+        );
+      });
+
+      test('Using U+FF0E as separator', () {
+        expect(
+          punycodeEncoder.toAscii('ma\xF1ana\uFF0Ecom'),
+          'xn--maana-pta.com',
+        );
+      });
+
+      test('Using U+FF61 as separator', () {
+        expect(
+          punycodeEncoder.toAscii('ma\xF1ana\uFF61com'),
+          'xn--maana-pta.com',
         );
       });
     });

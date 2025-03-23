@@ -19,6 +19,41 @@ const punycodeEncoder = PunycodeEncoder._();
 class PunycodeEncoder extends Converter<String, String> {
   const PunycodeEncoder._();
 
+  /// Converts a Unicode string representing a domain name or an email address
+  /// to Punycode. Only the non-ASCII parts of the domain name will be
+  /// converted, i.e. it doesn't matter if you call it with a domain that's
+  /// already in ASCII
+  String toAscii(String input) {
+    return _mapDomain(input);
+  }
+
+  /// A simple `map`-like function to work with domain name strings or email
+  /// addresses.
+  String _mapDomain(String input) {
+    var result = '';
+    final parts = input.split('@');
+
+    if (parts.length > 1) {
+      // In email addresses, only the domain name should be punycoded. Leave
+      // the local part (i.e., everything up to `@`) intact.
+      result = '${parts[0]}@';
+      input = parts[1];
+    }
+
+    final labels = input.split(punycodeRegex.regexSeparators);
+    final encodedLabels = labels.map(_encodeLabel).toList();
+    final encoded = encodedLabels.join('.');
+    return result + encoded;
+  }
+
+  String _encodeLabel(String label) {
+    if (punycodeRegex.regexNonASCII.hasMatch(label)) {
+      return 'xn--${convert(label)}';
+    } else {
+      return label;
+    }
+  }
+
   @override
   String convert(String input) {
     final output = <int>[];
@@ -83,9 +118,9 @@ class PunycodeEncoder extends Converter<String, String> {
         if (currentValue < n) {
           delta++;
           if (delta > maxInt) {
-          throw FormatException(
-            'Overflow: input needs wider integers to process',
-          );
+            throw FormatException(
+              'Overflow: input needs wider integers to process',
+            );
           }
         }
 

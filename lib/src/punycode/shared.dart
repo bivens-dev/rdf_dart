@@ -163,3 +163,10 @@ int basicToDigit(int codePoint) {
   }
   return bootstrapValues.base;
 }
+
+/// A record of handy regular expressions to use when working with Punycode
+final punycodeRegex = (
+  regexPunycode: RegExp('^xn--'),
+  regexNonASCII: RegExp(r'[^\x00-\x7F]'), // Note: U+007F DEL is excluded too.
+  regexSeparators: RegExp(r'[\x2E\u3002\uFF0E\uFF61]'), // RFC 3490 separators
+);
