@@ -21,13 +21,13 @@ class PunycodeEncoder extends Converter<String, String> {
 
   @override
   String convert(String input) {
-    final output = <String>[] = [];
+    final output = <int>[];
 
     // Convert the input in UCS-2 to an array of Unicode code points.
     final decodedInput = ucs2decode(input);
 
     // Cache the length.
-    final inputLength = input.length;
+    final inputLength = decodedInput.length;
 
     // Initialize the state.
     var n = bootstrapValues.initialN;
@@ -37,7 +37,7 @@ class PunycodeEncoder extends Converter<String, String> {
     // Handle the basic code points.
     for (final currentValue in decodedInput) {
       if (currentValue < 0x80) {
-        output.add(String.fromCharCode(currentValue));
+        output.add(currentValue); // Add the code point directly
       }
     }
 
@@ -49,7 +49,9 @@ class PunycodeEncoder extends Converter<String, String> {
 
     // Finish the basic string with a delimiter unless it's empty.
     if (basicLength > 0) {
-      output.add(bootstrapValues.delimiter);
+      output.add(
+        bootstrapValues.delimiter.codeUnitAt(0),
+      ); // Add delimiter code point
     }
 
     // Main encoding loop:
@@ -74,25 +76,24 @@ class PunycodeEncoder extends Converter<String, String> {
         );
       }
 
-      delta += (m - n) * handledCPCountPlusOne;
+      delta = delta + ((m - n) * handledCPCountPlusOne);
       n = m;
 
       for (final currentValue in decodedInput) {
-        if (currentValue < n && ++delta > maxInt) {
+        if (currentValue < n) {
+          delta++;
+          if (delta > maxInt) {
           throw FormatException(
             'Overflow: input needs wider integers to process',
           );
+          }
         }
 
         if (currentValue == n) {
           // Represent delta as a generalized variable-length integer.
           var q = delta;
 
-          for (
-            var k = bootstrapValues.base;
-            /* no condition */ ;
-            k += bootstrapValues.base
-          ) {
+          for (var k = bootstrapValues.base; ; k += bootstrapValues.base) {
             final t =
                 k <= bias
                     ? bootstrapValues.tMin
@@ -106,13 +107,11 @@ class PunycodeEncoder extends Converter<String, String> {
 
             final qMinusT = q - t;
             final baseMinusT = bootstrapValues.base - t;
-            output.add(
-              String.fromCharCode(digitToBasic(t + qMinusT % baseMinusT, 0)),
-            );
-            q = (qMinusT / baseMinusT).floor();
+            output.add(digitToBasic(t + (qMinusT % baseMinusT), 0));
+            q = qMinusT ~/ baseMinusT;
           }
 
-          output.add(String.fromCharCode(digitToBasic(q, 0)));
+          output.add(digitToBasic(q, 0));
           bias = adapt(
             delta: delta,
             numPoints: handledCPCountPlusOne,
@@ -125,7 +124,6 @@ class PunycodeEncoder extends Converter<String, String> {
       ++delta;
       ++n;
     }
-
-    return output.join();
+    return String.fromCharCodes(output);
   }
 }
