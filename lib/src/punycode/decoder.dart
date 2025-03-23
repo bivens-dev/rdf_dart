@@ -39,7 +39,11 @@ class PunycodeDecoder extends Converter<String, String> {
     for (var j = 0; j < basic; ++j) {
       // if it's not a basic code point
       if (input.codeUnitAt(j) >= 0x80) {
-        throw RangeError('Illegal input >= 0x80 (not a basic code point)');
+        throw RangeError.value(
+          input.codeUnitAt(j),
+          'input',
+          'Illegal input >= 0x80 (not a basic code point)',
+        );
       }
       output.add(input.codeUnitAt(j));
     }
@@ -47,10 +51,7 @@ class PunycodeDecoder extends Converter<String, String> {
     // Main decoding loop: start just after the last delimiter if any basic code
     // points were copied; start at the beginning otherwise.
 
-    for (
-      var index = basic > 0 ? basic + 1 : 0;
-      index < inputLength; /* no final expression */
-    ) {
+    for (var index = basic > 0 ? basic + 1 : 0; index < inputLength;) {
       // `index` is the index of the next character to be consumed.
       // Decode a generalized variable-length integer into `delta`,
       // which gets added to `i`. The overflow checking is easier
@@ -58,22 +59,20 @@ class PunycodeDecoder extends Converter<String, String> {
       // value at the end to obtain `delta`.
       final oldi = i;
 
-      for (
-        var w = 1, k = bootstrapValues.base;
-        /* no condition */ ;
-        k += bootstrapValues.base
-      ) {
+      for (var w = 1, k = bootstrapValues.base; ; k += bootstrapValues.base) {
         if (index >= inputLength) {
-          throw FormatException('Invalid input');
+          throw FormatException('Invalid input: Incomplete Punycode sequence');
         }
 
         final digit = basicToDigit(input.codeUnitAt(index++));
 
         if (digit >= bootstrapValues.base) {
-          throw FormatException('Invalid input');
+          throw FormatException(
+            'Invalid input: Invalid base-36 digit: ${input[index - 1]}',
+          );
         }
 
-        if (digit > ((maxInt - i) / w).floor()) {
+        if (digit > ((maxInt - i) ~/ w)) {
           throw FormatException(
             'Overflow: input needs wider integers to process',
           );
@@ -93,13 +92,13 @@ class PunycodeDecoder extends Converter<String, String> {
 
         final baseMinusT = bootstrapValues.base - t;
 
-        if (w > (maxInt / baseMinusT).floor()) {
+        if (w > (maxInt ~/ baseMinusT)) {
           throw FormatException(
             'Overflow: input needs wider integers to process',
           );
         }
 
-        w *= baseMinusT;
+        w = w * baseMinusT; // Multiply within integer limits
       }
 
       final out = output.length + 1;
@@ -107,13 +106,13 @@ class PunycodeDecoder extends Converter<String, String> {
 
       // `i` was supposed to wrap around from `out` to `0`,
       // incrementing `n` each time, so we'll fix that now:
-      if ((i / out).floor() > maxInt - n) {
+      if ((i ~/ out) > (maxInt - n)) {
         throw FormatException(
           'Overflow: input needs wider integers to process',
         );
       }
 
-      n += (i / out).floor();
+      n += i ~/ out;
       i %= out;
 
       // Insert `n` at position `i` of the output.
