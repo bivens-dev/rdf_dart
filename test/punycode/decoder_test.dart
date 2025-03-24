@@ -1,3 +1,4 @@
+import 'package:rdf_dart/src/punycode/decoder.dart';
 import 'package:rdf_dart/src/punycode/punycode_codec.dart';
 import 'package:test/test.dart';
 
@@ -161,6 +162,41 @@ void main() {
         expect(
           codec.decoder.convert('d9juau41awczczp'),
           '\u305D\u306E\u30B9\u30D4\u30FC\u30C9\u3067',
+        );
+      });
+    });
+
+    group('domains and emails', () {
+      test('With IRI domain', () {
+        expect(punycodeDecoder.toUnicode('xn--maana-pta.com'), 'mañana.com');
+        expect(punycodeDecoder.toUnicode('xn--bcher-kva.com'), 'bücher.com');
+        expect(punycodeDecoder.toUnicode('xn--caf-dma.com'), 'café.com');
+        expect(punycodeDecoder.toUnicode('xn----dqo34k.com'), '☃-⌘.com');
+        expect(punycodeDecoder.toUnicode('xn----dqo34kn65z.com'), '퐀☃-⌘.com');
+        expect(punycodeDecoder.toUnicode('foo\x7F.example'), 'foo\x7F.example');
+      });
+
+      test('With non-IRI domain', () {
+        expect(punycodeDecoder.toUnicode('example.com.'), 'example.com.');
+      });
+
+      test('With emoji', () {
+        expect(punycodeDecoder.toUnicode('xn--ls8h.la'), '💩.la');
+      });
+
+      test('with non-printable ASCII', () {
+        expect(
+          punycodeDecoder.toUnicode('0\x01\x02foo.bar'),
+          '0\x01\x02foo.bar',
+        );
+      });
+
+      test('with email address', () {
+        expect(
+          punycodeDecoder.toUnicode(
+            '\u0434\u0436\u0443\u043C\u043B\u0430@xn--p-8sbkgc5ag7bhce.xn--ba-lmcq',
+          ),
+          '\u0434\u0436\u0443\u043C\u043B\u0430@\u0434\u0436p\u0443\u043C\u043B\u0430\u0442\u0435\u0441\u0442.b\u0440\u0444a',
         );
       });
     });
