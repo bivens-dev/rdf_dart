@@ -3,9 +3,6 @@
 // This code is based on a port of the Punycode.js library by Mathias Bynens.
 // Original library: https://github.com/mathiasbynens/punycode.js/
 // Original library license: MIT
-//
-// The original library was written by Mathias Bynens and is covered under the
-// MIT license. This Dart port is also covered under the MIT license.
 
 /// Bootstring parameters & constants from the Punycode
 /// specification (RFC 3492)

@@ -3,9 +3,7 @@
 // This code is based on a port of the Punycode.js library by Mathias Bynens.
 // Original library: https://github.com/mathiasbynens/punycode.js/
 // Original library license: MIT
-//
-// The original library was written by Mathias Bynens and is covered under the
-// MIT license. This Dart port is also covered under the MIT license.
+
 // ignore_for_file: avoid_field_initializers_in_const_classes
 
 import 'dart:convert';
