@@ -11,6 +11,7 @@ import 'package:rdf_dart/src/data_types/byte.dart';
 import 'package:rdf_dart/src/data_types/decimal.dart';
 import 'package:rdf_dart/src/data_types/double.dart';
 import 'package:rdf_dart/src/data_types/duration.dart';
+import 'package:rdf_dart/src/data_types/g_month_day.dart';
 import 'package:rdf_dart/src/data_types/helper.dart';
 import 'package:rdf_dart/src/data_types/int.dart';
 import 'package:rdf_dart/src/data_types/integer.dart';
@@ -133,6 +134,12 @@ class DatatypeRegistry {
       XSDDuration,
       durationCodec.encoder.convert,
       durationCodec.decoder.convert as LiteralFormatter,
+    );
+    registerDatatype(
+      IRI(XMLDataType.gMonthDay.iri),
+      XsdGMonthDay,
+      xsdGMonthDayCodec.encoder.convert,
+      xsdGMonthDayCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
       IRI(XMLDataType.negativeInteger.iri),
