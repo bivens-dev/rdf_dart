@@ -91,11 +91,13 @@ class XsdDate implements Comparable<XsdDate> {
       final startOfDayUtc = DateTime.utc(year, month, day);
       // Get milliseconds since epoch for this UTC start time
       final startMillisUtc = startOfDayUtc.millisecondsSinceEpoch;
-      // Adjust by the timezone offset to find the actual UTC instant when this date started
+      // Adjust by the timezone offset to find the actual UTC instant
+      // when this date started
       final actualStartInstantMillis =
           startMillisUtc - timeZoneOffset!.inMilliseconds;
       return actualStartInstantMillis;
-      // Catching ArgumentError which might theoretically happen if constructor validation failed somehow
+      // Catching ArgumentError which might theoretically happen if
+      // constructor validation failed somehow
       // ignore: avoid_catching_errors
     } on ArgumentError {
       // Should ideally be prevented by constructor validation
