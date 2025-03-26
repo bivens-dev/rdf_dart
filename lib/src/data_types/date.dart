@@ -30,13 +30,54 @@ class XsdDate implements Comparable<XsdDate> {
     required this.day,
     this.timeZoneOffset,
   }) {
-    // --- Implementation Needed ---
-    // 1. Validate year != 0
-    // 2. Validate month (1-12)
-    // 3. Validate day (1-31 and check validity for month/year - maybe using DateTime.utc)
-    // 4. Validate timeZoneOffset (whole minutes, +/- 14:00 range) - similar to XsdGMonthDay
-    // --- ---
-    throw UnimplementedError('Constructor validation not implemented');
+    // 1. Validate year
+    if (year == 0) {
+      throw ArgumentError.value(year, 'year', 'Year must not be 0');
+    }
+
+    // 2. Validate month (implicitly handled by DateTime.utc below)
+    if (month < 1 || month > 12) {
+      throw ArgumentError.value(
+        month,
+        'month',
+        'Month must be between 1 and 12',
+      );
+    }
+
+    // 3. Validate day using DateTime.utc (handles month/day range and leap years)
+    try {
+      // Using UTC ensures consistency regardless of local system time.
+      DateTime.utc(year, month, day);
+      // Re-throw with a more specific message.
+      // ignore: avoid_catching_errors
+    } on ArgumentError catch (e) {
+      throw ArgumentError(
+        'Invalid day ($day) for month $month in year $year: ${e.message}',
+      );
+    }
+
+    // 4. Validate timeZoneOffset (if present)
+    if (timeZoneOffset != null) {
+      // Must be whole minutes
+      if (timeZoneOffset!.inSeconds.abs() % 60 != 0) {
+        throw ArgumentError.value(
+          timeZoneOffset,
+          'timeZoneOffset',
+          'Offset must be a whole number of minutes.',
+        );
+      }
+      // Must be within +/- 14:00 range
+      // Note: XSD spec allows -14:00 to +14:00 *inclusive*.
+      // Duration.inHours rounds towards zero, so check minutes directly.
+      final totalMinutes = timeZoneOffset!.inMinutes;
+      if (totalMinutes < -14 * 60 || totalMinutes > 14 * 60) {
+        throw ArgumentError.value(
+          timeZoneOffset,
+          'timeZoneOffset',
+          'Offset must be between -14:00 and +14:00 inclusive.',
+        );
+      }
+    }
   }
 
   /// Calculates a comparable integer value representing the start instant
