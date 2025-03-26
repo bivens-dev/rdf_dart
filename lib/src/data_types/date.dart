@@ -135,20 +135,17 @@ class XsdDate implements Comparable<XsdDate> {
 
   @override
   bool operator ==(Object other) {
-    // --- Implementation Needed ---
-    // Check type and compare year, month, day, timeZoneOffset.
-    // --- ---
     if (identical(this, other)) return true;
-    throw UnimplementedError('operator == not implemented');
+    return other is XsdDate &&
+        other.runtimeType == runtimeType &&
+        year == other.year &&
+        month == other.month &&
+        day == other.day &&
+        timeZoneOffset == other.timeZoneOffset;
   }
 
   @override
-  int get hashCode {
-    // --- Implementation Needed ---
-    // Use Object.hash(year, month, day, timeZoneOffset).
-    // --- ---
-    throw UnimplementedError('hashCode not implemented');
-  }
+  int get hashCode => Object.hash(year, month, day, timeZoneOffset);
 
   /// Formats the timezone offset (Z, +hh:mm, -hh:mm, or empty).
   /// (Can reuse logic from XsdGMonthDay or place in a shared helper)
