@@ -84,24 +84,53 @@ class XsdDate implements Comparable<XsdDate> {
   /// of this date, normalized to UTC milliseconds relative to epoch.
   /// Returns null if timeZoneOffset is null.
   int? get _normalizedStartMillis {
-    // --- Implementation Needed ---
-    // Similar to XsdGMonthDay._normalizedUtcMillis, but only Y/M/D:
-    // 1. Return null if timeZoneOffset is null.
-    // 2. Use DateTime.utc(year, month, day).millisecondsSinceEpoch.
-    // 3. Subtract timeZoneOffset!.inMilliseconds.
-    // 4. Handle potential ArgumentError from DateTime.utc if date is invalid (though constructor should prevent this).
-    // --- ---
-    throw UnimplementedError('_normalizedStartMillis not implemented');
+    if (timeZoneOffset == null) return null;
+
+    try {
+      // Get the DateTime representing the start of the day in UTC
+      final startOfDayUtc = DateTime.utc(year, month, day);
+      // Get milliseconds since epoch for this UTC start time
+      final startMillisUtc = startOfDayUtc.millisecondsSinceEpoch;
+      // Adjust by the timezone offset to find the actual UTC instant when this date started
+      final actualStartInstantMillis =
+          startMillisUtc - timeZoneOffset!.inMilliseconds;
+      return actualStartInstantMillis;
+      // Catching ArgumentError which might theoretically happen if constructor validation failed somehow
+      // ignore: avoid_catching_errors
+    } on ArgumentError {
+      // Should ideally be prevented by constructor validation
+      throw StateError(
+        'Cannot normalize invalid date: year=$year, month=$month, day=$day',
+      );
+    }
   }
 
   @override
   int compareTo(XsdDate other) {
-    // --- Implementation Needed ---
-    // Use _normalizedStartMillis for comparison:
-    // 1. Get normalized values for this and other.
-    // 2. Handle 3 cases: both zoned (compare normalized values), neither zoned (compare year, month, day), mixed (return -1 or 1 based on convention).
-    // --- ---
-    throw UnimplementedError('compareTo not implemented');
+    final thisNorm = _normalizedStartMillis;
+    final otherNorm = other._normalizedStartMillis;
+
+    // Case 1: Both have timezones
+    if (thisNorm != null && otherNorm != null) {
+      return thisNorm.compareTo(otherNorm);
+    }
+
+    // Case 2: Neither has timezone
+    if (thisNorm == null && otherNorm == null) {
+      final yearCompare = year.compareTo(other.year);
+      if (yearCompare != 0) return yearCompare;
+      final monthCompare = month.compareTo(other.month);
+      if (monthCompare != 0) return monthCompare;
+      return day.compareTo(other.day);
+    }
+
+    // Case 3: One has timezone, one doesn't - Indeterminate
+    // Following convention: timezone-less < timezone'd
+    if (thisNorm == null && otherNorm != null) {
+      return -1; // this (no TZ) < other (TZ)
+    }
+    // This is the remaining case: thisNorm != null && otherNorm == null
+    return 1; // this (TZ) > other (no TZ)
   }
 
   @override
