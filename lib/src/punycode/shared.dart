@@ -62,42 +62,6 @@ int adapt({
           (delta + bootstrapValues.skew));
 }
 
-/// Decodes a string into a list of Unicode code points.
-///
-/// This function handles surrogate pairs to correctly represent Unicode
-/// characters beyond the Basic Multilingual Plane (BMP). This
-/// function combines surrogate pairs into single code points, matching UTF-16
-/// encoding.
-///
-/// Args:
-///   string: The input string to decode.
-///
-/// Returns:
-///   A [List<int>] where each element represents a Unicode code point.
-List<int> ucs2decode(String string) {
-  final output = <int>[];
-  var counter = 0;
-  while (counter < string.length) {
-    final value = string.codeUnitAt(counter++);
-    if (value >= 0xD800 && value <= 0xDBFF && counter < string.length) {
-      // It's a high surrogate, and there is a next character.
-      final extra = string.codeUnitAt(counter++) - 0xDC00 + 0x10000;
-      if ((extra & 0xFC00) == 0xDC00) {
-        // Low surrogate.
-        output.add(((value & 0x3FF) << 10) + (extra & 0x3FF) + 0x10000);
-      } else {
-        // It's an unmatched surrogate; only append this code unit, in case the
-        // next code unit is the high surrogate of a surrogate pair.
-        output.add(value);
-        counter--;
-      }
-    } else {
-      output.add(value);
-    }
-  }
-  return output;
-}
-
 /// Converts a digit/integer into a basic code point.
 ///
 /// See `basicToDigit()`

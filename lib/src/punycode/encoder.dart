@@ -55,8 +55,8 @@ class PunycodeEncoder extends Converter<String, String> {
   String convert(String input) {
     final output = <int>[];
 
-    // Convert the input in UCS-2 to an array of Unicode code points.
-    final decodedInput = ucs2decode(input);
+    // Convert the input to an array of Unicode code points.
+    final decodedInput = input.runes.toList();
 
     // Cache the length.
     final inputLength = decodedInput.length;
