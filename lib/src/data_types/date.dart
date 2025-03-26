@@ -150,25 +150,38 @@ class XsdDate implements Comparable<XsdDate> {
   int get hashCode => Object.hash(year, month, day, timeZoneOffset);
 
   /// Formats the timezone offset (Z, +hh:mm, -hh:mm, or empty).
-  /// (Can reuse logic from XsdGMonthDay or place in a shared helper)
   String _formatTimeZone() {
-    // --- Implementation Needed (or reuse/import helper) ---
     if (timeZoneOffset == null) return '';
     if (timeZoneOffset == Duration.zero) return 'Z';
-    // ... formatting logic for +hh:mm / -hh:mm ...
-    // --- ---
-    throw UnimplementedError('_formatTimeZone not implemented');
+
+    final duration = timeZoneOffset!; // Known non-null here
+    final isNegative = duration.isNegative;
+    final absDuration = isNegative ? -duration : duration;
+    final totalMinutes = absDuration.inMinutes;
+    final tzHour = (totalMinutes ~/ 60).toString().padLeft(2, '0');
+    final tzMinute = (totalMinutes % 60).toString().padLeft(2, '0');
+    final sign = isNegative ? '-' : '+';
+    return '$sign$tzHour:$tzMinute';
   }
 
   /// Returns the canonical XSD string representation (e.g., "2023-03-26Z", "-0045-01-20").
   @override
   String toString() {
-    // --- Implementation Needed ---
-    // 1. Format year: Use abs().padLeft(4, '0'). Prepend '-' if negative.
-    // 2. Format month: padLeft(2, '0').
-    // 3. Format day: padLeft(2, '0').
-    // 4. Append result of _formatTimeZone().
-    // --- ---
-    throw UnimplementedError('toString not implemented');
+    // Format year: Pad absolute value to at least 4 digits, prepend '-' if negative
+    final String yearString;
+    if (year < 0) {
+      // Need 4 digits *after* the sign for negative years, e.g., -0045
+      yearString = '-${year.abs().toString().padLeft(4, '0')}';
+    } else {
+      // Pad positive years to at least 4 digits
+      yearString = year.toString().padLeft(4, '0');
+    }
+
+    // Format month and day
+    final mm = month.toString().padLeft(2, '0');
+    final dd = day.toString().padLeft(2, '0');
+
+    // Combine and append timezone
+    return '$yearString-$mm-$dd${_formatTimeZone()}';
   }
 }
