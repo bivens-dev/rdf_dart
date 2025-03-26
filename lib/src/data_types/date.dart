@@ -207,7 +207,10 @@ class XsdDate implements Comparable<XsdDate> {
 /// The canonical instance of [XsdDateCodec].
 const xsdDateCodec = XsdDateCodec._();
 
-/// A [Codec] for working with XML Schema `date` data.
+/// A [Codec] for working with XML Schema `xsd:date` lexical values.
+///
+/// Encodes lexical strings into [XsdDate] objects and decodes [XsdDate]
+/// objects into their canonical lexical string representation.
 class XsdDateCodec extends Codec<String, XsdDate> {
   final Converter<String, XsdDate> _encoder;
   final Converter<XsdDate, String> _decoder;
@@ -224,52 +227,63 @@ class XsdDateCodec extends Codec<String, XsdDate> {
   @override
   Converter<String, XsdDate> get encoder => _encoder;
 
-  /// Values taken from the specification
+  /// Defines constraints and patterns related to the `xsd:date` datatype.
   static final constraints = (
+    /// Whitespace processing rule for `xsd:date`.
     whitespace: Whitespace.collapse,
+
+    /// Original regex from the XSD 1.1 specification for validation.
     lexicalSpace: RegExp(
       r'^(-?(?:[1-9][0-9]{3,}|0[0-9]{3}))-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])(Z|([+-])([01][0-9]|1[0-3]):([0-5][0-9])|14:00)?$',
     ),
-    // Note: Simplified TZ part slightly for Dart regex capture compared to pure spec regex
-    // Grouping TZ components:
-    // Group 4: Full TZ ( Z | Offset )
-    // Group 5: Z
-    // Group 6: Offset ( [+-]hh:mm ) <-- Simplified, need separate groups for sign, hh, mm inside parseTimeZone
-    // Let's refine the regex for better TZ capture groups:
+
+    /// Refined regex used for parsing, making the optional timezone group capturing
+    /// and adjusting sub-group indices for easier extraction in [parseTimeZone].
     refinedRegex: RegExp(
-      '^(-?(?:[1-9][0-9]{3,}|0[0-9]{3}))' // Group 1: Year (incl. sign)
+      // Year part (Group 1)
+      '^(-?(?:[1-9][0-9]{3,}|0[0-9]{3}))'
       '-'
-      '(0[1-9]|1[0-2])' // Group 2: Month
+      // Month part (Group 2)
+      '(0[1-9]|1[0-2])'
       '-'
-      '(0[1-9]|[12][0-9]|3[01])' // Group 3: Day
-      r'(?:(Z)|([+-])(0[0-9]|1[0-3]):([0-5][0-9])|([+-])(14):00)?$', // Group 4: TZ (optional)
-      // Group 5: Z
-      // Group 6: +/- sign (for hh:mm < 14:00)
-      // Group 7: hh (<14)
-      // Group 8: mm
-      // Group 9: +/- sign (for 14:00)
-      // Group 10: 14
+      // Day part (Group 3)
+      '(0[1-9]|[12][0-9]|3[01])'
+      // Start Capturing Group 4 (Optional Full Timezone)
+      '('
+      // Z alternative (Group 5)
+      '(Z)'
+      '|'
+      // Offset < 14h alternative (Groups 6, 7, 8)
+      '([+-])(0[0-9]|1[0-3]):([0-5][0-9])'
+      '|'
+      // Offset = 14h alternative (Groups 9, 10)
+      '([+-])(14):00'
+      r')?$', // End Group 4 and Anchor
     ),
   );
 
-  /// Parses timezone groups from a regex match.
-  /// Adapted from XsdGMonthDay version to match _dateRegexRefined groups.
+  /// Parses the timezone portion of a matched `xsd:date` string.
+  ///
+  /// Expects a [Match] object obtained from matching [constraints.refinedRegex].
+  /// Uses capture groups 5 through 10 to determine the timezone offset.
+  /// Returns `Duration.zero` for 'Z', a [Duration] for +hh:mm/-hh:mm offsets,
+  /// or `null` if no timezone is present in the match.
   static Duration? parseTimeZone(Match match) {
     if (match.group(5) != null) {
-      // Group 5: Z
+      // Check Group 5 (Z)
       return Duration.zero;
     } else if (match.group(6) != null) {
-      // Group 6: +/- sign for hh:mm < 14:00
+      // Check Group 6 (Sign <14h)
       final sign = match.group(6)!;
-      final tzHour = int.parse(match.group(7)!); // Group 7: hh (<14)
-      final tzMinute = int.parse(match.group(8)!); // Group 8: mm
+      final tzHour = int.parse(match.group(7)!); // Use Group 7 (hh <14)
+      final tzMinute = int.parse(match.group(8)!); // Use Group 8 (mm)
       var offset = Duration(hours: tzHour, minutes: tzMinute);
       if (sign == '-') {
         offset = -offset;
       }
       return offset;
     } else if (match.group(9) != null) {
-      // Group 9: +/- sign for 14:00
+      // Check Group 9 (Sign 14h)
       final sign = match.group(9)!;
       // Group 10 is '14'
       var offset = Duration(hours: 14);
@@ -282,75 +296,81 @@ class XsdDateCodec extends Codec<String, XsdDate> {
   }
 }
 
-/// Encoder: String -> XsdDate
+/// Encoder: Converts an XSD date lexical string into an [XsdDate] object.
+///
+/// Parses strings conforming to the `xsd:date` lexical format:
+/// `CCYY-MM-DD(Z|(+|-)hh:mm)?`
+/// Throws [FormatException] if the input string is not a valid lexical
+/// representation or if the date components are invalid (e.g., invalid day
+/// for month/year, year 0).
 class XsdDateEncoder extends Converter<String, XsdDate> {
   const XsdDateEncoder._();
 
   @override
   XsdDate convert(String input) {
+    // Process whitespace according to XSD rules
     final processedInput = processWhiteSpace(
       input,
       XsdDateCodec.constraints.whitespace,
     );
 
-    // Check that it matches the spec definition of the lexical space first
-    final lexicalMatch = XsdDateCodec.constraints.lexicalSpace.firstMatch(
-      processedInput,
-    );
-
-    if (lexicalMatch == null) {
-      throw FormatException('Invalid xsd:date format: "$input"');
-    }
-
-    // Use the refined regex
+    // Use the refined regex to match and extract components
     final match = XsdDateCodec.constraints.refinedRegex.firstMatch(
       processedInput,
     );
 
+    // If the regex doesn't match the expected format, throw an error
     if (match == null) {
       throw FormatException('Invalid xsd:date format: "$input"');
     }
 
     try {
+      // Extract year, month, and day strings from regex groups
       final yearString = match.group(1)!;
       final monthString = match.group(2)!;
       final dayString = match.group(3)!;
 
-      // Parse year, month, day
-      final year = int.parse(
-        yearString,
-      ); // Handles leading '-' sign automatically
+      // Parse numeric components
+      final year = int.parse(yearString);
       final month = int.parse(monthString);
       final day = int.parse(dayString);
 
-      // Parse timezone
+      // Parse the optional timezone using the static helper
       final timeZoneOffset = XsdDateCodec.parseTimeZone(match);
 
-      // Constructor validates ranges and date validity (incl. year != 0)
+      // Create the XsdDate object; the constructor handles final validation
       return XsdDate(
         year: year,
         month: month,
         day: day,
         timeZoneOffset: timeZoneOffset,
       );
-      // FormatException makes more sense in the context of a converter
+      // Catch validation errors from the XsdDate constructor
+      // (e.g., day invalid for month/year, year 0, invalid timezone range)
       // ignore: avoid_catching_errors
     } on ArgumentError catch (e) {
-      // Catch validation errors from constructor (e.g., day invalid for month/year, year 0)
+      // Re-throw as FormatException for consistency within the converter
       throw FormatException(
         'Invalid date components for "$input": ${e.message}',
       );
+    } on FormatException catch (e) {
+      // Catch potential int.parse errors
+      throw FormatException('Invalid number format in "$input": $e');
     } catch (e) {
-      // Catch potential int.parse errors or other issues
+      // Catch any other unexpected errors during parsing
       throw FormatException('Error parsing xsd:date "$input": $e');
     }
   }
 }
 
-/// Decoder: XsdDate -> String
+/// Decoder: Converts an [XsdDate] object into its canonical XSD date
+/// lexical string representation.
+///
+/// Relies on the [XsdDate.toString()] method for the formatting.
 class XsdDateDecoder extends Converter<XsdDate, String> {
   const XsdDateDecoder._();
 
+  /// Converts the [XsdDate] `input` into its canonical string format.
   @override
   String convert(XsdDate input) {
     // Relies on the XsdDate.toString() method for canonical formatting
