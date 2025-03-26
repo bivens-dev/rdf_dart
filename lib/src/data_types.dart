@@ -8,6 +8,7 @@ import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/data_type_facets.dart';
 import 'package:rdf_dart/src/data_types/boolean.dart';
 import 'package:rdf_dart/src/data_types/byte.dart';
+import 'package:rdf_dart/src/data_types/date.dart';
 import 'package:rdf_dart/src/data_types/decimal.dart';
 import 'package:rdf_dart/src/data_types/double.dart';
 import 'package:rdf_dart/src/data_types/duration.dart';
@@ -140,6 +141,12 @@ class DatatypeRegistry {
       XsdGMonthDay,
       xsdGMonthDayCodec.encoder.convert,
       xsdGMonthDayCodec.decoder.convert as LiteralFormatter,
+    );
+    registerDatatype(
+      IRI(XMLDataType.date.iri),
+      XsdDate,
+      xsdDateCodec.encoder.convert,
+      xsdDateCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
       IRI(XMLDataType.negativeInteger.iri),
