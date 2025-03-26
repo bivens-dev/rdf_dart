@@ -47,19 +47,32 @@ class XsdDate implements Comparable<XsdDate> {
       );
     }
 
-    // 3. Validate day using DateTime.utc (handles month/day range and leap years)
+    // 3. Validate day (basic range check first, then check validity for month/year)
+    if (day < 1 || day > 31) {
+      throw ArgumentError.value(day, 'day', 'Day must be between 1 and 31');
+    }
+
+    // 4. Validate day using DateTime.utc (handles month/day range and leap years)
     try {
       // Using UTC ensures consistency regardless of local system time.
-      DateTime.utc(year, month, day);
+      final validationDate = DateTime.utc(year, month, day);
+      // Check if DateTime adjusted the day or month (indicating invalid input day)
+      if (validationDate.day != day ||
+          validationDate.month != month ||
+          validationDate.year != year) {
+        throw ArgumentError(
+          'Day ($day) is invalid for month $month in year $year',
+        );
+      }
       // Re-throw with a more specific message.
       // ignore: avoid_catching_errors
-    } on ArgumentError catch (e) {
+    } on ArgumentError {
       throw ArgumentError(
-        'Invalid day ($day) for month $month in year $year: ${e.message}',
+        'Invalid date components: year=$year, month=$month, day=$day',
       );
     }
 
-    // 4. Validate timeZoneOffset (if present)
+    // 5. Validate timeZoneOffset (if present)
     if (timeZoneOffset != null) {
       // Must be whole minutes
       if (timeZoneOffset!.inSeconds.abs() % 60 != 0) {
