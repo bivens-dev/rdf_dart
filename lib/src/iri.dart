@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:meta/meta.dart';
 import 'package:rdf_dart/src/punycode/punycode_codec.dart';
 
@@ -22,6 +24,7 @@ class IRI {
     // Note that strings that are not encoded using Punycode will be returned as-is.
     return _punycodeCodec.decoder.convert(_encodedUri.host);
   }
+
   String get path => _encodedUri.path;
   String get fragment => _encodedUri.fragment;
   String get query => _encodedUri.query;
@@ -41,7 +44,7 @@ class IRI {
 
   bool get hasAbsolutePath => path.startsWith('/');
 
-  Uri toUri(){
+  Uri toUri() {
     return _encodedUri;
   }
 
@@ -74,7 +77,7 @@ class IRI {
     // Compute hash code based on the *normalized* components.
     return _encodedUri.hashCode;
   }
-  
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
@@ -86,6 +89,101 @@ class IRI {
   @override
   String toString() {
     return '$scheme:$authority$path${hasQuery ? '?$query' : ''}${hasFragment ? '#$fragment' : ''}';
+  }
+
+  // RFC 3986 Unreserved Characters: ALPHA / DIGIT / "-" / "." / "_" / "~"
+  static const String _uriUnreservedChars =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
+
+  // RFC 3986 Sub-delimiters: "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="
+  static const String _uriSubDelimsChars = r"!$&'()*+,;=";
+
+  // Characters generally allowed *without* percent-encoding within a URI path segment
+  // pchar = unreserved / pct-encoded / sub-delims / ":" / "@"
+  // We define the *non*-pct-encoded ones here for the check.
+  // Note: We don't include '/' here because it's handled structurally.
+  static const String _uriPathComponentAllowedChars =
+      '$_uriUnreservedChars$_uriSubDelimsChars:@';
+
+  // Characters generally allowed *without* percent-encoding within a URI query
+  // query = *( pchar / "/" / "?" )
+  static const String _uriQueryAllowedChars =
+      '$_uriPathComponentAllowedChars/?';
+
+  // Characters generally allowed *without* percent-encoding within a URI fragment
+  // fragment = *( pchar / "/" / "?" )
+  static const String _uriFragmentAllowedChars =
+      '$_uriPathComponentAllowedChars/?';
+
+  // Characters generally allowed *without* percent-encoding within URI userinfo
+  // userinfo = *( unreserved / pct-encoded / sub-delims / ":" )
+  static const String _uriUserInfoAllowedChars =
+      '$_uriUnreservedChars$_uriSubDelimsChars:';
+
+  /// Percent-encodes characters in an IRI component string to make it URI-compatible.
+  ///
+  /// It iterates through the input string and applies UTF-8 based percent-encoding
+  /// to characters that are *not* in the `allowedChars` set and are *not* already
+  /// part of a valid percent-encoding sequence (`%XX`).
+  ///
+  /// Args:
+  ///   input: The IRI component string (e.g., path segment, query, fragment).
+  ///   allowedChars: A string containing all characters allowed to appear *unencoded*
+  ///                 in the corresponding *URI* component.
+  ///
+  /// Returns:
+  ///   A string safe to use in a URI component.
+  String _percentEncodeIriComponent(String input, String allowedChars) {
+    final output = StringBuffer();
+    // Create a Set for faster character lookup
+    final allowedCharCodes = allowedChars.codeUnits.toSet();
+    // We need to work with bytes for UTF-8 encoding and hex conversion
+    final inputBytes = utf8.encode(input);
+
+    for (var i = 0; i < inputBytes.length; i++) {
+      final byte = inputBytes[i];
+
+      // Check for existing percent encoding (%XX)
+      // ASCII '%' is 37 (0x25)
+      if (byte == 0x25) {
+        // Check if there are enough characters left for a valid sequence
+        if (i + 2 < inputBytes.length &&
+            _isHexDigit(inputBytes[i + 1]) &&
+            _isHexDigit(inputBytes[i + 2])) {
+          // Valid %XX sequence found, append it directly
+          output.write('%');
+          output.writeCharCode(inputBytes[i + 1]);
+          output.writeCharCode(inputBytes[i + 2]);
+          i += 2; // Skip the two hex digits
+          continue; // Move to the next byte
+        }
+        // If it's '%' but not followed by two hex digits, it's a literal '%'
+        // that needs encoding itself according to RFC 3986.
+        // Fall through to the encoding logic below.
+      }
+
+      // Check if the byte corresponds to a character in the allowed set
+      // This works reliably only for single-byte characters (ASCII range)
+      // For IRI processing, the assumption is that `allowedChars` contains only ASCII.
+      // Non-ASCII chars from the IRI are *never* in `allowedChars` and will be encoded.
+      if (byte < 128 && allowedCharCodes.contains(byte)) {
+        // Allowed ASCII character, append directly
+        output.writeCharCode(byte);
+      } else {
+        // Character is not allowed or is non-ASCII, percent-encode it
+        output.write('%');
+        output.write(byte.toRadixString(16).toUpperCase().padLeft(2, '0'));
+      }
+    }
+
+    return output.toString();
+  }
+
+  /// Helper to check if a byte value represents an ASCII hex digit (0-9, A-F, a-f).
+  bool _isHexDigit(int byte) {
+    return (byte >= 0x30 && byte <= 0x39) || // 0-9
+        (byte >= 0x41 && byte <= 0x46) || // A-F
+        (byte >= 0x61 && byte <= 0x66); // a-f
   }
 }
 
