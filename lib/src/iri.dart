@@ -65,62 +65,75 @@ class IRI {
     // Next check to see if it is *already* a URI without further processing
     final simpleUri = Uri.tryParse(iri);
     if (simpleUri != null) {
+      // Already a valid URI, just normalize path
       return simpleUri.normalizePath();
     }
 
+    // Parse and normalize all components according to IRI rules
     final normalizedComponents = _parseAndNormalize(iri);
     final scheme = normalizedComponents['scheme'] as String?;
     final userInfo = normalizedComponents['userInfo'] as String?;
-    final host = normalizedComponents['host'] as String?;
+    // Get the host details from the map
+    final hostNormalized = normalizedComponents['hostNormalized'] as String?;
+    final hostType = normalizedComponents['hostType'] as _HostType?;
     final port = normalizedComponents['port'] as int?;
+    // Path is already percent-normalized, dot segments handled by Uri constructor/normalizePath
     final path = normalizedComponents['path'] as String;
     final query = normalizedComponents['query'] as String?;
     final fragment = normalizedComponents['fragment'] as String?;
 
-    // If we have a scheme and no authority, we can just return a URI with the scheme and path
-    if (scheme != null && host == null) {
-      return Uri(scheme: scheme, path: path, query: query, fragment: fragment);
-    }
+    String? finalHostForUri; // Will hold Punycode-encoded or normalized IP host
 
-    // If we have a scheme and authority, we need to encode the host and return a URI with the scheme, authority, path, query, and fragment
-    if (scheme != null && host != null) {
-      final encodedHost = _punycodeCodec.encoder.convert(host);
-      return Uri(
-        scheme: scheme,
-        userInfo: userInfo,
-        host: encodedHost,
-        port: port,
-        path: path,
-        query: query,
-        fragment: fragment,
-      ).normalizePath();
+    // Determine the final host string for the Uri constructor based on type
+    if (hostNormalized != null) {
+      switch (hostType) {
+        case _HostType.registeredName:
+          // Only apply Punycode to registered names
+          try {
+            // Use the normalized host (already lowercased) for Punycode
+            finalHostForUri = _punycodeCodec.encoder.convert(hostNormalized);
+          } catch (e) {
+            // Handle potential Punycode errors
+            throw FormatException(
+              'Punycode encoding failed for host: $hostNormalized', e,
+            );
+          }
+        case _HostType.ipLiteral:
+        case _HostType.ipv4Address:
+          // Use the already type-normalized IP address directly
+          finalHostForUri = hostNormalized;
+        case null:
+          // This case should not happen if hostNormalized is not null due to _parseAndNormalize logic
+          throw StateError(
+            'Internal error: Host type is null when normalized host is present.',
+          );
+      }
     }
+    // If hostNormalized was null, finalHostForUri remains null
 
-    // If we have no scheme and an authority, we need to encode the host and return a URI with the authority, path, query, and fragment
-    if (scheme == null && host != null) {
-      final encodedHost = _punycodeCodec.encoder.convert(host);
-      return Uri(
-        userInfo: userInfo,
-        host: encodedHost,
-        port: port,
-        path: path,
-        query: query,
-        fragment: fragment,
-      ).normalizePath();
-    }
+    // Now construct the Uri based on components present, using the final host string
 
-    if (scheme == null && host == null) {
-      // Handles relative-path and absolute-path references
-      return Uri(
-        path: path, // Already normalized
-        query: query, // Already normalized
-        fragment: fragment, // Already normalized
-      ).normalizePath();
-    }
+    // The Uri constructor correctly handles null components.
+    // We leverage the built-in path normalization by calling .normalizePath() at the end.
+    final constructedUri = Uri(
+      scheme: scheme,
+      userInfo: userInfo,
+      host: finalHostForUri, // Correctly uses Punycode host or normalized IP
+      port: port,
+      path: path, // Path has percent-encoding normalized, needs dot-segment normalization
+      query: query, // Already percent-encoding normalized
+      fragment: fragment, // Already percent-encoding normalized
+    );
 
-    // If you reach here after the other checks we can throw an error
-    // although the above condition should cover all remaining valid IRI-reference structures.
-    throw StateError('Internal error: Unexpected IRI structure remaining.');
+    // Apply path normalization (removes dot segments like '.' and '..')
+    return constructedUri.normalizePath();
+
+    // The structure above covers all valid combinations:
+    // - Absolute IRI: scheme is non-null. finalHostForUri may or may not be null.
+    // - Relative Ref - Network Path: scheme is null, finalHostForUri is non-null.
+    // - Relative Ref - Absolute Path: scheme is null, finalHostForUri is null, path starts with '/'.
+    // - Relative Ref - Relative Path: scheme is null, finalHostForUri is null, path doesn't start with '/'.
+    // The Uri constructor handles these combinations correctly.
   }
 
   @override
