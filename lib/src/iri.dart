@@ -11,7 +11,7 @@ import 'package:rdf_dart/src/punycode/punycode_codec.dart';
 class IRI {
   final Uri _encodedUri;
 
-  final PunycodeCodec _punycodeCodec = PunycodeCodec();
+  static final PunycodeCodec _punycodeCodec = PunycodeCodec();
 
   IRI(String originalValue) : _encodedUri = _convertToUri(originalValue);
 
@@ -34,7 +34,7 @@ class IRI {
 
   bool get hasAuthority => host.isNotEmpty;
 
-  bool get hasPort => port == 0;
+  bool get hasPort => _encodedUri.hasPort;
 
   bool get hasQuery => query.isNotEmpty;
 
@@ -68,8 +68,59 @@ class IRI {
       return simpleUri.normalizePath();
     }
 
-    // If we make it here we need to do some more complex IRI to URI conversion
-    throw UnimplementedError('Complex IRI conversion not implemented yet');
+    final normalizedComponents = _parseAndNormalize(iri);
+    final scheme = normalizedComponents['scheme'] as String?;
+    final userInfo = normalizedComponents['userInfo'] as String?;
+    final host = normalizedComponents['host'] as String?;
+    final port = normalizedComponents['port'] as int?;
+    final path = normalizedComponents['path'] as String;
+    final query = normalizedComponents['query'] as String?;
+    final fragment = normalizedComponents['fragment'] as String?;
+
+    // If we have a scheme and no authority, we can just return a URI with the scheme and path
+    if (scheme != null && host == null) {
+      return Uri(scheme: scheme, path: path, query: query, fragment: fragment);
+    }
+
+    // If we have a scheme and authority, we need to encode the host and return a URI with the scheme, authority, path, query, and fragment
+    if (scheme != null && host != null) {
+      final encodedHost = _punycodeCodec.encoder.convert(host);
+      return Uri(
+        scheme: scheme,
+        userInfo: userInfo,
+        host: encodedHost,
+        port: port,
+        path: path,
+        query: query,
+        fragment: fragment,
+      ).normalizePath();
+    }
+
+    // If we have no scheme and an authority, we need to encode the host and return a URI with the authority, path, query, and fragment
+    if (scheme == null && host != null) {
+      final encodedHost = _punycodeCodec.encoder.convert(host);
+      return Uri(
+        userInfo: userInfo,
+        host: encodedHost,
+        port: port,
+        path: path,
+        query: query,
+        fragment: fragment,
+      ).normalizePath();
+    }
+
+    if (scheme == null && host == null) {
+      // Handles relative-path and absolute-path references
+      return Uri(
+        path: path, // Already normalized
+        query: query, // Already normalized
+        fragment: fragment, // Already normalized
+      ).normalizePath();
+    }
+
+    // If you reach here after the other checks we can throw an error
+    // although the above condition should cover all remaining valid IRI-reference structures.
+    throw StateError('Internal error: Unexpected IRI structure remaining.');
   }
 
   @override
@@ -120,6 +171,191 @@ class IRI {
   static const String _uriUserInfoAllowedChars =
       '$_uriUnreservedChars$_uriSubDelimsChars:';
 
+  // Main parsing and normalization method
+  static Map<String, dynamic> _parseAndNormalize(String iri) {
+    var remaining = iri;
+    String? fragment;
+    String? query;
+    String? scheme;
+    String? authority;
+    String? userInfo;
+    // Variables to store host details
+    String? hostRaw;         // Host as extracted
+    String? hostNormalized;  // Host after type-specific normalization
+    _HostType? hostType;     // Enum for the type
+    int? port;
+    String path; // Will hold the parsed path before normalization
+
+    // --- Steps 1, 2, 3 (Fragment, Query, Scheme extraction) remain the same ---
+    // 1. Extract Fragment (Raw)
+    final fragmentIndex = remaining.indexOf('#');
+    if (fragmentIndex >= 0) {
+      fragment = remaining.substring(fragmentIndex + 1);
+      remaining = remaining.substring(0, fragmentIndex);
+    }
+
+    // 2. Extract Query (Raw)
+    final queryIndex = remaining.indexOf('?');
+    if (queryIndex >= 0) {
+      query = remaining.substring(queryIndex + 1);
+      remaining = remaining.substring(0, queryIndex);
+    }
+
+    // 3. Extract Scheme (Raw + Normalize Case)
+    final schemeIndex = remaining.indexOf(':');
+    final firstSlashIndex = remaining.indexOf('/');
+    if (schemeIndex > 0 &&
+        (firstSlashIndex == -1 || schemeIndex < firstSlashIndex)) {
+      final potentialScheme = remaining.substring(0, schemeIndex);
+      if (_IRIRegexHelper.matchScheme(potentialScheme)) {
+        scheme = potentialScheme.toLowerCase(); // Case normalization
+        remaining = remaining.substring(schemeIndex + 1);
+      } else {
+        throw FormatException(
+          'Invalid scheme format: $potentialScheme in $iri',
+        );
+      }
+    } else if (schemeIndex == 0) {
+      throw FormatException('IRI cannot start with a colon: $iri');
+    }
+
+
+    // 4. Extract Authority (Raw) and Path (Raw)
+    if (remaining.startsWith('//')) {
+      remaining = remaining.substring(2);
+      final authorityEndIndex = remaining.indexOf('/');
+      if (authorityEndIndex >= 0) {
+        authority = remaining.substring(0, authorityEndIndex);
+        path = remaining.substring(authorityEndIndex); // Includes leading '/'
+      } else {
+        authority = remaining;
+        path = ''; // Path is empty according to RFC3986 sec 3.3
+      }
+
+      // --- Start Refactored Authority Parsing ---
+      if (authority.isNotEmpty) {
+        final authRemaining = authority;
+        final userInfoIndex = authRemaining.lastIndexOf('@');
+        final hostStartIndex = userInfoIndex >= 0 ? userInfoIndex + 1 : 0;
+
+        if (userInfoIndex >= 0) {
+          userInfo = authRemaining.substring(0, userInfoIndex); // Raw user info
+        }
+
+        final hostAndPortString = authRemaining.substring(hostStartIndex);
+
+        // --- Separate Host and Port ---
+        String potentialHost;
+        final ipv6EndBracketIndex = hostAndPortString.lastIndexOf(']');
+        // Look for port separator *after* the closing bracket of an IPv6 literal
+        final portSeparatorIndex = hostAndPortString.indexOf(':', (ipv6EndBracketIndex == -1) ? 0 : ipv6EndBracketIndex + 1);
+
+        if (portSeparatorIndex != -1) {
+          // Colon found after potential IPv6 literal
+          final potentialPort = hostAndPortString.substring(portSeparatorIndex + 1);
+          // Check if potentialPort is all digits and non-empty
+          if (potentialPort.isNotEmpty && potentialPort.runes.every((r) => r >= 48 && r <= 57)) {
+             port = int.tryParse(potentialPort); // Should succeed
+             potentialHost = hostAndPortString.substring(0, portSeparatorIndex);
+             if (port == null) {
+                // This case should theoretically not happen if check above passes
+                 throw FormatException('Invalid port format: $potentialPort in $iri');
+             }
+          } else if (potentialPort.isEmpty) {
+            // Case like "host:", port is technically empty string, map to null/default
+            port = null; // Or handle default port logic elsewhere
+            potentialHost = hostAndPortString.substring(0, portSeparatorIndex);
+          }
+           else {
+             // Colon present but not followed by digits (or empty) -> invalid port, treat colon as part of host
+             port = null;
+             potentialHost = hostAndPortString;
+          }
+        } else {
+          // No port separator found after host
+          potentialHost = hostAndPortString;
+          port = null;
+        }
+
+        // RFC 3987 Sec 3.2.2: Empty host is not allowed if authority is present
+        if (potentialHost.isEmpty) {
+          throw FormatException('Host cannot be empty when authority is present: $iri');
+        }
+
+        // --- Determine Host Type and Normalize ---
+        hostRaw = potentialHost; // Store raw host before normalization
+
+        if (_IRIRegexHelper.isIpLiteral(potentialHost)) {
+          hostType = _HostType.ipLiteral;
+          // Normalize IPv6: Lowercase A-F hex digits within brackets.
+          // Simple approach: find brackets, lowercase content between them.
+          // Note: Doesn't handle full RFC 5952 canonicalization.
+          final openBracket = potentialHost.indexOf('[');
+          final closeBracket = potentialHost.lastIndexOf(']');
+          if (openBracket != -1 && closeBracket > openBracket) {
+             final ipContent = potentialHost.substring(openBracket + 1, closeBracket);
+             // Also handle IPvFuture "v" - needs lowercase per RFC 3986 sec 3.2.2
+             if (ipContent.startsWith('v') || ipContent.startsWith('V')){
+                hostNormalized = '[${ipContent[0].toLowerCase()}${ipContent.substring(1).toLowerCase()}]';
+             } else {
+                hostNormalized = '[${ipContent.toLowerCase()}]';
+             }
+          } else {
+            // Should not happen if isIpLiteral is true, but as fallback:
+            hostNormalized = potentialHost.toLowerCase();
+          }
+
+        } else if (_IRIRegexHelper.isIPv4Address(potentialHost)) {
+          hostType = _HostType.ipv4Address;
+          hostNormalized = potentialHost; // No normalization needed for dotted quads
+
+        } else if(_IRIRegexHelper.isRegisteredName(potentialHost)){
+          hostType = _HostType.registeredName;
+          hostNormalized = potentialHost.toLowerCase(); // Case normalization
+        }
+
+      } else {
+        // Authority was empty "//", host cannot be empty.
+        throw FormatException('Host cannot be empty when authority marker "//" is present: $iri');
+      }
+      // --- End Refactored Authority Parsing ---
+
+    } else {
+      // No authority, remaining is path
+      path = remaining;
+    }
+
+    // 5. Normalize Other Components (Percent Encoding and Path Segments)
+    if (userInfo != null) {
+      userInfo = _normalizePercentEncoding(userInfo, _uriUserInfoAllowedChars);
+    }
+
+    // Normalize path (order matters: percent encoding first, then dot segments)
+    path = _normalizePercentEncoding(path, _uriPathComponentAllowedChars);
+    // Recommendation: Remove this and let Uri constructor handle dot segments
+    // path = _removeDotSegments(path);
+
+    if (query != null) {
+      query = _normalizePercentEncoding(query, _uriQueryAllowedChars);
+    }
+    if (fragment != null) {
+      fragment = _normalizePercentEncoding(fragment, _uriFragmentAllowedChars);
+    }
+
+    // Return map of *normalized* components including host details
+    return {
+      'scheme': scheme,
+      'userInfo': userInfo,
+      'hostRaw': hostRaw, // Raw extracted host
+      'hostNormalized': hostNormalized, // Normalized host (case, etc.)
+      'hostType': hostType, // Enum: ipLiteral, ipv4Address, registeredName
+      'port': port,
+      'path': path, // Path after percent normalization (dot segments handled later)
+      'query': query,
+      'fragment': fragment,
+    };
+  }
+
   /// Percent-encodes characters in an IRI component string to make it URI-compatible.
   ///
   /// It iterates through the input string and applies UTF-8 based percent-encoding
@@ -133,7 +369,7 @@ class IRI {
   ///
   /// Returns:
   ///   A string safe to use in a URI component.
-  String _percentEncodeIriComponent(String input, String allowedChars) {
+  static String _normalizePercentEncoding(String input, String allowedChars) {
     final output = StringBuffer();
     // Create a Set for faster character lookup
     final allowedCharCodes = allowedChars.codeUnits.toSet();
@@ -180,7 +416,7 @@ class IRI {
   }
 
   /// Helper to check if a byte value represents an ASCII hex digit (0-9, A-F, a-f).
-  bool _isHexDigit(int byte) {
+  static bool _isHexDigit(int byte) {
     return (byte >= 0x30 && byte <= 0x39) || // 0-9
         (byte >= 0x41 && byte <= 0x46) || // A-F
         (byte >= 0x61 && byte <= 0x66); // a-f
@@ -382,4 +618,21 @@ class _IRIRegexHelper {
     iri: _iri,
     iriReference: _iriReference,
   );
+
+  static bool matchScheme(String input) =>
+      RegExp('^$_scheme\$').hasMatch(input);
+
+  static bool isIpLiteral(String input) =>
+      RegExp('^$_ipLiteral\$').hasMatch(input);
+
+  static bool isIPv4Address(String input) =>
+      RegExp('^$_ipv4address\$').hasMatch(input);
+
+  static bool isRegisteredName(String input) => RegExp('^$_iregName\$').hasMatch(input);
+}
+
+enum _HostType {
+  ipLiteral,
+  ipv4Address,
+  registeredName,
 }
