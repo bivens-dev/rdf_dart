@@ -12,7 +12,7 @@ import 'package:rdf_dart/src/term_type.dart';
 /// This class is immutable. Once an IRI object is created, its value cannot
 /// be changed.
 @immutable
-class IRI extends RdfTerm {
+class IRITerm extends RdfTerm {
   /// The string value of this IRI.
   final String value;
 
@@ -36,7 +36,7 @@ class IRI extends RdfTerm {
   ///   print(e); // Output: FormatException
   /// }
   /// ```
-  IRI(String value) : value = _validateIri(value);
+  IRITerm(String value) : value = _validateIri(value);
 
   /// Validates the given [unvalidatedIri] string and returns a valid IRI string.
   ///
@@ -131,5 +131,5 @@ class IRI extends RdfTerm {
   int get hashCode => value.hashCode;
 
   @override
-  bool operator ==(Object other) => other is IRI && value == other.value;
+  bool operator ==(Object other) => other is IRITerm && value == other.value;
 }

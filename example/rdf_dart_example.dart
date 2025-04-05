@@ -2,15 +2,15 @@ import 'package:rdf_dart/rdf_dart.dart';
 
 void main() {
   // Create an IRI
-  final subject = IRI('http://example.com/resource');
+  final subject = IRITerm('http://example.com/resource');
 
   // Create an IRI
-  final perdicate = IRI('http://example.com/predicate');
+  final perdicate = IRITerm('http://example.com/predicate');
 
   // Create a Literal
   final object = Literal(
     'Hello',
-    IRI('http://www.w3.org/2001/XMLSchema#string'),
+    IRITerm('http://www.w3.org/2001/XMLSchema#string'),
   );
 
   // Create a Triple

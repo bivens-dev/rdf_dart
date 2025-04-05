@@ -77,7 +77,7 @@ export 'src/blank_node.dart';
 export 'src/data_types/duration.dart' show XSDDuration;
 export 'src/dataset.dart';
 export 'src/graph.dart';
-export 'src/iri.dart';
+export 'src/iri_term.dart';
 export 'src/literal.dart';
 export 'src/rdf_term.dart';
 export 'src/term_type.dart';
