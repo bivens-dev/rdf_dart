@@ -11,41 +11,171 @@ import 'package:rdf_dart/src/punycode/encoder.dart';
 @immutable
 class IRI {
   final Uri _encodedUri;
-  final Runes _codepoints;
 
-  IRI(String originalValue)
-    : _encodedUri = _convertToUri(originalValue),
-      _codepoints = originalValue.runes;
+  IRI(String originalValue) : _encodedUri = _convertToUri(originalValue);
 
-  // Component Accessors
+  // Accessors
+
+  /// The scheme component of the IRI.
+  ///
+  /// The value is the empty string if there is no scheme component.
+  ///
+  /// A IRI scheme is case insensitive.
+  /// The returned scheme is canonicalized to lowercase letters.
   String get scheme => _encodedUri.scheme;
+
+  /// The authority component.
+  ///
+  /// The authority is formatted from the [userInfo], [host] and [port]
+  /// parts.
+  ///
+  /// The value is the empty string if there is no authority component.
   String get authority => _encodedUri.authority;
-  String get userInfo => _encodedUri.userInfo;
+
+  /// The user info part of the authority component.
+  ///
+  /// The value is the empty string if there is no user info in the
+  /// authority component.
+  String get userInfo => Uri.decodeFull(_encodedUri.userInfo);
+
+  /// The host part of the authority component.
+  ///
+  /// The value is the empty string if there is no authority component and
+  /// hence no host.
+  ///
+  /// If the host is an IP version 6 address, the surrounding `[` and `]` is
+  /// removed.
+  ///
+  /// The host string is case-insensitive.
+  /// The returned host name is canonicalized to lower-case
   String get host {
     // The host component of a URI is encoded using Punycode. We need to decode it.
     // Note that strings that are not encoded using Punycode will be returned as-is.
     return punycodeDecoder.toUnicode(_encodedUri.host);
   }
 
-  String get path => _encodedUri.path;
-  String get fragment => _encodedUri.fragment;
-  String get query => _encodedUri.query;
+  /// The path component.
+  ///
+  /// The path is the actual substring of the IRI representing the path,
+  /// and it is encoded where necessary. To get direct access to the decoded
+  /// path, use [pathSegments].
+  ///
+  /// The path value is the empty string if there is no path component.
+  String get path => Uri.decodeFull(_encodedUri.path);
+
+  /// The fragment identifier component.
+  ///
+  /// The value is the empty string if there is no fragment identifier
+  /// component.
+  String get fragment => Uri.decodeFull(_encodedUri.fragment);
+
+  /// The query component.
+  ///
+  /// The value is the actual substring of the IRI representing the query part,
+  /// and it is encoded where necessary.
+  /// To get direct access to the decoded query, use [queryParameters].
+  ///
+  /// The value is the empty string if there is no query component.
+  String get query => Uri.decodeFull(_encodedUri.query);
+
+  /// The port part of the authority component.
+  ///
+  /// The value is the default port if there is no port number in the authority
+  /// component. That's 80 for http, 443 for https, and 0 for everything else.
   int get port => _encodedUri.port;
 
-  bool get hasScheme => scheme.isNotEmpty;
+  /// Whether the IRI is absolute.
+  ///
+  /// A IRI is an absolute IRI in the sense of RFC 3986 if it has a scheme
+  /// and no fragment.
+  bool get isAbsolute => _encodedUri.isAbsolute;
 
-  bool get hasAuthority => host.isNotEmpty;
+  /// Whether the IRI has a [scheme] component.
+  bool get hasScheme => _encodedUri.hasScheme;
 
+  /// Whether the IRI has an [authority] component.
+  bool get hasAuthority => _encodedUri.hasAuthority;
+
+  /// The ITI path split into its segments.
+  ///
+  /// Each of the segments in the list has been decoded.
+  /// If the path is empty, the empty list will
+  /// be returned. A leading slash `/` does not affect the segments returned.
+  ///
+  /// The list is unmodifiable and will throw [UnsupportedError] on any
+  /// calls that would mutate it.
+  List<String> get pathSegments => _encodedUri.pathSegments;
+
+  /// The IRI query split into a map according to the rules
+  /// specified for FORM post in the [HTML 4.01 specification section
+  /// 17.13.4](https://www.w3.org/TR/REC-html40/interact/forms.html#h-17.13.4
+  /// "HTML 4.01 section 17.13.4").
+  ///
+  /// Each key and value in the resulting map has been decoded.
+  /// If there is no query, the empty map is returned.
+  ///
+  /// Keys in the query string that have no value are mapped to the
+  /// empty string.
+  /// If a key occurs more than once in the query string, it is mapped to
+  /// an arbitrary choice of possible value.
+  /// The [queryParametersAll] getter can provide a map
+  /// that maps keys to all of their values.
+  ///
+  /// Example:
+  /// ```dart import:convert
+  /// final uri =
+  ///     Uri.parse('https://example.com/api/fetch?limit=10,20,30&unicode_pȧram=true');
+  /// print(jsonEncode(uri.queryParameters));
+  /// // {"limit":"10,20,30","unicode_pȧram":"true"}
+  /// ```
+  ///
+  /// The map is unmodifiable.
+  Map<String, String> get queryParameters => _encodedUri.queryParameters;
+
+  /// Returns the IRI query split into a map according to the rules
+  /// specified for FORM post in the [HTML 4.01 specification section
+  /// 17.13.4](https://www.w3.org/TR/REC-html40/interact/forms.html#h-17.13.4
+  /// "HTML 4.01 section 17.13.4").
+  ///
+  /// Each key and value in the resulting map has been decoded. If there is no
+  /// query, the map is empty.
+  ///
+  /// Keys are mapped to lists of their values. If a key occurs only once,
+  /// its value is a singleton list. If a key occurs with no value, the
+  /// empty string is used as the value for that occurrence.
+  ///
+  /// Example:
+  /// ```dart import:convert
+  /// final uri =
+  ///     Uri.parse('https://example.com/api/fetch?limit=10&limit=20&limit=30&unicode_pȧram=100');
+  /// print(jsonEncode(uri.queryParametersAll)); // {"limit":["10","20","30"],"unicode_pȧram":["100"]}
+  /// ```
+  ///
+  /// The map and the lists it contains are unmodifiable.
+  Map<String, List<String>> get queryParametersAll =>
+      _encodedUri.queryParametersAll;
+
+  /// Whether the URI has an explicit port.
+  ///
+  /// If the port number is the default port number
+  /// (zero for unrecognized schemes, with http (80) and https (443) being
+  /// recognized),
+  /// then the port is made implicit and omitted from the URI.
   bool get hasPort => _encodedUri.hasPort;
 
-  bool get hasQuery => query.isNotEmpty;
+  /// Whether the URI has a query part.
+  bool get hasQuery => _encodedUri.hasQuery;
 
-  bool get hasFragment => fragment.isNotEmpty;
+  /// Whether the URI has a fragment part.
+  bool get hasFragment => _encodedUri.hasFragment;
 
-  bool get hasEmptyPath => path.isEmpty;
+  /// Whether the URI has an empty path.
+  bool get hasEmptyPath => _encodedUri.hasEmptyPath;
 
-  bool get hasAbsolutePath => path.startsWith('/');
+  /// Whether the URI has an absolute path (starting with '/').
+  bool get hasAbsolutePath => _encodedUri.hasAbsolutePath;
 
+  /// Converts the IRI to it's canonical Uri encoding
   Uri toUri() {
     return _encodedUri;
   }
@@ -141,20 +271,67 @@ class IRI {
   }
 
   // From https://www.w3.org/TR/rdf12-concepts/#dfn-iri
-  // Two IRIs are equal if and only if they consist of the same sequence of 
-  // Unicode code points, as in Simple String Comparison in section 5.3.1 of [RFC3987]. 
-  // (This is done in the abstract syntax, so the IRIs are resolved IRIs with no 
+  // Two IRIs are equal if and only if they consist of the same sequence of
+  // Unicode code points, as in Simple String Comparison in section 5.3.1 of [RFC3987].
+  // (This is done in the abstract syntax, so the IRIs are resolved IRIs with no
   // escaping or encoding.) Further normalization MUST NOT be performed before this comparison.
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! IRI) return false;
-    return _codepoints == other._codepoints;
+    return toString().runes == other.toString().runes;
   }
 
   @override
   String toString() {
-    return '$scheme:$authority$path${hasQuery ? '?$query' : ''}${hasFragment ? '#$fragment' : ''}';
+    final buffer = StringBuffer();
+
+    if (hasScheme) {
+      buffer.write(scheme);
+      buffer.write('://');
+    } else if(_encodedUri.toString().startsWith('//')){ // Relative network path
+      buffer.write('//');
+    }
+
+    if (hasAuthority) {
+      if (userInfo.isNotEmpty) {
+        buffer.write(userInfo);
+        buffer.write('@');
+      }
+
+      var normalizedHost = host;
+
+      // For example in the case of http://[::1]/path
+      if (!normalizedHost.startsWith('[') && authority.startsWith('[')) {
+        normalizedHost = '[$normalizedHost';
+      }
+
+      if (!normalizedHost.endsWith(']') && authority.endsWith(']')) {
+        normalizedHost = '$normalizedHost]';
+      }
+
+      buffer.write(normalizedHost);
+
+      // Only include the port if it's non-standard for the scheme
+      if (hasPort && port != Uri.parse('$scheme://host').port) {
+        buffer.write(':');
+        buffer.write(port);
+      }
+    }
+
+    buffer.write(path);
+
+    if (hasQuery) {
+      buffer.write('?');
+      buffer.write(query);
+    }
+
+    if (hasFragment) {
+      buffer.write('#');
+      buffer.write(fragment);
+    }
+
+    return buffer.toString();
   }
 
   // RFC 3986 Unreserved Characters: ALPHA / DIGIT / "-" / "." / "_" / "~"
@@ -246,7 +423,10 @@ class IRI {
       if (pathStartIndex == -1) {
         // No slash found, the entire remaining string is the authority
         authority = remaining; // e.g., "user/name@example.com"
-        path = ''; // Path is empty
+
+        // Path is empty. Normalize it with a / per IRI guidelines outlined here
+        // https://www.rfc-editor.org/rfc/rfc3987#section-5.3.3
+        path = '/';
       } else {
         // Slash found, split authority and path
         authority = remaining.substring(
@@ -407,6 +587,10 @@ class IRI {
     }
     if (fragment != null) {
       fragment = _normalizePercentEncoding(fragment, _uriFragmentAllowedChars);
+    }
+
+    if (path.endsWith('%25')) {
+      throw FormatException('Invalid IRI: $iri');
     }
 
     // Return map of *normalized* components including host details
