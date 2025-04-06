@@ -23,7 +23,7 @@ void main() {
         final predicate = IRITerm('http://example.com/predicate');
         final object = Literal(
           'value',
-          IRITerm('http://www.w3.org/2001/XMLSchema#string'),
+          IRI('http://www.w3.org/2001/XMLSchema#string'),
         );
         expect(() => Triple(subject, predicate, object), returnsNormally);
       });
@@ -70,7 +70,7 @@ void main() {
         final predicate = IRITerm('http://example.com/predicate');
         final object = Literal(
           'Hello',
-          IRITerm('http://www.w3.org/2001/XMLSchema#string'),
+          IRI('http://www.w3.org/2001/XMLSchema#string'),
         );
         final triple = Triple(subject, predicate, object);
         expect(

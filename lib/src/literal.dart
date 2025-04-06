@@ -1,6 +1,7 @@
 import 'package:intl/locale.dart';
 import 'package:meta/meta.dart';
 import 'package:rdf_dart/src/data_types.dart';
+import 'package:rdf_dart/src/iri.dart';
 import 'package:rdf_dart/src/iri_term.dart';
 import 'package:rdf_dart/src/rdf_term.dart';
 import 'package:rdf_dart/src/term_type.dart';
@@ -36,9 +37,9 @@ class Literal extends RdfTerm {
 
   /// The datatype of the literal.
   ///
-  /// This is an [IRITerm] that specifies the type of the literal's value.
+  /// This is an [IRI] that specifies the type of the literal's value.
   /// Common datatypes include `xsd:string`, `xsd:integer`, `xsd:dateTime`, etc.
-  final IRITerm datatype;
+  final IRI datatype;
 
   /// The language tag of the literal (optional).
   ///
@@ -67,7 +68,7 @@ class Literal extends RdfTerm {
     : value = _parseValue(lexicalForm, datatype),
       language = _parseLanguage(language, datatype);
 
-  static Object _parseValue(String lexicalForm, IRITerm datatype) {
+  static Object _parseValue(String lexicalForm, IRI datatype) {
     if (lexicalForm.isEmpty) {
       throw ArgumentError.value(
         lexicalForm,
@@ -89,7 +90,7 @@ class Literal extends RdfTerm {
     return parser(lexicalForm);
   }
 
-  static Locale? _parseLanguage(String? language, IRITerm datatype) {
+  static Locale? _parseLanguage(String? language, IRI datatype) {
     _validateLangStringDataType(language, datatype);
     if (language == null) {
       return null;
@@ -103,8 +104,8 @@ class Literal extends RdfTerm {
   /// according to section 2.2.9 of `BCP47`, and MUST be treated consistently,
   /// that is, in a case insensitive manner. Two language tags are the same
   /// if they only differ by case.
-  static void _validateLangStringDataType(String? language, IRITerm datatype) {
-    final langStringDataType = IRITerm(
+  static void _validateLangStringDataType(String? language, IRI datatype) {
+    final langStringDataType = IRI(
       'http://www.w3.org/1999/02/22-rdf-syntax-ns#langString',
     );
 
@@ -149,7 +150,7 @@ class Literal extends RdfTerm {
     if (language != null) {
       return '"$lexicalForm"@$language';
     }
-    if (datatype == IRITerm('http://www.w3.org/2001/XMLSchema#string')) {
+    if (datatype == IRI('http://www.w3.org/2001/XMLSchema#string')) {
       return '"$lexicalForm"';
     }
     return '"${_toLexicalForm()}"^^<$datatype>';
