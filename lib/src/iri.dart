@@ -36,7 +36,10 @@ class IRI {
   ///
   /// The value is the empty string if there is no user info in the
   /// authority component.
-  String get userInfo => Uri.decodeFull(_encodedUri.userInfo);
+  String get userInfo => _decodeIriComponent(
+    _encodedUri.userInfo,
+    _IRIRegexHelper._iriUserInfoAllowedAsciiChars,
+  );
 
   /// The host part of the authority component.
   ///
@@ -61,13 +64,19 @@ class IRI {
   /// path, use [pathSegments].
   ///
   /// The path value is the empty string if there is no path component.
-  String get path => Uri.decodeFull(_encodedUri.path);
+  String get path => _decodeIriComponent(
+    _encodedUri.path,
+    '${_IRIRegexHelper._iriPathComponentAllowedAsciiChars}/', // Allow '/' in path
+  );
 
   /// The fragment identifier component.
   ///
   /// The value is the empty string if there is no fragment identifier
   /// component.
-  String get fragment => Uri.decodeFull(_encodedUri.fragment);
+  String get fragment => _decodeIriComponent(
+    _encodedUri.fragment,
+    _IRIRegexHelper._iriFragmentAllowedAsciiChars,
+  );
 
   /// The query component.
   ///
@@ -76,7 +85,11 @@ class IRI {
   /// To get direct access to the decoded query, use [queryParameters].
   ///
   /// The value is the empty string if there is no query component.
-  String get query => Uri.decodeFull(_encodedUri.query);
+  String get query => _decodeIriComponent(
+    _encodedUri.query,
+    _IRIRegexHelper._iriQueryAllowedAsciiChars,
+    allowIprivate: true,
+  ); // Query needs special handling for iprivate chars
 
   /// The port part of the authority component.
   ///
@@ -288,50 +301,86 @@ class IRI {
 
     if (hasScheme) {
       buffer.write(scheme);
-      buffer.write('://');
-    } else if(_encodedUri.toString().startsWith('//')){ // Relative network path
-      buffer.write('//');
+      buffer.write(':'); // Only one slash needed here
     }
 
+    // Handle authority part reconstruction
     if (hasAuthority) {
-      if (userInfo.isNotEmpty) {
-        buffer.write(userInfo);
+      buffer.write('//'); // Start authority marker
+
+      final encUserInfo = _encodedUri.userInfo; // Use encoded for check
+      if (encUserInfo.isNotEmpty) {
+        buffer.write(userInfo); // Use the IRI-decoded getter result
         buffer.write('@');
       }
 
-      var normalizedHost = host;
+      final encodedHost = _encodedUri.host; // Host value without brackets
+      // Get the raw encoded host from the Uri to check for IP Literal brackets
+      final isIpLiteralHost = _encodedUri.authority.startsWith('[');
 
-      // For example in the case of http://[::1]/path
-      if (!normalizedHost.startsWith('[') && authority.startsWith('[')) {
-        normalizedHost = '[$normalizedHost';
+      if (isIpLiteralHost) {
+        buffer.write('[');
+        buffer.write(encodedHost);
+        buffer.write(']');
+      } else {
+        buffer.write(host);
       }
 
-      if (!normalizedHost.endsWith(']') && authority.endsWith(']')) {
-        normalizedHost = '$normalizedHost]';
+      // Only include the port if it's explicit and non-standard
+      // Use _encodedUri.port directly to check against default Uri behavior
+      if (hasPort) {
+        // We need to know the default port for the scheme to decide if we print it
+        final defaultPort =
+            Uri.parse('$scheme://host').port; // Default port lookup
+        if (port != defaultPort) {
+          buffer.write(':');
+          buffer.write(port);
+        }
       }
-
-      buffer.write(normalizedHost);
-
-      // Only include the port if it's non-standard for the scheme
-      if (hasPort && port != Uri.parse('$scheme://host').port) {
-        buffer.write(':');
-        buffer.write(port);
-      }
+    } else if (hasScheme) {
+      // Handle cases like "mailto:user@example.com" which have scheme but no authority marker
+      // The path getter will handle the rest. If path is empty, nothing more is added.
     }
 
-    buffer.write(path);
+    // Append path, query, fragment using the IRI-decoded getters
+    buffer.write(path); // Path getter now provides IRI-correct string
 
     if (hasQuery) {
       buffer.write('?');
-      buffer.write(query);
+      buffer.write(query); // Query getter now provides IRI-correct string
     }
 
     if (hasFragment) {
       buffer.write('#');
-      buffer.write(fragment);
+      buffer.write(fragment); // Fragment getter now provides IRI-correct string
     }
 
-    return buffer.toString();
+    // Handle relative references starting with "//" but without scheme
+    // The logic above should cover this via hasAuthority check.
+    // If !hasScheme && hasAuthority, it correctly starts with "//".
+
+    // Handle rootless paths for relative references (no scheme, no authority)
+    // If !hasScheme && !hasAuthority, the buffer just contains path+query+fragment.
+    // Need to ensure path doesn't start with "//" if authority isn't present.
+    // The parser (_convertToUri) should prevent invalid combinations,
+    // and Uri normalisation handles path resolution.
+
+    // Final check for relative network path case (no scheme, starts with //)
+    final result = buffer.toString();
+    if (!hasScheme &&
+        _encodedUri.toString().startsWith('//') &&
+        !result.startsWith('//')) {
+      // This case indicates a network-path relative reference where our reconstruction
+      // might have missed the leading '//' if the authority part was complex.
+      // Prepend '//' if the original URI had it but our reconstruction doesn't.
+      // (This might need refinement based on edge cases)
+      // A simpler check might be: if !hasScheme && hasAuthority, ensure result starts with //
+      if (hasAuthority) {
+        return '//$result'; // Ensure leading // if authority exists without scheme
+      }
+    }
+
+    return result;
   }
 
   // RFC 3986 Unreserved Characters: ALPHA / DIGIT / "-" / "." / "_" / "~"
@@ -674,6 +723,148 @@ class IRI {
         (byte >= 0x41 && byte <= 0x46) || // A-F
         (byte >= 0x61 && byte <= 0x66); // a-f
   }
+
+  /// Decodes a percent-encoded URI component string into its IRI representation.
+  ///
+  /// It selectively decodes percent-encoded sequences based on whether the
+  /// resulting character is allowed *unencoded* in the target IRI component context.
+  ///
+  /// - Decodes sequences representing valid IRI characters (`iunreserved`, `sub-delims`, etc.
+  ///   depending on the component type).
+  /// - Leaves sequences representing characters that *must* remain encoded in an IRI
+  ///   (like space `%20` in a path) as they are (normalized to uppercase hex).
+  /// - Handles UTF-8 decoding for multi-byte characters.
+  ///
+  /// Args:
+  ///   encodedInput: The percent-encoded string from the `Uri` component.
+  ///   allowedAsciiChars: A string containing ASCII characters allowed unencoded
+  ///                      in the target *IRI* component.
+  ///   allowIprivate: Whether to allow `iprivate` characters (used for query component).
+  ///
+  /// Returns:
+  ///   The decoded IRI component string.
+  static String _decodeIriComponent(
+    String encodedInput,
+    String allowedAsciiChars, {
+    bool allowIprivate = false,
+  }) {
+    final allowedAsciiCodes = allowedAsciiChars.codeUnits.toSet();
+    final output = StringBuffer();
+    final bytes = <int>[]; // Buffer for potential multi-byte UTF-8 sequences
+
+    // Regular expression to find percent-encoded sequences or other characters
+    final pattern = RegExp('(%[0-9a-fA-F]{2})|.');
+    final matches = pattern.allMatches(encodedInput);
+
+    for (final match in matches) {
+      final group = match.group(0)!;
+      if (group.startsWith('%')) {
+        // Found a percent-encoded sequence
+        try {
+          final byteValue = int.parse(group.substring(1), radix: 16);
+          bytes.add(byteValue);
+
+          // Try to decode the current byte sequence as UTF-8
+          String decodedChar;
+          try {
+            // Use RuneIterator to handle potential surrogate pairs correctly
+            final runeIterator = _RuneIterator.fromBytes(bytes);
+            if (!runeIterator.moveNext()) {
+              // Not enough bytes for a full character yet, continue accumulating
+              continue;
+            }
+            final rune = runeIterator.current;
+            // Check if there are remaining bytes (invalid sequence)
+            if (runeIterator.moveNext()) {
+              // If we could advance again, it means the previous bytes
+              // formed a valid char, but there are leftover bytes.
+              // This indicates an invalid sequence overall. Treat as undecodable.
+              throw const FormatException('Invalid UTF-8 sequence');
+            }
+            decodedChar = String.fromCharCode(rune);
+            // Successfully decoded a character, clear the byte buffer
+            bytes.clear();
+
+            // --- Check if the decoded character should remain encoded ---
+            var isAllowedUnencoded = false;
+            final charCode =
+                decodedChar.runes.first; // Get the Unicode code point
+
+            // 1. Check ASCII allowed set
+            if (charCode < 128 && allowedAsciiCodes.contains(charCode)) {
+              isAllowedUnencoded = true;
+            }
+            // 2. Check if it's an iunreserved character (includes ucschar)
+            else if (_IRIRegexHelper._isIriUnreserved(charCode)) {
+              isAllowedUnencoded = true;
+            }
+            // 3. Check sub-delims (already covered by allowedAsciiCodes if applicable)
+            // else if (_subDelimsChars.contains(decodedChar)) { ... }
+            // 4. Check component-specific extras (:, @, /, ?)
+            // (already covered by allowedAsciiCodes if applicable)
+            // 5. Check iprivate (only for query)
+            else if (allowIprivate && _IRIRegexHelper._isIprivate(charCode)) {
+              isAllowedUnencoded = true;
+            }
+
+            if (isAllowedUnencoded) {
+              output.write(decodedChar); // Append the decoded character
+            } else {
+              // Character is not allowed unencoded in this IRI component
+              // Append the original percent-encoded sequence (normalized)
+              output.write(group.toUpperCase());
+            }
+          } on FormatException {
+            // UTF-8 decoding failed for the current byte sequence.
+            // This might mean it's an incomplete sequence, or invalid bytes.
+            // If it's the last match, or the next match isn't '%',
+            // treat the buffered bytes as literals to be re-encoded.
+            // For simplicity now, let's assume the Uri encoding was valid
+            // and a failed decode implies we should keep the original encoding.
+            // Re-append the *first* byte's encoding and clear buffer.
+            // This might be imperfect for complex invalid sequences.
+            if (bytes.isNotEmpty) {
+              output.write(
+                '%${bytes.first.toRadixString(16).toUpperCase().padLeft(2, '0')}',
+              );
+              bytes.clear();
+              // TODO: Potentially revisit handling of invalid sequences.
+              // Maybe try processing remaining bytes in the buffer?
+            }
+          }
+        } catch (e) {
+          // Error parsing hex or other issue - append original group
+          output.write(group.toUpperCase());
+          bytes.clear(); // Clear buffer on error
+        }
+      } else {
+        // Not a percent sign - check if bytes buffer should be flushed
+        if (bytes.isNotEmpty) {
+          // We encountered a non-% char after accumulating bytes that didn't form
+          // a valid UTF-8 char. Flush the buffer as normalized % sequences.
+          for (final byte in bytes) {
+            output.write(
+              '%${byte.toRadixString(16).toUpperCase().padLeft(2, '0')}',
+            );
+          }
+          bytes.clear();
+        }
+        // Append the literal character
+        output.write(group);
+      }
+    }
+
+    // Flush any remaining bytes in the buffer (e.g., incomplete sequence at the end)
+    if (bytes.isNotEmpty) {
+      for (final byte in bytes) {
+        output.write(
+          '%${byte.toRadixString(16).toUpperCase().padLeft(2, '0')}',
+        );
+      }
+    }
+
+    return output.toString();
+  }
 }
 
 // ignore: avoid_classes_with_only_static_members
@@ -880,6 +1071,170 @@ class _IRIRegexHelper {
 
   static bool isIPv4Address(String input) =>
       RegExp('^$_ipv4address\$').hasMatch(input);
+
+  // RFC 3987 iunreserved = ALPHA / DIGIT / "-" / "." / "_" / "~" / ucschar
+  // Define the ASCII part first
+  static const String _iriUnreservedAsciiChars =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
+
+  // RFC 3986 Sub-delimiters: "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="
+  static const String _subDelimsChars =
+      r"!$&'()*+,;="; // Same as URI sub-delims
+
+  // Characters allowed unencoded in IRI path segments (ipchar minus '/')
+  // ipchar = iunreserved / pct-encoded / sub-delims / ":" / "@"
+  static const String _iriPathComponentAllowedAsciiChars =
+      '$_iriUnreservedAsciiChars$_subDelimsChars:@';
+
+  // Characters allowed unencoded in IRI query (ipchar / iprivate / "/" / "?")
+  // We'll handle iprivate check dynamically if needed, focus on ASCII for the set
+  static const String _iriQueryAllowedAsciiChars =
+      '$_iriPathComponentAllowedAsciiChars/?';
+
+  // Characters allowed unencoded in IRI fragment (ipchar / "/" / "?")
+  static const String _iriFragmentAllowedAsciiChars =
+      '$_iriPathComponentAllowedAsciiChars/?';
+
+  // Characters allowed unencoded in IRI userinfo (iunreserved / pct-encoded / sub-delims / ":")
+  static const String _iriUserInfoAllowedAsciiChars =
+      '$_iriUnreservedAsciiChars$_subDelimsChars:';
+
+  // Helper Set for faster ASCII lookups in the decoder
+  static final Set<int> _iriUnreservedAsciiCodes =
+      _iriUnreservedAsciiChars.codeUnits.toSet();
+
+  // Regular expression to match the ucschar ranges from RFC 3987
+  // ucschar = %xA0-D7FF / %xF900-FDCF / %xFDF0-FFEF / %x10000-1FFFD / ... / %xE1000-EFFFD
+  // (Simplified for this check - we just need to know if a decoded char is in these ranges)
+  // We can create a helper function for this check.
+  static bool _isUcschar(int charCode) {
+    return (charCode >= 0xA0 && charCode <= 0xD7FF) ||
+        (charCode >= 0xF900 && charCode <= 0xFDCF) ||
+        (charCode >= 0xFDF0 && charCode <= 0xFFEF) ||
+        (charCode >= 0x10000 && charCode <= 0x1FFFD) ||
+        (charCode >= 0x20000 && charCode <= 0x2FFFD) ||
+        (charCode >= 0x30000 && charCode <= 0x3FFFD) ||
+        (charCode >= 0x40000 && charCode <= 0x4FFFD) ||
+        (charCode >= 0x50000 && charCode <= 0x5FFFD) ||
+        (charCode >= 0x60000 && charCode <= 0x6FFFD) ||
+        (charCode >= 0x70000 && charCode <= 0x7FFFD) ||
+        (charCode >= 0x80000 && charCode <= 0x8FFFD) ||
+        (charCode >= 0x90000 && charCode <= 0x9FFFD) ||
+        (charCode >= 0xA0000 && charCode <= 0xAFFFD) ||
+        (charCode >= 0xB0000 && charCode <= 0xBFFFD) ||
+        (charCode >= 0xC0000 && charCode <= 0xCFFFD) ||
+        (charCode >= 0xD0000 && charCode <= 0xDFFFD) ||
+        (charCode >= 0xE1000 && charCode <= 0xEFFFD);
+  }
+
+  // RFC 3987 iprivate characters (for query component)
+  static bool _isIprivate(int charCode) {
+    return (charCode >= 0xE000 && charCode <= 0xF8FF) ||
+        (charCode >= 0xF0000 && charCode <= 0xFFFFD) ||
+        (charCode >= 0x100000 && charCode <= 0x10FFFD);
+  }
+
+  // Helper to check if a character is an IRI 'iunreserved' character
+  static bool _isIriUnreserved(int charCode) {
+    return _iriUnreservedAsciiCodes.contains(charCode) || _isUcschar(charCode);
+  }
 }
 
 enum _HostType { ipLiteral, ipv4Address, registeredName }
+
+/// Helper class to decode UTF-8 bytes incrementally.
+/// Needed because standard utf8.decode might throw on incomplete sequences
+/// when processing chunks.
+class _RuneIterator implements Iterator<int> {
+  final List<int> _bytes;
+  int _offset = 0;
+  int _currentRune = -1;
+
+  _RuneIterator.fromBytes(List<int> bytes) : _bytes = List.unmodifiable(bytes);
+
+  @override
+  int get current => _currentRune;
+
+  @override
+  bool moveNext() {
+    if (_offset >= _bytes.length) {
+      _currentRune = -1;
+      return false; // No more bytes
+    }
+
+    final byte1 = _bytes[_offset];
+    int expectedLength;
+
+    // Determine expected sequence length from the first byte
+    if (byte1 < 0x80) {
+      // 0xxxxxxx (ASCII)
+      expectedLength = 1;
+    } else if ((byte1 & 0xE0) == 0xC0) {
+      // 110xxxxx
+      expectedLength = 2;
+    } else if ((byte1 & 0xF0) == 0xE0) {
+      // 1110xxxx
+      expectedLength = 3;
+    } else if ((byte1 & 0xF8) == 0xF0) {
+      // 11110xxx
+      expectedLength = 4;
+    } else {
+      // Invalid UTF-8 start byte
+      _currentRune = -1;
+      // Optional: Advance offset by 1 to skip? Or treat as failure.
+      // Let's treat as failure for now.
+      // _offset++; return moveNext(); // Alternative: skip and retry
+      return false;
+    }
+
+    // Check if enough bytes are available for the expected sequence
+    if (_offset + expectedLength > _bytes.length) {
+      // Incomplete sequence at the end
+      _currentRune = -1;
+      return false;
+    }
+
+    // Extract the bytes for this potential sequence
+    final sequenceBytes = _bytes.sublist(_offset, _offset + expectedLength);
+
+    // Validate continuation bytes (must start with 10xxxxxx)
+    if (expectedLength > 1) {
+      for (var i = 1; i < expectedLength; i++) {
+        if ((sequenceBytes[i] & 0xC0) != 0x80) {
+          // Invalid continuation byte
+          _currentRune = -1;
+          // Optional: Advance offset by 1? Or treat as failure.
+          return false;
+        }
+      }
+    }
+
+    // Attempt to decode the extracted sequence strictly
+    try {
+      // Use allowMalformed: false to catch invalid sequences like overlong encodings
+      final decodedString = utf8.decode(sequenceBytes, allowMalformed: false);
+
+      // Ensure exactly one rune was decoded
+      if (decodedString.runes.length != 1) {
+        throw const FormatException(
+          'Decoded zero or multiple runes from sequence.',
+        );
+      }
+      _currentRune = decodedString.runes.first;
+
+      // Additional check: Reject surrogate code points U+D800 to U+DFFF as invalid in UTF-8
+      if (_currentRune >= 0xD800 && _currentRune <= 0xDFFF) {
+        throw FormatException('Decoded invalid surrogate code point.');
+      }
+
+      // If successful, advance the offset
+      _offset += expectedLength;
+      return true;
+    } catch (e) {
+      // Decoding failed (invalid sequence, overlong, etc.)
+      _currentRune = -1;
+      // Optional: Advance offset by 1? Or treat as failure.
+      return false;
+    }
+  }
+}
