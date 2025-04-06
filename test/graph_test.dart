@@ -4,16 +4,16 @@ import 'package:test/test.dart';
 void main() {
   group('Graph', () {
     late Graph graph;
-    late IRI subject;
-    late IRI predicate;
-    late IRI object;
+    late IRITerm subject;
+    late IRITerm predicate;
+    late IRITerm object;
     late Triple triple;
 
     setUp(() {
       graph = Graph();
-      subject = IRI('http://example.com/subject');
-      predicate = IRI('http://example.com/predicate');
-      object = IRI('http://example.com/object');
+      subject = IRITerm('http://example.com/subject');
+      predicate = IRITerm('http://example.com/predicate');
+      object = IRITerm('http://example.com/object');
       triple = Triple(subject, predicate, object);
     });
 
@@ -35,7 +35,7 @@ void main() {
         final triple2 = Triple(
           subject,
           predicate,
-          IRI('http://example.com/object2'),
+          IRITerm('http://example.com/object2'),
         );
         graph.addAll([triple, triple2]);
         expect(graph.triples, containsAll([triple, triple2]));
@@ -48,7 +48,7 @@ void main() {
           final triple2 = Triple(
             subject,
             predicate,
-            IRI('http://example.com/object2'),
+            IRITerm('http://example.com/object2'),
           );
           graph.addAll([triple, triple, triple2, triple2]);
           expect(graph.triples.length, 2);
