@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the IRI constructor from Class IRI from the rdf_dart library, for the Dart programming language.">
-  <title>IRI constructor - IRI - rdf_dart library - Dart API</title>
+  <meta name="description" content="API docs for the IRI.new constructor from Class IRI from the rdf_dart library, for the Dart programming language.">
+  <title>IRI.new constructor - IRI - rdf_dart library - Dart API</title>
 
 
   
@@ -25,25 +25,22 @@
   <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">rdf_dart</a></li>
-    <li><a href="../../rdf_dart">rdf_dart.dart</a></li>
+    <li><a href="../../rdf_dart/">rdf_dart.dart</a></li>
     <li><a href="../../rdf_dart/IRI-class.html">IRI</a></li>
-    <li class="self-crumb">IRI constructor</li>
+    <li class="self-crumb">IRI.new constructor</li>
   </ol>
-  <div class="self-name">IRI</div>
+  <div class="self-name">IRI.new</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
-  <div class="toggle" id="theme-button" title="Toggle brightness">
-    <label for="theme">
-      <input type="checkbox" id="theme" value="light-theme">
-      <span id="dark-theme-button" class="material-symbols-outlined">
-        dark_mode
-      </span>
-      <span id="light-theme-button" class="material-symbols-outlined">
-        light_mode
-      </span>
-    </label>
-  </div>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
 </header>
 <main>
   <div
@@ -57,34 +54,16 @@
 
     <section class="multi-line-signature">
       
-      <span class="name ">IRI</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="-param-value"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.7.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">value</span></span></li>
+      <span class="name ">IRI</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="-param-originalValue"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a></span> <span class="parameter-name">originalValue</span></span></li>
 </ol>)
     </section>
     
-<section class="desc markdown">
-  <p>Creates a new IRI from the given <code>value</code> string.</p>
-<p>The <code>value</code> string is validated to ensure it conforms to basic IRI
-syntax rules. If the string is not a valid IRI, an
-<a href="https://api.dart.dev/stable/3.7.2/dart-core/FormatException-class.html">FormatException</a> is thrown.</p>
-<p>If the IRI is valid, the string is parsed and any necessary percent-encoding
-is applied to create a normalized IRI string.</p>
-<p>Example:</p>
-<pre class="language-dart"><code class="language-dart">final validIri = IRI('http://example.com/resource');
-print(validIri.value); // Output: http://example.com/resource
-
-try {
-  final invalidIri = IRI('http://example.com /resource');
-} on InvalidIRIException catch (e) {
-  print(e); // Output: FormatException
-}
-</code></pre>
-</section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">IRI(String value) : value = _validateIri(value);</code></pre>
+  <pre class="language-dart"><code class="language-dart">IRI(String originalValue) : _encodedUri = _convertToUri(originalValue);</code></pre>
 </section>
 
 
@@ -98,9 +77,9 @@ try {
 </header>
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">rdf_dart</a></li>
-    <li><a href="../../rdf_dart">rdf_dart</a></li>
+    <li><a href="../../rdf_dart/">rdf_dart</a></li>
     <li><a href="../../rdf_dart/IRI-class.html">IRI</a></li>
-    <li class="self-crumb">IRI constructor</li>
+    <li class="self-crumb">IRI.new constructor</li>
 </ol>
 
     <h5>IRI class</h5>
