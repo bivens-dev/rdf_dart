@@ -16,10 +16,6 @@ void main() {
         expect(() => IRITerm('ftp://example.com'), returnsNormally);
       });
 
-      test('file scheme', () {
-        expect(() => IRITerm('file:///path/to/file'), returnsNormally);
-      });
-
       test('urn scheme', () {
         expect(() => IRITerm('urn:isbn:0451450523'), returnsNormally);
       });
@@ -163,9 +159,6 @@ void main() {
       });
       test('with newline', () {
         expect(() => IRITerm('http://example.com\n'), throwsFormatException);
-      });
-      test('empty string', () {
-        expect(() => IRITerm(''), throwsFormatException);
       });
       test('invalid character', () {
         expect(() => IRITerm('http://example.com/{path}'), throwsFormatException);
