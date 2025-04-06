@@ -64,9 +64,9 @@ import 'package:rdf_dart/rdf_dart.dart';
 
 void main() {
   // Create some IRIs
-  final subject = IRI('http://example.org/subject');
-  final predicate = IRI('http://example.org/predicate');
-  final object = IRI('http://example.org/object');
+  final subject = IRITerm('http://example.org/subject');
+  final predicate = IRITerm('http://example.org/predicate');
+  final object = IRITerm('http://example.org/object');
 
   // Create a string literal
   final stringLiteral = Literal('Hello, world!', IRI('http://www.w3.org/2001/XMLSchema#string'));
