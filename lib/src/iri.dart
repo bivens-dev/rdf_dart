@@ -280,7 +280,7 @@ class IRI {
   @override
   int get hashCode {
     // Compute hash code based on the *normalized* components.
-    return _encodedUri.hashCode;
+    return toString().hashCode;
   }
 
   // From https://www.w3.org/TR/rdf12-concepts/#dfn-iri
