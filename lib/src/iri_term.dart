@@ -58,5 +58,5 @@ class IRITerm extends RdfTerm {
   int get hashCode => value.hashCode;
 
   @override
-  bool operator ==(Object other) => other is IRITerm && value.toString() == other.value.toString();
+  bool operator ==(Object other) => other is IRITerm && value.hashCode == other.value.hashCode;
 }
