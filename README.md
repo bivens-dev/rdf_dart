@@ -7,29 +7,26 @@ RDF.dart is a Dart library designed to make it easy to work with [RDF (Resource 
 
 ## Features
 
-*   **Core RDF Data Structures:**
-    *   `IRI`: Represents an Internationalized Resource Identifier (IRI).
-    *   `Literal`: Represents an RDF literal with datatype and optional language tag.
-    *   `BlankNode`: Represents an RDF blank node.
-    *   `RdfTerm`:  Represent an abstract RDF term.
-    *   `Triple`: Represents an RDF triple (subject, predicate, object).
-    *   `Graph`: Represents a collection of RDF triples.
-    *   `Dataset`: Represents a collection of named graphs.
-*   **Datatype Handling:**
-    *   A `DatatypeRegistry` for managing different datatypes and their parsers/formatters.
-    *   Built-in support for common datatypes like `xsd:string`, `xsd:integer`, `xsd:double`, `xsd:dateTime`, and `xsd:boolean`.
-    *   Extensible: Register your custom datatypes easily.
-*   **IRI Validation:**
-    * `IriValidator`: provide a way to validate IRI.
-    * Parse an IRI string to get the different parts.
-    * Check if an IRI is valid or not.
-    * Check if a specific part of the IRI is valid or not.
-*   **Error Handling:**
-    *   Clear exceptions (e.g., `InvalidIRIException`, `FormatException`) for invalid data.
-*  **Immutable**
-    *  `Literal` objects are immutable.
-* **Well tested**
-    * The core features are well tested.
+* **Core RDF 1.2 Data Structures:**
+    * `IRI`: Represents an Internationalized Resource Identifier string.
+    * `IRITerm`: Represents an IRI used as an RDF term (subject, predicate, object, or graph name).
+    * `Literal`: Represents an RDF literal with datatype and optional language tag.
+    * `BlankNode`: Represents an RDF blank node.
+    * `TripleTerm`: Represents an RDF triple used as an RDF term (subject or object) as defined in RDF 1.2.
+    * `RdfTerm`: The abstract base class for all RDF terms (`IRITerm`, `BlankNode`, `Literal`, `TripleTerm`).
+    * `Triple`: Represents an RDF triple (subject, predicate, object - where object can be any `RdfTerm`, including a `TripleTerm`).
+    * `Graph`: Represents a collection of RDF triples.
+    * `Dataset`: Represents a collection consisting of one default graph and zero or more named graphs.
+* **Datatype Handling:**
+    * Built-in support and validation for common XSD datatypes (e.g., `xsd:string`, `xsd:integer`, `xsd:double`, `xsd:dateTime`, `xsd:boolean`, `xsd:date`, `xsd:duration`, and more). See `XMLDataType` enum.
+    * Support for `rdf:langString`.
+    * *(Planned)* `DatatypeRegistry` for managing custom datatypes.
+* **IRI Validation & Parsing:**
+    * Robust IRI parsing based on RFC 3987.
+    * Validation checks for IRIs.
+    * Access to IRI components (scheme, authority, path, query, fragment).
+* **Immutability:** Core data structures (`IRITerm`, `BlankNode`, `Literal`, `TripleTerm`, `Triple`, `IRI`) are immutable.
+* **Well-Tested:** Core features have comprehensive unit tests.
 
 ## Getting Started
 

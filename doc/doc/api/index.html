@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="rdf_dart API docs, for the Dart programming language.">
+  <title>rdf_dart - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static-assets/github.css?v1">
+  <link rel="stylesheet" href="static-assets/styles.css?v1">
+  <link rel="icon" href="static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li class="self-crumb">rdf_dart package</li>
+  </ol>
+  <div class="self-name">rdf_dart</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <h1 id="rdfdart-a-dart-library-for-working-with-rdf">RDF.dart: A Dart Library for Working with RDF</h1>
+<p><a href="https://pub.dev/packages/rdf_dart"><img src="https://img.shields.io/pub/v/rdf_dart" alt="Pub Version"></a>
+<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License"></a></p>
+<p>RDF.dart is a Dart library designed to make it easy to work with <a href="https://www.w3.org/RDF/">RDF (Resource Description Framework)</a> data structures and concepts. It provides core data structures for representing RDF triples, graphs, datasets, and literals, along with utilities for managing datatypes and IRIs.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li><strong>Core RDF 1.2 Data Structures:</strong>
+<ul>
+<li><code>IRI</code>: Represents an Internationalized Resource Identifier string.</li>
+<li><code>IRITerm</code>: Represents an IRI used as an RDF term (subject, predicate, object, or graph name).</li>
+<li><code>Literal</code>: Represents an RDF literal with datatype and optional language tag.</li>
+<li><code>BlankNode</code>: Represents an RDF blank node.</li>
+<li><code>TripleTerm</code>: Represents an RDF triple used as an RDF term (subject or object) as defined in RDF 1.2.</li>
+<li><code>RdfTerm</code>: The abstract base class for all RDF terms (<code>IRITerm</code>, <code>BlankNode</code>, <code>Literal</code>, <code>TripleTerm</code>).</li>
+<li><code>Triple</code>: Represents an RDF triple (subject, predicate, object - where object can be any <code>RdfTerm</code>, including a <code>TripleTerm</code>).</li>
+<li><code>Graph</code>: Represents a collection of RDF triples.</li>
+<li><code>Dataset</code>: Represents a collection consisting of one default graph and zero or more named graphs.</li>
+</ul>
+</li>
+<li><strong>Datatype Handling:</strong>
+<ul>
+<li>Built-in support and validation for common XSD datatypes (e.g., <code>xsd:string</code>, <code>xsd:integer</code>, <code>xsd:double</code>, <code>xsd:dateTime</code>, <code>xsd:boolean</code>, <code>xsd:date</code>, <code>xsd:duration</code>, and more). See <code>XMLDataType</code> enum.</li>
+<li>Support for <code>rdf:langString</code>.</li>
+<li><em>(Planned)</em> <code>DatatypeRegistry</code> for managing custom datatypes.</li>
+</ul>
+</li>
+<li><strong>IRI Validation &amp; Parsing:</strong>
+<ul>
+<li>Robust IRI parsing based on RFC 3987.</li>
+<li>Validation checks for IRIs.</li>
+<li>Access to IRI components (scheme, authority, path, query, fragment).</li>
+</ul>
+</li>
+<li><strong>Immutability:</strong> Core data structures (<code>IRITerm</code>, <code>BlankNode</code>, <code>Literal</code>, <code>TripleTerm</code>, <code>Triple</code>, <code>IRI</code>) are immutable.</li>
+<li><strong>Well-Tested:</strong> Core features have comprehensive unit tests.</li>
+</ul>
+<h2 id="getting-started">Getting Started</h2>
+<ol>
+<li>
+<p><strong>Add the Dependency:</strong>
+Open your <code>pubspec.yaml</code> file and add <code>rdf_dart</code> to your dependencies:</p>
+<pre class="language-yaml"><code class="language-yaml">dependencies:
+  rdf_dart: ^1.0.0 # Replace with the latest version
+</code></pre>
+</li>
+<li>
+<p><strong>Install the Package:</strong>
+Run this command in your terminal:</p>
+<pre class="language-bash"><code class="language-bash">dart pub get
+</code></pre>
+</li>
+<li>
+<p><strong>Import the Library:</strong>
+In your Dart code, import the <code>rdf_dart</code> library:</p>
+<pre class="language-dart"><code class="language-dart">import 'package:rdf_dart/rdf_dart.dart';
+</code></pre>
+</li>
+</ol>
+<h2 id="usage">Usage</h2>
+<p>Here's a simple example demonstrating how to create RDF objects:</p>
+<pre class="language-dart"><code class="language-dart">import 'package:rdf_dart/rdf_dart.dart';
+
+void main() {
+  // Create some IRIs
+  final subject = IRITerm('http://example.org/subject');
+  final predicate = IRITerm('http://example.org/predicate');
+  final object = IRITerm('http://example.org/object');
+
+  // Create a string literal
+  final stringLiteral = Literal('Hello, world!', IRI('http://www.w3.org/2001/XMLSchema#string'));
+  print(stringLiteral); // Output: "Hello, world!"
+
+  // Create a triple
+  final triple = Triple(subject, predicate, object);
+
+  // Create a Dataset
+  final dataset = Dataset();
+
+  // Add the Triple to the Dataset
+  dataset.defaultGraph.add(triple);
+}
+</code></pre>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+        </dl>
+      </section>
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li class="self-crumb">rdf_dart package</li>
+</ol>
+
+    <h5 class="hidden-xs"><span class="package-name">rdf_dart</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+</ol>
+
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+</main>
+<footer>
+  <span class="no-break">
+    rdf_dart
+      1.0.0
+  </span>
+  
+</footer>
+
+
+<script src="static-assets/highlight.pack.js?v1"></script>
+<script src="static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

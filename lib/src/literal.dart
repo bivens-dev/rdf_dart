@@ -143,6 +143,9 @@ class Literal extends RdfTerm {
   bool get isLiteral => true;
 
   @override
+  bool get isTripleTerm=> false;
+
+  @override
   TermType get termType => TermType.literal;
 
   @override

@@ -88,7 +88,7 @@ String toString() {
   if (language != null) {
     return &#39;&quot;$lexicalForm&quot;@$language&#39;;
   }
-  if (datatype == IRITerm(&#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XMLSchema#string&#39;)) {
+  if (datatype == IRI(&#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XMLSchema#string&#39;)) {
     return &#39;&quot;$lexicalForm&quot;&#39;;
   }
   return &#39;&quot;${_toLexicalForm()}&quot;^^&lt;$datatype&gt;&#39;;

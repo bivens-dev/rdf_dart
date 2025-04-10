@@ -1,8 +1,23 @@
 import 'package:rdf_dart/rdf_dart.dart';
+import 'package:rdf_dart/src/data_type_facets.dart';
+import 'package:rdf_dart/src/triple_term.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('Triple', () {
+    final innerTripleForNesting = Triple(
+      IRITerm('http://example.com/nestedSubj'),
+      IRITerm('http://example.com/nestedPred'),
+      Literal('nestedObj', IRI(XMLDataType.string.iri)),
+    );
+    final innerTripleForNesting2 = Triple(
+      IRITerm('http://example.com/nestedSubj2'),
+      IRITerm('http://example.com/nestedPred2'),
+      Literal('nestedObj2', IRI(XMLDataType.string.iri)),
+    );
+    final tripleTermObject = TripleTerm(innerTripleForNesting);
+    final tripleTermObject2 = TripleTerm(innerTripleForNesting2);
+
     group('Creation', () {
       test('with valid subject, predicate, and object', () {
         final subject = IRITerm('http://example.com/subject');
@@ -41,6 +56,16 @@ void main() {
         final object = IRITerm('http://example.com/object');
         expect(() => Triple(subject, predicate, object), returnsNormally);
       });
+
+      test('with TripleTerm as object (RDF 1.2)', () {
+        final subject = IRITerm('http://example.com/subject');
+        final predicate = IRITerm('http://example.com/predicate');
+        // tripleTermObject defined above
+        expect(
+          () => Triple(subject, predicate, tripleTermObject),
+          returnsNormally,
+        );
+      });
     });
 
     group('toString', () {
@@ -76,6 +101,20 @@ void main() {
         expect(
           triple.toString(),
           'http://example.com/subject http://example.com/predicate "Hello" .',
+        );
+      });
+
+      test('returns correct string representation with TripleTerm object', () {
+        final subject = IRITerm('http://example.com/subject');
+        final predicate = IRITerm('http://example.com/predicate');
+        // tripleTermObject defined above
+        final triple = Triple(subject, predicate, tripleTermObject);
+        final expectedInnerString =
+            innerTripleForNesting
+                .toString(); // Get the inner triple's string rep
+        expect(
+          triple.toString(),
+          'http://example.com/subject http://example.com/predicate << $expectedInnerString >> .',
         );
       });
     });
@@ -119,6 +158,44 @@ void main() {
         final triple2 = Triple(subject, predicate, object2);
         expect(triple1 == triple2, false);
       });
+
+      test('equal triples with TripleTerm object', () {
+        final subject = IRITerm('http://example.com/subject');
+        final predicate = IRITerm('http://example.com/predicate');
+        // tripleTermObject defined above
+
+        // Create another TripleTerm wrapping an identical inner triple
+        final sameInnerTriple = Triple(
+          IRITerm('http://example.com/nestedSubj'),
+          IRITerm('http://example.com/nestedPred'),
+          Literal('nestedObj', IRI(XMLDataType.string.iri)),
+        );
+        final sameTripleTermObject = TripleTerm(sameInnerTriple);
+
+        final triple1 = Triple(subject, predicate, tripleTermObject);
+        final triple2 = Triple(subject, predicate, sameTripleTermObject);
+        expect(triple1 == triple2, true);
+        expect(triple2 == triple1, true); // Symmetry
+      });
+
+      test('different TripleTerm objects', () {
+        final subject = IRITerm('http://example.com/subject');
+        final predicate = IRITerm('http://example.com/predicate');
+        // tripleTermObject and tripleTermObject2 defined above
+        final triple1 = Triple(subject, predicate, tripleTermObject);
+        final triple2 = Triple(subject, predicate, tripleTermObject2);
+        expect(triple1 == triple2, false);
+      });
+
+      test('different object types (TripleTerm vs IRITerm)', () {
+        final subject = IRITerm('http://example.com/subject');
+        final predicate = IRITerm('http://example.com/predicate');
+        final iriObject = IRITerm('http://example.com/object');
+        // tripleTermObject defined above
+        final triple1 = Triple(subject, predicate, tripleTermObject);
+        final triple2 = Triple(subject, predicate, iriObject);
+        expect(triple1 == triple2, false);
+      });
     });
 
     group('HashCode', () {
@@ -160,6 +237,45 @@ void main() {
         final triple2 = Triple(subject, predicate, object2);
         expect(triple1.hashCode == triple2.hashCode, false);
       });
+
+      test('equal triples with TripleTerm object have same hashCode', () {
+        final subject = IRITerm('http://example.com/subject');
+        final predicate = IRITerm('http://example.com/predicate');
+        // tripleTermObject defined above
+
+        final sameInnerTriple = Triple(
+          IRITerm('http://example.com/nestedSubj'),
+          IRITerm('http://example.com/nestedPred'),
+          Literal('nestedObj', IRI(XMLDataType.string.iri)),
+        );
+        final sameTripleTermObject = TripleTerm(sameInnerTriple);
+
+        final triple1 = Triple(subject, predicate, tripleTermObject);
+        final triple2 = Triple(subject, predicate, sameTripleTermObject);
+        expect(triple1.hashCode == triple2.hashCode, true);
+      });
+
+      test('different TripleTerm objects have different hashCodes', () {
+        final subject = IRITerm('http://example.com/subject');
+        final predicate = IRITerm('http://example.com/predicate');
+        // tripleTermObject and tripleTermObject2 defined above
+        final triple1 = Triple(subject, predicate, tripleTermObject);
+        final triple2 = Triple(subject, predicate, tripleTermObject2);
+        expect(triple1.hashCode == triple2.hashCode, false);
+      });
+
+      test(
+        'different object types (TripleTerm vs Literal) have different hashCodes',
+        () {
+          final subject = IRITerm('http://example.com/subject');
+          final predicate = IRITerm('http://example.com/predicate');
+          final literalObject = Literal('value', IRI(XMLDataType.string.iri));
+          // tripleTermObject defined above
+          final triple1 = Triple(subject, predicate, tripleTermObject);
+          final triple2 = Triple(subject, predicate, literalObject);
+          expect(triple1.hashCode == triple2.hashCode, false);
+        },
+      );
     });
   });
 }

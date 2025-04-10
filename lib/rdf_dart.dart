@@ -6,8 +6,9 @@
 /// This library provides classes and utilities for representing and manipulating
 /// RDF data structures, including:
 ///
-/// *   **Terms:** [IRITerm], [BlankNode], [Literal], [RdfTerm]
+/// *   **Terms:** [IRITerm], [BlankNode], [Literal], [RdfTerm], [TripleTerm]
 /// *   **Triples:** [Triple]
+/// *   **IRIs:**: [IRI]
 /// *   **Graphs:** [Graph]
 /// *   **Datasets:** [Dataset]
 ///
@@ -74,6 +75,7 @@
 library;
 
 export 'src/blank_node.dart';
+export 'src/data_type_facets.dart';
 export 'src/data_types/duration.dart' show XSDDuration;
 export 'src/dataset.dart';
 export 'src/graph.dart';
@@ -83,3 +85,4 @@ export 'src/literal.dart';
 export 'src/rdf_term.dart';
 export 'src/term_type.dart';
 export 'src/triple.dart';
+export 'src/triple_term.dart';
