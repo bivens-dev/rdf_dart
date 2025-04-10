@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the XMLDataType enum from the rdf_dart library, for the Dart programming language.">
+  <title>XMLDataType enum - rdf_dart library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">rdf_dart</a></li>
+    <li><a href="../rdf_dart/">rdf_dart.dart</a></li>
+    <li class="self-crumb">XMLDataType enum</li>
+  </ol>
+  <div class="self-name">XMLDataType</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="rdf_dart&#47;rdf_dart-library-sidebar.html"
+    data-below-sidebar="rdf_dart&#47;XMLDataType-enum-sidebar.html">
+    <div>
+
+      <h1>
+        <span class="kind-enum">XMLDataType</span>
+        enum 
+ 
+
+      </h1>
+    </div>
+
+    
+<section class="desc markdown">
+  <p>This represents all of the supported XML data types as specified in RDF 1.2</p>
+</section>
+
+
+      <section>
+        <dl class="dl-horizontal">
+          
+  <dt>Inheritance</dt>
+  <dd>
+    <ul class="gt-separated dark eNum-relationships">
+      <li><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Object-class.html">Object</a></li>
+        <li><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Enum-class.html">Enum</a></li>
+      <li>XMLDataType</li>
+    </ul>
+  </dd>
+
+          
+          
+          
+  <dt>Available extensions</dt>
+  <dd><ul class="comma-separated clazz-relationships">
+      <li><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/EnumName.html">EnumName</a></li>
+  </ul></dd>
+          
+
+
+        </dl>
+      </section>
+
+      <section class="summary offset-anchor" id="values">
+        <h2>Values</h2>
+        <dl class="properties">
+            <dt id="string" class="constant">
+    <span class="name ">string</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>The string datatype represents character strings in XML.</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.none, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: false, primativeType: true, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XML…</code></span>
+    </div>
+</dd>
+
+            <dt id="boolean" class="constant">
+    <span class="name ">boolean</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>true, false</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.none, bounded: false, cardinality: CardinalityFacet.finite, numeric: false, primativeType: true, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XMLSchema#bool…</code></span>
+    </div>
+</dd>
+
+            <dt id="float" class="constant">
+    <span class="name ">float</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>32-bit floating point numbers incl. ±Inf, ±0, NaN</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.partial, bounded: true, cardinality: CardinalityFacet.finite, numeric: true, primativeType: true, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XMLSchema#flo…</code></span>
+    </div>
+</dd>
+
+            <dt id="double" class="constant">
+    <span class="name ">double</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>64-bit floating point numbers incl. ±Inf, ±0, NaN</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.partial, bounded: true, cardinality: CardinalityFacet.finite, numeric: true, primativeType: true, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XMLSchema#dou…</code></span>
+    </div>
+</dd>
+
+            <dt id="decimal" class="constant">
+    <span class="name ">decimal</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Arbitrary-precision decimal numbers</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.total, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: true, primativeType: true, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XML…</code></span>
+    </div>
+</dd>
+
+            <dt id="duration" class="constant">
+    <span class="name ">duration</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Duration of time</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.partial, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: false, primativeType: true, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;…</code></span>
+    </div>
+</dd>
+
+            <dt id="dateTime" class="constant">
+    <span class="name ">dateTime</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Date and time with or without timezone</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.partial, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: false, primativeType: true, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;…</code></span>
+    </div>
+</dd>
+
+            <dt id="time" class="constant">
+    <span class="name ">time</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Times (hh:mm:ss.sss…) with or without timezone</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.partial, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: false, primativeType: true, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;…</code></span>
+    </div>
+</dd>
+
+            <dt id="date" class="constant">
+    <span class="name ">date</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Dates (yyyy-mm-dd) with or without timezone</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.partial, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: false, primativeType: true, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;…</code></span>
+    </div>
+</dd>
+
+            <dt id="gYearMonth" class="constant">
+    <span class="name ">gYearMonth</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Gregorian calendar year and month</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.partial, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: false, primativeType: true, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;…</code></span>
+    </div>
+</dd>
+
+            <dt id="gYear" class="constant">
+    <span class="name ">gYear</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Gregorian calendar year</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.partial, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: false, primativeType: true, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;…</code></span>
+    </div>
+</dd>
+
+            <dt id="gMonthDay" class="constant">
+    <span class="name ">gMonthDay</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Gregorian calendar month and day</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.partial, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: false, primativeType: true, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;…</code></span>
+    </div>
+</dd>
+
+            <dt id="gDay" class="constant">
+    <span class="name ">gDay</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Gregorian calendar day of the month</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.partial, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: false, primativeType: true, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;…</code></span>
+    </div>
+</dd>
+
+            <dt id="gMonth" class="constant">
+    <span class="name ">gMonth</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Gregorian calendar month</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.partial, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: false, primativeType: true, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;…</code></span>
+    </div>
+</dd>
+
+            <dt id="hexBinary" class="constant">
+    <span class="name ">hexBinary</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Hex-encoded binary data</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.none, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: false, primativeType: true, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XML…</code></span>
+    </div>
+</dd>
+
+            <dt id="base64Binary" class="constant">
+    <span class="name ">base64Binary</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Base64-encoded binary data</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.none, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: false, primativeType: true, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XML…</code></span>
+    </div>
+</dd>
+
+            <dt id="anyURI" class="constant">
+    <span class="name ">anyURI</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Resolved or relative URI and IRI references</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.none, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: false, primativeType: true, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XML…</code></span>
+    </div>
+</dd>
+
+            <dt id="integer" class="constant">
+    <span class="name ">integer</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Arbitrary-size integer numbers</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.total, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: true, primativeType: false, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XM…</code></span>
+    </div>
+</dd>
+
+            <dt id="dateTimeStamp" class="constant">
+    <span class="name ">dateTimeStamp</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Date and time with required timezone</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.partial, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: false, primativeType: false, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47…</code></span>
+    </div>
+</dd>
+
+            <dt id="yearMonthDuration" class="constant">
+    <span class="name ">yearMonthDuration</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Duration of time (months and years only)</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.partial, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: false, primativeType: false, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47…</code></span>
+    </div>
+</dd>
+
+            <dt id="dayTimeDuration" class="constant">
+    <span class="name ">dayTimeDuration</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Duration of time (days, hours, minutes, seconds only)</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.partial, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: false, primativeType: false, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47…</code></span>
+    </div>
+</dd>
+
+            <dt id="byte" class="constant">
+    <span class="name ">byte</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>-128…+127 (8 bit)</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.total, bounded: true, cardinality: CardinalityFacet.finite, numeric: true, primativeType: false, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XMLSchema#byte…</code></span>
+    </div>
+</dd>
+
+            <dt id="short" class="constant">
+    <span class="name ">short</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>-32768…+32767 (16 bit)</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.total, bounded: true, cardinality: CardinalityFacet.finite, numeric: true, primativeType: false, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XMLSchema#shor…</code></span>
+    </div>
+</dd>
+
+            <dt id="int" class="constant">
+    <span class="name ">int</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>-2147483648…+2147483647 (32 bit)</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.total, bounded: true, cardinality: CardinalityFacet.finite, numeric: true, primativeType: false, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XMLSchema#int&…</code></span>
+    </div>
+</dd>
+
+            <dt id="long" class="constant">
+    <span class="name ">long</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>-9223372036854775808… +9223372036854775807 (64 bit)</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.total, bounded: true, cardinality: CardinalityFacet.finite, numeric: true, primativeType: false, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XMLSchema#long…</code></span>
+    </div>
+</dd>
+
+            <dt id="unsignedByte" class="constant">
+    <span class="name ">unsignedByte</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>0…255 (8 bit)</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.total, bounded: true, cardinality: CardinalityFacet.finite, numeric: true, primativeType: false, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XMLSchema#unsi…</code></span>
+    </div>
+</dd>
+
+            <dt id="unsignedShort" class="constant">
+    <span class="name ">unsignedShort</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>0…65535 (16 bit)</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.total, bounded: true, cardinality: CardinalityFacet.finite, numeric: true, primativeType: false, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XMLSchema#unsi…</code></span>
+    </div>
+</dd>
+
+            <dt id="unsignedInt" class="constant">
+    <span class="name ">unsignedInt</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>0…4294967295 (32 bit)</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.total, bounded: true, cardinality: CardinalityFacet.finite, numeric: true, primativeType: false, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XMLSchema#unsi…</code></span>
+    </div>
+</dd>
+
+            <dt id="unsignedLong" class="constant">
+    <span class="name ">unsignedLong</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>0…18446744073709551615 (64 bit)</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.total, bounded: true, cardinality: CardinalityFacet.finite, numeric: true, primativeType: false, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XMLSchema#unsi…</code></span>
+    </div>
+</dd>
+
+            <dt id="positiveInteger" class="constant">
+    <span class="name ">positiveInteger</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Integer numbers &gt; 0</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.total, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: true, primativeType: false, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XM…</code></span>
+    </div>
+</dd>
+
+            <dt id="nonNegativeInteger" class="constant">
+    <span class="name ">nonNegativeInteger</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Integer numbers ≥ 0</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.total, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: true, primativeType: false, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XM…</code></span>
+    </div>
+</dd>
+
+            <dt id="negativeInteger" class="constant">
+    <span class="name ">negativeInteger</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Integer numbers &lt; 0</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.total, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: true, primativeType: false, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XM…</code></span>
+    </div>
+</dd>
+
+            <dt id="nonPositiveInteger" class="constant">
+    <span class="name ">nonPositiveInteger</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Integer numbers ≤ 0</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.total, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: true, primativeType: false, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XM…</code></span>
+    </div>
+</dd>
+
+            <dt id="language" class="constant">
+    <span class="name ">language</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Language tags per BCP47</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.none, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: false, primativeType: false, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XM…</code></span>
+    </div>
+</dd>
+
+            <dt id="normalizedString" class="constant">
+    <span class="name ">normalizedString</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Whitespace-normalized strings</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.none, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: false, primativeType: false, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XM…</code></span>
+    </div>
+</dd>
+
+            <dt id="token" class="constant">
+    <span class="name ">token</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Tokenized strings</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.none, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: false, primativeType: false, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XM…</code></span>
+    </div>
+</dd>
+
+            <dt id="nmToken" class="constant">
+    <span class="name ">nmToken</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>XML NMTOKENs</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.none, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: false, primativeType: false, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XM…</code></span>
+    </div>
+</dd>
+
+            <dt id="name" class="constant">
+    <span class="name ">name</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>XML Names</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.none, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: false, primativeType: false, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XM…</code></span>
+    </div>
+</dd>
+
+            <dt id="ncName" class="constant">
+    <span class="name ">ncName</span>
+  <span class="signature">&#8594; const <a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>
+  
+
+</dt>
+<dd>
+  <p>XML NCNamea represents XML "non-colonized" Names.</p>
+  
+
+    <div>
+      <span class="signature"><code>const XMLDataType(ordered: OrderedFacet.none, bounded: false, cardinality: CardinalityFacet.countablyInfinite, numeric: false, primativeType: false, iri: &#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XM…</code></span>
+    </div>
+</dd>
+
+        </dl>
+      </section>
+
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-properties">
+    <h2>Properties</h2>
+    <dl class="properties">
+        <dt id="bounded" class="property">
+  <span class="name"><a href="../rdf_dart/XMLDataType/bounded.html">bounded</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  Some ordered datatypes have the property that there is one value greater
+than or equal to every other value, and another that is less than or
+equal to every other value.
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="cardinality" class="property">
+  <span class="name"><a href="../rdf_dart/XMLDataType/cardinality.html">cardinality</a></span>
+  <span class="signature">&#8594; <a href="../rdf_dart/CardinalityFacet.html">CardinalityFacet</a></span>
+  
+
+</dt>
+<dd>
+  Every value space has a specific number of members.  This number can be
+characterized as finite or infinite.
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="hashCode" class="property inherited">
+  <span class="name"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Object/hashCode.html">hashCode</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  The hash code for this object.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="index" class="property inherited">
+  <span class="name"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Enum/index.html">index</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  A numeric identifier for the enumerated value.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="iri" class="property">
+  <span class="name"><a href="../rdf_dart/XMLDataType/iri.html">iri</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  Represents the Internationalized Resource Identifier Reference (IRI)
+associated with this particular data type
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="name" class="property">
+  <span class="name"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/EnumName/name.html">name</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+      <p class="from-extension">
+        <span>Available on <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Enum-class.html">Enum</a>,
+        provided by the <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/EnumName.html">EnumName</a> extension</span>
+      </p>
+  The name of the enum value.
+  <div class="features"><span class="feature">no setter</span></div>
+
+</dd>
+
+        <dt id="numeric" class="property">
+  <span class="name"><a href="../rdf_dart/XMLDataType/numeric.html">numeric</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  Some value spaces are made up of things that are conceptually numeric,
+others are not.
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="ordered" class="property">
+  <span class="name"><a href="../rdf_dart/XMLDataType/ordered.html">ordered</a></span>
+  <span class="signature">&#8594; <a href="../rdf_dart/OrderedFacet.html">OrderedFacet</a></span>
+  
+
+</dt>
+<dd>
+  For some datatypes, this specifies an order relation
+for their value spaces
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="primativeType" class="property">
+  <span class="name"><a href="../rdf_dart/XMLDataType/primativeType.html">primativeType</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  Primitive datatypes are those datatypes that are not ·special· and are
+not defined in terms of other datatypes; they exist ab initio.
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="runtimeType" class="property inherited">
+  <span class="name"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Object/runtimeType.html">runtimeType</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Type-class.html">Type</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  A representation of the runtime type of the object.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+
+    
+  <section
+      class="summary offset-anchor inherited"
+      id="instance-methods">
+    <h2>Methods</h2>
+    <dl class="callables">
+        <dt id="noSuchMethod" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+    <span class="returntype parameter">&#8594; dynamic</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Invoked when a nonexistent method or property is accessed.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="toString" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  A string representation of this object.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor inherited"
+      id="operators">
+    <h2>Operators</h2>
+    <dl class="callables">
+        <dt id="operator ==" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  The equality operator.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+    
+    
+    
+
+  <section class="summary offset-anchor" id="constants">
+    <h2>Constants</h2>
+    <dl class="properties">
+        <dt id="values" class="constant">
+    <span class="name "><a href="../rdf_dart/XMLDataType/values-constant.html">values</a></span>
+  <span class="signature">&#8594; const <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span>&gt;</span></span>
+  
+
+</dt>
+<dd>
+  A constant List of the values in this enum, in order of their declaration.
+  
+
+</dd>
+
+    </dl>
+  </section>
+</div><!-- /.main-content -->
+<div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+  <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">rdf_dart</a></li>
+    <li><a href="../rdf_dart/">rdf_dart</a></li>
+    <li class="self-crumb">XMLDataType enum</li>
+</ol>
+
+  <h5>rdf_dart library</h5>
+  <div id="dartdoc-sidebar-left-content"></div>
+</div>
+<div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!-- /.sidebar-offcanvas -->
+</main>
+<footer>
+  <span class="no-break">
+    rdf_dart
+      1.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

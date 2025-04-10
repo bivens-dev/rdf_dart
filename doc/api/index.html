@@ -49,47 +49,35 @@
 <p>RDF.dart is a Dart library designed to make it easy to work with <a href="https://www.w3.org/RDF/">RDF (Resource Description Framework)</a> data structures and concepts. It provides core data structures for representing RDF triples, graphs, datasets, and literals, along with utilities for managing datatypes and IRIs.</p>
 <h2 id="features">Features</h2>
 <ul>
-<li><strong>Core RDF Data Structures:</strong>
+<li><strong>Core RDF 1.2 Data Structures:</strong>
 <ul>
-<li><code>IRI</code>: Represents an Internationalized Resource Identifier (IRI).</li>
+<li><code>IRI</code>: Represents an Internationalized Resource Identifier string.</li>
+<li><code>IRITerm</code>: Represents an IRI used as an RDF term (subject, predicate, object, or graph name).</li>
 <li><code>Literal</code>: Represents an RDF literal with datatype and optional language tag.</li>
 <li><code>BlankNode</code>: Represents an RDF blank node.</li>
-<li><code>RdfTerm</code>:  Represent an abstract RDF term.</li>
-<li><code>Triple</code>: Represents an RDF triple (subject, predicate, object).</li>
+<li><code>TripleTerm</code>: Represents an RDF triple used as an RDF term (subject or object) as defined in RDF 1.2.</li>
+<li><code>RdfTerm</code>: The abstract base class for all RDF terms (<code>IRITerm</code>, <code>BlankNode</code>, <code>Literal</code>, <code>TripleTerm</code>).</li>
+<li><code>Triple</code>: Represents an RDF triple (subject, predicate, object - where object can be any <code>RdfTerm</code>, including a <code>TripleTerm</code>).</li>
 <li><code>Graph</code>: Represents a collection of RDF triples.</li>
-<li><code>Dataset</code>: Represents a collection of named graphs.</li>
+<li><code>Dataset</code>: Represents a collection consisting of one default graph and zero or more named graphs.</li>
 </ul>
 </li>
 <li><strong>Datatype Handling:</strong>
 <ul>
-<li>A <code>DatatypeRegistry</code> for managing different datatypes and their parsers/formatters.</li>
-<li>Built-in support for common datatypes like <code>xsd:string</code>, <code>xsd:integer</code>, <code>xsd:double</code>, <code>xsd:dateTime</code>, and <code>xsd:boolean</code>.</li>
-<li>Extensible: Register your custom datatypes easily.</li>
+<li>Built-in support and validation for common XSD datatypes (e.g., <code>xsd:string</code>, <code>xsd:integer</code>, <code>xsd:double</code>, <code>xsd:dateTime</code>, <code>xsd:boolean</code>, <code>xsd:date</code>, <code>xsd:duration</code>, and more). See <code>XMLDataType</code> enum.</li>
+<li>Support for <code>rdf:langString</code>.</li>
+<li><em>(Planned)</em> <code>DatatypeRegistry</code> for managing custom datatypes.</li>
 </ul>
 </li>
-<li><strong>IRI Validation:</strong>
+<li><strong>IRI Validation &amp; Parsing:</strong>
 <ul>
-<li><code>IriValidator</code>: provide a way to validate IRI.</li>
-<li>Parse an IRI string to get the different parts.</li>
-<li>Check if an IRI is valid or not.</li>
-<li>Check if a specific part of the IRI is valid or not.</li>
+<li>Robust IRI parsing based on RFC 3987.</li>
+<li>Validation checks for IRIs.</li>
+<li>Access to IRI components (scheme, authority, path, query, fragment).</li>
 </ul>
 </li>
-<li><strong>Error Handling:</strong>
-<ul>
-<li>Clear exceptions (e.g., <code>InvalidIRIException</code>, <code>FormatException</code>) for invalid data.</li>
-</ul>
-</li>
-<li><strong>Immutable</strong>
-<ul>
-<li><code>Literal</code> objects are immutable.</li>
-</ul>
-</li>
-<li><strong>Well tested</strong>
-<ul>
-<li>The core features are well tested.</li>
-</ul>
-</li>
+<li><strong>Immutability:</strong> Core data structures (<code>IRITerm</code>, <code>BlankNode</code>, <code>Literal</code>, <code>TripleTerm</code>, <code>Triple</code>, <code>IRI</code>) are immutable.</li>
+<li><strong>Well-Tested:</strong> Core features have comprehensive unit tests.</li>
 </ul>
 <h2 id="getting-started">Getting Started</h2>
 <ol>
@@ -119,9 +107,9 @@ In your Dart code, import the <code>rdf_dart</code> library:</p>
 
 void main() {
   // Create some IRIs
-  final subject = IRI('http://example.org/subject');
-  final predicate = IRI('http://example.org/predicate');
-  final object = IRI('http://example.org/object');
+  final subject = IRITerm('http://example.org/subject');
+  final predicate = IRITerm('http://example.org/predicate');
+  final object = IRITerm('http://example.org/object');
 
   // Create a string literal
   final stringLiteral = Literal('Hello, world!', IRI('http://www.w3.org/2001/XMLSchema#string'));

@@ -64,8 +64,9 @@
 <p>This library provides classes and utilities for representing and manipulating
 RDF data structures, including:</p>
 <ul>
-<li><strong>Terms:</strong> <a href="../rdf_dart/IRITerm-class.html">IRITerm</a>, <a href="../rdf_dart/BlankNode-class.html">BlankNode</a>, <a href="../rdf_dart/Literal-class.html">Literal</a>, <a href="../rdf_dart/RdfTerm-class.html">RdfTerm</a></li>
+<li><strong>Terms:</strong> <a href="../rdf_dart/IRITerm-class.html">IRITerm</a>, <a href="../rdf_dart/BlankNode-class.html">BlankNode</a>, <a href="../rdf_dart/Literal-class.html">Literal</a>, <a href="../rdf_dart/RdfTerm-class.html">RdfTerm</a>, <a href="../rdf_dart/TripleTerm-class.html">TripleTerm</a></li>
 <li><strong>Triples:</strong> <a href="../rdf_dart/Triple-class.html">Triple</a></li>
+<li><strong>IRIs:</strong>: <a href="../rdf_dart/IRI-class.html">IRI</a></li>
 <li><strong>Graphs:</strong> <a href="../rdf_dart/Graph-class.html">Graph</a></li>
 <li><strong>Datasets:</strong> <a href="../rdf_dart/Dataset-class.html">Dataset</a></li>
 </ul>
@@ -185,6 +186,14 @@ void main() {
   Represents an RDF triple, which is a statement about a resource.
 </dd>
 
+          <dt id="TripleTerm">
+  <span class="name "><a href="../rdf_dart/TripleTerm-class.html">TripleTerm</a></span> 
+
+</dt>
+<dd>
+  Represents an RDF Triple used as an RDF Term (RDF 1.2).
+</dd>
+
           <dt id="XSDDuration">
   <span class="name "><a href="../rdf_dart/XSDDuration-class.html">XSDDuration</a></span> 
 
@@ -199,12 +208,39 @@ void main() {
     <section class="summary offset-anchor" id="enums">
       <h2>Enums</h2>
       <dl>
+          <dt id="CardinalityFacet">
+  <span class="name "><a href="../rdf_dart/CardinalityFacet.html">CardinalityFacet</a></span> 
+
+</dt>
+<dd>
+  Every value space has a specific number of members. This number can be
+characterized as finite or infinite. (Currently there are no datatypes
+with infinite value spaces larger than countable.)
+</dd>
+
+          <dt id="OrderedFacet">
+  <span class="name "><a href="../rdf_dart/OrderedFacet.html">OrderedFacet</a></span> 
+
+</dt>
+<dd>
+  For some datatypes, this specifies an order relation for their value spaces
+the ordered facet reflects this.
+</dd>
+
           <dt id="TermType">
   <span class="name "><a href="../rdf_dart/TermType.html">TermType</a></span> 
 
 </dt>
 <dd>
-  Represents the type of an RDF term.
+  Represents the type of an RDF term according to RDF 1.2.
+</dd>
+
+          <dt id="XMLDataType">
+  <span class="name "><a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span> 
+
+</dt>
+<dd>
+  This represents all of the supported XML data types as specified in RDF 1.2
 </dd>
 
       </dl>

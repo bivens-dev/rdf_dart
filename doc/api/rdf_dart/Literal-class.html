@@ -108,7 +108,7 @@ final frenchLiteral = Literal('Bonjour le monde!', IRI('http://www.w3.org/2001/X
     <h2>Constructors</h2>
     <dl class="constructor-summary-list">
         <dt id="Literal.new" class="callable">
-          <span class="name"><a href="../rdf_dart/Literal/Literal.html">Literal.new</a></span><span class="signature">(<span class="parameter" id="-param-lexicalForm"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a></span> <span class="parameter-name">lexicalForm</span>, </span><span class="parameter" id="-param-datatype"><span class="type-annotation"><a href="../rdf_dart/IRITerm-class.html">IRITerm</a></span> <span class="parameter-name">datatype</span>, [</span><span class="parameter" id="-param-language"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">language</span></span>])</span>
+          <span class="name"><a href="../rdf_dart/Literal/Literal.html">Literal.new</a></span><span class="signature">(<span class="parameter" id="-param-lexicalForm"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a></span> <span class="parameter-name">lexicalForm</span>, </span><span class="parameter" id="-param-datatype"><span class="type-annotation"><a href="../rdf_dart/IRI-class.html">IRI</a></span> <span class="parameter-name">datatype</span>, [</span><span class="parameter" id="-param-language"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">language</span></span>])</span>
         </dt>
         <dd>
           Creates a new Literal with the given <code>lexicalForm</code>, <code>datatype</code>, and
@@ -124,7 +124,7 @@ optional <code>language</code>.
     <dl class="properties">
         <dt id="datatype" class="property">
   <span class="name"><a href="../rdf_dart/Literal/datatype.html">datatype</a></span>
-  <span class="signature">&#8594; <a href="../rdf_dart/IRITerm-class.html">IRITerm</a></span>
+  <span class="signature">&#8594; <a href="../rdf_dart/IRI-class.html">IRI</a></span>
   
 
 </dt>
@@ -165,7 +165,7 @@ optional <code>language</code>.
 
 </dt>
 <dd>
-  Returns <code>true</code> if this term is an IRI, <code>false</code> otherwise.
+  Returns <code>true</code> if this term is an IRI term, <code>false</code> otherwise.
   <div class="features"><span class="feature">no setter</span><span class="feature">override</span></div>
 
 </dd>
@@ -178,6 +178,18 @@ optional <code>language</code>.
 </dt>
 <dd>
   Returns <code>true</code> if this term is a literal, <code>false</code> otherwise.
+  <div class="features"><span class="feature">no setter</span><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="isTripleTerm" class="property">
+  <span class="name"><a href="../rdf_dart/Literal/isTripleTerm.html">isTripleTerm</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  Returns <code>true</code> if this term is a triple term, <code>false</code> otherwise.
   <div class="features"><span class="feature">no setter</span><span class="feature">override</span></div>
 
 </dd>
