@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:intl/locale.dart';
 import 'package:rdf_dart/rdf_dart.dart';
-import 'package:rdf_dart/src/data_type_facets.dart';
 import 'package:test/test.dart';
 
 void main() {

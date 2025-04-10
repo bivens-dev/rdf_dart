@@ -1,6 +1,4 @@
 import 'package:rdf_dart/rdf_dart.dart';
-import 'package:rdf_dart/src/data_type_facets.dart';
-import 'package:rdf_dart/src/triple_term.dart';
 import 'package:test/test.dart';
 
 void main() {

@@ -1,6 +1,5 @@
 import 'package:rdf_dart/rdf_dart.dart'; // Assuming main library export
-import 'package:rdf_dart/src/data_type_facets.dart';
-import 'package:rdf_dart/src/triple_term.dart'; // Import the new class
+// Import the new class
 import 'package:test/test.dart';
 
 void main() {

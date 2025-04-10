@@ -5,7 +5,6 @@ import 'package:convert/convert.dart';
 import 'package:decimal/decimal.dart';
 import 'package:intl/locale.dart';
 import 'package:rdf_dart/rdf_dart.dart';
-import 'package:rdf_dart/src/data_type_facets.dart';
 import 'package:rdf_dart/src/data_types/boolean.dart';
 import 'package:rdf_dart/src/data_types/byte.dart';
 import 'package:rdf_dart/src/data_types/date.dart';
