@@ -4,6 +4,7 @@
 import 'package:meta/meta.dart';
 import 'package:rdf_dart/src/iri_term.dart';
 import 'package:rdf_dart/src/rdf_term.dart';
+import 'package:rdf_dart/src/subject_type.dart';
 
 /// Represents an RDF triple, which is a statement about a resource.
 ///
@@ -11,28 +12,31 @@ import 'package:rdf_dart/src/rdf_term.dart';
 /// The triple asserts that the relationship described by the [predicate]
 /// holds between the [subject] and the [object].
 ///
-/// - The [subject] is an [RdfTerm] that represents the resource being described.
-/// - The [predicate] is an [IRITerm] that represents the relationship between the
-///   subject and the object.
-/// - The [object] is an [RdfTerm] that represents the value or resource
-///   related to the subject by the predicate.
+///   * The [subject] must be a [SubjectTerm] (specifically, an [IRITerm] or
+///     a [BlankNode]), representing the resource being described.
+///   * The [predicate] must be an [IRITerm], representing the relationship.
+///   * The [object] can be any [RdfTerm] ([IRITerm], [BlankNode], [Literal],
+///     or [TripleTerm]), representing the value or resource related to the
+///     subject.
 ///
 /// Example:
 ///
 /// ```dart
-/// final subject = IRI('http://example.com/person/john');
-/// final predicate = IRI('http://example.com/relation/knows');
-/// final object = IRI('http://example.com/person/jane');
+/// // Use the specific Term classes for clarity
+/// final subject = IRITerm('http://example.com/person/john');
+/// final predicate = IRITerm('http://xmlns.com/foaf/0.1/knows');
+/// final object = IRITerm('http://example.com/person/jane');
 /// final triple = Triple(subject, predicate, object);
-/// print(triple); // Output: http://example.com/person/john http://example.com/relation/knows http://example.com/person/jane .
+/// print(triple); // Output: http://example.com/person/john http://xmlns.com/foaf/0.1/knows http://example.com/person/jane .
 /// ```
 @immutable
 class Triple {
   /// The subject of this triple.
   ///
-  /// The subject is the resource that the triple is describing. It must be an
-  /// [RdfTerm], which can be an [IRITerm] or a [BlankNode].
-  final RdfTerm subject;
+  /// The subject is the resource that the triple is describing. It must be a
+  /// [SubjectTerm], which restricts it to being either an [IRITerm] or a
+  /// [BlankNode], according to the RDF specification.
+  final SubjectTerm subject;
 
   /// The predicate of this triple.
   ///
@@ -43,22 +47,27 @@ class Triple {
   /// The object of this triple.
   ///
   /// The object is the value or resource related to the [subject] by the
-  /// [predicate]. It must be an [RdfTerm], which can be an [IRITerm], a
-  /// [BlankNode], or a [Literal].
+  /// [predicate]. It can be any concrete [RdfTerm]: an [IRITerm], a
+  /// [BlankNode], a [Literal], or (in RDF 1.2) a [TripleTerm].
   final RdfTerm object;
 
   /// Creates a new Triple with the given [subject], [predicate], and [object].
   ///
-  /// The [subject] is the resource being described.
-  /// The [predicate] is the relationship between the subject and the object.
-  /// The [object] is the value or resource related to the subject by the predicate.
+  /// The [subject] must be an [IRITerm] or a [BlankNode].
+  /// The [predicate] must be an [IRITerm].
+  /// The [object] can be any [RdfTerm] ([IRITerm], [BlankNode], [Literal], or [TripleTerm]).
   ///
   /// Example:
   /// ```dart
-  /// final subject = IRI('http://example.com/person/john');
-  /// final predicate = IRI('http://example.com/relation/knows');
-  /// final object = IRI('http://example.com/person/jane');
+  /// final subject = IRITerm('http://example.com/person/john');
+  /// final predicate = IRITerm('http://xmlns.com/foaf/0.1/knows');
+  /// final object = IRITerm('http://example.com/person/jane');
   /// final triple = Triple(subject, predicate, object);
+  ///
+  /// final subjectB = BlankNode();
+  /// final predicateB = IRITerm('[http://xmlns.com/foaf/0.1/name](http://xmlns.com/foaf/0.1/name)');
+  /// final objectB = Literal('Anonymous', IRI(XMLDataType.string.iri));
+  /// final tripleB = Triple(subjectB, predicateB, objectB);
   /// ```
   Triple(this.subject, this.predicate, this.object);
 

@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:rdf_dart/src/iri.dart';
 import 'package:rdf_dart/src/rdf_term.dart';
+import 'package:rdf_dart/src/subject_type.dart';
 import 'package:rdf_dart/src/term_type.dart';
 
 /// Represents an Internationalized Resource Identifier (IRI).
@@ -13,7 +14,7 @@ import 'package:rdf_dart/src/term_type.dart';
 /// This class is immutable. Once an IRI object is created, its value cannot
 /// be changed.
 @immutable
-class IRITerm extends RdfTerm {
+class IRITerm extends RdfTerm implements SubjectTerm {
   /// The string value of this IRI.
   final IRI value;
 
