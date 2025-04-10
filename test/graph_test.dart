@@ -84,5 +84,103 @@ void main() {
         expect(() => graph.triples.add(triple), throwsUnsupportedError);
       });
     });
+
+    group('classicize', () {
+      test('converts an RDF full graph to a RDF classic graph successfully', () {
+        graph.addAll([
+          Triple(
+            BlankNode('r1'),
+            IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies'),
+            TripleTerm(triple),
+          ),
+          Triple(
+            BlankNode('r1'),
+            IRITerm('http://example.org/q'),
+            Literal(
+              'some value',
+              IRI('http://www.w3.org/2001/XMLSchema#string'),
+            ),
+          ),
+        ]);
+        final classicGraph = Graph.classicize(graph);
+
+        // Find the triple in the classicgraph where the predicate is http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies
+        final reifierTriple = classicGraph.triples.firstWhere(
+          (triple) =>
+              triple.predicate ==
+              IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies'),
+        );
+        final generatedBlankNode = reifierTriple.object as BlankNode;
+
+        expect(
+          classicGraph.triples.contains(
+            Triple(
+              BlankNode('r1'),
+              IRITerm('http://example.org/q'),
+              Literal(
+                'some value',
+                IRI('http://www.w3.org/2001/XMLSchema#string'),
+              ),
+            ),
+          ),
+          isTrue,
+        );
+
+        expect(
+          classicGraph.triples.contains(
+            Triple(
+              BlankNode('r1'),
+              IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies'),
+              generatedBlankNode,
+            ),
+          ),
+          isTrue,
+        );
+
+        expect(
+          classicGraph.triples.contains(
+            Triple(
+              generatedBlankNode,
+              IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#rdfType'),
+              IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#rdfTripleTerm'),
+            ),
+          ),
+          isTrue,
+        );
+
+        expect(
+          classicGraph.triples.contains(
+            Triple(
+              generatedBlankNode,
+              IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#ttSubject'),
+              subject,
+            ),
+          ),
+          isTrue,
+        );
+
+        expect(
+          classicGraph.triples.contains(
+            Triple(
+              generatedBlankNode,
+              IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#ttPredicate'),
+              predicate,
+            ),
+          ),
+          isTrue,
+        );
+
+        expect(
+          classicGraph.triples.contains(
+            Triple(
+              generatedBlankNode,
+              IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#ttObject'),
+              object,
+            ),
+          ),
+          isTrue,
+        );
+      });
+    });
   });
 }
