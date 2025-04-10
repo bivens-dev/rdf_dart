@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the BlankNode class from the rdf_dart library, for the Dart programming language.">
-  <title>BlankNode class - rdf_dart library - Dart API</title>
+  <meta name="description" content="API docs for the SubjectTerm class from the rdf_dart library, for the Dart programming language.">
+  <title>SubjectTerm class - rdf_dart library - Dart API</title>
 
 
   
@@ -26,9 +26,9 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../index.html">rdf_dart</a></li>
     <li><a href="../rdf_dart/">rdf_dart.dart</a></li>
-    <li class="self-crumb">BlankNode class</li>
+    <li class="self-crumb">SubjectTerm class</li>
   </ol>
-  <div class="self-name">BlankNode</div>
+  <div class="self-name">SubjectTerm</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -46,22 +46,26 @@
     id="dartdoc-main-content"
     class="main-content"
     data-above-sidebar="rdf_dart&#47;rdf_dart-library-sidebar.html"
-    data-below-sidebar="rdf_dart&#47;BlankNode-class-sidebar.html">
+    data-below-sidebar="rdf_dart&#47;SubjectTerm-class-sidebar.html">
     <div>
-<h1><span class="kind-class">BlankNode</span> class 
+<h1><span class="kind-class">SubjectTerm</span> class 
+    <a href="https://dart.dev/language/class-modifiers#abstract" class="feature feature-abstract" title="This type can not be directly constructed.">abstract</a>
  
 </h1></div>
 
     
 <section class="desc markdown">
-  <p>Represents a blank node in an RDF graph.</p>
-<p>Blank nodes are used to represent resources that do not have a globally unique
-identifier (IRI). They are locally scoped within the RDF graph and are often
-used for existential quantification or to represent unnamed or anonymous
-resources.</p>
-<p>Blank nodes are identified by a unique string identifier, which can be
-provided by the user or automatically generated as a UUID. The identifier
-is only unique within the scope of the data it is defined, not globally.</p>
+  <p>Abstract marker class for RDF terms that can function as the subject of an
+RDF <a href="../rdf_dart/Triple-class.html">Triple</a>.</p>
+<p>According to the RDF 1.2 specification, the subject of a triple must be
+either an <a href="../rdf_dart/IRITerm-class.html">IRITerm</a> or a <a href="../rdf_dart/BlankNode-class.html">BlankNode</a>. This abstract class is implemented
+by those specific term types (<code>IRITerm</code>, <code>BlankNode</code>) to allow for
+compile-time type checking when constructing <a href="../rdf_dart/Triple-class.html">Triple</a> instances.</p>
+<p>This ensures that attempts to create a <a href="../rdf_dart/Triple-class.html">Triple</a> with an invalid subject type
+(like a <a href="../rdf_dart/Literal-class.html">Literal</a> or <a href="../rdf_dart/TripleTerm-class.html">TripleTerm</a>) are caught by the Dart type system.</p>
+<p>It does not introduce a new type of RDF term itself, but rather classifies
+existing term types based on their valid roles within a triple.</p>
+<p>See: <a href="https://www.w3.org/TR/rdf12-concepts/#section-triples">www.w3.org/TR/rdf12-concepts/#section-triples</a></p>
 </section>
 
 
@@ -73,28 +77,21 @@ is only unique within the scope of the data it is defined, not globally.</p>
     <ul class="gt-separated dark clazz-relationships">
       <li><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Object-class.html">Object</a></li>
         <li><a href="../rdf_dart/RdfTerm-class.html">RdfTerm</a></li>
-      <li>BlankNode</li>
+      <li>SubjectTerm</li>
     </ul>
   </dd>
 
         
-  <dt>Implemented types</dt>
-  <dd>
-    <ul class="comma-separated clazz-relationships">
-        <li><a href="../rdf_dart/SubjectTerm-class.html">SubjectTerm</a></li>
-    </ul>
-  </dd>
         
 
+          <dt>Implementers</dt>
+          <dd><ul class="comma-separated clazz-relationships">
+              <li><a href="../rdf_dart/BlankNode-class.html">BlankNode</a></li>
+              <li><a href="../rdf_dart/IRITerm-class.html">IRITerm</a></li>
+          </ul></dd>
 
         
         
-  <dt>Annotations</dt>
-  <dd>
-    <ul class="annotation-list clazz-relationships">
-        <li>@<a href="https://pub.dev/documentation/meta/1.16.0/meta/immutable-constant.html">immutable</a></li>
-    </ul>
-  </dd>
 
 
       </dl>
@@ -104,89 +101,77 @@ is only unique within the scope of the data it is defined, not globally.</p>
   <section class="summary offset-anchor" id="constructors">
     <h2>Constructors</h2>
     <dl class="constructor-summary-list">
-        <dt id="BlankNode.new" class="callable">
-          <span class="name"><a href="../rdf_dart/BlankNode/BlankNode.html">BlankNode.new</a></span><span class="signature">([<span class="parameter" id="-param-id"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">id</span></span>])</span>
+        <dt id="SubjectTerm.new" class="callable">
+          <span class="name"><a href="../rdf_dart/SubjectTerm/SubjectTerm.html">SubjectTerm.new</a></span><span class="signature">()</span>
         </dt>
         <dd>
-          Creates a new Blank Node.
+          
         </dd>
     </dl>
   </section>
     
   <section
-      class="summary offset-anchor"
+      class="summary offset-anchor inherited"
       id="instance-properties">
     <h2>Properties</h2>
     <dl class="properties">
-        <dt id="hashCode" class="property">
-  <span class="name"><a href="../rdf_dart/BlankNode/hashCode.html">hashCode</a></span>
+        <dt id="hashCode" class="property inherited">
+  <span class="name"><a href="../rdf_dart/RdfTerm/hashCode.html">hashCode</a></span>
   <span class="signature">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/int-class.html">int</a></span>
   
 
 </dt>
-<dd>
+<dd class="inherited">
   The hash code for this object.
-  <div class="features"><span class="feature">no setter</span><span class="feature">override</span></div>
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
 
 </dd>
 
-        <dt id="id" class="property">
-  <span class="name"><a href="../rdf_dart/BlankNode/id.html">id</a></span>
-  <span class="signature">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a></span>
-  
-
-</dt>
-<dd>
-  The unique identifier for this blank node.
-  <div class="features"><span class="feature">final</span></div>
-
-</dd>
-
-        <dt id="isBlankNode" class="property">
-  <span class="name"><a href="../rdf_dart/BlankNode/isBlankNode.html">isBlankNode</a></span>
+        <dt id="isBlankNode" class="property inherited">
+  <span class="name"><a href="../rdf_dart/RdfTerm/isBlankNode.html">isBlankNode</a></span>
   <span class="signature">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/bool-class.html">bool</a></span>
   
 
 </dt>
-<dd>
-  Returns <code>true</code> as this is a Blank Node.
-  <div class="features"><span class="feature">no setter</span><span class="feature">override</span></div>
+<dd class="inherited">
+  Returns <code>true</code> if this term is a blank node, <code>false</code> otherwise.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
 
 </dd>
 
-        <dt id="isIRI" class="property">
-  <span class="name"><a href="../rdf_dart/BlankNode/isIRI.html">isIRI</a></span>
+        <dt id="isIRI" class="property inherited">
+  <span class="name"><a href="../rdf_dart/RdfTerm/isIRI.html">isIRI</a></span>
   <span class="signature">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/bool-class.html">bool</a></span>
   
 
 </dt>
-<dd>
-  Returns <code>false</code> as this is not an IRI.
-  <div class="features"><span class="feature">no setter</span><span class="feature">override</span></div>
+<dd class="inherited">
+  Returns <code>true</code> if this term is an IRI term, <code>false</code> otherwise.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
 
 </dd>
 
-        <dt id="isLiteral" class="property">
-  <span class="name"><a href="../rdf_dart/BlankNode/isLiteral.html">isLiteral</a></span>
+        <dt id="isLiteral" class="property inherited">
+  <span class="name"><a href="../rdf_dart/RdfTerm/isLiteral.html">isLiteral</a></span>
   <span class="signature">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/bool-class.html">bool</a></span>
   
 
 </dt>
-<dd>
+<dd class="inherited">
   Returns <code>true</code> if this term is a literal, <code>false</code> otherwise.
-  <div class="features"><span class="feature">no setter</span><span class="feature">override</span></div>
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
 
 </dd>
 
-        <dt id="isTripleTerm" class="property">
-  <span class="name"><a href="../rdf_dart/BlankNode/isTripleTerm.html">isTripleTerm</a></span>
+        <dt id="isTripleTerm" class="property inherited">
+  <span class="name"><a href="../rdf_dart/RdfTerm/isTripleTerm.html">isTripleTerm</a></span>
   <span class="signature">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/bool-class.html">bool</a></span>
   
 
 </dt>
-<dd>
+<dd class="inherited">
   Returns <code>true</code> if this term is a triple term, <code>false</code> otherwise.
-  <div class="features"><span class="feature">no setter</span><span class="feature">override</span></div>
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
 
 </dd>
 
@@ -202,15 +187,15 @@ is only unique within the scope of the data it is defined, not globally.</p>
 
 </dd>
 
-        <dt id="termType" class="property">
-  <span class="name"><a href="../rdf_dart/BlankNode/termType.html">termType</a></span>
+        <dt id="termType" class="property inherited">
+  <span class="name"><a href="../rdf_dart/RdfTerm/termType.html">termType</a></span>
   <span class="signature">&#8594; <a href="../rdf_dart/TermType.html">TermType</a></span>
   
 
 </dt>
-<dd>
+<dd class="inherited">
   Returns the <a href="../rdf_dart/TermType.html">TermType</a> of this term.
-  <div class="features"><span class="feature">no setter</span><span class="feature">override</span></div>
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
 
 </dd>
 
@@ -219,7 +204,7 @@ is only unique within the scope of the data it is defined, not globally.</p>
 
     
   <section
-      class="summary offset-anchor"
+      class="summary offset-anchor inherited"
       id="instance-methods">
     <h2>Methods</h2>
     <dl class="callables">
@@ -236,16 +221,16 @@ is only unique within the scope of the data it is defined, not globally.</p>
 
 </dd>
 
-        <dt id="toString" class="callable">
-  <span class="name"><a href="../rdf_dart/BlankNode/toString.html">toString</a></span><span class="signature">(<wbr>)
+        <dt id="toString" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
     <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a></span>
   </span>
   
 
 </dt>
-<dd>
+<dd class="inherited">
   A string representation of this object.
-  <div class="features"><span class="feature">override</span></div>
+  <div class="features"><span class="feature">inherited</span></div>
 
 </dd>
 
@@ -253,20 +238,20 @@ is only unique within the scope of the data it is defined, not globally.</p>
   </section>
     
   <section
-      class="summary offset-anchor"
+      class="summary offset-anchor inherited"
       id="operators">
     <h2>Operators</h2>
     <dl class="callables">
-        <dt id="operator ==" class="callable">
-  <span class="name"><a href="../rdf_dart/BlankNode/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
+        <dt id="operator ==" class="callable inherited">
+  <span class="name"><a href="../rdf_dart/RdfTerm/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
     <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/bool-class.html">bool</a></span>
   </span>
   
 
 </dt>
-<dd>
+<dd class="inherited">
   The equality operator.
-  <div class="features"><span class="feature">override</span></div>
+  <div class="features"><span class="feature">inherited</span></div>
 
 </dd>
 
@@ -287,7 +272,7 @@ is only unique within the scope of the data it is defined, not globally.</p>
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../index.html">rdf_dart</a></li>
     <li><a href="../rdf_dart/">rdf_dart</a></li>
-    <li class="self-crumb">BlankNode class</li>
+    <li class="self-crumb">SubjectTerm class</li>
 </ol>
 
     <h5>rdf_dart library</h5>

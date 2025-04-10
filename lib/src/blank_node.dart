@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:rdf_dart/src/rdf_term.dart';
+import 'package:rdf_dart/src/subject_type.dart';
 import 'package:rdf_dart/src/term_type.dart';
 import 'package:uuid/uuid.dart';
 
@@ -14,7 +15,7 @@ import 'package:uuid/uuid.dart';
 /// provided by the user or automatically generated as a UUID. The identifier
 /// is only unique within the scope of the data it is defined, not globally.
 @immutable
-class BlankNode extends RdfTerm {
+class BlankNode extends RdfTerm implements SubjectTerm {
   /// The unique identifier for this blank node.
   ///
   /// This identifier is a string that is unique within the scope of the data

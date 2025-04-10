@@ -54,7 +54,7 @@
 
     <section class="multi-line-signature">
       
-      <span class="name ">Triple</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="-param-subject"><span class="type-annotation"><a href="../../rdf_dart/RdfTerm-class.html">RdfTerm</a></span> <span class="parameter-name">subject</span>, </span></li>
+      <span class="name ">Triple</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="-param-subject"><span class="type-annotation"><a href="../../rdf_dart/SubjectTerm-class.html">SubjectTerm</a></span> <span class="parameter-name">subject</span>, </span></li>
 <li><span class="parameter" id="-param-predicate"><span class="type-annotation"><a href="../../rdf_dart/IRITerm-class.html">IRITerm</a></span> <span class="parameter-name">predicate</span>, </span></li>
 <li><span class="parameter" id="-param-object"><span class="type-annotation"><a href="../../rdf_dart/RdfTerm-class.html">RdfTerm</a></span> <span class="parameter-name">object</span></span></li>
 </ol>)
@@ -62,14 +62,19 @@
     
 <section class="desc markdown">
   <p>Creates a new Triple with the given <code>subject</code>, <code>predicate</code>, and <code>object</code>.</p>
-<p>The <code>subject</code> is the resource being described.
-The <code>predicate</code> is the relationship between the subject and the object.
-The <code>object</code> is the value or resource related to the subject by the predicate.</p>
+<p>The <code>subject</code> must be an <a href="../../rdf_dart/IRITerm-class.html">IRITerm</a> or a <a href="../../rdf_dart/BlankNode-class.html">BlankNode</a>.
+The <code>predicate</code> must be an <a href="../../rdf_dart/IRITerm-class.html">IRITerm</a>.
+The <code>object</code> can be any <a href="../../rdf_dart/RdfTerm-class.html">RdfTerm</a> (<a href="../../rdf_dart/IRITerm-class.html">IRITerm</a>, <a href="../../rdf_dart/BlankNode-class.html">BlankNode</a>, <a href="../../rdf_dart/Literal-class.html">Literal</a>, or <a href="../../rdf_dart/TripleTerm-class.html">TripleTerm</a>).</p>
 <p>Example:</p>
-<pre class="language-dart"><code class="language-dart">final subject = IRI('http://example.com/person/john');
-final predicate = IRI('http://example.com/relation/knows');
-final object = IRI('http://example.com/person/jane');
+<pre class="language-dart"><code class="language-dart">final subject = IRITerm('http://example.com/person/john');
+final predicate = IRITerm('http://xmlns.com/foaf/0.1/knows');
+final object = IRITerm('http://example.com/person/jane');
 final triple = Triple(subject, predicate, object);
+
+final subjectB = BlankNode();
+final predicateB = IRITerm('[http://xmlns.com/foaf/0.1/name](http://xmlns.com/foaf/0.1/name)');
+final objectB = Literal('Anonymous', IRI(XMLDataType.string.iri));
+final tripleB = Triple(subjectB, predicateB, objectB);
 </code></pre>
 </section>
 
