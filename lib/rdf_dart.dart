@@ -6,8 +6,9 @@
 /// This library provides classes and utilities for representing and manipulating
 /// RDF data structures, including:
 ///
-/// *   **Terms:** [IRITerm], [BlankNode], [Literal], [RdfTerm]
+/// *   **Terms:** [IRITerm], [BlankNode], [Literal], [RdfTerm], [TripleTerm]
 /// *   **Triples:** [Triple]
+/// *   **IRIs:**: [IRI]
 /// *   **Graphs:** [Graph]
 /// *   **Datasets:** [Dataset]
 ///
