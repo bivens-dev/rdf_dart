@@ -83,6 +83,7 @@ export 'src/iri.dart';
 export 'src/iri_term.dart';
 export 'src/literal.dart';
 export 'src/rdf_term.dart';
+export 'src/subject_type.dart';
 export 'src/term_type.dart';
 export 'src/triple.dart';
 export 'src/triple_term.dart';
