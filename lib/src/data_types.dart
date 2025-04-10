@@ -94,92 +94,92 @@ class DatatypeRegistry {
   DatatypeRegistry._internal() {
     // Register default datatypes
     registerDatatype(
-      IRITerm(XMLDataType.string.iri),
+      IRI(XMLDataType.string.iri),
       String,
       (lexicalForm) => processWhiteSpace(lexicalForm, Whitespace.preserve),
       (value) => processWhiteSpace(value.toString(), Whitespace.preserve),
     );
     registerDatatype(
-      IRITerm(XMLDataType.anyURI.iri),
+      IRI(XMLDataType.anyURI.iri),
       Uri,
       (lexicalForm) =>
           Uri.parse(processWhiteSpace(lexicalForm, Whitespace.collapse)),
       (value) => processWhiteSpace(value.toString(), Whitespace.collapse),
     );
     registerDatatype(
-      IRITerm(XMLDataType.normalizedString.iri),
+      IRI(XMLDataType.normalizedString.iri),
       String,
       (lexicalForm) => processWhiteSpace(lexicalForm, Whitespace.replace),
       (value) => processWhiteSpace(value.toString(), Whitespace.replace),
     );
     registerDatatype(
-      IRITerm(XMLDataType.token.iri),
+      IRI(XMLDataType.token.iri),
       String,
       (lexicalForm) => processWhiteSpace(lexicalForm, Whitespace.collapse),
       (value) => processWhiteSpace(value.toString(), Whitespace.collapse),
     );
     registerDatatype(
-      IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#langString'),
+      IRI('http://www.w3.org/1999/02/22-rdf-syntax-ns#langString'),
       String,
       (lexicalForm) => processWhiteSpace(lexicalForm, Whitespace.preserve),
       (value) => processWhiteSpace(value.toString(), Whitespace.preserve),
     );
     registerDatatype(
-      IRITerm(XMLDataType.nonNegativeInteger.iri),
+      IRI(XMLDataType.nonNegativeInteger.iri),
       int,
       nonNegativeInteger.encoder.convert,
       nonNegativeInteger.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRITerm(XMLDataType.duration.iri),
+      IRI(XMLDataType.duration.iri),
       XSDDuration,
       durationCodec.encoder.convert,
       durationCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRITerm(XMLDataType.gMonthDay.iri),
+      IRI(XMLDataType.gMonthDay.iri),
       XsdGMonthDay,
       xsdGMonthDayCodec.encoder.convert,
       xsdGMonthDayCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRITerm(XMLDataType.date.iri),
+      IRI(XMLDataType.date.iri),
       XsdDate,
       xsdDateCodec.encoder.convert,
       xsdDateCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRITerm(XMLDataType.negativeInteger.iri),
+      IRI(XMLDataType.negativeInteger.iri),
       int,
       negativeInteger.encoder.convert,
       negativeInteger.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRITerm(XMLDataType.nonPositiveInteger.iri),
+      IRI(XMLDataType.nonPositiveInteger.iri),
       int,
       nonPositiveInteger.encoder.convert,
       nonPositiveInteger.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRITerm(XMLDataType.positiveInteger.iri),
+      IRI(XMLDataType.positiveInteger.iri),
       int,
       positiveInteger.encoder.convert,
       positiveInteger.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRITerm(XMLDataType.integer.iri),
+      IRI(XMLDataType.integer.iri),
       BigInt,
       bigIntCodec.encoder.convert,
       bigIntCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRITerm(XMLDataType.decimal.iri),
+      IRI(XMLDataType.decimal.iri),
       Decimal,
       decimalCodec.encoder.convert,
       decimalCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRITerm(XMLDataType.double.iri),
+      IRI(XMLDataType.double.iri),
       double,
       doubleCodec.encoder.convert,
       doubleCodec.decoder.convert as LiteralFormatter,
@@ -188,85 +188,85 @@ class DatatypeRegistry {
     // to the 64 bit of a double but its logic to and from a Dart
     // native [double] is otherwise the same so just reuse the double codec
     registerDatatype(
-      IRITerm(XMLDataType.float.iri),
+      IRI(XMLDataType.float.iri),
       double,
       doubleCodec.encoder.convert,
       doubleCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRITerm(XMLDataType.dateTime.iri),
+      IRI(XMLDataType.dateTime.iri),
       DateTime,
       DateTime.parse,
       (value) => (value as DateTime).toUtc().toIso8601String(),
     );
     registerDatatype(
-      IRITerm(XMLDataType.boolean.iri),
+      IRI(XMLDataType.boolean.iri),
       bool,
       booleanCodec.encoder.convert,
       booleanCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRITerm(XMLDataType.base64Binary.iri),
+      IRI(XMLDataType.base64Binary.iri),
       Uint8List,
       base64.decode,
       base64.encode as LiteralFormatter,
     );
     registerDatatype(
-      IRITerm(XMLDataType.hexBinary.iri),
+      IRI(XMLDataType.hexBinary.iri),
       Uint8List,
       hex.decode,
       hex.encode as LiteralFormatter,
     );
     registerDatatype(
-      IRITerm(XMLDataType.unsignedByte.iri),
+      IRI(XMLDataType.unsignedByte.iri),
       int,
       unsignedByte.encoder.convert,
       unsignedByte.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRITerm(XMLDataType.byte.iri),
+      IRI(XMLDataType.byte.iri),
       int,
       byte.encoder.convert,
       byte.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRITerm(XMLDataType.unsignedShort.iri),
+      IRI(XMLDataType.unsignedShort.iri),
       int,
       unsignedShort.encoder.convert,
       unsignedShort.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRITerm(XMLDataType.short.iri),
+      IRI(XMLDataType.short.iri),
       int,
       shortCodec.encoder.convert,
       shortCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRITerm(XMLDataType.int.iri),
+      IRI(XMLDataType.int.iri),
       int,
       intCodec.encoder.convert,
       intCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRITerm(XMLDataType.unsignedInt.iri),
+      IRI(XMLDataType.unsignedInt.iri),
       int,
       unsignedInt.encoder.convert,
       unsignedInt.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRITerm(XMLDataType.unsignedLong.iri),
+      IRI(XMLDataType.unsignedLong.iri),
       BigInt,
       unsignedLong.encoder.convert,
       unsignedLong.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRITerm(XMLDataType.long.iri),
+      IRI(XMLDataType.long.iri),
       BigInt,
       longCodec.encoder.convert,
       longCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRITerm(XMLDataType.language.iri),
+      IRI(XMLDataType.language.iri),
       Locale,
       Locale.parse,
       (value) => value.toString(),
@@ -274,11 +274,11 @@ class DatatypeRegistry {
   }
 
   /// The map that holds the registered datatypes.
-  final Map<IRITerm, DatatypeInfo> _registry = {};
+  final Map<IRI, DatatypeInfo> _registry = {};
 
   /// Registers a new datatype with its associated parser and formatter.
   ///
-  /// - [datatypeIri]: The [IRITerm] of the datatype.
+  /// - [datatypeIri]: The [IRI] of the datatype.
   /// - [dartType]: The Dart [Type] associated with the datatype.
   /// - [parser]: The [LiteralParser] used to parse the lexical form of a
   ///   literal of this datatype.
@@ -293,7 +293,7 @@ class DatatypeRegistry {
   /// DatatypeRegistry().registerDatatype(myDatatype, int, myParser, myFormatter);
   /// ```
   void registerDatatype(
-    IRITerm datatypeIri,
+    IRI datatypeIri,
     Type dartType,
     LiteralParser parser,
     LiteralFormatter formatter,
@@ -309,8 +309,8 @@ class DatatypeRegistry {
   ///
   /// Throws an [Exception] if the datatype is not registered.
   ///
-  /// - [datatypeIri]: The [IRITerm] of the datatype to look up.
-  DatatypeInfo getDatatypeInfo(IRITerm datatypeIri) {
+  /// - [datatypeIri]: The [IRI] of the datatype to look up.
+  DatatypeInfo getDatatypeInfo(IRI datatypeIri) {
     final info = _registry[datatypeIri];
     if (info == null) {
       throw Exception('Datatype $datatypeIri not registered.');

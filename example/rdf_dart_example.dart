@@ -10,7 +10,7 @@ void main() {
   // Create a Literal
   final object = Literal(
     'Hello',
-    IRITerm('http://www.w3.org/2001/XMLSchema#string'),
+    IRI('http://www.w3.org/2001/XMLSchema#string'),
   );
 
   // Create a Triple

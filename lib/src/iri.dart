@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 import 'package:rdf_dart/src/punycode/decoder.dart';
 import 'package:rdf_dart/src/punycode/encoder.dart';
@@ -11,8 +12,9 @@ import 'package:rdf_dart/src/punycode/encoder.dart';
 @immutable
 class IRI {
   final Uri _encodedUri;
+  final Runes _codepoints;
 
-  IRI(String originalValue) : _encodedUri = _convertToUri(originalValue);
+  IRI(String originalValue) : _encodedUri = _convertToUri(originalValue), _codepoints = originalValue.runes;
 
   // Accessors
 
@@ -279,8 +281,8 @@ class IRI {
 
   @override
   int get hashCode {
-    // Compute hash code based on the *normalized* components.
-    return toString().hashCode;
+   // Use IterableEquality to compute a hash code based on the elements (code points).
+    return const IterableEquality<int>().hash(_codepoints);
   }
 
   // From https://www.w3.org/TR/rdf12-concepts/#dfn-iri
@@ -292,7 +294,7 @@ class IRI {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! IRI) return false;
-    return toString().runes == other.toString().runes;
+    return const IterableEquality<int>().equals(_codepoints, other._codepoints);
   }
 
   @override
