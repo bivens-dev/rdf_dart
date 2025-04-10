@@ -181,6 +181,34 @@ void main() {
           isTrue,
         );
       });
+
+      test('does not change a graph that is already RDF classic conformant', () {
+        final reclassicized = Graph.classicize(graph);
+
+        expect(reclassicized.triples, equals(graph.triples));
+      });
+
+      test('Applying a transformation several times to a graph should have the same effect as applying it once', () {
+        graph.addAll([
+          Triple(
+            BlankNode('r1'),
+            IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies'),
+            TripleTerm(triple),
+          ),
+          Triple(
+            BlankNode('r1'),
+            IRITerm('http://example.org/q'),
+            Literal(
+              'some value',
+              IRI('http://www.w3.org/2001/XMLSchema#string'),
+            ),
+          ),
+        ]);
+        final classicGraph = Graph.classicize(graph);
+        final reclassicizedGraph = Graph.classicize(classicGraph);
+
+        expect(reclassicizedGraph.triples, equals(classicGraph.triples));
+      });
     });
   });
 }
