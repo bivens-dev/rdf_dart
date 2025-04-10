@@ -1,5 +1,4 @@
 import 'package:rdf_dart/rdf_dart.dart';
-import 'package:rdf_dart/src/triple.dart';
 
 /// Represents an RDF graph, which is a collection of RDF triples.
 ///
