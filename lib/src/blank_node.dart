@@ -43,6 +43,9 @@ class BlankNode extends RdfTerm {
   bool get isLiteral => false;
 
   @override
+  bool get isTripleTerm=> false;
+
+  @override
   TermType get termType => TermType.blankNode;
 
   @override

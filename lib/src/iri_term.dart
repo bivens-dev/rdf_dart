@@ -49,6 +49,9 @@ class IRITerm extends RdfTerm {
   bool get isLiteral => false;
 
   @override
+  bool get isTripleTerm=> false;
+
+  @override
   TermType get termType => TermType.iri;
 
   @override
