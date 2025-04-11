@@ -110,12 +110,7 @@ class Literal extends RdfTerm {
     }
     final locale = Locale.tryParse(languageTag);
     if (locale == null) {
-      // TODO: Introduce custom exception InvalidLanguageTagException?
-      throw ArgumentError.value(
-        languageTag,
-        'languageTag',
-        'Is not a valid BCP47 language tag',
-      );
+      throw InvalidLanguageTagException(languageTag);
     }
     return locale;
   }

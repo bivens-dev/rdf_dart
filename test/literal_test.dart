@@ -887,7 +887,7 @@ void main() {
                   langStringIri,
                   'invalid_language_tag',
                 ),
-                throwsArgumentError,
+                throwsA(isA<InvalidLanguageTagException>()),
               );
             });
 
