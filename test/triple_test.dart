@@ -34,10 +34,7 @@ void main() {
       test('with Literal as object', () {
         final subject = IRITerm(IRI('http://example.com/subject'));
         final predicate = IRITerm(IRI('http://example.com/predicate'));
-        final object = Literal(
-          'value',
-          XSD.string,
-        );
+        final object = Literal('value', XSD.string);
         expect(() => Triple(subject, predicate, object), returnsNormally);
       });
 
@@ -91,10 +88,7 @@ void main() {
       test('returns correct string representation with literal', () {
         final subject = IRITerm(IRI('http://example.com/subject'));
         final predicate = IRITerm(IRI('http://example.com/predicate'));
-        final object = Literal(
-          'Hello',
-          XSD.string,
-        );
+        final object = Literal('Hello', XSD.string);
         final triple = Triple(subject, predicate, object);
         expect(
           triple.toString(),

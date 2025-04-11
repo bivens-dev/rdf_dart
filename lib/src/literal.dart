@@ -68,7 +68,7 @@ class Literal extends RdfTerm {
   ///
   /// The constructor eagerly parses the [lexicalForm] based on the [datatype]
   /// and stores the result in [value]. It will throw an appropriate exception
-  /// (e.g., [InvalidLexicalFormException], [DatatypeNotFoundException], 
+  /// (e.g., [InvalidLexicalFormException], [DatatypeNotFoundException],
   /// [InvalidLanguageTagException], [LiteralConstraintException]) if
   /// parsing fails or the inputs are invalid (e.g., language tag provided
   /// for non-langString datatype, invalid tag format).

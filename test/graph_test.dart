@@ -86,130 +86,104 @@ void main() {
     });
 
     group('classicize', () {
-      test('converts an RDF full graph to a RDF classic graph successfully', () {
-        graph.addAll([
-          Triple(
-            BlankNode('r1'),
-            IRITerm(RDF.reifies),
-            TripleTerm(triple),
-          ),
-          Triple(
-            BlankNode('r1'),
-            IRITerm(IRI('http://example.org/q')),
-            Literal(
-              'some value',
-              XSD.string,
-            ),
-          ),
-        ]);
-        final classicGraph = Graph.classicize(graph);
-
-        // Find the triple in the classicgraph where the predicate 
-        // is http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies
-        final reifierTriple = classicGraph.triples.firstWhere(
-          (triple) =>
-              triple.predicate ==
-              IRITerm(RDF.reifies),
-        );
-        final generatedBlankNode = reifierTriple.object as BlankNode;
-
-        expect(
-          classicGraph.triples.contains(
+      test(
+        'converts an RDF full graph to a RDF classic graph successfully',
+        () {
+          graph.addAll([
+            Triple(BlankNode('r1'), IRITerm(RDF.reifies), TripleTerm(triple)),
             Triple(
               BlankNode('r1'),
               IRITerm(IRI('http://example.org/q')),
-              Literal(
-                'some value',
-                XSD.string,
+              Literal('some value', XSD.string),
+            ),
+          ]);
+          final classicGraph = Graph.classicize(graph);
+
+          // Find the triple in the classicgraph where the predicate
+          // is http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies
+          final reifierTriple = classicGraph.triples.firstWhere(
+            (triple) => triple.predicate == IRITerm(RDF.reifies),
+          );
+          final generatedBlankNode = reifierTriple.object as BlankNode;
+
+          expect(
+            classicGraph.triples.contains(
+              Triple(
+                BlankNode('r1'),
+                IRITerm(IRI('http://example.org/q')),
+                Literal('some value', XSD.string),
               ),
             ),
-          ),
-          isTrue,
-        );
+            isTrue,
+          );
 
-        expect(
-          classicGraph.triples.contains(
+          expect(
+            classicGraph.triples.contains(
+              Triple(BlankNode('r1'), IRITerm(RDF.reifies), generatedBlankNode),
+            ),
+            isTrue,
+          );
+
+          expect(
+            classicGraph.triples.contains(
+              Triple(
+                generatedBlankNode,
+                IRITerm(RDF.type),
+                IRITerm(RDF.tripleTerm),
+              ),
+            ),
+            isTrue,
+          );
+
+          expect(
+            classicGraph.triples.contains(
+              Triple(generatedBlankNode, IRITerm(RDF.ttSubject), subject),
+            ),
+            isTrue,
+          );
+
+          expect(
+            classicGraph.triples.contains(
+              Triple(generatedBlankNode, IRITerm(RDF.ttPredicate), predicate),
+            ),
+            isTrue,
+          );
+
+          expect(
+            classicGraph.triples.contains(
+              Triple(generatedBlankNode, IRITerm(RDF.ttObject), object),
+            ),
+            isTrue,
+          );
+        },
+      );
+
+      test(
+        'does not change a graph that is already RDF classic conformant',
+        () {
+          final reclassicized = Graph.classicize(graph);
+
+          expect(reclassicized.triples, equals(graph.triples));
+        },
+      );
+
+      test(
+        'Applying a transformation several times to a graph should have the same effect as applying it once',
+        () {
+          graph.addAll([
+            Triple(BlankNode('r1'), IRITerm(RDF.reifies), TripleTerm(triple)),
             Triple(
               BlankNode('r1'),
-              IRITerm(RDF.reifies),
-              generatedBlankNode,
+              IRITerm(IRI('http://example.org/q')),
+              Literal('some value', XSD.string),
             ),
-          ),
-          isTrue,
-        );
+          ]);
+          final classicGraph = Graph.classicize(graph);
+          final reclassicizedGraph = Graph.classicize(classicGraph);
 
-        expect(
-          classicGraph.triples.contains(
-            Triple(
-              generatedBlankNode,
-              IRITerm(RDF.type),
-              IRITerm(RDF.tripleTerm),
-            ),
-          ),
-          isTrue,
-        );
-
-        expect(
-          classicGraph.triples.contains(
-            Triple(
-              generatedBlankNode,
-              IRITerm(RDF.ttSubject),
-              subject,
-            ),
-          ),
-          isTrue,
-        );
-
-        expect(
-          classicGraph.triples.contains(
-            Triple(
-              generatedBlankNode,
-              IRITerm(RDF.ttPredicate),
-              predicate,
-            ),
-          ),
-          isTrue,
-        );
-
-        expect(
-          classicGraph.triples.contains(
-            Triple(
-              generatedBlankNode,
-              IRITerm(RDF.ttObject),
-              object,
-            ),
-          ),
-          isTrue,
-        );
-      });
-
-      test('does not change a graph that is already RDF classic conformant', () {
-        final reclassicized = Graph.classicize(graph);
-
-        expect(reclassicized.triples, equals(graph.triples));
-      });
-
-      test('Applying a transformation several times to a graph should have the same effect as applying it once', () {
-        graph.addAll([
-          Triple(
-            BlankNode('r1'),
-            IRITerm(RDF.reifies),
-            TripleTerm(triple),
-          ),
-          Triple(
-            BlankNode('r1'),
-            IRITerm(IRI('http://example.org/q')),
-            Literal(
-              'some value',
-              XSD.string,
-            ),
-          ),
-        ]);
-        final classicGraph = Graph.classicize(graph);
-        final reclassicizedGraph = Graph.classicize(classicGraph);
-
-        expect(reclassicizedGraph.triples, equals(classicGraph.triples));
-      });
+          expect(reclassicizedGraph.triples, equals(classicGraph.triples));
+        },
+      );
     });
   });
 }

@@ -137,10 +137,11 @@ void main() {
       expect(iri.toString(), equals(expectedUriString));
     });
 
-     test('IPv6 Host (Full) - Checks preservation of uncompressed form', () {
+    test('IPv6 Host (Full) - Checks preservation of uncompressed form', () {
       const inputIri = 'http://[2001:0db8:85a3:0000:0000:8a2e:0370:7334]/';
       // Dart's Uri class preserves the input IPv6 form (does not apply RFC 5952)
-      const expectedUriString = 'http://[2001:0db8:85a3:0000:0000:8a2e:0370:7334]/';
+      const expectedUriString =
+          'http://[2001:0db8:85a3:0000:0000:8a2e:0370:7334]/';
       final iri = IRI(inputIri);
       final uri = iri.toUri();
       expect(uri.toString(), equals(expectedUriString));
@@ -472,9 +473,9 @@ void main() {
       expect(() => IRI('1http://example.com'), throwsFormatException);
     });
 
-     test('Invalid IRI: Path with invalid percent encoding (non-hex)', () {
-        expect(() => IRI('http://example.com/path%ax'), throwsFormatException);
-     });
+    test('Invalid IRI: Path with invalid percent encoding (non-hex)', () {
+      expect(() => IRI('http://example.com/path%ax'), throwsFormatException);
+    });
 
     test('Invalid IRI: Invalid characters in path (e.g., control chars)', () {
       // Note: _isValid check might catch this first
@@ -494,4 +495,4 @@ void main() {
       expect(() => IRI('http://example.com/path[abc]'), throwsFormatException);
     });
   }); // End group: IRI to URI Conversion Tests
-} 
+}

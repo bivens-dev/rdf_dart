@@ -72,7 +72,7 @@ final class XSD {
   /// `xsd:dateTimeStamp` - Represents a dateTime with a required timezone.
   static final IRI dateTimeStamp = IRI('${namespace}dateTimeStamp');
 
-   /// `xsd:yearMonthDuration` - Represents duration measured in years and months.
+  /// `xsd:yearMonthDuration` - Represents duration measured in years and months.
   static final IRI yearMonthDuration = IRI('${namespace}yearMonthDuration');
 
   /// `xsd:dayTimeDuration` - Represents duration measured in days, hours, minutes, seconds.

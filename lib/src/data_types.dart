@@ -106,7 +106,7 @@ class DatatypeRegistry {
       (value) => processWhiteSpace(value.toString(), Whitespace.collapse),
     );
     registerDatatype(
-     XSD.normalizedString,
+      XSD.normalizedString,
       String,
       (lexicalForm) => processWhiteSpace(lexicalForm, Whitespace.replace),
       (value) => processWhiteSpace(value.toString(), Whitespace.replace),

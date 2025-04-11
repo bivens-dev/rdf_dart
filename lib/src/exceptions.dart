@@ -38,7 +38,7 @@ class DatatypeNotFoundException extends InvalidTermException {
 
   /// Creates a new [DatatypeNotFoundException] for the specified [datatypeIri].
   DatatypeNotFoundException(this.datatypeIri)
-      : super('Datatype IRI <$datatypeIri> not found in registry.');
+    : super('Datatype IRI <$datatypeIri> not found in registry.');
 
   @override
   String toString() => 'DatatypeNotFoundException: $message';
@@ -52,8 +52,10 @@ class DatatypeNotFoundException extends InvalidTermException {
 class InvalidLexicalFormException extends InvalidTermException {
   /// The invalid lexical form encountered.
   final String lexicalForm;
+
   /// The IRI of the datatype for which the [lexicalForm] is invalid.
   final String datatypeIri;
+
   /// Optional underlying exception that caused this validation failure,
   /// such as a [FormatException] during parsing.
   final Object? cause;
@@ -63,7 +65,7 @@ class InvalidLexicalFormException extends InvalidTermException {
   /// Takes the invalid [lexicalForm], the associated [datatypeIri], and an
   /// optional [cause] for the underlying error.
   InvalidLexicalFormException(this.lexicalForm, this.datatypeIri, {this.cause})
-      : super('Invalid lexical form "$lexicalForm" for datatype <$datatypeIri>.');
+    : super('Invalid lexical form "$lexicalForm" for datatype <$datatypeIri>.');
 
   @override
   String toString() {
@@ -85,7 +87,7 @@ class InvalidLanguageTagException extends InvalidTermException {
 
   /// Creates a new [InvalidLanguageTagException] for the invalid [languageTag].
   InvalidLanguageTagException(this.languageTag)
-      : super('Invalid BCP47 language tag: "$languageTag".');
+    : super('Invalid BCP47 language tag: "$languageTag".');
 
   @override
   String toString() => 'InvalidLanguageTagException: $message';

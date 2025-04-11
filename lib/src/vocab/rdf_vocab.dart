@@ -35,7 +35,6 @@ final class RDF {
   /// Represents literals with both language and direction.
   static final IRI compoundLiteral = IRI('${namespace}CompoundLiteral');
 
-
   // --- Properties ---
 
   /// `rdf:type` - The subject is an instance of a class.
@@ -99,7 +98,6 @@ final class RDF {
 
   /// `rdf:ttObject` - The object of a triple term (RDF 1.2).
   static final IRI ttObject = IRI('${namespace}ttObject');
-
 
   /// Private constructor to prevent instantiation.
   RDF._();

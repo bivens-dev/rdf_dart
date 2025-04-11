@@ -14,7 +14,9 @@ class IRI {
   final Uri _encodedUri;
   final Runes _codepoints;
 
-  IRI(String originalValue) : _encodedUri = _convertToUri(originalValue), _codepoints = originalValue.runes;
+  IRI(String originalValue)
+    : _encodedUri = _convertToUri(originalValue),
+      _codepoints = originalValue.runes;
 
   // Accessors
 
@@ -281,7 +283,7 @@ class IRI {
 
   @override
   int get hashCode {
-   // Use IterableEquality to compute a hash code based on the elements (code points).
+    // Use IterableEquality to compute a hash code based on the elements (code points).
     return const IterableEquality<int>().hash(_codepoints);
   }
 

@@ -21,5 +21,5 @@ enum TermType {
   literal,
 
   /// An RDF triple used as a term (RDF 1.2).
-  tripleTerm
+  tripleTerm,
 }

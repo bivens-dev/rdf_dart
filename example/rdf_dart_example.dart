@@ -27,22 +27,13 @@ void main() {
   // Simple literal (defaults to xsd:string)
   final literalSimple = Literal('Alice', XSD.string);
   // Literal with explicit datatype (xsd:string)
-  final literalString = Literal(
-    'Hello',
-    XSD.string,
-  );
+  final literalString = Literal('Hello', XSD.string);
   // Literal with language tag
   final literalLang = Literal('Bonjour', RDF.langString, 'fr');
   // Literal with a different datatype (e.g., integer)
-  final literalInt = Literal(
-    '30',
-    XSD.integer,
-  );
+  final literalInt = Literal('30', XSD.integer);
   // Literal with boolean datatype
-  final literalBool = Literal(
-    'true',
-    XSD.boolean,
-  );
+  final literalBool = Literal('true', XSD.boolean);
   print('Literal (Simple String): $literalSimple');
   print('Literal (Explicit String): $literalString');
   print('Literal (Language Tag): $literalLang');
@@ -52,9 +43,21 @@ void main() {
   print('\n--- Basic Triple Creation ---');
 
   // Create standard Triples
-  final triple1 = Triple(iriSubj, iriPred, literalSimple); // Subject knows Name "Alice"
-  final triple2 = Triple(iriSubj, IRITerm(IRI('http://xmlns.com/foaf/0.1/knows')), blankNode2); // Subject knows Someone (blank node)
-  final triple3 = Triple(blankNode2, iriPred, Literal('Bob', XSD.string)); // That Someone's Name is "Bob"
+  final triple1 = Triple(
+    iriSubj,
+    iriPred,
+    literalSimple,
+  ); // Subject knows Name "Alice"
+  final triple2 = Triple(
+    iriSubj,
+    IRITerm(IRI('http://xmlns.com/foaf/0.1/knows')),
+    blankNode2,
+  ); // Subject knows Someone (blank node)
+  final triple3 = Triple(
+    blankNode2,
+    iriPred,
+    Literal('Bob', XSD.string),
+  ); // That Someone's Name is "Bob"
 
   print('Triple 1: $triple1');
   print('Triple 2: $triple2');
@@ -106,7 +109,7 @@ void main() {
   dataset.defaultGraph.addAll([triple2, triple3]);
 
   // Add the triple containing the TripleTerm to a named graph
-  final tempGraph =  Graph();
+  final tempGraph = Graph();
   tempGraph.add(tripleAboutTriple);
   dataset.addNamedGraph(graphName, tempGraph);
 

@@ -57,11 +57,14 @@ void main() {
       final tt2 = TripleTerm(innerTriple2);
       final tt3 = TripleTerm(sameAsInnerTriple1);
 
-      expect(tt1.hashCode, equals(tt3.hashCode)); // Equal objects, equal hashCodes
+      expect(
+        tt1.hashCode,
+        equals(tt3.hashCode),
+      ); // Equal objects, equal hashCodes
       expect(tt1.hashCode, isNot(equals(tt2.hashCode))); // Unequal objects
     });
 
-     test('toString() returns expected format', () {
+    test('toString() returns expected format', () {
       final tt = TripleTerm(innerTriple1);
       // Example: "<http://example.com/subject> <http://example.com/predicate> "object" ."
       final expectedInnerString = innerTriple1.toString();
@@ -70,8 +73,7 @@ void main() {
       final tt2 = TripleTerm(innerTriple2);
       // Example: "_:b1 <http://example.com/predicate> <http://example.com/object> ."
       final expectedInnerString2 = innerTriple2.toString();
-       expect(tt2.toString(), equals('<< $expectedInnerString2 >>'));
+      expect(tt2.toString(), equals('<< $expectedInnerString2 >>'));
     });
-
   });
 }

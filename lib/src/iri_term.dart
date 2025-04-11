@@ -50,7 +50,7 @@ class IRITerm extends RdfTerm implements SubjectTerm {
   bool get isLiteral => false;
 
   @override
-  bool get isTripleTerm=> false;
+  bool get isTripleTerm => false;
 
   @override
   TermType get termType => TermType.iri;
@@ -62,5 +62,6 @@ class IRITerm extends RdfTerm implements SubjectTerm {
   int get hashCode => value.hashCode;
 
   @override
-  bool operator ==(Object other) => other is IRITerm && value.hashCode == other.value.hashCode;
+  bool operator ==(Object other) =>
+      other is IRITerm && value.hashCode == other.value.hashCode;
 }
