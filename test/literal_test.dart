@@ -891,9 +891,10 @@ void main() {
               );
             });
 
-            test('without a language tag', () {
+            
+            test('with a language tag but the wrong data type', () {
               expect(
-                () => Literal('hello world', langStringIri),
+                () => Literal("g'day world", IRI(XMLDataType.string.iri), 'en-AU'),
                 throwsA(isA<LiteralConstraintException>()),
               );
             });
