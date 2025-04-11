@@ -25,23 +25,23 @@ void main() {
 
   // Create Literals (used for objects)
   // Simple literal (defaults to xsd:string)
-  final literalSimple = Literal('Alice', IRI(XMLDataType.string.iri));
+  final literalSimple = Literal('Alice', XSD.string);
   // Literal with explicit datatype (xsd:string)
   final literalString = Literal(
     'Hello',
-    IRI(XMLDataType.string.iri),
+    XSD.string,
   );
   // Literal with language tag
-  final literalLang = Literal('Bonjour', IRI('http://www.w3.org/1999/02/22-rdf-syntax-ns#langString'), 'fr');
+  final literalLang = Literal('Bonjour', RDF.langString, 'fr');
   // Literal with a different datatype (e.g., integer)
   final literalInt = Literal(
     '30',
-    IRI(XMLDataType.integer.iri),
+    XSD.integer,
   );
   // Literal with boolean datatype
   final literalBool = Literal(
     'true',
-    IRI(XMLDataType.boolean.iri),
+    XSD.boolean,
   );
   print('Literal (Simple String): $literalSimple');
   print('Literal (Explicit String): $literalString');
@@ -54,7 +54,7 @@ void main() {
   // Create standard Triples
   final triple1 = Triple(iriSubj, iriPred, literalSimple); // Subject knows Name "Alice"
   final triple2 = Triple(iriSubj, IRITerm('http://xmlns.com/foaf/0.1/knows'), blankNode2); // Subject knows Someone (blank node)
-  final triple3 = Triple(blankNode2, iriPred, Literal('Bob', IRI(XMLDataType.string.iri))); // That Someone's Name is "Bob"
+  final triple3 = Triple(blankNode2, iriPred, Literal('Bob', XSD.string)); // That Someone's Name is "Bob"
 
   print('Triple 1: $triple1');
   print('Triple 2: $triple2');

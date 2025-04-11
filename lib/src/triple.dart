@@ -65,8 +65,8 @@ class Triple {
   /// final triple = Triple(subject, predicate, object);
   ///
   /// final subjectB = BlankNode();
-  /// final predicateB = IRITerm('[http://xmlns.com/foaf/0.1/name](http://xmlns.com/foaf/0.1/name)');
-  /// final objectB = Literal('Anonymous', IRI(XMLDataType.string.iri));
+  /// final predicateB = IRITerm('http://xmlns.com/foaf/0.1/name');
+  /// final objectB = Literal('Anonymous', XSD.string);
   /// final tripleB = Triple(subjectB, predicateB, objectB);
   /// ```
   Triple(this.subject, this.predicate, this.object);

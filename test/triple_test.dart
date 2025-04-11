@@ -6,12 +6,12 @@ void main() {
     final innerTripleForNesting = Triple(
       IRITerm('http://example.com/nestedSubj'),
       IRITerm('http://example.com/nestedPred'),
-      Literal('nestedObj', IRI(XMLDataType.string.iri)),
+      Literal('nestedObj', XSD.string),
     );
     final innerTripleForNesting2 = Triple(
       IRITerm('http://example.com/nestedSubj2'),
       IRITerm('http://example.com/nestedPred2'),
-      Literal('nestedObj2', IRI(XMLDataType.string.iri)),
+      Literal('nestedObj2', XSD.string),
     );
     final tripleTermObject = TripleTerm(innerTripleForNesting);
     final tripleTermObject2 = TripleTerm(innerTripleForNesting2);
@@ -166,7 +166,7 @@ void main() {
         final sameInnerTriple = Triple(
           IRITerm('http://example.com/nestedSubj'),
           IRITerm('http://example.com/nestedPred'),
-          Literal('nestedObj', IRI(XMLDataType.string.iri)),
+          Literal('nestedObj', XSD.string),
         );
         final sameTripleTermObject = TripleTerm(sameInnerTriple);
 
@@ -244,7 +244,7 @@ void main() {
         final sameInnerTriple = Triple(
           IRITerm('http://example.com/nestedSubj'),
           IRITerm('http://example.com/nestedPred'),
-          Literal('nestedObj', IRI(XMLDataType.string.iri)),
+          Literal('nestedObj', XSD.string),
         );
         final sameTripleTermObject = TripleTerm(sameInnerTriple);
 
@@ -267,7 +267,7 @@ void main() {
         () {
           final subject = IRITerm('http://example.com/subject');
           final predicate = IRITerm('http://example.com/predicate');
-          final literalObject = Literal('value', IRI(XMLDataType.string.iri));
+          final literalObject = Literal('value', XSD.string);
           // tripleTermObject defined above
           final triple1 = Triple(subject, predicate, tripleTermObject);
           final triple2 = Triple(subject, predicate, literalObject);

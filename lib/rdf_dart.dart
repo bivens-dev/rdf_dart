@@ -67,7 +67,7 @@
 ///   print(blankNode);
 ///
 ///   // Create a Literal
-///   final literal = Literal("Hello", IRI('http://www.w3.org/2001/XMLSchema#string'));
+///   final literal = Literal("Hello", XSD.string);
 ///   print(literal);
 ///
 ///   // Create a Triple
@@ -78,7 +78,6 @@
 library;
 
 export 'src/blank_node.dart';
-export 'src/data_type_facets.dart';
 export 'src/data_types/duration.dart' show XSDDuration;
 export 'src/dataset.dart';
 export 'src/exceptions.dart';
@@ -91,3 +90,5 @@ export 'src/subject_type.dart';
 export 'src/term_type.dart';
 export 'src/triple.dart';
 export 'src/triple_term.dart';
+export 'src/vocab/rdf_vocab.dart';
+export 'src/vocab/xsd_vocab.dart';

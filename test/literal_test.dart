@@ -14,10 +14,10 @@ void main() {
             test('language tag with private extensions', () {
               final literal = Literal(
                 'de-Latn-DE-1996-x-private-test',
-                IRI(XMLDataType.language.iri),
+                XSD.language,
               );
               expect(literal.lexicalForm, 'de-Latn-DE-1996-x-private-test');
-              expect(literal.datatype, IRI(XMLDataType.language.iri));
+              expect(literal.datatype, XSD.language);
               expect(
                 literal.value,
                 Locale.parse('de-Latn-DE-1996-x-private-test'),
@@ -27,14 +27,14 @@ void main() {
             test('language tag with multiple variants', () {
               final literal = Literal(
                 'sl-Latn-IT-rozaj-nedis-1996',
-                IRI(XMLDataType.language.iri),
+                XSD.language,
               );
               expect(literal.lexicalForm, 'sl-Latn-IT-rozaj-nedis-1996');
               expect(
                 literal.getCanonicalLexicalForm(),
                 'sl-Latn-IT-1996-nedis-rozaj',
               );
-              expect(literal.datatype, IRI(XMLDataType.language.iri));
+              expect(literal.datatype, XSD.language);
               expect(
                 literal.value,
                 Locale.parse('sl-Latn-IT-rozaj-nedis-1996'),
@@ -42,16 +42,16 @@ void main() {
             });
 
             test('simple language tag', () {
-              final literal = Literal('en', IRI(XMLDataType.language.iri));
+              final literal = Literal('en', XSD.language);
               expect(literal.lexicalForm, 'en');
-              expect(literal.datatype, IRI(XMLDataType.language.iri));
+              expect(literal.datatype, XSD.language);
               expect(literal.value, Locale.parse('en'));
             });
 
             test('language tag with country', () {
-              final literal = Literal('en-AU', IRI(XMLDataType.language.iri));
+              final literal = Literal('en-AU', XSD.language);
               expect(literal.lexicalForm, 'en-AU');
-              expect(literal.datatype, IRI(XMLDataType.language.iri));
+              expect(literal.datatype, XSD.language);
               expect(literal.value, Locale.parse('en-AU'));
             });
           });
@@ -59,14 +59,14 @@ void main() {
           group('with invalid data', () {
             test('cantbethislong is not a valid value', () {
               expect(
-                () => Literal('cantbethislong', IRI(XMLDataType.language.iri)),
+                () => Literal('cantbethislong', XSD.language),
                 throwsA(isA<InvalidLexicalFormException>()),
               );
             });
 
             test('does not accept empty extensions', () {
               expect(
-                () => Literal('ja-t-i-ami', IRI(XMLDataType.language.iri)),
+                () => Literal('ja-t-i-ami', XSD.language),
                 throwsA(isA<InvalidLexicalFormException>()),
               );
             });
@@ -76,35 +76,35 @@ void main() {
         group('boolean', () {
           group('using valid data', () {
             test('true is a valid boolean data type', () {
-              final literal = Literal('true', IRI(XMLDataType.boolean.iri));
+              final literal = Literal('true', XSD.boolean);
               expect(literal.value, true);
             });
 
             test('1 is a valid boolean data type', () {
-              final literal = Literal('1', IRI(XMLDataType.boolean.iri));
+              final literal = Literal('1', XSD.boolean);
               expect(literal.value, true);
             });
 
             test('false is a valid boolean data type', () {
-              final literal = Literal('false', IRI(XMLDataType.boolean.iri));
+              final literal = Literal('false', XSD.boolean);
               expect(literal.value, false);
             });
 
             test('0 is a valid boolean data type', () {
-              final literal = Literal('0', IRI(XMLDataType.boolean.iri));
+              final literal = Literal('0', XSD.boolean);
               expect(literal.value, false);
             });
           });
 
           group('serializing', () {
             test('false is serialized as correctly', () {
-              final literal = Literal('0', IRI(XMLDataType.boolean.iri));
+              final literal = Literal('0', XSD.boolean);
               expect(literal.lexicalForm, '0');
               expect(literal.getCanonicalLexicalForm(), 'false');
             });
 
             test('true is serialized as correctly', () {
-              final literal = Literal('1', IRI(XMLDataType.boolean.iri));
+              final literal = Literal('1', XSD.boolean);
               expect(literal.lexicalForm, '1');
               expect(literal.getCanonicalLexicalForm(), 'true');
             });
@@ -113,21 +113,21 @@ void main() {
           group('using invalid data', () {
             test('TRUE is not a valid boolean data type', () {
               expect(
-                () => Literal('TRUE', IRI(XMLDataType.boolean.iri)),
+                () => Literal('TRUE', XSD.boolean),
                 throwsA(isA<InvalidLexicalFormException>()),
               );
             });
 
             test('FALSE is not a valid boolean data type', () {
               expect(
-                () => Literal('FALSE', IRI(XMLDataType.boolean.iri)),
+                () => Literal('FALSE', XSD.boolean),
                 throwsA(isA<InvalidLexicalFormException>()),
               );
             });
 
             test('3 is not a valid boolean data type', () {
               expect(
-                () => Literal('3', IRI(XMLDataType.boolean.iri)),
+                () => Literal('3', XSD.boolean),
                 throwsA(isA<InvalidLexicalFormException>()),
               );
             });
@@ -136,19 +136,19 @@ void main() {
               'valid numbers with leading symbols are not valid boolean data type',
               () {
                 expect(
-                  () => Literal('-0', IRI(XMLDataType.boolean.iri)),
+                  () => Literal('-0', XSD.boolean),
                   throwsA(isA<InvalidLexicalFormException>()),
                 );
                 expect(
-                  () => Literal('-1', IRI(XMLDataType.boolean.iri)),
+                  () => Literal('-1', XSD.boolean),
                   throwsA(isA<InvalidLexicalFormException>()),
                 );
                 expect(
-                  () => Literal('+0', IRI(XMLDataType.boolean.iri)),
+                  () => Literal('+0', XSD.boolean),
                   throwsA(isA<InvalidLexicalFormException>()),
                 );
                 expect(
-                  () => Literal('+1', IRI(XMLDataType.boolean.iri)),
+                  () => Literal('+1', XSD.boolean),
                   throwsA(isA<InvalidLexicalFormException>()),
                 );
               },
@@ -156,11 +156,11 @@ void main() {
 
             test('decimal values are not a valid boolean data type', () {
               expect(
-                () => Literal('1.0', IRI(XMLDataType.boolean.iri)),
+                () => Literal('1.0', XSD.boolean),
                 throwsA(isA<InvalidLexicalFormException>()),
               );
               expect(
-                () => Literal('0.0', IRI(XMLDataType.boolean.iri)),
+                () => Literal('0.0',XSD.boolean),
                 throwsA(isA<InvalidLexicalFormException>()),
               );
             });
@@ -170,10 +170,10 @@ void main() {
         group('float', () {
           group('using valid data', () {
             test('with exponents in non-canonical form', () {
-              final literal = Literal('-3E2', IRI(XMLDataType.float.iri));
+              final literal = Literal('-3E2', XSD.float);
               expect(literal.lexicalForm, '-3E2');
               expect(literal.getCanonicalLexicalForm(), '-3.0E2');
-              expect(literal.datatype, IRI(XMLDataType.float.iri));
+              expect(literal.datatype, XSD.float);
               expect(literal.language, isNull);
               expect(literal.value, -3.0E2);
             });
@@ -181,67 +181,67 @@ void main() {
             test('exponents with decimals', () {
               final literal = Literal(
                 '4268.22752E11',
-                IRI(XMLDataType.float.iri),
+                XSD.float,
               );
               expect(literal.lexicalForm, '4268.22752E11');
               expect(literal.getCanonicalLexicalForm(), '4.26822752E14');
-              expect(literal.datatype, IRI(XMLDataType.float.iri));
+              expect(literal.datatype, XSD.float);
               expect(literal.language, isNull);
               expect(literal.value, 4268.22752E11);
               expect(literal.value, 4.26822752E14);
             });
 
             test('exponents with decimals and a leading plus sign', () {
-              final literal = Literal('+24.3e-3', IRI(XMLDataType.float.iri));
+              final literal = Literal('+24.3e-3', XSD.float);
               expect(literal.lexicalForm, '+24.3e-3');
               expect(literal.getCanonicalLexicalForm(), '2.43E-2');
-              expect(literal.datatype, IRI(XMLDataType.float.iri));
+              expect(literal.datatype, XSD.float);
               expect(literal.language, isNull);
               expect(literal.value, 24.3e-3);
               expect(literal.value, 2.43E-2);
             });
 
             test('As an integer', () {
-              final literal = Literal('12', IRI(XMLDataType.float.iri));
+              final literal = Literal('12', XSD.float);
               expect(literal.lexicalForm, '12');
               expect(literal.getCanonicalLexicalForm(), '1.2E1');
-              expect(literal.datatype, IRI(XMLDataType.float.iri));
+              expect(literal.datatype, XSD.float);
               expect(literal.language, isNull);
               expect(literal.value, 12);
               expect(literal.value, 1.2E1);
             });
 
             test('With a decimal point and a leading plus sign', () {
-              final literal = Literal('+3.5', IRI(XMLDataType.float.iri));
+              final literal = Literal('+3.5', XSD.float);
               expect(literal.lexicalForm, '+3.5');
               expect(literal.getCanonicalLexicalForm(), '3.5E0');
-              expect(literal.datatype, IRI(XMLDataType.float.iri));
+              expect(literal.datatype, XSD.float);
               expect(literal.language, isNull);
               expect(literal.value, 3.5);
               expect(literal.value, 3.5E0);
             });
 
             test('negative infinity', () {
-              final literal = Literal('-INF', IRI(XMLDataType.float.iri));
+              final literal = Literal('-INF', XSD.float);
               expect(literal.lexicalForm, '-INF');
-              expect(literal.datatype, IRI(XMLDataType.float.iri));
+              expect(literal.datatype, XSD.float);
               expect(literal.language, isNull);
               expect(literal.value, double.negativeInfinity);
             });
 
             test('negative zero', () {
-              final literal = Literal('-0', IRI(XMLDataType.float.iri));
+              final literal = Literal('-0', XSD.float);
               expect(literal.lexicalForm, '-0');
               expect(literal.getCanonicalLexicalForm(), '-0.0E0');
-              expect(literal.datatype, IRI(XMLDataType.float.iri));
+              expect(literal.datatype, XSD.float);
               expect(literal.language, isNull);
               expect(literal.value, 0);
             });
 
             test('not a number', () {
-              final literal = Literal('NaN', IRI(XMLDataType.float.iri));
+              final literal = Literal('NaN', XSD.float);
               expect(literal.lexicalForm, 'NaN');
-              expect(literal.datatype, IRI(XMLDataType.float.iri));
+              expect(literal.datatype, XSD.float);
               expect(literal.language, isNull);
             });
           });
@@ -252,10 +252,10 @@ void main() {
             test('A URL', () {
               final literal = Literal(
                 'https://example.com',
-                IRI(XMLDataType.anyURI.iri),
+                XSD.anyURI,
               );
               expect(literal.lexicalForm, 'https://example.com');
-              expect(literal.datatype, IRI(XMLDataType.anyURI.iri));
+              expect(literal.datatype, XSD.anyURI);
               expect(literal.language, isNull);
               expect(literal.value, Uri.tryParse('https://example.com'));
             });
@@ -263,10 +263,10 @@ void main() {
             test('absolute URI', () {
               final literal = Literal(
                 'mailto:hello@world.com',
-                IRI(XMLDataType.anyURI.iri),
+                XSD.anyURI,
               );
               expect(literal.lexicalForm, 'mailto:hello@world.com');
-              expect(literal.datatype, IRI(XMLDataType.anyURI.iri));
+              expect(literal.datatype, XSD.anyURI);
               expect(literal.language, isNull);
               expect(literal.value, Uri.tryParse('mailto:hello@world.com'));
             });
@@ -274,10 +274,10 @@ void main() {
             test('relative URI containing escaped non-ASCII character', () {
               final literal = Literal(
                 '../%C3%A9dict.html',
-                IRI(XMLDataType.anyURI.iri),
+                XSD.anyURI,
               );
               expect(literal.lexicalForm, '../%C3%A9dict.html');
-              expect(literal.datatype, IRI(XMLDataType.anyURI.iri));
+              expect(literal.datatype, XSD.anyURI);
               expect(literal.language, isNull);
               expect(literal.value, Uri.tryParse('../%C3%A9dict.html'));
             });
@@ -285,13 +285,13 @@ void main() {
             test('URI with fragment identifier', () {
               final literal = Literal(
                 'https://www.example.com/test.html#works',
-                IRI(XMLDataType.anyURI.iri),
+                XSD.anyURI,
               );
               expect(
                 literal.lexicalForm,
                 'https://www.example.com/test.html#works',
               );
-              expect(literal.datatype, IRI(XMLDataType.anyURI.iri));
+              expect(literal.datatype, XSD.anyURI);
               expect(literal.language, isNull);
               expect(
                 literal.value,
@@ -302,10 +302,10 @@ void main() {
             test('URN value', () {
               final literal = Literal(
                 'urn:example:org',
-                IRI(XMLDataType.anyURI.iri),
+                XSD.anyURI,
               );
               expect(literal.lexicalForm, 'urn:example:org');
-              expect(literal.datatype, IRI(XMLDataType.anyURI.iri));
+              expect(literal.datatype, XSD.anyURI);
               expect(literal.language, isNull);
               expect(literal.value, Uri.tryParse('urn:example:org'));
             });
@@ -315,98 +315,98 @@ void main() {
         group('double', () {
           group('using valid data', () {
             test('with decimal places', () {
-              final literal = Literal('3.14', IRI(XMLDataType.double.iri));
+              final literal = Literal('3.14', XSD.double);
               expect(literal.lexicalForm, '3.14');
               expect(literal.getCanonicalLexicalForm(), '3.14E0');
-              expect(literal.datatype, IRI(XMLDataType.double.iri));
+              expect(literal.datatype, XSD.double);
               expect(literal.language, isNull);
               expect(literal.value, 3.14);
             });
 
             test('values without decimal places are normalized', () {
-              final literal = Literal('1', IRI(XMLDataType.double.iri));
+              final literal = Literal('1', XSD.double);
               expect(literal.lexicalForm, '1');
               expect(literal.getCanonicalLexicalForm(), '1.0E0');
-              expect(literal.datatype, IRI(XMLDataType.double.iri));
+              expect(literal.datatype, XSD.double);
               expect(literal.language, isNull);
               expect(literal.value, 1.0);
             });
 
             test('values with lowercase e exponents are normalized', () {
-              final literal = Literal('1.0e+1', IRI(XMLDataType.double.iri));
+              final literal = Literal('1.0e+1', XSD.double);
               expect(literal.lexicalForm, '1.0e+1');
               expect(literal.getCanonicalLexicalForm(), '1.0E1');
-              expect(literal.datatype, IRI(XMLDataType.double.iri));
+              expect(literal.datatype, XSD.double);
               expect(literal.language, isNull);
               expect(literal.value, 1.0E1);
             });
 
             test('INF is a valid value', () {
-              final literal = Literal('INF', IRI(XMLDataType.double.iri));
+              final literal = Literal('INF', XSD.double);
               expect(literal.lexicalForm, 'INF');
-              expect(literal.datatype, IRI(XMLDataType.double.iri));
+              expect(literal.datatype, XSD.double);
               expect(literal.language, isNull);
               expect(literal.value, double.infinity);
             });
 
             test('-INF is a valid value', () {
-              final literal = Literal('-INF', IRI(XMLDataType.double.iri));
+              final literal = Literal('-INF', XSD.double);
               expect(literal.lexicalForm, '-INF');
-              expect(literal.datatype, IRI(XMLDataType.double.iri));
+              expect(literal.datatype, XSD.double);
               expect(literal.language, isNull);
               expect(literal.value, double.negativeInfinity);
             });
 
             test('inf is a valid value', () {
-              final literal = Literal('inf', IRI(XMLDataType.double.iri));
+              final literal = Literal('inf', XSD.double);
               expect(literal.lexicalForm, 'inf');
               expect(literal.getCanonicalLexicalForm(), 'INF');
-              expect(literal.datatype, IRI(XMLDataType.double.iri));
+              expect(literal.datatype, XSD.double);
               expect(literal.language, isNull);
               expect(literal.value, double.infinity);
             });
 
             test('values with exponents are normalized', () {
-              final literal = Literal('1.E-8', IRI(XMLDataType.double.iri));
+              final literal = Literal('1.E-8', XSD.double);
               expect(literal.lexicalForm, '1.E-8');
               expect(literal.getCanonicalLexicalForm(), '1.0E-8');
-              expect(literal.datatype, IRI(XMLDataType.double.iri));
+              expect(literal.datatype, XSD.double);
               expect(literal.language, isNull);
               expect(literal.value, 1.0E-8);
             });
 
             test('leading zeros are normalized', () {
-              final literal = Literal('01', IRI(XMLDataType.double.iri));
+              final literal = Literal('01', XSD.double);
               expect(literal.lexicalForm, '01');
               expect(literal.getCanonicalLexicalForm(), '1.0E0');
-              expect(literal.datatype, IRI(XMLDataType.double.iri));
+              expect(literal.datatype, XSD.double);
               expect(literal.language, isNull);
               expect(literal.value, 1);
             });
 
             test('negative numbers without decimal places', () {
-              final literal = Literal('-1', IRI(XMLDataType.double.iri));
+              final literal = Literal('-1', XSD.double);
               expect(literal.lexicalForm, '-1');
               expect(literal.getCanonicalLexicalForm(), '-1.0E0');
-              expect(literal.datatype, IRI(XMLDataType.double.iri));
+              expect(literal.datatype, XSD.double);
               expect(literal.language, isNull);
               expect(literal.value, -1);
             });
 
             test('trailing decimal points are normalized', () {
-              final literal = Literal('1.', IRI(XMLDataType.double.iri));
+              final literal = Literal('1.', XSD.double);
               expect(literal.lexicalForm, '1.');
               expect(literal.getCanonicalLexicalForm(), '1.0E0');
-              expect(literal.datatype, IRI(XMLDataType.double.iri));
+              expect(literal.datatype, XSD.double);
               expect(literal.language, isNull);
               expect(literal.value, 1.0);
             });
 
             test('redundant decimal points are normalized', () {
-              final literal = Literal('1.00', IRI(XMLDataType.double.iri));
+              final literal = Literal('1.00', XSD.double);
               expect(literal.lexicalForm, '1.00');
               expect(literal.getCanonicalLexicalForm(), '1.0E0');
-              expect(literal.datatype, IRI(XMLDataType.double.iri));
+              expect(literal.datatype, XSD.double);
               expect(literal.language, isNull);
               expect(literal.value, 1);
             });
@@ -414,10 +414,10 @@ void main() {
             test(
               'redundant zeros combined with the plus sign are normalized',
               () {
-                final literal = Literal('+001.00', IRI(XMLDataType.double.iri));
+                final literal = Literal('+001.00', XSD.double);
                 expect(literal.lexicalForm, '+001.00');
                 expect(literal.getCanonicalLexicalForm(), '1.0E0');
-                expect(literal.datatype, IRI(XMLDataType.double.iri));
+                expect(literal.datatype, XSD.double);
                 expect(literal.language, isNull);
                 expect(literal.value, 1);
               },
@@ -426,11 +426,11 @@ void main() {
             test('precision with 10 decimal places works as expected', () {
               final literal = Literal(
                 '2.234000005',
-                IRI(XMLDataType.double.iri),
+                XSD.double,
               );
               expect(literal.lexicalForm, '2.234000005');
               expect(literal.getCanonicalLexicalForm(), '2.234000005E0');
-              expect(literal.datatype, IRI(XMLDataType.double.iri));
+              expect(literal.datatype, XSD.double);
               expect(literal.language, isNull);
               expect(literal.value, 2.234000005);
             });
@@ -438,12 +438,12 @@ void main() {
             test('precision with 16 decimal places works as expected', () {
               final literal = Literal(
                 '2.2340000000000005',
-                IRI(XMLDataType.double.iri),
+                XSD.double,
               );
               expect(literal.lexicalForm, '2.2340000000000005');
               // TODO: Investigate broken test
               // expect(literal.getCanonicalLexicalForm(), '2.2340000000000005E0');
-              expect(literal.datatype, IRI(XMLDataType.double.iri));
+              expect(literal.datatype, XSD.double);
               expect(literal.language, isNull);
               expect(literal.value, 2.2340000000000005);
             });
@@ -451,20 +451,20 @@ void main() {
             test('precision with 17 decimal places is rounded', () {
               final literal = Literal(
                 '2.23400000000000005',
-                IRI(XMLDataType.double.iri),
+                XSD.double,
               );
               expect(literal.lexicalForm, '2.23400000000000005');
               expect(literal.getCanonicalLexicalForm(), '2.234E0');
-              expect(literal.datatype, IRI(XMLDataType.double.iri));
+              expect(literal.datatype, XSD.double);
               expect(literal.language, isNull);
               expect(literal.value, 2.234);
             });
 
             test('number starting with a decimal point is valid', () {
-              final literal = Literal('.2', IRI(XMLDataType.double.iri));
+              final literal = Literal('.2', XSD.double);
               expect(literal.lexicalForm, '.2');
               expect(literal.getCanonicalLexicalForm(), '2.0E-1');
-              expect(literal.datatype, IRI(XMLDataType.double.iri));
+              expect(literal.datatype, XSD.double);
               expect(literal.language, isNull);
               expect(literal.value, 0.2);
             });
@@ -472,11 +472,11 @@ void main() {
             test('rounding is capped at 16 decimal places', () {
               final literal = Literal(
                 '1.2345678901234567890123457890',
-                IRI(XMLDataType.double.iri),
+                XSD.double,
               );
               expect(literal.lexicalForm, '1.2345678901234567890123457890');
               expect(literal.getCanonicalLexicalForm(), '1.2345678901234567E0');
-              expect(literal.datatype, IRI(XMLDataType.double.iri));
+              expect(literal.datatype, XSD.double);
               expect(literal.language, isNull);
               expect(literal.value, 1.2345678901234567);
             });
@@ -484,10 +484,10 @@ void main() {
             test(
               'redundant zeros combined with the minus sign are normalized',
               () {
-                final literal = Literal('-001.00', IRI(XMLDataType.double.iri));
+                final literal = Literal('-001.00', XSD.double);
                 expect(literal.lexicalForm, '-001.00');
                 expect(literal.getCanonicalLexicalForm(), '-1.0E0');
-                expect(literal.datatype, IRI(XMLDataType.double.iri));
+                expect(literal.datatype, XSD.double);
                 expect(literal.language, isNull);
                 expect(literal.value, -1);
               },
@@ -497,32 +497,32 @@ void main() {
           group('using invalid data', () {
             test('non numerical figures are not valid double data types', () {
               expect(
-                () => Literal('abc', IRI(XMLDataType.double.iri)),
+                () => Literal('abc', XSD.double),
                 throwsA(isA<InvalidLexicalFormException>()),
               );
             });
 
             test('Only a +/- sign is not a valid double data type', () {
               expect(
-                () => Literal('+', IRI(XMLDataType.double.iri)),
+                () => Literal('+', XSD.double),
                 throwsA(isA<InvalidLexicalFormException>()),
               );
               expect(
-                () => Literal('-', IRI(XMLDataType.double.iri)),
+                () => Literal('-', XSD.double),
                 throwsA(isA<InvalidLexicalFormException>()),
               );
             });
 
             test('Multiple decimal points are not valid', () {
               expect(
-                () => Literal('1.2.3', IRI(XMLDataType.double.iri)),
+                () => Literal('1.2.3', XSD.double),
                 throwsA(isA<InvalidLexicalFormException>()),
               );
             });
 
             test('Numbers with spaces are not valid', () {
               expect(
-                () => Literal('1 2 3', IRI(XMLDataType.double.iri)),
+                () => Literal('1 2 3', XSD.double),
                 throwsA(isA<InvalidLexicalFormException>()),
               );
             });
@@ -532,14 +532,14 @@ void main() {
         group('unsigned byte', () {
           group('with valid data', () {
             test('0 is a valid value', () {
-              final literal = Literal('0', IRI(XMLDataType.unsignedByte.iri));
+              final literal = Literal('0', XSD.unsignedByte);
               expect(literal.lexicalForm, '0');
               expect(literal.language, isNull);
               expect(literal.value, 0);
             });
 
             test('255 is a valid value', () {
-              final literal = Literal('255', IRI(XMLDataType.unsignedByte.iri));
+              final literal = Literal('255', XSD.unsignedByte);
               expect(literal.lexicalForm, '255');
               expect(literal.language, isNull);
               expect(literal.value, 255);
@@ -549,7 +549,7 @@ void main() {
           group('with invalid data', () {
             test('256 is not a valid value', () {
               expect(
-                () => Literal('256', IRI(XMLDataType.unsignedByte.iri)),
+                () => Literal('256', XSD.unsignedByte),
                 throwsRangeError,
               );
             });
@@ -558,35 +558,35 @@ void main() {
         group('byte types', () {
           group('with valid data', () {
             test('0 is a valid value', () {
-              final literal = Literal('0', IRI(XMLDataType.byte.iri));
+              final literal = Literal('0', XSD.byte);
               expect(literal.lexicalForm, '0');
               expect(literal.language, isNull);
               expect(literal.value, 0);
             });
 
             test('-1 is a valid value', () {
-              final literal = Literal('-1', IRI(XMLDataType.byte.iri));
+              final literal = Literal('-1', XSD.byte);
               expect(literal.lexicalForm, '-1');
               expect(literal.language, isNull);
               expect(literal.value, -1);
             });
 
             test('-128 is a valid value', () {
-              final literal = Literal('-128', IRI(XMLDataType.byte.iri));
+              final literal = Literal('-128', XSD.byte);
               expect(literal.lexicalForm, '-128');
               expect(literal.language, isNull);
               expect(literal.value, -128);
             });
 
             test('127 is a valid value', () {
-              final literal = Literal('127', IRI(XMLDataType.byte.iri));
+              final literal = Literal('127', XSD.byte);
               expect(literal.lexicalForm, '127');
               expect(literal.language, isNull);
               expect(literal.value, 127);
             });
 
             test('valid values with a leading + are normalised', () {
-              final literal = Literal('+127', IRI(XMLDataType.byte.iri));
+              final literal = Literal('+127', XSD.byte);
               expect(literal.lexicalForm, '+127');
               expect(literal.getCanonicalLexicalForm(), '127');
               expect(literal.language, isNull);
@@ -597,28 +597,28 @@ void main() {
           group('with invalid data', () {
             test('128 is not a valid value', () {
               expect(
-                () => Literal('128', IRI(XMLDataType.byte.iri)),
+                () => Literal('128', XSD.byte),
                 throwsRangeError,
               );
             });
 
             test('-129 is not a valid value', () {
               expect(
-                () => Literal('-129', IRI(XMLDataType.byte.iri)),
+                () => Literal('-129', XSD.byte),
                 throwsRangeError,
               );
             });
 
             test('+-0 is not a valid value', () {
               expect(
-                () => Literal('+-0', IRI(XMLDataType.byte.iri)),
+                () => Literal('+-0', XSD.byte),
                 throwsA(isA<InvalidLexicalFormException>()),
               );
             });
 
             test('non numerical characters are not a valid value', () {
               expect(
-                () => Literal('abc', IRI(XMLDataType.byte.iri)),
+                () => Literal('abc', XSD.byte),
                 throwsA(isA<InvalidLexicalFormException>()),
               );
             });
@@ -628,7 +628,7 @@ void main() {
         group('unsigned short', () {
           group('with valid data', () {
             test('0 is a valid value', () {
-              final literal = Literal('0', IRI(XMLDataType.unsignedShort.iri));
+              final literal = Literal('0', XSD.unsignedShort);
               expect(literal.lexicalForm, '0');
               expect(literal.language, isNull);
               expect(literal.value, 0);
@@ -637,7 +637,7 @@ void main() {
             test('65535 is a valid value', () {
               final literal = Literal(
                 '65535',
-                IRI(XMLDataType.unsignedShort.iri),
+                XSD.unsignedShort,
               );
               expect(literal.lexicalForm, '65535');
               expect(literal.language, isNull);
@@ -648,7 +648,7 @@ void main() {
           group('with invalid data', () {
             test('65536 is not a valid value', () {
               expect(
-                () => Literal('65536', IRI(XMLDataType.unsignedShort.iri)),
+                () => Literal('65536', XSD.unsignedShort),
                 throwsRangeError,
               );
             });
@@ -658,21 +658,21 @@ void main() {
         group('short', () {
           group('with valid data', () {
             test('0 is a valid value', () {
-              final literal = Literal('0', IRI(XMLDataType.short.iri));
+              final literal = Literal('0', XSD.short);
               expect(literal.lexicalForm, '0');
               expect(literal.language, isNull);
               expect(literal.value, 0);
             });
 
             test('32767 is a valid value', () {
-              final literal = Literal('32767', IRI(XMLDataType.short.iri));
+              final literal = Literal('32767', XSD.short);
               expect(literal.lexicalForm, '32767');
               expect(literal.language, isNull);
               expect(literal.value, 32767);
             });
 
             test('-32768 is a valid value', () {
-              final literal = Literal('-32768', IRI(XMLDataType.short.iri));
+              final literal = Literal('-32768', XSD.short);
               expect(literal.lexicalForm, '-32768');
               expect(literal.language, isNull);
               expect(literal.value, -32768);
@@ -682,14 +682,14 @@ void main() {
           group('with invalid data', () {
             test('32768 is not a valid value', () {
               expect(
-                () => Literal('32768', IRI(XMLDataType.short.iri)),
+                () => Literal('32768', XSD.short),
                 throwsRangeError,
               );
             });
 
             test('-32769 is not a valid value', () {
               expect(
-                () => Literal('-32769', IRI(XMLDataType.short.iri)),
+                () => Literal('-32769', XSD.short),
                 throwsRangeError,
               );
             });
@@ -699,7 +699,7 @@ void main() {
         group('unsigned int', () {
           group('with valid data', () {
             test('0 is a valid value', () {
-              final literal = Literal('0', IRI(XMLDataType.unsignedInt.iri));
+              final literal = Literal('0', XSD.unsignedInt);
               expect(literal.lexicalForm, '0');
               expect(literal.language, isNull);
               expect(literal.value, 0);
@@ -708,7 +708,7 @@ void main() {
             test('4294967295 is a valid value', () {
               final literal = Literal(
                 '4294967295',
-                IRI(XMLDataType.unsignedInt.iri),
+                XSD.unsignedInt,
               );
               expect(literal.lexicalForm, '4294967295');
               expect(literal.language, isNull);
@@ -719,7 +719,7 @@ void main() {
           group('with invalid data', () {
             test('65536 is not a valid value', () {
               expect(
-                () => Literal('4294967296', IRI(XMLDataType.unsignedInt.iri)),
+                () => Literal('4294967296', XSD.unsignedInt),
                 throwsRangeError,
               );
             });
@@ -729,21 +729,21 @@ void main() {
         group('int', () {
           group('with valid data', () {
             test('0 is a valid value', () {
-              final literal = Literal('0', IRI(XMLDataType.int.iri));
+              final literal = Literal('0', XSD.int);
               expect(literal.lexicalForm, '0');
               expect(literal.language, isNull);
               expect(literal.value, 0);
             });
 
             test('2147483647 is a valid value', () {
-              final literal = Literal('2147483647', IRI(XMLDataType.int.iri));
+              final literal = Literal('2147483647', XSD.int);
               expect(literal.lexicalForm, '2147483647');
               expect(literal.language, isNull);
               expect(literal.value, 2147483647);
             });
 
             test('-2147483648 is a valid value', () {
-              final literal = Literal('-2147483648', IRI(XMLDataType.int.iri));
+              final literal = Literal('-2147483648', XSD.int);
               expect(literal.lexicalForm, '-2147483648');
               expect(literal.language, isNull);
               expect(literal.value, -2147483648);
@@ -753,14 +753,14 @@ void main() {
           group('with invalid data', () {
             test('2147483648 is not a valid value', () {
               expect(
-                () => Literal('2147483648', IRI(XMLDataType.int.iri)),
+                () => Literal('2147483648', XSD.int),
                 throwsRangeError,
               );
             });
 
             test('-2147483649 is not a valid value', () {
               expect(
-                () => Literal('-2147483649', IRI(XMLDataType.short.iri)),
+                () => Literal('-2147483649', XSD.short),
                 throwsRangeError,
               );
             });
@@ -772,7 +772,7 @@ void main() {
             test('it decodes the data correctly', () {
               final literal = Literal(
                 'SGVsbG8gV29ybGQ=',
-                IRI(XMLDataType.base64Binary.iri),
+                XSD.base64Binary,
               );
 
               expect(literal.lexicalForm, 'SGVsbG8gV29ybGQ=');
@@ -786,7 +786,7 @@ void main() {
               expect(
                 () => Literal(
                   '^not a valid string^',
-                  IRI(XMLDataType.base64Binary.iri),
+                  XSD.base64Binary,
                 ),
                 throwsA(isA<InvalidLexicalFormException>()),
               );
@@ -799,7 +799,7 @@ void main() {
             test('it decodes the data correctly with lowercase hex', () {
               final literal = Literal(
                 '48656c6c6f20576f726c64',
-                IRI(XMLDataType.hexBinary.iri),
+                XSD.hexBinary,
               );
 
               expect(literal.lexicalForm, '48656c6c6f20576f726c64');
@@ -810,7 +810,7 @@ void main() {
             test('it decodes the data correctly with uppercase hex', () {
               final literal = Literal(
                 '48656C6C6F20576F726C64',
-                IRI(XMLDataType.hexBinary.iri),
+                XSD.hexBinary,
               );
 
               expect(literal.lexicalForm, '48656C6C6F20576F726C64');
@@ -822,7 +822,7 @@ void main() {
             test('it decodes the data correctly with mixed case hex', () {
               final literal = Literal(
                 '48656c6C6f20576F726C64',
-                IRI(XMLDataType.hexBinary.iri),
+                XSD.hexBinary,
               );
 
               expect(literal.lexicalForm, '48656c6C6f20576F726C64');
@@ -837,7 +837,7 @@ void main() {
               expect(
                 () => Literal(
                   '^not a valid hex string^',
-                  IRI(XMLDataType.hexBinary.iri),
+                  XSD.hexBinary,
                 ),
                 throwsA(isA<InvalidLexicalFormException>()),
               );
@@ -846,9 +846,7 @@ void main() {
         });
 
         group('langString', () {
-          final langStringIri = IRI(
-            'http://www.w3.org/1999/02/22-rdf-syntax-ns#langString',
-          );
+          final langStringIri = RDF.langString;
 
           group('with valid data', () {
             test('with a simple language tag', () {
@@ -893,7 +891,7 @@ void main() {
             
             test('with a language tag but the wrong data type', () {
               expect(
-                () => Literal("g'day world", IRI(XMLDataType.string.iri), 'en-AU'),
+                () => Literal("g'day world", XSD.string, 'en-AU'),
                 throwsA(isA<LiteralConstraintException>()),
               );
             });
@@ -903,149 +901,149 @@ void main() {
         group('cross cutting concerns', () {
           test("numbers don't accept blank strings", () {
             expect(
-              () => Literal('', IRI(XMLDataType.unsignedByte.iri)),
+              () => Literal('', XSD.unsignedByte),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('', IRI(XMLDataType.byte.iri)),
+              () => Literal('', XSD.byte),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('', IRI(XMLDataType.unsignedInt.iri)),
+              () => Literal('', XSD.unsignedInt),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('', IRI(XMLDataType.int.iri)),
+              () => Literal('', XSD.int),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('', IRI(XMLDataType.short.iri)),
+              () => Literal('', XSD.short),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('', IRI(XMLDataType.unsignedShort.iri)),
+              () => Literal('', XSD.unsignedShort),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('', IRI(XMLDataType.integer.iri)),
+              () => Literal('', XSD.integer),
               throwsA(isA<InvalidLexicalFormException>()),
             );
           });
 
           test("numbers don't accept only +/- signs", () {
             expect(
-              () => Literal('-', IRI(XMLDataType.unsignedByte.iri)),
+              () => Literal('-', XSD.unsignedByte),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('+', IRI(XMLDataType.unsignedByte.iri)),
+              () => Literal('+', XSD.unsignedByte),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('-', IRI(XMLDataType.byte.iri)),
+              () => Literal('-', XSD.byte),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('+', IRI(XMLDataType.byte.iri)),
+              () => Literal('+', XSD.byte),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('-', IRI(XMLDataType.unsignedInt.iri)),
+              () => Literal('-', XSD.unsignedInt),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('+', IRI(XMLDataType.unsignedInt.iri)),
+              () => Literal('+', XSD.unsignedInt),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('-', IRI(XMLDataType.int.iri)),
+              () => Literal('-', XSD.int),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('+', IRI(XMLDataType.int.iri)),
+              () => Literal('+', XSD.int),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('-', IRI(XMLDataType.unsignedShort.iri)),
+              () => Literal('-', XSD.unsignedShort),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('+', IRI(XMLDataType.unsignedShort.iri)),
+              () => Literal('+', XSD.unsignedShort),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('-', IRI(XMLDataType.short.iri)),
+              () => Literal('-', XSD.short),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('+', IRI(XMLDataType.short.iri)),
+              () => Literal('+', XSD.short),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('-', IRI(XMLDataType.integer.iri)),
+              () => Literal('-', XSD.integer),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('+', IRI(XMLDataType.integer.iri)),
+              () => Literal('+', XSD.integer),
               throwsA(isA<InvalidLexicalFormException>()),
             );
           });
 
           test("numbers don't accept letters", () {
             expect(
-              () => Literal('one', IRI(XMLDataType.unsignedByte.iri)),
+              () => Literal('one', XSD.unsignedByte),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('one', IRI(XMLDataType.unsignedByte.iri)),
+              () => Literal('one', XSD.unsignedByte),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('one', IRI(XMLDataType.byte.iri)),
+              () => Literal('one', XSD.byte),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('one', IRI(XMLDataType.byte.iri)),
+              () => Literal('one', XSD.byte),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('one', IRI(XMLDataType.unsignedInt.iri)),
+              () => Literal('one', XSD.unsignedInt),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('one', IRI(XMLDataType.unsignedInt.iri)),
+              () => Literal('one', XSD.unsignedInt),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('one', IRI(XMLDataType.int.iri)),
+              () => Literal('one', XSD.int),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('one', IRI(XMLDataType.int.iri)),
+              () => Literal('one', XSD.int),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('one', IRI(XMLDataType.unsignedShort.iri)),
+              () => Literal('one', XSD.unsignedShort),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('one', IRI(XMLDataType.unsignedShort.iri)),
+              () => Literal('one', XSD.unsignedShort),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('one', IRI(XMLDataType.short.iri)),
+              () => Literal('one', XSD.short),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('one', IRI(XMLDataType.short.iri)),
+              () => Literal('one', XSD.short),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('one', IRI(XMLDataType.integer.iri)),
+              () => Literal('one', XSD.integer),
               throwsA(isA<InvalidLexicalFormException>()),
             );
             expect(
-              () => Literal('one', IRI(XMLDataType.integer.iri)),
+              () => Literal('one', XSD.integer),
               throwsA(isA<InvalidLexicalFormException>()),
             );
           });
@@ -1056,7 +1054,7 @@ void main() {
             test('0 is a valid value', () {
               final literal = Literal(
                 '0',
-                IRI(XMLDataType.nonNegativeInteger.iri),
+                XSD.nonNegativeInteger,
               );
               expect(literal.lexicalForm, '0');
               expect(literal.language, isNull);
@@ -1066,7 +1064,7 @@ void main() {
             test('1 is a valid value', () {
               final literal = Literal(
                 '1',
-                IRI(XMLDataType.nonNegativeInteger.iri),
+                XSD.nonNegativeInteger,
               );
               expect(literal.lexicalForm, '1');
               expect(literal.language, isNull);
@@ -1076,7 +1074,7 @@ void main() {
             test('value with leading space is a valid value', () {
               final literal = Literal(
                 ' 1',
-                IRI(XMLDataType.nonNegativeInteger.iri),
+                XSD.nonNegativeInteger,
               );
               expect(literal.getCanonicalLexicalForm(), '1');
               expect(literal.lexicalForm, ' 1');
@@ -1087,7 +1085,7 @@ void main() {
             test('value with trailing space is a valid value', () {
               final literal = Literal(
                 '1 ',
-                IRI(XMLDataType.nonNegativeInteger.iri),
+                XSD.nonNegativeInteger,
               );
               expect(literal.lexicalForm, '1 ');
               expect(literal.getCanonicalLexicalForm(), '1');
@@ -1099,14 +1097,14 @@ void main() {
           group('with invalid data', () {
             test('-1 is not a valid value', () {
               expect(
-                () => Literal('-1', IRI(XMLDataType.nonNegativeInteger.iri)),
+                () => Literal('-1', XSD.nonNegativeInteger),
                 throwsRangeError,
               );
             });
 
             test('1.5 is not a valid value', () {
               expect(
-                () => Literal('1.5', IRI(XMLDataType.nonNegativeInteger.iri)),
+                () => Literal('1.5', XSD.nonNegativeInteger),
                 throwsA(isA<InvalidLexicalFormException>()),
               );
             });
@@ -1118,7 +1116,7 @@ void main() {
             test('-1 is a valid value', () {
               final literal = Literal(
                 '-1',
-                IRI(XMLDataType.negativeInteger.iri),
+                XSD.negativeInteger,
               );
               expect(literal.lexicalForm, '-1');
               expect(literal.language, isNull);
@@ -1128,7 +1126,7 @@ void main() {
             test('value with leading space is a valid value', () {
               final literal = Literal(
                 ' -1',
-                IRI(XMLDataType.negativeInteger.iri),
+                XSD.negativeInteger,
               );
               expect(literal.lexicalForm, ' -1');
               expect(literal.getCanonicalLexicalForm(), '-1');
@@ -1139,7 +1137,7 @@ void main() {
             test('value with trailing space is a valid value', () {
               final literal = Literal(
                 '-1 ',
-                IRI(XMLDataType.negativeInteger.iri),
+                XSD.negativeInteger,
               );
               expect(literal.lexicalForm, '-1 ');
               expect(literal.getCanonicalLexicalForm(), '-1');
@@ -1151,21 +1149,21 @@ void main() {
           group('with invalid data', () {
             test('0 is not a valid value', () {
               expect(
-                () => Literal('0', IRI(XMLDataType.negativeInteger.iri)),
+                () => Literal('0', XSD.negativeInteger),
                 throwsRangeError,
               );
             });
 
             test('-1.5 is not a valid value', () {
               expect(
-                () => Literal('-1.5', IRI(XMLDataType.negativeInteger.iri)),
+                () => Literal('-1.5', XSD.negativeInteger),
                 throwsA(isA<InvalidLexicalFormException>()),
               );
             });
 
             test('-0 is not a valid value', () {
               expect(
-                () => Literal('-0', IRI(XMLDataType.negativeInteger.iri)),
+                () => Literal('-0', XSD.negativeInteger),
                 throwsRangeError,
               );
             });
@@ -1177,7 +1175,7 @@ void main() {
             test('0 is a valid value', () {
               final literal = Literal(
                 '0',
-                IRI(XMLDataType.nonPositiveInteger.iri),
+                XSD.nonPositiveInteger,
               );
               expect(literal.lexicalForm, '0');
               expect(literal.language, isNull);
@@ -1187,7 +1185,7 @@ void main() {
             test('-1 is a valid value', () {
               final literal = Literal(
                 '-1',
-                IRI(XMLDataType.nonPositiveInteger.iri),
+                XSD.nonPositiveInteger,
               );
               expect(literal.lexicalForm, '-1');
               expect(literal.language, isNull);
@@ -1197,7 +1195,7 @@ void main() {
             test('value with leading space is a valid value', () {
               final literal = Literal(
                 ' -1',
-                IRI(XMLDataType.nonPositiveInteger.iri),
+                XSD.nonPositiveInteger,
               );
               expect(literal.lexicalForm, ' -1');
               expect(literal.getCanonicalLexicalForm(), '-1');
@@ -1208,7 +1206,7 @@ void main() {
             test('value with trailing space is a valid value', () {
               final literal = Literal(
                 '-1 ',
-                IRI(XMLDataType.nonPositiveInteger.iri),
+                XSD.nonPositiveInteger,
               );
               expect(literal.lexicalForm, '-1 ');
               expect(literal.getCanonicalLexicalForm(), '-1');
@@ -1220,14 +1218,14 @@ void main() {
           group('with invalid data', () {
             test('1 is not a valid value', () {
               expect(
-                () => Literal('1', IRI(XMLDataType.nonPositiveInteger.iri)),
+                () => Literal('1', XSD.nonPositiveInteger),
                 throwsRangeError,
               );
             });
 
             test('-1.5 is not a valid value', () {
               expect(
-                () => Literal('-1.5', IRI(XMLDataType.nonPositiveInteger.iri)),
+                () => Literal('-1.5', XSD.nonPositiveInteger),
                 throwsA(isA<InvalidLexicalFormException>()),
               );
             });
@@ -1236,26 +1234,26 @@ void main() {
       });
 
       test('with string datatype', () {
-        final literal = Literal('hello', IRI(XMLDataType.string.iri));
+        final literal = Literal('hello', XSD.string);
         expect(literal.lexicalForm, 'hello');
-        expect(literal.datatype, IRI(XMLDataType.string.iri));
+        expect(literal.datatype, XSD.string);
         expect(literal.language, isNull);
         expect(literal.value, 'hello');
       });
 
       test('with integer datatype', () {
-        final literal = Literal('42', IRI(XMLDataType.integer.iri));
+        final literal = Literal('42', XSD.integer);
         expect(literal.lexicalForm, '42');
-        expect(literal.datatype, IRI(XMLDataType.integer.iri));
+        expect(literal.datatype, XSD.integer);
         expect(literal.language, isNull);
         expect(literal.value, BigInt.from(42));
       });
 
       test('with double datatype', () {
-        final literal = Literal('3.14', IRI(XMLDataType.double.iri));
+        final literal = Literal('3.14', XSD.double);
         expect(literal.lexicalForm, '3.14');
         expect(literal.getCanonicalLexicalForm(), '3.14E0');
-        expect(literal.datatype, IRI(XMLDataType.double.iri));
+        expect(literal.datatype, XSD.double);
         expect(literal.language, isNull);
         expect(literal.value, 3.14);
       });
@@ -1264,10 +1262,10 @@ void main() {
         final now = DateTime.utc(2025, 03, 12, 23, 30, 38, 917614);
         final literal = Literal(
           now.toIso8601String(),
-          IRI(XMLDataType.dateTime.iri),
+          XSD.dateTime,
         );
         expect(literal.lexicalForm, now.toIso8601String());
-        expect(literal.datatype, IRI(XMLDataType.dateTime.iri));
+        expect(literal.datatype, XSD.dateTime);
         expect(literal.language, isNull);
         expect(
           (literal.value as DateTime).toIso8601String(),
@@ -1276,9 +1274,9 @@ void main() {
       });
 
       test('with boolean datatype', () {
-        final literal = Literal('true', IRI(XMLDataType.boolean.iri));
+        final literal = Literal('true', XSD.boolean);
         expect(literal.lexicalForm, 'true');
-        expect(literal.datatype, IRI(XMLDataType.boolean.iri));
+        expect(literal.datatype, XSD.boolean);
         expect(literal.language, isNull);
         expect(literal.value, true);
       });
@@ -1286,55 +1284,55 @@ void main() {
 
     group('Type checking', () {
       test('isIRI is false', () {
-        final literal = Literal('hello', IRI(XMLDataType.string.iri));
+        final literal = Literal('hello', XSD.string);
         expect(literal.isIRI, false);
       });
 
       test('isBlankNode is false', () {
-        final literal = Literal('hello', IRI(XMLDataType.string.iri));
+        final literal = Literal('hello', XSD.string);
         expect(literal.isBlankNode, false);
       });
 
       test('isLiteral is true', () {
-        final literal = Literal('hello', IRI(XMLDataType.string.iri));
+        final literal = Literal('hello', XSD.string);
         expect(literal.isLiteral, true);
       });
     });
 
     group('TermType', () {
       test('termType is literal', () {
-        final literal = Literal('hello', IRI(XMLDataType.string.iri));
+        final literal = Literal('hello', XSD.string);
         expect(literal.termType, TermType.literal);
       });
     });
 
     group('toString', () {
       test('string literal without language tag', () {
-        final literal = Literal('hello', IRI(XMLDataType.string.iri));
+        final literal = Literal('hello', XSD.string);
         expect(literal.toString(), '"hello"');
       });
 
       test('string literal with language tag', () {
-        final literal = Literal('bonjour', IRI('http://www.w3.org/1999/02/22-rdf-syntax-ns#langString'), 'fr');
+        final literal = Literal('bonjour', RDF.langString, 'fr');
         expect(literal.toString(), '"bonjour"@fr');
       });
 
       test('integer literal', () {
-        final literal = Literal('42', IRI(XMLDataType.integer.iri));
+        final literal = Literal('42', XSD.integer);
         expect(
           literal.toString(),
           '"42"^^<http://www.w3.org/2001/XMLSchema#integer>',
         );
       });
       test('boolean literal', () {
-        final literal = Literal('true', IRI(XMLDataType.boolean.iri));
+        final literal = Literal('true', XSD.boolean);
         expect(
           literal.toString(),
           '"true"^^<http://www.w3.org/2001/XMLSchema#boolean>',
         );
       });
       test('double literal', () {
-        final literal = Literal('3.14', IRI(XMLDataType.double.iri));
+        final literal = Literal('3.14', XSD.double);
         expect(
           literal.toString(),
           '"3.14"^^<http://www.w3.org/2001/XMLSchema#double>',
@@ -1344,7 +1342,7 @@ void main() {
         final now = DateTime.utc(2025, 03, 12, 23, 30, 38, 917614);
         final literal = Literal(
           now.toIso8601String(),
-          IRI(XMLDataType.dateTime.iri),
+          XSD.dateTime,
         );
         expect(
           literal.toString(),
@@ -1354,17 +1352,17 @@ void main() {
     });
     group('toLexicalForm', () {
       test('string', () {
-        final literal = Literal('hello', IRI(XMLDataType.string.iri));
+        final literal = Literal('hello', XSD.string);
         expect(literal.lexicalForm, 'hello');
         expect(literal.getCanonicalLexicalForm(), 'hello');
       });
       test('integer', () {
-        final literal = Literal('42', IRI(XMLDataType.integer.iri));
+        final literal = Literal('42', XSD.integer);
         expect(literal.lexicalForm, '42');
         expect(literal.getCanonicalLexicalForm(), '42');
       });
       test('double', () {
-        final literal = Literal('3.14', IRI(XMLDataType.double.iri));
+        final literal = Literal('3.14', XSD.double);
         expect(literal.lexicalForm, '3.14');
         expect(literal.getCanonicalLexicalForm(), '3.14E0');
       });
@@ -1372,13 +1370,13 @@ void main() {
         final now = DateTime.utc(2025, 03, 12, 23, 30, 38, 917614);
         final literal = Literal(
           now.toIso8601String(),
-          IRI(XMLDataType.dateTime.iri),
+          XSD.dateTime,
         );
         expect(literal.lexicalForm, now.toIso8601String());
         expect(literal.getCanonicalLexicalForm(), now.toIso8601String());
       });
       test('boolean', () {
-        final literal = Literal('true', IRI(XMLDataType.boolean.iri));
+        final literal = Literal('true', XSD.boolean);
         expect(literal.lexicalForm, 'true');
         expect(literal.getCanonicalLexicalForm(), 'true');
       });
@@ -1386,64 +1384,64 @@ void main() {
 
     group('Equality', () {
       test('equal literals', () {
-        final literal1 = Literal('hello', IRI(XMLDataType.string.iri));
-        final literal2 = Literal('hello', IRI(XMLDataType.string.iri));
+        final literal1 = Literal('hello', XSD.string);
+        final literal2 = Literal('hello', XSD.string);
         expect(literal1 == literal2, true);
       });
 
       test('different lexical forms', () {
-        final literal1 = Literal('hello', IRI(XMLDataType.string.iri));
-        final literal2 = Literal('world', IRI(XMLDataType.string.iri));
+        final literal1 = Literal('hello', XSD.string);
+        final literal2 = Literal('world', XSD.string);
         expect(literal1 == literal2, false);
       });
 
       test('different datatypes', () {
-        final literal1 = Literal('42', IRI(XMLDataType.integer.iri));
-        final literal2 = Literal('42', IRI(XMLDataType.string.iri));
+        final literal1 = Literal('42', XSD.integer);
+        final literal2 = Literal('42', XSD.string);
         expect(literal1 == literal2, false);
       });
 
       test('different language tags', () {
-        final literal1 = Literal('bonjour', IRI('http://www.w3.org/1999/02/22-rdf-syntax-ns#langString'), 'fr');
-        final literal2 = Literal('bonjour', IRI('http://www.w3.org/1999/02/22-rdf-syntax-ns#langString'), 'en');
+        final literal1 = Literal('bonjour', RDF.langString, 'fr');
+        final literal2 = Literal('bonjour', RDF.langString, 'en');
         expect(literal1 == literal2, false);
       });
 
       test('one with language tag, one without', () {
-        final literal1 = Literal('hello', IRI(XMLDataType.string.iri));
-        final literal2 = Literal('hello', IRI('http://www.w3.org/1999/02/22-rdf-syntax-ns#langString'), 'fr');
+        final literal1 = Literal('hello', XSD.string);
+        final literal2 = Literal('hello', RDF.langString, 'fr');
         expect(literal1 == literal2, false);
       });
     });
 
     group('HashCode', () {
       test('equal literals have same hashCode', () {
-        final literal1 = Literal('hello', IRI(XMLDataType.string.iri));
-        final literal2 = Literal('hello', IRI(XMLDataType.string.iri));
+        final literal1 = Literal('hello', XSD.string);
+        final literal2 = Literal('hello', XSD.string);
         expect(literal1.hashCode == literal2.hashCode, true);
       });
 
       test('different lexical forms have different hashCodes', () {
-        final literal1 = Literal('hello', IRI(XMLDataType.string.iri));
-        final literal2 = Literal('world', IRI(XMLDataType.string.iri));
+        final literal1 = Literal('hello', XSD.string);
+        final literal2 = Literal('world', XSD.string);
         expect(literal1.hashCode == literal2.hashCode, false);
       });
 
       test('different datatypes have different hashCodes', () {
-        final literal1 = Literal('42', IRI(XMLDataType.integer.iri));
-        final literal2 = Literal('42', IRI(XMLDataType.string.iri));
+        final literal1 = Literal('42', XSD.integer);
+        final literal2 = Literal('42', XSD.string);
         expect(literal1.hashCode == literal2.hashCode, false);
       });
 
       test('different language tags have different hashCodes', () {
-        final literal1 = Literal('bonjour', IRI('http://www.w3.org/1999/02/22-rdf-syntax-ns#langString'), 'fr');
-        final literal2 = Literal('bonjour', IRI('http://www.w3.org/1999/02/22-rdf-syntax-ns#langString'), 'en');
+        final literal1 = Literal('bonjour', RDF.langString, 'fr');
+        final literal2 = Literal('bonjour', RDF.langString, 'en');
         expect(literal1.hashCode == literal2.hashCode, false);
       });
 
       test('one with language tag, one without have different hashCodes', () {
-        final literal1 = Literal('hello', IRI(XMLDataType.string.iri));
-        final literal2 = Literal('hello', IRI('http://www.w3.org/1999/02/22-rdf-syntax-ns#langString'), 'fr');
+        final literal1 = Literal('hello', XSD.string);
+        final literal2 = Literal('hello', RDF.langString, 'fr');
         expect(literal1.hashCode == literal2.hashCode, false);
       });
     });

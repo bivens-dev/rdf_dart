@@ -90,7 +90,7 @@ void main() {
         graph.addAll([
           Triple(
             BlankNode('r1'),
-            IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies'),
+            IRITerm(RDF.reifies.toString()),
             TripleTerm(triple),
           ),
           Triple(
@@ -98,17 +98,18 @@ void main() {
             IRITerm('http://example.org/q'),
             Literal(
               'some value',
-              IRI('http://www.w3.org/2001/XMLSchema#string'),
+              XSD.string,
             ),
           ),
         ]);
         final classicGraph = Graph.classicize(graph);
 
-        // Find the triple in the classicgraph where the predicate is http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies
+        // Find the triple in the classicgraph where the predicate 
+        // is http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies
         final reifierTriple = classicGraph.triples.firstWhere(
           (triple) =>
               triple.predicate ==
-              IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies'),
+              IRITerm(RDF.reifies.toString()),
         );
         final generatedBlankNode = reifierTriple.object as BlankNode;
 
@@ -119,7 +120,7 @@ void main() {
               IRITerm('http://example.org/q'),
               Literal(
                 'some value',
-                IRI('http://www.w3.org/2001/XMLSchema#string'),
+                XSD.string,
               ),
             ),
           ),
@@ -130,7 +131,7 @@ void main() {
           classicGraph.triples.contains(
             Triple(
               BlankNode('r1'),
-              IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies'),
+              IRITerm(RDF.reifies.toString()),
               generatedBlankNode,
             ),
           ),
@@ -141,8 +142,8 @@ void main() {
           classicGraph.triples.contains(
             Triple(
               generatedBlankNode,
-              IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#rdfType'),
-              IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#rdfTripleTerm'),
+              IRITerm(RDF.type.toString()),
+              IRITerm(RDF.tripleTerm.toString()),
             ),
           ),
           isTrue,
@@ -152,7 +153,7 @@ void main() {
           classicGraph.triples.contains(
             Triple(
               generatedBlankNode,
-              IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#ttSubject'),
+              IRITerm(RDF.ttSubject.toString()),
               subject,
             ),
           ),
@@ -163,7 +164,7 @@ void main() {
           classicGraph.triples.contains(
             Triple(
               generatedBlankNode,
-              IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#ttPredicate'),
+              IRITerm(RDF.ttPredicate.toString()),
               predicate,
             ),
           ),
@@ -174,7 +175,7 @@ void main() {
           classicGraph.triples.contains(
             Triple(
               generatedBlankNode,
-              IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#ttObject'),
+              IRITerm(RDF.ttObject.toString()),
               object,
             ),
           ),
@@ -192,7 +193,7 @@ void main() {
         graph.addAll([
           Triple(
             BlankNode('r1'),
-            IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies'),
+            IRITerm(RDF.reifies.toString()),
             TripleTerm(triple),
           ),
           Triple(
@@ -200,7 +201,7 @@ void main() {
             IRITerm('http://example.org/q'),
             Literal(
               'some value',
-              IRI('http://www.w3.org/2001/XMLSchema#string'),
+              XSD.string,
             ),
           ),
         ]);

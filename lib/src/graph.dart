@@ -35,10 +35,10 @@ class Graph {
       // 4.1 If s is a blank node, p is rdf:type and o is rdf:TripleTerm, then:
       if (triple.subject is BlankNode &&
           triple.predicate ==
-              IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#rdfType') &&
+              IRITerm(RDF.type.toString()) &&
           triple.object ==
               IRITerm(
-                'http://www.w3.org/1999/02/22-rdf-syntax-ns#rdfTripleTerm',
+                RDF.tripleTerm.toString(),
               )) {
         // 4.1.1 If inputKind is "full" then exit with an error.
         if (inputKind == 'full') {
@@ -145,28 +145,28 @@ class Graph {
       g.add(
         Triple(
           b,
-          IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#rdfType'),
-          IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#rdfTripleTerm'),
+          IRITerm(RDF.type.toString()),
+          IRITerm(RDF.tripleTerm.toString()),
         ),
       );
       g.add(
         Triple(
           b,
-          IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#ttSubject'),
+          IRITerm(RDF.ttSubject.toString()),
           s,
         ),
       );
       g.add(
         Triple(
           b,
-          IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#ttPredicate'),
+          IRITerm(RDF.ttPredicate.toString()),
           p,
         ),
       );
       g.add(
         Triple(
           b,
-          IRITerm('http://www.w3.org/1999/02/22-rdf-syntax-ns#ttObject'),
+          IRITerm(RDF.ttObject.toString()),
           o,
         ),
       );

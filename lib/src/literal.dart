@@ -1,5 +1,6 @@
 import 'package:intl/locale.dart';
 import 'package:meta/meta.dart';
+import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/data_types.dart';
 import 'package:rdf_dart/src/exceptions.dart';
 import 'package:rdf_dart/src/iri.dart';
@@ -20,16 +21,16 @@ import 'package:rdf_dart/src/term_type.dart';
 ///
 /// ```dart
 /// // A string literal
-/// final stringLiteral = Literal('Hello, world!', IRI(XMLDataType.string.iri));
+/// final stringLiteral = Literal('Hello, world!', XSD.string);
 ///
 /// // An integer literal (original lexical form "042" is preserved for equality)
-/// final integerLiteral = Literal('042', IRI(XMLDataType.integer.iri));
+/// final integerLiteral = Literal('042', XSD.integer);
 /// print(integerLiteral.lexicalForm); // Output: 042
 /// print(integerLiteral.value); // Output: 42 (as BigInt)
 /// print(integerLiteral.getCanonicalLexicalForm()); // Output: 42
 ///
 /// //A string literal with language tag
-/// final frenchLiteral = Literal('Bonjour le monde!', IRI(XMLDataType.string.iri), 'fr');
+/// final frenchLiteral = Literal('Bonjour le monde!', XSD.string, 'fr');
 /// ```
 @immutable
 class Literal extends RdfTerm {
@@ -74,10 +75,10 @@ class Literal extends RdfTerm {
   ///
   /// Example:
   /// ```dart
-  /// final myLiteral = Literal('example', IRI(XMLDataType.string.iri));
-  /// final langLiteral = Literal('chat', IRI('http://www.w3.org/1999/02/22-rdf-syntax-ns#langString'), 'fr');
+  /// final myLiteral = Literal('example', XSD.string);
+  /// final langLiteral = Literal('chat', RDF.langString, 'fr');
   /// try {
-  ///   final invalidLiteral = Literal('abc', IRI(XMLDataType.integer.iri));
+  ///   final invalidLiteral = Literal('abc', XSD.integer);
   /// } on InvalidLexicalFormException catch (e) {
   ///   print('Caught expected error: $e');
   /// }
@@ -128,9 +129,7 @@ class Literal extends RdfTerm {
   /// Validates constraints related to language tags and the rdf:langString datatype.
   /// Called after fields are initialized.
   static void _validateLangStringConstraints(Locale? language, IRI datatype) {
-    final langStringDataType = IRI(
-      'http://www.w3.org/1999/02/22-rdf-syntax-ns#langString',
-    );
+    final langStringDataType = RDF.langString;
 
     if (datatype == langStringDataType) {
       if (language == null) {
@@ -172,7 +171,7 @@ class Literal extends RdfTerm {
     if (language != null) {
       // Language tag implies rdf:langString, use original form + tag
       return '"$escapedLexical"@${language!.toLanguageTag()}';
-    } else if (datatype == IRI('http://www.w3.org/2001/XMLSchema#string')) {
+    } else if (datatype == XSD.string) {
       // Simple string, just the original form in quotes
       return '"$escapedLexical"';
     } else {

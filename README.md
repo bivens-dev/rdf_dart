@@ -18,7 +18,7 @@ RDF.dart is a Dart library designed to make it easy to work with [RDF (Resource 
     * `Graph`: Represents a collection of RDF triples.
     * `Dataset`: Represents a collection consisting of one default graph and zero or more named graphs.
 * **Datatype Handling:**
-    * Built-in support and validation for common XSD datatypes (e.g., `xsd:string`, `xsd:integer`, `xsd:double`, `xsd:dateTime`, `xsd:boolean`, `xsd:date`, `xsd:duration`, and more). See `XMLDataType` enum.
+    * Built-in support and validation for common XSD datatypes (e.g., `xsd:string`, `xsd:integer`, `xsd:double`, `xsd:dateTime`, `xsd:boolean`, `xsd:date`, `xsd:duration`, and more). See `XSD` class.
     * Support for `rdf:langString`.
     * *(Planned)* `DatatypeRegistry` for managing custom datatypes.
 * **IRI Validation & Parsing:**
@@ -66,7 +66,7 @@ void main() {
   final object = IRITerm('http://example.org/object');
 
   // Create a string literal
-  final stringLiteral = Literal('Hello, world!', IRI('http://www.w3.org/2001/XMLSchema#string'));
+  final stringLiteral = Literal('Hello, world!', XSD.string);
   print(stringLiteral); // Output: "Hello, world!"
 
   // Create a triple

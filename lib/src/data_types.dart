@@ -93,92 +93,92 @@ class DatatypeRegistry {
   DatatypeRegistry._internal() {
     // Register default datatypes
     registerDatatype(
-      IRI(XMLDataType.string.iri),
+      XSD.string,
       String,
       (lexicalForm) => processWhiteSpace(lexicalForm, Whitespace.preserve),
       (value) => processWhiteSpace(value.toString(), Whitespace.preserve),
     );
     registerDatatype(
-      IRI(XMLDataType.anyURI.iri),
+      XSD.anyURI,
       Uri,
       (lexicalForm) =>
           Uri.parse(processWhiteSpace(lexicalForm, Whitespace.collapse)),
       (value) => processWhiteSpace(value.toString(), Whitespace.collapse),
     );
     registerDatatype(
-      IRI(XMLDataType.normalizedString.iri),
+     XSD.normalizedString,
       String,
       (lexicalForm) => processWhiteSpace(lexicalForm, Whitespace.replace),
       (value) => processWhiteSpace(value.toString(), Whitespace.replace),
     );
     registerDatatype(
-      IRI(XMLDataType.token.iri),
+      XSD.token,
       String,
       (lexicalForm) => processWhiteSpace(lexicalForm, Whitespace.collapse),
       (value) => processWhiteSpace(value.toString(), Whitespace.collapse),
     );
     registerDatatype(
-      IRI('http://www.w3.org/1999/02/22-rdf-syntax-ns#langString'),
+      RDF.langString,
       String,
       (lexicalForm) => processWhiteSpace(lexicalForm, Whitespace.preserve),
       (value) => processWhiteSpace(value.toString(), Whitespace.preserve),
     );
     registerDatatype(
-      IRI(XMLDataType.nonNegativeInteger.iri),
+      XSD.nonNegativeInteger,
       int,
       nonNegativeInteger.encoder.convert,
       nonNegativeInteger.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRI(XMLDataType.duration.iri),
+      XSD.duration,
       XSDDuration,
       durationCodec.encoder.convert,
       durationCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRI(XMLDataType.gMonthDay.iri),
+      XSD.gMonthDay,
       XsdGMonthDay,
       xsdGMonthDayCodec.encoder.convert,
       xsdGMonthDayCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRI(XMLDataType.date.iri),
+      XSD.date,
       XsdDate,
       xsdDateCodec.encoder.convert,
       xsdDateCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRI(XMLDataType.negativeInteger.iri),
+      XSD.negativeInteger,
       int,
       negativeInteger.encoder.convert,
       negativeInteger.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRI(XMLDataType.nonPositiveInteger.iri),
+      XSD.nonPositiveInteger,
       int,
       nonPositiveInteger.encoder.convert,
       nonPositiveInteger.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRI(XMLDataType.positiveInteger.iri),
+      XSD.positiveInteger,
       int,
       positiveInteger.encoder.convert,
       positiveInteger.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRI(XMLDataType.integer.iri),
+      XSD.integer,
       BigInt,
       bigIntCodec.encoder.convert,
       bigIntCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRI(XMLDataType.decimal.iri),
+      XSD.decimal,
       Decimal,
       decimalCodec.encoder.convert,
       decimalCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRI(XMLDataType.double.iri),
+      XSD.double,
       double,
       doubleCodec.encoder.convert,
       doubleCodec.decoder.convert as LiteralFormatter,
@@ -187,85 +187,85 @@ class DatatypeRegistry {
     // to the 64 bit of a double but its logic to and from a Dart
     // native [double] is otherwise the same so just reuse the double codec
     registerDatatype(
-      IRI(XMLDataType.float.iri),
+      XSD.float,
       double,
       doubleCodec.encoder.convert,
       doubleCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRI(XMLDataType.dateTime.iri),
+      XSD.dateTime,
       DateTime,
       DateTime.parse,
       (value) => (value as DateTime).toUtc().toIso8601String(),
     );
     registerDatatype(
-      IRI(XMLDataType.boolean.iri),
+      XSD.boolean,
       bool,
       booleanCodec.encoder.convert,
       booleanCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRI(XMLDataType.base64Binary.iri),
+      XSD.base64Binary,
       Uint8List,
       base64.decode,
       base64.encode as LiteralFormatter,
     );
     registerDatatype(
-      IRI(XMLDataType.hexBinary.iri),
+      XSD.hexBinary,
       Uint8List,
       hex.decode,
       hex.encode as LiteralFormatter,
     );
     registerDatatype(
-      IRI(XMLDataType.unsignedByte.iri),
+      XSD.unsignedByte,
       int,
       unsignedByte.encoder.convert,
       unsignedByte.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRI(XMLDataType.byte.iri),
+      XSD.byte,
       int,
       byte.encoder.convert,
       byte.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRI(XMLDataType.unsignedShort.iri),
+      XSD.unsignedShort,
       int,
       unsignedShort.encoder.convert,
       unsignedShort.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRI(XMLDataType.short.iri),
+      XSD.short,
       int,
       shortCodec.encoder.convert,
       shortCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRI(XMLDataType.int.iri),
+      XSD.int,
       int,
       intCodec.encoder.convert,
       intCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRI(XMLDataType.unsignedInt.iri),
+      XSD.unsignedInt,
       int,
       unsignedInt.encoder.convert,
       unsignedInt.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRI(XMLDataType.unsignedLong.iri),
+      XSD.unsignedLong,
       BigInt,
       unsignedLong.encoder.convert,
       unsignedLong.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRI(XMLDataType.long.iri),
+      XSD.long,
       BigInt,
       longCodec.encoder.convert,
       longCodec.decoder.convert as LiteralFormatter,
     );
     registerDatatype(
-      IRI(XMLDataType.language.iri),
+      XSD.language,
       Locale,
       Locale.parse,
       (value) => value.toString(),
