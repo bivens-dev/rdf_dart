@@ -1,6 +1,7 @@
 import 'package:intl/locale.dart';
 import 'package:meta/meta.dart';
 import 'package:rdf_dart/src/data_types.dart';
+import 'package:rdf_dart/src/exceptions.dart';
 import 'package:rdf_dart/src/iri.dart';
 import 'package:rdf_dart/src/rdf_term.dart';
 import 'package:rdf_dart/src/term_type.dart';
@@ -90,11 +91,16 @@ class Literal extends RdfTerm {
     IRI datatype,
     String? languageTag,
   ) {
-    final info = DatatypeRegistry().getDatatypeInfo(
-      datatype,
-    ); // Throws if not found
-    final parser = info.parser;
-    return parser(lexicalForm);
+    try {
+      // getDatatypeInfo now throws DatatypeNotFoundException
+      final info = DatatypeRegistry().getDatatypeInfo(datatype);
+      final parser = info.parser;
+      // Wrap potential FormatException from parser
+      return parser(lexicalForm);
+    } on FormatException catch (e) {
+      // Wrap FormatException in our custom exception
+      throw InvalidLexicalFormException(lexicalForm, datatype.toString(), cause: e);
+    }
   }
 
   /// Internal helper to parse the language tag string into a Locale.
