@@ -23,9 +23,9 @@ import 'package:rdf_dart/src/subject_type.dart';
 ///
 /// ```dart
 /// // Use the specific Term classes for clarity
-/// final subject = IRITerm('http://example.com/person/john');
-/// final predicate = IRITerm('http://xmlns.com/foaf/0.1/knows');
-/// final object = IRITerm('http://example.com/person/jane');
+/// final subject = IRITerm(IRI('http://example.com/person/john'));
+/// final predicate = IRITerm(IRI('http://xmlns.com/foaf/0.1/knows'));
+/// final object = IRITerm(IRI('http://example.com/person/jane'));
 /// final triple = Triple(subject, predicate, object);
 /// print(triple); // Output: http://example.com/person/john http://xmlns.com/foaf/0.1/knows http://example.com/person/jane .
 /// ```
@@ -59,13 +59,13 @@ class Triple {
   ///
   /// Example:
   /// ```dart
-  /// final subject = IRITerm('http://example.com/person/john');
-  /// final predicate = IRITerm('http://xmlns.com/foaf/0.1/knows');
-  /// final object = IRITerm('http://example.com/person/jane');
+  /// final subject = IRITerm(IRI('http://example.com/person/john'));
+  /// final predicate = IRITerm(IRI('http://xmlns.com/foaf/0.1/knows'));
+  /// final object = IRITerm(IRI('http://example.com/person/jane'));
   /// final triple = Triple(subject, predicate, object);
   ///
   /// final subjectB = BlankNode();
-  /// final predicateB = IRITerm('http://xmlns.com/foaf/0.1/name');
+  /// final predicateB = IRITerm(IRI('http://xmlns.com/foaf/0.1/name'));
   /// final objectB = Literal('Anonymous', XSD.string);
   /// final tripleB = Triple(subjectB, predicateB, objectB);
   /// ```
