@@ -64,7 +64,7 @@
 </li>
 <li><strong>Datatype Handling:</strong>
 <ul>
-<li>Built-in support and validation for common XSD datatypes (e.g., <code>xsd:string</code>, <code>xsd:integer</code>, <code>xsd:double</code>, <code>xsd:dateTime</code>, <code>xsd:boolean</code>, <code>xsd:date</code>, <code>xsd:duration</code>, and more). See <code>XMLDataType</code> enum.</li>
+<li>Built-in support and validation for common XSD datatypes (e.g., <code>xsd:string</code>, <code>xsd:integer</code>, <code>xsd:double</code>, <code>xsd:dateTime</code>, <code>xsd:boolean</code>, <code>xsd:date</code>, <code>xsd:duration</code>, and more). See <code>XSD</code> class.</li>
 <li>Support for <code>rdf:langString</code>.</li>
 <li><em>(Planned)</em> <code>DatatypeRegistry</code> for managing custom datatypes.</li>
 </ul>
@@ -112,7 +112,7 @@ void main() {
   final object = IRITerm('http://example.org/object');
 
   // Create a string literal
-  final stringLiteral = Literal('Hello, world!', IRI('http://www.w3.org/2001/XMLSchema#string'));
+  final stringLiteral = Literal('Hello, world!', XSD.string);
   print(stringLiteral); // Output: "Hello, world!"
 
   // Create a triple

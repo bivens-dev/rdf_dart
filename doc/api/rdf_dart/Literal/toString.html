@@ -93,7 +93,7 @@ String toString() {
   if (language != null) {
     &#47;&#47; Language tag implies rdf:langString, use original form + tag
     return &#39;&quot;$escapedLexical&quot;@${language!.toLanguageTag()}&#39;;
-  } else if (datatype == IRI(&#39;http:&#47;&#47;www.w3.org&#47;2001&#47;XMLSchema#string&#39;)) {
+  } else if (datatype == XSD.string) {
     &#47;&#47; Simple string, just the original form in quotes
     return &#39;&quot;$escapedLexical&quot;&#39;;
   } else {

@@ -85,10 +85,10 @@
     &#47;&#47; 4.1 If s is a blank node, p is rdf:type and o is rdf:TripleTerm, then:
     if (triple.subject is BlankNode &amp;&amp;
         triple.predicate ==
-            IRITerm(&#39;http:&#47;&#47;www.w3.org&#47;1999&#47;02&#47;22-rdf-syntax-ns#rdfType&#39;) &amp;&amp;
+            IRITerm(RDF.type.toString()) &amp;&amp;
         triple.object ==
             IRITerm(
-              &#39;http:&#47;&#47;www.w3.org&#47;1999&#47;02&#47;22-rdf-syntax-ns#rdfTripleTerm&#39;,
+              RDF.tripleTerm.toString(),
             )) {
       &#47;&#47; 4.1.1 If inputKind is &quot;full&quot; then exit with an error.
       if (inputKind == &#39;full&#39;) {

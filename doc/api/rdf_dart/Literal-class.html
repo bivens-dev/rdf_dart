@@ -63,16 +63,16 @@ The <a href="../rdf_dart/Literal/datatype.html">datatype</a> specifies the type 
 an optional language tag for text literals.</p>
 <p>Example:</p>
 <pre class="language-dart"><code class="language-dart">// A string literal
-final stringLiteral = Literal('Hello, world!', IRI(XMLDataType.string.iri));
+final stringLiteral = Literal('Hello, world!', XSD.string);
 
 // An integer literal (original lexical form "042" is preserved for equality)
-final integerLiteral = Literal('042', IRI(XMLDataType.integer.iri));
+final integerLiteral = Literal('042', XSD.integer);
 print(integerLiteral.lexicalForm); // Output: 042
 print(integerLiteral.value); // Output: 42 (as BigInt)
 print(integerLiteral.getCanonicalLexicalForm()); // Output: 42
 
 //A string literal with language tag
-final frenchLiteral = Literal('Bonjour le monde!', IRI(XMLDataType.string.iri), 'fr');
+final frenchLiteral = Literal('Bonjour le monde!', XSD.string, 'fr');
 </code></pre>
 </section>
 

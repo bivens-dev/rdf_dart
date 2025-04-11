@@ -111,7 +111,7 @@ void main() {
   print(blankNode);
 
   // Create a Literal
-  final literal = Literal("Hello", IRI('http://www.w3.org/2001/XMLSchema#string'));
+  final literal = Literal("Hello", XSD.string);
   print(literal);
 
   // Create a Triple
@@ -173,6 +173,14 @@ void main() {
   Represents a literal value in an RDF graph.
 </dd>
 
+          <dt id="RDF">
+  <span class="name "><a href="../rdf_dart/RDF-class.html">RDF</a></span> 
+
+</dt>
+<dd>
+  Provides constants for the RDF vocabulary namespace (rdf:).
+</dd>
+
           <dt id="RdfTerm">
   <span class="name "><a href="../rdf_dart/RdfTerm-class.html">RdfTerm</a></span> 
 
@@ -206,6 +214,14 @@ RDF <a href="../rdf_dart/Triple-class.html">Triple</a>.
   Represents an RDF Triple used as an RDF Term (RDF 1.2).
 </dd>
 
+          <dt id="XSD">
+  <span class="name "><a href="../rdf_dart/XSD-class.html">XSD</a></span> 
+
+</dt>
+<dd>
+  Provides constants for XML Schema Definition (XSD) datatype IRIs.
+</dd>
+
           <dt id="XSDDuration">
   <span class="name "><a href="../rdf_dart/XSDDuration-class.html">XSDDuration</a></span> 
 
@@ -220,39 +236,12 @@ RDF <a href="../rdf_dart/Triple-class.html">Triple</a>.
     <section class="summary offset-anchor" id="enums">
       <h2>Enums</h2>
       <dl>
-          <dt id="CardinalityFacet">
-  <span class="name "><a href="../rdf_dart/CardinalityFacet.html">CardinalityFacet</a></span> 
-
-</dt>
-<dd>
-  Every value space has a specific number of members. This number can be
-characterized as finite or infinite. (Currently there are no datatypes
-with infinite value spaces larger than countable.)
-</dd>
-
-          <dt id="OrderedFacet">
-  <span class="name "><a href="../rdf_dart/OrderedFacet.html">OrderedFacet</a></span> 
-
-</dt>
-<dd>
-  For some datatypes, this specifies an order relation for their value spaces
-the ordered facet reflects this.
-</dd>
-
           <dt id="TermType">
   <span class="name "><a href="../rdf_dart/TermType.html">TermType</a></span> 
 
 </dt>
 <dd>
   Represents the type of an RDF term according to RDF 1.2.
-</dd>
-
-          <dt id="XMLDataType">
-  <span class="name "><a href="../rdf_dart/XMLDataType.html">XMLDataType</a></span> 
-
-</dt>
-<dd>
-  This represents all of the supported XML data types as specified in RDF 1.2
 </dd>
 
       </dl>
