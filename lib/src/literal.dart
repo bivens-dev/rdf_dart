@@ -181,9 +181,14 @@ class Literal extends RdfTerm {
   /// This uses the formatter associated with the datatype to generate a
   /// potentially normalized string representation from the parsed [value].
   String getCanonicalLexicalForm() {
-    // TODO: Handle potential errors during formatting?
-    final formatter = DatatypeRegistry().getDatatypeInfo(datatype).formatter;
-    return formatter(value);
+    try {
+      final formatter = DatatypeRegistry().getDatatypeInfo(datatype).formatter;
+      return formatter(value);
+    } on Exception catch (e) {
+      throw LiteralConstraintException(
+        'Unable to format literal value $value with datatype $datatype.\n$e',
+      );
+    }
   }
 
   /// Computes the hash code based on term equality rules.
