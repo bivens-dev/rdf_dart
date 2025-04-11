@@ -63,9 +63,9 @@
       
 <section class="desc markdown">
   <p>The language tag of the literal (optional).</p>
-<p>This is a string representing the language of the literal's text, if
-applicable. For example, 'en' for English or 'fr' for French. If not
-specified, it's <code>null</code>.</p>
+<p>This is a <a href="https://pub.dev/documentation/intl/0.20.2/locale/Locale-class.html">Locale</a> object representing the language of the literal's text,
+if applicable (typically for literals with datatype <code>rdf:langString</code>).
+If not specified, it's <code>null</code>. Comparison is case-insensitive.</p>
 </section>
 
       

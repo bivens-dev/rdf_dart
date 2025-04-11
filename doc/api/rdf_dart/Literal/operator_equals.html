@@ -102,12 +102,13 @@ the <a href="../../rdf_dart/Literal/hashCode.html">hashCode</a> method as well t
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-bool operator ==(Object other) =&gt;
-    other is Literal &amp;&amp;
-    termType == other.termType &amp;&amp;
-    lexicalForm == other.lexicalForm &amp;&amp;
-    datatype == other.datatype &amp;&amp;
-    language == other.language;</code></pre>
+bool operator ==(Object other) {
+  if (identical(this, other)) return true;
+  return other is Literal &amp;&amp;
+      lexicalForm == other.lexicalForm &amp;&amp; &#47;&#47; Case-sensitive
+      datatype == other.datatype &amp;&amp; &#47;&#47; IRI equality
+      language == other.language; &#47;&#47; Locale equality (handles null &amp; case)
+}</code></pre>
 </section>
 
 

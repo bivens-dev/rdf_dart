@@ -11,6 +11,9 @@
 /// *   **IRIs:**: [IRI]
 /// *   **Graphs:** [Graph]
 /// *   **Datasets:** [Dataset]
+/// *   **Exceptions:** [RDFException], [InvalidTermException], [DatatypeNotFoundException],
+///     [InvalidLexicalFormException], [InvalidLanguageTagException],
+///     [LiteralConstraintException]
 ///
 /// **Terms**
 ///
@@ -78,6 +81,7 @@ export 'src/blank_node.dart';
 export 'src/data_type_facets.dart';
 export 'src/data_types/duration.dart' show XSDDuration;
 export 'src/dataset.dart';
+export 'src/exceptions.dart';
 export 'src/graph.dart';
 export 'src/iri.dart';
 export 'src/iri_term.dart';
