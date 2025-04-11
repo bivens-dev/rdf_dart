@@ -34,12 +34,8 @@ class Graph {
     for (final triple in fullGraph.triples) {
       // 4.1 If s is a blank node, p is rdf:type and o is rdf:TripleTerm, then:
       if (triple.subject is BlankNode &&
-          triple.predicate ==
-              IRITerm(RDF.type.toString()) &&
-          triple.object ==
-              IRITerm(
-                RDF.tripleTerm.toString(),
-              )) {
+          triple.predicate == IRITerm(RDF.type) &&
+          triple.object == IRITerm(RDF.tripleTerm)) {
         // 4.1.1 If inputKind is "full" then exit with an error.
         if (inputKind == 'full') {
           throw Exception('Input graph is not classicizable');
@@ -142,34 +138,10 @@ class Graph {
       // 4.5 Add the triples (b, rdf:type, rdf:TripleTerm),
       // (b, rdf:ttSubject, s), (b, rdf:ttPredicate, p),
       // and (b, rdf:ttObject, o) in G.
-      g.add(
-        Triple(
-          b,
-          IRITerm(RDF.type.toString()),
-          IRITerm(RDF.tripleTerm.toString()),
-        ),
-      );
-      g.add(
-        Triple(
-          b,
-          IRITerm(RDF.ttSubject.toString()),
-          s,
-        ),
-      );
-      g.add(
-        Triple(
-          b,
-          IRITerm(RDF.ttPredicate.toString()),
-          p,
-        ),
-      );
-      g.add(
-        Triple(
-          b,
-          IRITerm(RDF.ttObject.toString()),
-          o,
-        ),
-      );
+      g.add(Triple(b, IRITerm(RDF.type), IRITerm(RDF.tripleTerm)));
+      g.add(Triple(b, IRITerm(RDF.ttSubject), s));
+      g.add(Triple(b, IRITerm(RDF.ttPredicate), p));
+      g.add(Triple(b, IRITerm(RDF.ttObject), o));
     }
 
     // 5. Return b, Mₒ and G.

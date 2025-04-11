@@ -11,9 +11,9 @@ void main() {
 
     setUp(() {
       graph = Graph();
-      subject = IRITerm('http://example.com/subject');
-      predicate = IRITerm('http://example.com/predicate');
-      object = IRITerm('http://example.com/object');
+      subject = IRITerm(IRI('http://example.com/subject'));
+      predicate = IRITerm(IRI('http://example.com/predicate'));
+      object = IRITerm(IRI('http://example.com/object'));
       triple = Triple(subject, predicate, object);
     });
 
@@ -35,7 +35,7 @@ void main() {
         final triple2 = Triple(
           subject,
           predicate,
-          IRITerm('http://example.com/object2'),
+          IRITerm(IRI('http://example.com/object2')),
         );
         graph.addAll([triple, triple2]);
         expect(graph.triples, containsAll([triple, triple2]));
@@ -48,7 +48,7 @@ void main() {
           final triple2 = Triple(
             subject,
             predicate,
-            IRITerm('http://example.com/object2'),
+            IRITerm(IRI('http://example.com/object2')),
           );
           graph.addAll([triple, triple, triple2, triple2]);
           expect(graph.triples.length, 2);
@@ -90,12 +90,12 @@ void main() {
         graph.addAll([
           Triple(
             BlankNode('r1'),
-            IRITerm(RDF.reifies.toString()),
+            IRITerm(RDF.reifies),
             TripleTerm(triple),
           ),
           Triple(
             BlankNode('r1'),
-            IRITerm('http://example.org/q'),
+            IRITerm(IRI('http://example.org/q')),
             Literal(
               'some value',
               XSD.string,
@@ -109,7 +109,7 @@ void main() {
         final reifierTriple = classicGraph.triples.firstWhere(
           (triple) =>
               triple.predicate ==
-              IRITerm(RDF.reifies.toString()),
+              IRITerm(RDF.reifies),
         );
         final generatedBlankNode = reifierTriple.object as BlankNode;
 
@@ -117,7 +117,7 @@ void main() {
           classicGraph.triples.contains(
             Triple(
               BlankNode('r1'),
-              IRITerm('http://example.org/q'),
+              IRITerm(IRI('http://example.org/q')),
               Literal(
                 'some value',
                 XSD.string,
@@ -131,7 +131,7 @@ void main() {
           classicGraph.triples.contains(
             Triple(
               BlankNode('r1'),
-              IRITerm(RDF.reifies.toString()),
+              IRITerm(RDF.reifies),
               generatedBlankNode,
             ),
           ),
@@ -142,8 +142,8 @@ void main() {
           classicGraph.triples.contains(
             Triple(
               generatedBlankNode,
-              IRITerm(RDF.type.toString()),
-              IRITerm(RDF.tripleTerm.toString()),
+              IRITerm(RDF.type),
+              IRITerm(RDF.tripleTerm),
             ),
           ),
           isTrue,
@@ -153,7 +153,7 @@ void main() {
           classicGraph.triples.contains(
             Triple(
               generatedBlankNode,
-              IRITerm(RDF.ttSubject.toString()),
+              IRITerm(RDF.ttSubject),
               subject,
             ),
           ),
@@ -164,7 +164,7 @@ void main() {
           classicGraph.triples.contains(
             Triple(
               generatedBlankNode,
-              IRITerm(RDF.ttPredicate.toString()),
+              IRITerm(RDF.ttPredicate),
               predicate,
             ),
           ),
@@ -175,7 +175,7 @@ void main() {
           classicGraph.triples.contains(
             Triple(
               generatedBlankNode,
-              IRITerm(RDF.ttObject.toString()),
+              IRITerm(RDF.ttObject),
               object,
             ),
           ),
@@ -193,12 +193,12 @@ void main() {
         graph.addAll([
           Triple(
             BlankNode('r1'),
-            IRITerm(RDF.reifies.toString()),
+            IRITerm(RDF.reifies),
             TripleTerm(triple),
           ),
           Triple(
             BlankNode('r1'),
-            IRITerm('http://example.org/q'),
+            IRITerm(IRI('http://example.org/q')),
             Literal(
               'some value',
               XSD.string,

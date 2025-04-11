@@ -38,7 +38,7 @@ class IRITerm extends RdfTerm implements SubjectTerm {
   ///   print(e); // Output: FormatException
   /// }
   /// ```
-  IRITerm(String iriString) : value = IRI(iriString);
+  IRITerm(this.value);
 
   @override
   bool get isIRI => true;

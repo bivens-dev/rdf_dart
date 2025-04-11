@@ -6,10 +6,10 @@ void main() {
   print('--- Basic RDF Term Creation ---');
 
   // Create an IRI Term (used for subjects, predicates, objects, graph names)
-  final iriSubj = IRITerm('http://example.com/resource');
-  final iriPred = IRITerm('http://xmlns.com/foaf/0.1/name');
-  final iriObj = IRITerm('http://example.com/another_resource');
-  final graphName = IRITerm('http://example.com/graph1');
+  final iriSubj = IRITerm(IRI('http://example.com/resource'));
+  final iriPred = IRITerm(IRI('http://xmlns.com/foaf/0.1/name'));
+  final iriObj = IRITerm(IRI('http://example.com/another_resource'));
+  final graphName = IRITerm(IRI('http://example.com/graph1'));
 
   print('IRI Term (Subject): $iriSubj');
   print('IRI Term (Predicate): $iriPred');
@@ -53,7 +53,7 @@ void main() {
 
   // Create standard Triples
   final triple1 = Triple(iriSubj, iriPred, literalSimple); // Subject knows Name "Alice"
-  final triple2 = Triple(iriSubj, IRITerm('http://xmlns.com/foaf/0.1/knows'), blankNode2); // Subject knows Someone (blank node)
+  final triple2 = Triple(iriSubj, IRITerm(IRI('http://xmlns.com/foaf/0.1/knows')), blankNode2); // Subject knows Someone (blank node)
   final triple3 = Triple(blankNode2, iriPred, Literal('Bob', XSD.string)); // That Someone's Name is "Bob"
 
   print('Triple 1: $triple1');
@@ -65,7 +65,7 @@ void main() {
   // Create an inner triple that will be used as an object
   final innerTriple = Triple(
     iriSubj, // Alice's resource
-    IRITerm('http://example.com/confidence'),
+    IRITerm(IRI('http://example.com/confidence')),
     literalInt, // Confidence "30"^^xsd:integer
   );
   print('Inner Triple structure: $innerTriple');
@@ -78,8 +78,8 @@ void main() {
   // This triple makes a statement ABOUT the inner triple
   final outerTriple = Triple(
     blankNode1, // Some context
-    IRITerm('http://example.com/assertedBy'), // assertedBy relation
-    IRITerm('http://example.com/source/sensorA'), // Asserted by Sensor A
+    IRITerm(IRI('http://example.com/assertedBy')), // assertedBy relation
+    IRITerm(IRI('http://example.com/source/sensorA')), // Asserted by Sensor A
     // The object is the statement about Alice's confidence
     // NOTE: For a triple to *contain* a triple term, its object needs to be TripleTerm
     // We'll create a *new* triple *about* the tripleTermObj
@@ -89,8 +89,8 @@ void main() {
   // Let's make a statement *about* the innerTriple's assertion
   // e.g., "Sensor A reported that <resource> has confidence 30"
   final tripleAboutTriple = Triple(
-    IRITerm('http://example.com/source/sensorA'), // Sensor A
-    IRITerm('http://example.com/reported'), // reported
+    IRITerm(IRI('http://example.com/source/sensorA')), // Sensor A
+    IRITerm(IRI('http://example.com/reported')), // reported
     tripleTermObj, // the statement << <resource> <confidence> "30"^^xsd:integer . >>
   );
 

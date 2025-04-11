@@ -4,17 +4,17 @@ import 'package:test/test.dart';
 
 void main() {
   // --- Helper constants/variables for tests ---
-  final iriSubj = IRITerm('http://example.com/subject');
-  final iriPred = IRITerm('http://example.com/predicate');
+  final iriSubj = IRITerm(IRI('http://example.com/subject'));
+  final iriPred = IRITerm(IRI('http://example.com/predicate'));
   final literalObj = Literal('object', XSD.string);
   final blankNodeSubj = BlankNode('b1');
-  final iriObj = IRITerm('http://example.com/object');
+  final iriObj = IRITerm(IRI('http://example.com/object'));
 
   final innerTriple1 = Triple(iriSubj, iriPred, literalObj);
   final innerTriple2 = Triple(blankNodeSubj, iriPred, iriObj);
   final sameAsInnerTriple1 = Triple(
-    IRITerm('http://example.com/subject'),
-    IRITerm('http://example.com/predicate'),
+    IRITerm(IRI('http://example.com/subject')),
+    IRITerm(IRI('http://example.com/predicate')),
     Literal('object', XSD.string),
   );
 
