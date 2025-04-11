@@ -25,7 +25,6 @@ import 'package:rdf_dart/src/data_types/unsigned_byte.dart';
 import 'package:rdf_dart/src/data_types/unsigned_int.dart';
 import 'package:rdf_dart/src/data_types/unsigned_long.dart';
 import 'package:rdf_dart/src/data_types/unsigned_short.dart';
-import 'package:rdf_dart/src/exceptions.dart';
 
 /// A function that takes a lexical form (a string) and returns a Dart object.
 ///
