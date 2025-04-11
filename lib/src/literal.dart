@@ -99,7 +99,11 @@ class Literal extends RdfTerm {
       return parser(lexicalForm);
     } on FormatException catch (e) {
       // Wrap FormatException in our custom exception
-      throw InvalidLexicalFormException(lexicalForm, datatype.toString(), cause: e);
+      throw InvalidLexicalFormException(
+        lexicalForm,
+        datatype.toString(),
+        cause: e,
+      );
     }
   }
 
@@ -124,15 +128,13 @@ class Literal extends RdfTerm {
 
     if (datatype == langStringDataType) {
       if (language == null) {
-        // TODO: Use custom exception
-        throw ArgumentError(
+        throw LiteralConstraintException(
           'Language tag MUST be present for datatype rdf:langString.',
         );
       }
     } else {
       if (language != null) {
-        // TODO: Use custom exception
-        throw ArgumentError(
+        throw LiteralConstraintException(
           'Language tag MUST NOT be present if datatype is not rdf:langString.',
         );
       }
@@ -157,8 +159,9 @@ class Literal extends RdfTerm {
   @override
   String toString() {
     // Use originalLexicalForm for display
-    final escapedLexical =
-        lexicalForm.replaceAll(r'\', r'\\').replaceAll('"', r'\"');
+    final escapedLexical = lexicalForm
+        .replaceAll(r'\', r'\\')
+        .replaceAll('"', r'\"');
 
     if (language != null) {
       // Language tag implies rdf:langString, use original form + tag

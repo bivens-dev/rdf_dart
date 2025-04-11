@@ -894,7 +894,7 @@ void main() {
             test('without a language tag', () {
               expect(
                 () => Literal('hello world', langStringIri),
-                throwsArgumentError,
+                throwsA(isA<LiteralConstraintException>()),
               );
             });
           });
