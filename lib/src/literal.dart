@@ -67,14 +67,20 @@ class Literal extends RdfTerm {
   ///
   /// The constructor eagerly parses the [lexicalForm] based on the [datatype]
   /// and stores the result in [value]. It will throw an appropriate exception
-  /// (e.g., `InvalidLexicalFormException`, `DatatypeNotFoundException`) if
+  /// (e.g., [InvalidLexicalFormException], [DatatypeNotFoundException], 
+  /// [InvalidLanguageTagException], [LiteralConstraintException]) if
   /// parsing fails or the inputs are invalid (e.g., language tag provided
   /// for non-langString datatype, invalid tag format).
   ///
   /// Example:
   /// ```dart
   /// final myLiteral = Literal('example', IRI(XMLDataType.string.iri));
-  /// final langLiteral = Literal('chat', IRI('[http://www.w3.org/1999/02/22-rdf-syntax-ns#langString](http://www.w3.org/1999/02/22-rdf-syntax-ns#langString)'), 'fr');
+  /// final langLiteral = Literal('chat', IRI('http://www.w3.org/1999/02/22-rdf-syntax-ns#langString'), 'fr');
+  /// try {
+  ///   final invalidLiteral = Literal('abc', IRI(XMLDataType.integer.iri));
+  /// } on InvalidLexicalFormException catch (e) {
+  ///   print('Caught expected error: $e');
+  /// }
   /// ```
   Literal(this.lexicalForm, this.datatype, [String? languageTag])
     // Eagerly parse the value
@@ -180,6 +186,7 @@ class Literal extends RdfTerm {
   ///
   /// This uses the formatter associated with the datatype to generate a
   /// potentially normalized string representation from the parsed [value].
+  /// Throws a [LiteralConstraintException] if formatting fails.
   String getCanonicalLexicalForm() {
     try {
       final formatter = DatatypeRegistry().getDatatypeInfo(datatype).formatter;

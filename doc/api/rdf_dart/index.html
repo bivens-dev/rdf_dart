@@ -69,6 +69,9 @@ RDF data structures, including:</p>
 <li><strong>IRIs:</strong>: <a href="../rdf_dart/IRI-class.html">IRI</a></li>
 <li><strong>Graphs:</strong> <a href="../rdf_dart/Graph-class.html">Graph</a></li>
 <li><strong>Datasets:</strong> <a href="../rdf_dart/Dataset-class.html">Dataset</a></li>
+<li><strong>Exceptions:</strong> <a href="../rdf_dart/RDFException-class.html">RDFException</a>, <a href="../rdf_dart/InvalidTermException-class.html">InvalidTermException</a>, <a href="../rdf_dart/DatatypeNotFoundException-class.html">DatatypeNotFoundException</a>,
+<a href="../rdf_dart/InvalidLexicalFormException-class.html">InvalidLexicalFormException</a>, <a href="../rdf_dart/InvalidLanguageTagException-class.html">InvalidLanguageTagException</a>,
+<a href="../rdf_dart/LiteralConstraintException-class.html">LiteralConstraintException</a></li>
 </ul>
 <p><strong>Terms</strong></p>
 <p>RDF data is built from <em>terms</em>, which can be one of three types:</p>
@@ -262,6 +265,62 @@ the ordered facet reflects this.
 
 
 
+    <section class="summary offset-anchor" id="exceptions">
+      <h2>Exceptions / Errors</h2>
+      <dl>
+          <dt id="DatatypeNotFoundException">
+  <span class="name "><a href="../rdf_dart/DatatypeNotFoundException-class.html">DatatypeNotFoundException</a></span> 
+
+</dt>
+<dd>
+  Exception thrown when a required datatype IRI is not found in the registry
+or is not supported by the library.
+</dd>
+
+          <dt id="InvalidLanguageTagException">
+  <span class="name "><a href="../rdf_dart/InvalidLanguageTagException-class.html">InvalidLanguageTagException</a></span> 
+
+</dt>
+<dd>
+  Exception thrown when a language tag string is not well-formed according
+to BCP 47 syntax.
+</dd>
+
+          <dt id="InvalidLexicalFormException">
+  <span class="name "><a href="../rdf_dart/InvalidLexicalFormException-class.html">InvalidLexicalFormException</a></span> 
+
+</dt>
+<dd>
+  Exception thrown when a literal's lexical form is invalid according to the
+rules of its specified datatype.
+</dd>
+
+          <dt id="InvalidTermException">
+  <span class="name "><a href="../rdf_dart/InvalidTermException-class.html">InvalidTermException</a></span> 
+
+</dt>
+<dd>
+  Base class for exceptions related to invalid RDF terms.
+</dd>
+
+          <dt id="LiteralConstraintException">
+  <span class="name "><a href="../rdf_dart/LiteralConstraintException-class.html">LiteralConstraintException</a></span> 
+
+</dt>
+<dd>
+  Exception thrown for violations of RDF literal constraints.
+</dd>
+
+          <dt id="RDFException">
+  <span class="name "><a href="../rdf_dart/RDFException-class.html">RDFException</a></span> 
+
+</dt>
+<dd>
+  Base class for exceptions specific to the RDF Dart library.
+</dd>
+
+      </dl>
+    </section>
   </div> <!-- /.main-content -->
   <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
     <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->

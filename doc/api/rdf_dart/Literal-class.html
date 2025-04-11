@@ -63,13 +63,16 @@ The <a href="../rdf_dart/Literal/datatype.html">datatype</a> specifies the type 
 an optional language tag for text literals.</p>
 <p>Example:</p>
 <pre class="language-dart"><code class="language-dart">// A string literal
-final stringLiteral = Literal('Hello, world!', IRI('http://www.w3.org/2001/XMLSchema#string'));
+final stringLiteral = Literal('Hello, world!', IRI(XMLDataType.string.iri));
 
-// An integer literal
-final integerLiteral = Literal('42', IRI('http://www.w3.org/2001/XMLSchema#integer'));
+// An integer literal (original lexical form "042" is preserved for equality)
+final integerLiteral = Literal('042', IRI(XMLDataType.integer.iri));
+print(integerLiteral.lexicalForm); // Output: 042
+print(integerLiteral.value); // Output: 42 (as BigInt)
+print(integerLiteral.getCanonicalLexicalForm()); // Output: 42
 
-// A string literal with language tag
-final frenchLiteral = Literal('Bonjour le monde!', IRI('http://www.w3.org/2001/XMLSchema#string'), 'fr');
+//A string literal with language tag
+final frenchLiteral = Literal('Bonjour le monde!', IRI(XMLDataType.string.iri), 'fr');
 </code></pre>
 </section>
 
@@ -108,11 +111,11 @@ final frenchLiteral = Literal('Bonjour le monde!', IRI('http://www.w3.org/2001/X
     <h2>Constructors</h2>
     <dl class="constructor-summary-list">
         <dt id="Literal.new" class="callable">
-          <span class="name"><a href="../rdf_dart/Literal/Literal.html">Literal.new</a></span><span class="signature">(<span class="parameter" id="-param-lexicalForm"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a></span> <span class="parameter-name">lexicalForm</span>, </span><span class="parameter" id="-param-datatype"><span class="type-annotation"><a href="../rdf_dart/IRI-class.html">IRI</a></span> <span class="parameter-name">datatype</span>, [</span><span class="parameter" id="-param-language"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">language</span></span>])</span>
+          <span class="name"><a href="../rdf_dart/Literal/Literal.html">Literal.new</a></span><span class="signature">(<span class="parameter" id="-param-lexicalForm"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a></span> <span class="parameter-name">lexicalForm</span>, </span><span class="parameter" id="-param-datatype"><span class="type-annotation"><a href="../rdf_dart/IRI-class.html">IRI</a></span> <span class="parameter-name">datatype</span>, [</span><span class="parameter" id="-param-languageTag"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">languageTag</span></span>])</span>
         </dt>
         <dd>
           Creates a new Literal with the given <code>lexicalForm</code>, <code>datatype</code>, and
-optional <code>language</code>.
+optional <code>languageTag</code>.
         </dd>
     </dl>
   </section>
@@ -141,7 +144,10 @@ optional <code>language</code>.
 
 </dt>
 <dd>
-  The hash code for this object.
+  Computes the hash code based on term equality rules.
+Uses <a href="../rdf_dart/Literal/lexicalForm.html">lexicalForm</a>, <a href="../rdf_dart/Literal/datatype.html">datatype</a>, and <a href="../rdf_dart/Literal/language.html">language</a>.
+Note: <code>language?.hashCode</code> handles null correctly. <code>Locale</code> hashCode
+should be case-insensitive appropriate for language tags.
   <div class="features"><span class="feature">no setter</span><span class="feature">override</span></div>
 
 </dd>
@@ -213,8 +219,8 @@ optional <code>language</code>.
 
 </dt>
 <dd>
-  The lexical form of the literal.
-  <div class="features"><span class="feature">no setter</span></div>
+  The original lexical form of the literal as provided during construction.
+  <div class="features"><span class="feature">final</span></div>
 
 </dd>
 
@@ -263,6 +269,19 @@ optional <code>language</code>.
       id="instance-methods">
     <h2>Methods</h2>
     <dl class="callables">
+        <dt id="getCanonicalLexicalForm" class="callable">
+  <span class="name"><a href="../rdf_dart/Literal/getCanonicalLexicalForm.html">getCanonicalLexicalForm</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the canonical lexical form according to the datatype's rules.
+  
+
+</dd>
+
         <dt id="noSuchMethod" class="callable inherited">
   <span class="name"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
     <span class="returntype parameter">&#8594; dynamic</span>
