@@ -158,7 +158,10 @@ class Literal extends RdfTerm {
   /// Validates constraints related to language tags, direction, and the datatype.
   /// Called after fields are initialized (implicitly via constructor order).
   static void _validateConstraints(
-      Locale? language, IRI datatype, TextDirection? direction) {
+    Locale? language,
+    IRI datatype,
+    TextDirection? direction,
+  ) {
     if (datatype == RDF.langString) {
       // Datatype is rdf:langString
       if (language == null) {
@@ -170,13 +173,15 @@ class Literal extends RdfTerm {
     } else {
       // Datatype is NOT rdf:langString
       if (language != null) {
-        throw LiteralConstraintException( //
+        throw LiteralConstraintException(
+          //
           'Language tag MUST NOT be present if datatype is not rdf:langString.',
         );
       }
       if (direction != null) {
         // This also covers the case where language is null but direction is not
-        throw LiteralConstraintException( //
+        throw LiteralConstraintException(
+          //
           'Direction MUST NOT be present if datatype is not rdf:langString.',
         );
       }
@@ -186,8 +191,10 @@ class Literal extends RdfTerm {
     if (direction != null && language == null) {
       // This situation should ideally be caught by the logic above,
       // but an explicit check adds clarity and robustness.
-      throw LiteralConstraintException( //
-          'Direction MUST NOT be present if the language tag is absent.');
+      throw LiteralConstraintException(
+        //
+        'Direction MUST NOT be present if the language tag is absent.',
+      );
     }
   }
 
@@ -247,7 +254,8 @@ class Literal extends RdfTerm {
   /// Note: `language?.hashCode` handles null correctly. `Locale` hashCode
   /// should be case-insensitive appropriate for language tags.
   @override
-  int get hashCode => Object.hash(termType, lexicalForm, datatype, language, baseDirection);
+  int get hashCode =>
+      Object.hash(termType, lexicalForm, datatype, language, baseDirection);
 
   @override
   bool operator ==(Object other) {

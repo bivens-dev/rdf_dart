@@ -1303,46 +1303,75 @@ void main() {
         expect(rtlLiteral.value, hebrewLex);
       });
 
-       test('Successful creation with langString and language (no direction)', () {
-         final literal = Literal('Bonjour', RDF.langString, 'fr');
-         expect(literal.baseDirection, isNull);
-         expect(literal.language, Locale.parse('fr'));
-         expect(literal.datatype, RDF.langString);
-       });
-
-
-      test('Throws LiteralConstraintException for direction without language',
-          () {
-        expect(
-          () => Literal(englishLex, XSD.string, null, TextDirection.ltr),
-          throwsA(isA<LiteralConstraintException>()),
-        );
-        // Also implicitly tested when datatype is langString but language is null
-         expect(
-          () => Literal(englishLex, RDF.langString, null, TextDirection.ltr),
-           throwsA(isA<LiteralConstraintException>().having(
-               (e) => e.message,
-               'message',
-               contains('Language tag MUST be present'), // Check underlying langString rule first
-           )),
-         );
-      });
+      test(
+        'Successful creation with langString and language (no direction)',
+        () {
+          final literal = Literal('Bonjour', RDF.langString, 'fr');
+          expect(literal.baseDirection, isNull);
+          expect(literal.language, Locale.parse('fr'));
+          expect(literal.datatype, RDF.langString);
+        },
+      );
 
       test(
-          'Throws LiteralConstraintException for direction with non-langString datatype',
-          () {
-        expect(
-          () => Literal(englishLex, XSD.string, 'en', TextDirection.ltr),
-          throwsA(isA<LiteralConstraintException>()),
-        );
-      });
+        'Throws LiteralConstraintException for direction without language',
+        () {
+          expect(
+            () => Literal(englishLex, XSD.string, null, TextDirection.ltr),
+            throwsA(isA<LiteralConstraintException>()),
+          );
+          // Also implicitly tested when datatype is langString but language is null
+          expect(
+            () => Literal(englishLex, RDF.langString, null, TextDirection.ltr),
+            throwsA(
+              isA<LiteralConstraintException>().having(
+                (e) => e.message,
+                'message',
+                contains(
+                  'Language tag MUST be present',
+                ), // Check underlying langString rule first
+              ),
+            ),
+          );
+        },
+      );
+
+      test(
+        'Throws LiteralConstraintException for direction with non-langString datatype',
+        () {
+          expect(
+            () => Literal(englishLex, XSD.string, 'en', TextDirection.ltr),
+            throwsA(isA<LiteralConstraintException>()),
+          );
+        },
+      );
 
       group('Equality and HashCode', () {
         final baseEn = Literal(englishLex, RDF.langString, 'en');
-        final ltrEn = Literal(englishLex, RDF.langString, 'en', TextDirection.ltr);
-        final rtlEn = Literal(englishLex, RDF.langString, 'en', TextDirection.rtl);
-        final ltrEnCopy = Literal(englishLex, RDF.langString, 'en', TextDirection.ltr);
-        final ltrHe = Literal(hebrewLex, RDF.langString, 'he', TextDirection.ltr);
+        final ltrEn = Literal(
+          englishLex,
+          RDF.langString,
+          'en',
+          TextDirection.ltr,
+        );
+        final rtlEn = Literal(
+          englishLex,
+          RDF.langString,
+          'en',
+          TextDirection.rtl,
+        );
+        final ltrEnCopy = Literal(
+          englishLex,
+          RDF.langString,
+          'en',
+          TextDirection.ltr,
+        );
+        final ltrHe = Literal(
+          hebrewLex,
+          RDF.langString,
+          'he',
+          TextDirection.ltr,
+        );
 
         test('Literals with same direction are equal', () {
           expect(ltrEn == ltrEnCopy, isTrue);
@@ -1359,10 +1388,13 @@ void main() {
           expect(baseEn.hashCode == ltrEn.hashCode, isFalse);
         });
 
-         test('Literals with different lexical/lang/type but same direction are unequal', () {
-           expect(ltrEn == ltrHe, isFalse);
-           expect(ltrEn.hashCode == ltrHe.hashCode, isFalse);
-         });
+        test(
+          'Literals with different lexical/lang/type but same direction are unequal',
+          () {
+            expect(ltrEn == ltrHe, isFalse);
+            expect(ltrEn.hashCode == ltrHe.hashCode, isFalse);
+          },
+        );
       });
     });
 
