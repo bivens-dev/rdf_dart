@@ -73,7 +73,7 @@
     
 <section class="desc markdown">
   <p>Computes the hash code based on term equality rules.
-Uses <a href="../../rdf_dart/Literal/lexicalForm.html">lexicalForm</a>, <a href="../../rdf_dart/Literal/datatype.html">datatype</a>, and <a href="../../rdf_dart/Literal/language.html">language</a>.
+Uses <a href="../../rdf_dart/Literal/lexicalForm.html">lexicalForm</a>, <a href="../../rdf_dart/Literal/datatype.html">datatype</a>, <a href="../../rdf_dart/Literal/language.html">language</a> adn <a href="../../rdf_dart/Literal/baseDirection.html">baseDirection</a>.
 Note: <code>language?.hashCode</code> handles null correctly. <code>Locale</code> hashCode
 should be case-insensitive appropriate for language tags.</p>
 </section>
@@ -82,7 +82,7 @@ should be case-insensitive appropriate for language tags.</p>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-int get hashCode =&gt; Object.hash(termType, lexicalForm, datatype, language);</code></pre>
+int get hashCode =&gt; Object.hash(termType, lexicalForm, datatype, language, baseDirection);</code></pre>
 </section>
 
   </section>

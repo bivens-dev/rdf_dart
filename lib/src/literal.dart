@@ -32,7 +32,7 @@ import 'package:rdf_dart/src/term_type.dart';
 /// print(integerLiteral.getCanonicalLexicalForm()); // Output: 42
 ///
 /// //A string literal with language tag
-/// final frenchLiteral = Literal('Bonjour le monde!', XSD.string, 'fr');
+/// final frenchLiteral = Literal('Bonjour le monde!', RDF.langString, 'fr');
 ///
 /// // Literal with language and direction (RDF 1.2)
 /// final arabicLiteral = Literal(

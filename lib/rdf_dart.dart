@@ -58,9 +58,10 @@
 /// import 'package:rdf_dart/rdf_dart.dart';
 ///
 /// void main() {
-///   // Create an IRI
-///   final iri = IRI('http://example.com/resource');
-///   print(iri);
+///   // Create some IRIs
+///   final subject = IRI('http://example.com/resource');
+///   final predicate = IRI('http://example.com/property');
+///   print(subject);
 ///
 ///   // Create a Blank Node
 ///   final blankNode = BlankNode();
@@ -71,7 +72,7 @@
 ///   print(literal);
 ///
 ///   // Create a Triple
-///   final triple = Triple(iri, iri, literal);
+///   final triple = Triple(IRITerm(subject), IRITerm(predicate), literal);
 ///   print(triple);
 /// }
 /// ```
