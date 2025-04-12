@@ -62,6 +62,8 @@ class IRITerm extends RdfTerm implements SubjectTerm {
   int get hashCode => value.hashCode;
 
   @override
-  bool operator ==(Object other) =>
-      other is IRITerm && value.hashCode == other.value.hashCode;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is IRITerm && value == other.value;
+  }
 }
