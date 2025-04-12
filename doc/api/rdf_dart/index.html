@@ -102,9 +102,10 @@ and zero or more named graphs. See <a href="../rdf_dart/Dataset-class.html">Data
 <pre class="language-dart"><code class="language-dart">import 'package:rdf_dart/rdf_dart.dart';
 
 void main() {
-  // Create an IRI
-  final iri = IRI('http://example.com/resource');
-  print(iri);
+  // Create some IRIs
+  final subject = IRI('http://example.com/resource');
+  final predicate = IRI('http://example.com/property');
+  print(subject);
 
   // Create a Blank Node
   final blankNode = BlankNode();
@@ -115,7 +116,7 @@ void main() {
   print(literal);
 
   // Create a Triple
-  final triple = Triple(iri, iri, literal);
+  final triple = Triple(IRITerm(subject), IRITerm(predicate), literal);
   print(triple);
 }
 </code></pre>
@@ -242,6 +243,14 @@ RDF <a href="../rdf_dart/Triple-class.html">Triple</a>.
 </dt>
 <dd>
   Represents the type of an RDF term according to RDF 1.2.
+</dd>
+
+          <dt id="TextDirection">
+  <span class="name "><a href="../rdf_dart/TextDirection.html">TextDirection</a></span> 
+
+</dt>
+<dd>
+  Represents the base direction of text as defined in RDF 1.2 Concepts.
 </dd>
 
       </dl>

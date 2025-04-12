@@ -9,13 +9,15 @@ import 'package:rdf_dart/src/term_type.dart';
 
 /// Represents a literal value in an RDF graph.
 ///
-/// A literal is a data value, such as a string, number, or date. It has a
-/// lexical form (the way it is written), a datatype IRI (specifying the type
-/// of the data), and optionally a language tag (for text literals).
+/// A literal consists of:
+/// - A [lexicalForm]: The string representation.
+/// - A [datatype]: An [IRI] specifying the data type (e.g., `xsd:string`, `xsd:integer`).
+/// - Optionally, a [language] tag: A [Locale] for language-tagged strings (datatype `rdf:langString`).
+/// - Optionally, a [baseDirection]: A [TextDirection] (`ltr` or `rtl`) for
+///   language-tagged strings, indicating the base text direction (RDF 1.2 feature).
 ///
-/// The [lexicalForm] represents the literal's value as a string.
-/// The [datatype] specifies the type of the literal, and the [language] is
-/// an optional language tag for text literals.
+/// Literals are immutable. Equality is based on the lexical form, datatype,
+/// language tag (case-insensitive), and direction.
 ///
 /// Example:
 ///
@@ -30,7 +32,15 @@ import 'package:rdf_dart/src/term_type.dart';
 /// print(integerLiteral.getCanonicalLexicalForm()); // Output: 42
 ///
 /// //A string literal with language tag
-/// final frenchLiteral = Literal('Bonjour le monde!', XSD.string, 'fr');
+/// final frenchLiteral = Literal('Bonjour le monde!', RDF.langString, 'fr');
+///
+/// // Literal with language and direction (RDF 1.2)
+/// final arabicLiteral = Literal(
+///   'مرحبا بالعالم',
+///   RDF.langString,
+///   'ar',
+///   direction: TextDirection.rtl,
+/// );
 /// ```
 @immutable
 class Literal extends RdfTerm {
@@ -52,44 +62,64 @@ class Literal extends RdfTerm {
   /// If not specified, it's `null`. Comparison is case-insensitive.
   final Locale? language;
 
+  /// The base text direction (optional, RDF 1.2).
+  ///
+  /// This indicates the base direction (`ltr` or `rtl`) for the literal's text.
+  /// It MUST only be present if the [language] tag is also present, and the
+  /// [datatype] MUST be `rdf:langString`.
+  final TextDirection? baseDirection;
+
   /// The parsed value of the literal.
   ///
   /// This is an object of the type specified by the datatype.
   final Object value;
 
-  /// Creates a new Literal with the given [lexicalForm], [datatype], and
-  /// optional [languageTag].
+  /// Creates a new Literal.
   ///
-  /// The [lexicalForm] is the original string representation. It is stored and
-  /// used for term equality.
-  /// The [datatype] is an [IRI] specifying the type.
-  /// The optional [languageTag] (a BCP47 string) is parsed into a [Locale]
-  /// for the [language] field.
+  /// - [lexicalForm]: The original string representation. Used for equality.
+  /// - [datatype]: The [IRI] specifying the type (e.g., `XSD.string`, `RDF.langString`).
+  /// - [languageTag]: Optional BCP47 string, parsed into [language]. MUST be
+  ///   present if `datatype` is `RDF.langString`, and absent otherwise.
+  /// - [baseDirection]: Optional [TextDirection]. MUST be absent if [languageTag]
+  ///   is absent. If present, [datatype] MUST be `RDF.langString`.
   ///
-  /// The constructor eagerly parses the [lexicalForm] based on the [datatype]
-  /// and stores the result in [value]. It will throw an appropriate exception
-  /// (e.g., [InvalidLexicalFormException], [DatatypeNotFoundException],
-  /// [InvalidLanguageTagException], [LiteralConstraintException]) if
-  /// parsing fails or the inputs are invalid (e.g., language tag provided
-  /// for non-langString datatype, invalid tag format).
+  /// Throws:
+  /// - [InvalidLexicalFormException] if the [lexicalForm] is invalid for the [datatype].
+  /// - [DatatypeNotFoundException] if the [datatype] is not recognized.
+  /// - [InvalidLanguageTagException] if the [languageTag] format is invalid.
+  /// - [LiteralConstraintException] if constraints regarding language, direction,
+  ///   and `rdf:langString` are violated.
   ///
   /// Example:
   /// ```dart
   /// final myLiteral = Literal('example', XSD.string);
   /// final langLiteral = Literal('chat', RDF.langString, 'fr');
+  /// final directedLiteral = Literal('שָׁלוֹם', RDF.langString, 'he', direction: TextDirection.rtl);
   /// try {
-  ///   final invalidLiteral = Literal('abc', XSD.integer);
-  /// } on InvalidLexicalFormException catch (e) {
-  ///   print('Caught expected error: $e');
-  /// }
+  ///   // Invalid: direction without language
+  ///   final invalid1 = Literal('test', XSD.string, null, direction: TextDirection.ltr);
+  /// } on LiteralConstraintException catch (e) { print(e); }
+  /// try {
+  ///   // Invalid: direction with wrong datatype
+  ///   final invalid2 = Literal('test', XSD.string, 'en', direction: TextDirection.ltr);
+  /// } on LiteralConstraintException catch (e) { print(e); }
+  /// try {
+  ///   // Invalid: langString without language
+  ///   final invalid3 = Literal('test', RDF.langString);
+  /// } on LiteralConstraintException catch (e) { print(e); }
   /// ```
-  Literal(this.lexicalForm, this.datatype, [String? languageTag])
+  Literal(
+    this.lexicalForm,
+    this.datatype, [
+    String? languageTag,
+    this.baseDirection,
+  ])
     // Eagerly parse the value
     : value = _parseValue(lexicalForm, datatype, languageTag),
-      // Parse and validate the language tag based on datatype
-      language = _parseLanguage(languageTag, datatype) {
+       // Parse and validate the language tag based on datatype
+       language = _parseLanguage(languageTag, datatype) {
     // Additional validation after fields are initialized (e.g., lang tag presence for rdf:langString)
-    _validateLangStringConstraints(language, datatype);
+    _validateConstraints(language, datatype, baseDirection);
   }
 
   /// Internal helper to parse the lexical form.
@@ -99,7 +129,6 @@ class Literal extends RdfTerm {
     String? languageTag,
   ) {
     try {
-      // getDatatypeInfo now throws DatatypeNotFoundException
       final info = DatatypeRegistry().getDatatypeInfo(datatype);
       final parser = info.parser;
       // Wrap potential FormatException from parser
@@ -126,23 +155,46 @@ class Literal extends RdfTerm {
     return locale;
   }
 
-  /// Validates constraints related to language tags and the rdf:langString datatype.
-  /// Called after fields are initialized.
-  static void _validateLangStringConstraints(Locale? language, IRI datatype) {
-    final langStringDataType = RDF.langString;
-
-    if (datatype == langStringDataType) {
+  /// Validates constraints related to language tags, direction, and the datatype.
+  /// Called after fields are initialized (implicitly via constructor order).
+  static void _validateConstraints(
+    Locale? language,
+    IRI datatype,
+    TextDirection? direction,
+  ) {
+    if (datatype == RDF.langString) {
+      // Datatype is rdf:langString
       if (language == null) {
         throw LiteralConstraintException(
           'Language tag MUST be present for datatype rdf:langString.',
         );
       }
+      // Direction is allowed only with langString, but not required
     } else {
+      // Datatype is NOT rdf:langString
       if (language != null) {
         throw LiteralConstraintException(
+          //
           'Language tag MUST NOT be present if datatype is not rdf:langString.',
         );
       }
+      if (direction != null) {
+        // This also covers the case where language is null but direction is not
+        throw LiteralConstraintException(
+          //
+          'Direction MUST NOT be present if datatype is not rdf:langString.',
+        );
+      }
+    }
+
+    // Additional constraint: Direction requires Language
+    if (direction != null && language == null) {
+      // This situation should ideally be caught by the logic above,
+      // but an explicit check adds clarity and robustness.
+      throw LiteralConstraintException(
+        //
+        'Direction MUST NOT be present if the language tag is absent.',
+      );
     }
   }
 
@@ -198,11 +250,12 @@ class Literal extends RdfTerm {
   }
 
   /// Computes the hash code based on term equality rules.
-  /// Uses [lexicalForm], [datatype], and [language].
+  /// Uses [lexicalForm], [datatype], [language] adn [baseDirection].
   /// Note: `language?.hashCode` handles null correctly. `Locale` hashCode
   /// should be case-insensitive appropriate for language tags.
   @override
-  int get hashCode => Object.hash(termType, lexicalForm, datatype, language);
+  int get hashCode =>
+      Object.hash(termType, lexicalForm, datatype, language, baseDirection);
 
   @override
   bool operator ==(Object other) {
@@ -210,6 +263,19 @@ class Literal extends RdfTerm {
     return other is Literal &&
         lexicalForm == other.lexicalForm && // Case-sensitive
         datatype == other.datatype && // IRI equality
-        language == other.language; // Locale equality (handles null & case)
+        language == other.language && // Locale equality (handles null & case)
+        baseDirection == other.baseDirection;
   }
+}
+
+/// Represents the base direction of text as defined in RDF 1.2 Concepts.
+///
+/// Used with language-tagged literals (datatype `rdf:langString`).
+/// See: https://www.w3.org/TR/rdf12-concepts/#section-Graph-Literal
+enum TextDirection {
+  /// Left-to-right text direction.
+  ltr,
+
+  /// Right-to-left text direction.
+  rtl,
 }

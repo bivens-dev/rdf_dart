@@ -107,7 +107,8 @@ bool operator ==(Object other) {
   return other is Literal &amp;&amp;
       lexicalForm == other.lexicalForm &amp;&amp; &#47;&#47; Case-sensitive
       datatype == other.datatype &amp;&amp; &#47;&#47; IRI equality
-      language == other.language; &#47;&#47; Locale equality (handles null &amp; case)
+      language == other.language &amp;&amp; &#47;&#47; Locale equality (handles null &amp; case)
+      baseDirection == other.baseDirection;
 }</code></pre>
 </section>
 

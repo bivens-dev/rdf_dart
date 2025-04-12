@@ -55,12 +55,16 @@
     
 <section class="desc markdown">
   <p>Represents a literal value in an RDF graph.</p>
-<p>A literal is a data value, such as a string, number, or date. It has a
-lexical form (the way it is written), a datatype IRI (specifying the type
-of the data), and optionally a language tag (for text literals).</p>
-<p>The <a href="../rdf_dart/Literal/lexicalForm.html">lexicalForm</a> represents the literal's value as a string.
-The <a href="../rdf_dart/Literal/datatype.html">datatype</a> specifies the type of the literal, and the <a href="../rdf_dart/Literal/language.html">language</a> is
-an optional language tag for text literals.</p>
+<p>A literal consists of:</p>
+<ul>
+<li>A <a href="../rdf_dart/Literal/lexicalForm.html">lexicalForm</a>: The string representation.</li>
+<li>A <a href="../rdf_dart/Literal/datatype.html">datatype</a>: An <a href="../rdf_dart/IRI-class.html">IRI</a> specifying the data type (e.g., <code>xsd:string</code>, <code>xsd:integer</code>).</li>
+<li>Optionally, a <a href="../rdf_dart/Literal/language.html">language</a> tag: A <a href="https://pub.dev/documentation/intl/0.20.2/locale/Locale-class.html">Locale</a> for language-tagged strings (datatype <code>rdf:langString</code>).</li>
+<li>Optionally, a <a href="../rdf_dart/Literal/baseDirection.html">baseDirection</a>: A <a href="../rdf_dart/TextDirection.html">TextDirection</a> (<code>ltr</code> or <code>rtl</code>) for
+language-tagged strings, indicating the base text direction (RDF 1.2 feature).</li>
+</ul>
+<p>Literals are immutable. Equality is based on the lexical form, datatype,
+language tag (case-insensitive), and direction.</p>
 <p>Example:</p>
 <pre class="language-dart"><code class="language-dart">// A string literal
 final stringLiteral = Literal('Hello, world!', XSD.string);
@@ -72,7 +76,15 @@ print(integerLiteral.value); // Output: 42 (as BigInt)
 print(integerLiteral.getCanonicalLexicalForm()); // Output: 42
 
 //A string literal with language tag
-final frenchLiteral = Literal('Bonjour le monde!', XSD.string, 'fr');
+final frenchLiteral = Literal('Bonjour le monde!', RDF.langString, 'fr');
+
+// Literal with language and direction (RDF 1.2)
+final arabicLiteral = Literal(
+  'مرحبا بالعالم',
+  RDF.langString,
+  'ar',
+  direction: TextDirection.rtl,
+);
 </code></pre>
 </section>
 
@@ -111,11 +123,10 @@ final frenchLiteral = Literal('Bonjour le monde!', XSD.string, 'fr');
     <h2>Constructors</h2>
     <dl class="constructor-summary-list">
         <dt id="Literal.new" class="callable">
-          <span class="name"><a href="../rdf_dart/Literal/Literal.html">Literal.new</a></span><span class="signature">(<span class="parameter" id="-param-lexicalForm"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a></span> <span class="parameter-name">lexicalForm</span>, </span><span class="parameter" id="-param-datatype"><span class="type-annotation"><a href="../rdf_dart/IRI-class.html">IRI</a></span> <span class="parameter-name">datatype</span>, [</span><span class="parameter" id="-param-languageTag"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">languageTag</span></span>])</span>
+          <span class="name"><a href="../rdf_dart/Literal/Literal.html">Literal.new</a></span><span class="signature">(<span class="parameter" id="-param-lexicalForm"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a></span> <span class="parameter-name">lexicalForm</span>, </span><span class="parameter" id="-param-datatype"><span class="type-annotation"><a href="../rdf_dart/IRI-class.html">IRI</a></span> <span class="parameter-name">datatype</span>, [</span><span class="parameter" id="-param-languageTag"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">languageTag</span>, </span><span class="parameter" id="-param-baseDirection"><span class="type-annotation"><a href="../rdf_dart/TextDirection.html">TextDirection</a>?</span> <span class="parameter-name">baseDirection</span></span>])</span>
         </dt>
         <dd>
-          Creates a new Literal with the given <code>lexicalForm</code>, <code>datatype</code>, and
-optional <code>languageTag</code>.
+          Creates a new Literal.
         </dd>
     </dl>
   </section>
@@ -125,6 +136,18 @@ optional <code>languageTag</code>.
       id="instance-properties">
     <h2>Properties</h2>
     <dl class="properties">
+        <dt id="baseDirection" class="property">
+  <span class="name"><a href="../rdf_dart/Literal/baseDirection.html">baseDirection</a></span>
+  <span class="signature">&#8594; <a href="../rdf_dart/TextDirection.html">TextDirection</a>?</span>
+  
+
+</dt>
+<dd>
+  The base text direction (optional, RDF 1.2).
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
         <dt id="datatype" class="property">
   <span class="name"><a href="../rdf_dart/Literal/datatype.html">datatype</a></span>
   <span class="signature">&#8594; <a href="../rdf_dart/IRI-class.html">IRI</a></span>
@@ -145,7 +168,7 @@ optional <code>languageTag</code>.
 </dt>
 <dd>
   Computes the hash code based on term equality rules.
-Uses <a href="../rdf_dart/Literal/lexicalForm.html">lexicalForm</a>, <a href="../rdf_dart/Literal/datatype.html">datatype</a>, and <a href="../rdf_dart/Literal/language.html">language</a>.
+Uses <a href="../rdf_dart/Literal/lexicalForm.html">lexicalForm</a>, <a href="../rdf_dart/Literal/datatype.html">datatype</a>, <a href="../rdf_dart/Literal/language.html">language</a> adn <a href="../rdf_dart/Literal/baseDirection.html">baseDirection</a>.
 Note: <code>language?.hashCode</code> handles null correctly. <code>Locale</code> hashCode
 should be case-insensitive appropriate for language tags.
   <div class="features"><span class="feature">no setter</span><span class="feature">override</span></div>

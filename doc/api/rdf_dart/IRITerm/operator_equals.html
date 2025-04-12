@@ -102,7 +102,10 @@ the <a href="../../rdf_dart/IRITerm/hashCode.html">hashCode</a> method as well t
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-bool operator ==(Object other) =&gt; other is IRITerm &amp;&amp; value.hashCode == other.value.hashCode;</code></pre>
+bool operator ==(Object other) {
+  if (identical(this, other)) return true;
+  return other is IRITerm &amp;&amp; value == other.value;
+}</code></pre>
 </section>
 
 
