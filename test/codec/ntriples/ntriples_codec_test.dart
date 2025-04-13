@@ -326,11 +326,10 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
             equals(Locale.parse('en')),
           );
           expect((decoded.first.object as Literal).value, equals('Hello'));
-          // Unsure if this should actually pass or not?
-          // expect(
-          //   (decoded.first.object as Literal).datatype,
-          //   equals(RDF.langString),
-          // );
+          expect(
+            (decoded.first.object as Literal).datatype,
+            equals(RDF.langString),
+          );
         });
 
         test('literal with base direction rtl', () {
@@ -357,11 +356,10 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
             equals(Locale.parse('en')),
           );
           expect((decoded.first.object as Literal).value, equals('Hello'));
-          // Unsure if this should actually pass or not?
-          // expect(
-          //   (decoded.first.object as Literal).datatype,
-          //   equals(RDF.langString),
-          // );
+          expect(
+            (decoded.first.object as Literal).datatype,
+            equals(RDF.langString),
+          );
         });
       });
 

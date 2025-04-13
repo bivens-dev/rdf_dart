@@ -228,7 +228,7 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
     }
   }
 
-  // --- Term Parsing Stubs ---
+  // --- Term Parsing ---
   // These will parse the term starting from the current _cursor position
   // and update the _cursor to point after the parsed term.
 
