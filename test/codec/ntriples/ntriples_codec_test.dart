@@ -528,7 +528,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
 
         final encoded = nTriplesCodec.encode([triple]);
         final expectedOutcome =
-            '<http://example/a> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( <http://example/s> <http://example/p> <http://example/o> )>> .';
+            '<http://example/a> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( <http://example/s> <http://example/p> <http://example/o> )>> .\n';
         expect(encoded, equals(expectedOutcome));
       });
 
@@ -569,7 +569,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
             IRITerm(IRI('http://example/o')),
           ),
           Triple(
-            IRITerm(IRI('http://example/s')),
+            IRITerm(IRI('http://example/a')),
             IRITerm(RDF.reifies),
             TripleTerm(
               Triple(
@@ -584,7 +584,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
             IRITerm(RDF.reifies),
             TripleTerm(
               Triple(
-                IRITerm(IRI('http://example/s23')),
+                IRITerm(IRI('http://example/23')),
                 IRITerm(RDF.reifies),
                 TripleTerm(
                   Triple(
