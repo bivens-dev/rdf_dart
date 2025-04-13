@@ -397,8 +397,14 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
     final startCol = _cursor + 1;
 
     // Check prefix '_:'
-    if (_cursor + 1 >= line.length || line[_cursor] != '_' || line[_cursor + 1] != ':') {
-       throw ParseError("Internal error: Expected blank node to start with '_:'", lineNumber, startCol);
+    if (_cursor + 1 >= line.length ||
+        line[_cursor] != '_' ||
+        line[_cursor + 1] != ':') {
+      throw ParseError(
+        "Internal error: Expected blank node to start with '_:'",
+        lineNumber,
+        startCol,
+      );
     }
     _cursor += 2; // Consume '_:'
 
@@ -409,20 +415,25 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
     final firstCharCode = line.codeUnitAt(_cursor);
 
     // Validate first character: PN_CHARS_U | [0-9]
-    if (!_isPnCharsU(firstCharCode) && !(firstCharCode >= 0x30 && firstCharCode <= 0x39)) {
-        throw ParseError('Invalid first character for blank node label', lineNumber, firstCharCol);
+    if (!_isPnCharsU(firstCharCode) &&
+        !(firstCharCode >= 0x30 && firstCharCode <= 0x39)) {
+      throw ParseError(
+        'Invalid first character for blank node label',
+        lineNumber,
+        firstCharCol,
+      );
     }
     _cursor++; // Consume first character
 
     // Consume subsequent characters: (PN_CHARS | '.')*
     // No need for labelIntermediateStartCursor here
     while (_cursor < line.length) {
-        final currentCharCode = line.codeUnitAt(_cursor);
-        if (_isPnChars(currentCharCode) || currentCharCode == 0x2E /* '.' */) {
-            _cursor++;
-        } else {
-            break; // End of label characters
-        }
+      final currentCharCode = line.codeUnitAt(_cursor);
+      if (_isPnChars(currentCharCode) || currentCharCode == 0x2E /* '.' */ ) {
+        _cursor++;
+      } else {
+        break; // End of label characters
+      }
     }
 
     // Label extracted from labelStartCursor up to the current _cursor
@@ -430,7 +441,11 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
 
     // Final validation: Check last character is not '.'
     if (label.endsWith('.')) {
-        throw ParseError("Blank node label cannot end with '.'", lineNumber, _cursor); // _cursor is after the dot
+      throw ParseError(
+        "Blank node label cannot end with '.'",
+        lineNumber,
+        _cursor,
+      ); // _cursor is after the dot
     }
 
     // Check cache or create new BlankNode
@@ -452,12 +467,17 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
 
     if (line[_cursor] != '"') {
       // Defensive check
-      throw ParseError('Expected Literal to start with "', lineNumber, startCol);
+      throw ParseError(
+        'Expected Literal to start with "',
+        lineNumber,
+        startCol,
+      );
     }
     _cursor++; // Consume opening '"'
 
     final lexicalBuffer = StringBuffer();
-    final contentStartCol = _cursor + 1; // For reporting errors within the content
+    final contentStartCol =
+        _cursor + 1; // For reporting errors within the content
     var closed = false;
 
     // Parse the literal's content (STRING_LITERAL_QUOTE)
@@ -481,117 +501,195 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
 
         switch (escapeChar) {
           // ECHAR: [tbnrf"'] plus our addition of \ for \ itself
-          case 't': lexicalBuffer.write('\t'); _cursor++;
-          case 'b': lexicalBuffer.write('\b'); _cursor++;
-          case 'n': lexicalBuffer.write('\n'); _cursor++;
-          case 'r': lexicalBuffer.write('\r'); _cursor++;
-          case 'f': lexicalBuffer.write('\f'); _cursor++;
-          case '"': lexicalBuffer.write('"'); _cursor++;
-          case r'\': lexicalBuffer.write(r'\'); _cursor++;
+          case 't':
+            lexicalBuffer.write('\t');
+            _cursor++;
+          case 'b':
+            lexicalBuffer.write('\b');
+            _cursor++;
+          case 'n':
+            lexicalBuffer.write('\n');
+            _cursor++;
+          case 'r':
+            lexicalBuffer.write('\r');
+            _cursor++;
+          case 'f':
+            lexicalBuffer.write('\f');
+            _cursor++;
+          case '"':
+            lexicalBuffer.write('"');
+            _cursor++;
+          case r'\':
+            lexicalBuffer.write(r'\');
+            _cursor++;
           // UCHAR
           case 'u':
-             _cursor++; // Consume 'u'
-             // _unescapeUchar handles cursor update past hex digits
-             lexicalBuffer.write(_unescapeUchar(line, lineNumber, 4, escapeStartCol));
+            _cursor++; // Consume 'u'
+            // _unescapeUchar handles cursor update past hex digits
+            lexicalBuffer.write(
+              _unescapeUchar(line, lineNumber, 4, escapeStartCol),
+            );
           case 'U':
-             _cursor++; // Consume 'U'
-             // _unescapeUchar handles cursor update past hex digits
-             lexicalBuffer.write(_unescapeUchar(line, lineNumber, 8, escapeStartCol));
+            _cursor++; // Consume 'U'
+            // _unescapeUchar handles cursor update past hex digits
+            lexicalBuffer.write(
+              _unescapeUchar(line, lineNumber, 8, escapeStartCol),
+            );
           default:
-            throw ParseError('Invalid escape sequence in literal: \\$escapeChar', lineNumber, escapeStartCol);
+            throw ParseError(
+              'Invalid escape sequence in literal: \\$escapeChar',
+              lineNumber,
+              escapeStartCol,
+            );
         }
       } else {
-         // Check for disallowed unescaped characters LF (U+0A), CR (U+0D)
-         if (charCode == 0x0A || charCode == 0x0D) {
-             throw ParseError('Invalid unescaped character (LF or CR) in literal', lineNumber, currentCol);
-         }
-         // Append allowed character
-         lexicalBuffer.write(char);
-         _cursor++;
+        // Check for disallowed unescaped characters LF (U+0A), CR (U+0D)
+        if (charCode == 0x0A || charCode == 0x0D) {
+          throw ParseError(
+            'Invalid unescaped character (LF or CR) in literal',
+            lineNumber,
+            currentCol,
+          );
+        }
+        // Append allowed character
+        lexicalBuffer.write(char);
+        _cursor++;
       }
     }
 
     if (!closed) {
       // Reached end of line without finding closing quote
-      throw ParseError('Unterminated string literal', lineNumber, contentStartCol);
+      throw ParseError(
+        'Unterminated string literal',
+        lineNumber,
+        contentStartCol,
+      );
     }
 
     final lexicalForm = lexicalBuffer.toString();
 
     // --- Check for suffix: @lang--dir or ^^<datatype> ---
-    String? parsedLanguageTag; // Store the full tag string (e.g., "en-US--ltr")
     TextDirection? parsedDirection;
     IRI? parsedDatatype;
+    String? pureLanguageTag; // Store only the BCP47 part
 
     if (_cursor < line.length) {
       final suffixStartCol = _cursor + 1;
       if (line[_cursor] == '@') {
         // --- Parse LANG_DIR ---
-          _cursor++; // Consume '@'
-          _checkNotEof(line, 'language tag', suffixStartCol);
+        _cursor++; // Consume '@'
+        final tagStartCursor = _cursor; // Remember where the tag content starts
+        _checkNotEof(line, 'language tag', suffixStartCol);
 
-          final tagStartCursor = _cursor;
+        // 1. Parse primary language tag: [a-zA-Z]+
+        final primaryTagMatch = RegExp(
+          '^[a-zA-Z]+',
+        ).firstMatch(line.substring(_cursor));
+        if (primaryTagMatch == null) {
+          throw ParseError(
+            'Expected primary language subtag after @',
+            lineNumber,
+            suffixStartCol,
+          );
+        }
+        _cursor += primaryTagMatch.group(0)!.length;
 
-          // Parse language tag part: [a-zA-Z]+ ( '-' [a-zA-Z0-9]+ )*
-          // (This is a basic validation, BCP47 is more complex but Literal constructor handles full validation)
-          final firstLangPartMatch = RegExp('^[a-zA-Z]+').firstMatch(line.substring(_cursor));
-          if (firstLangPartMatch == null) {
-              throw ParseError('Expected primary language subtag after @', lineNumber, _cursor + 1);
+        // 2. Parse optional subtags: ( '-' [a-zA-Z0-9]+ )*
+        while (_cursor < line.length && line[_cursor] == '-') {
+          // Look ahead: Is it '--' or just '-'?
+          if (_cursor + 1 < line.length && line[_cursor + 1] == '-') {
+            // Found '--', potential direction separator, stop subtag loop
+            break;
           }
-          _cursor += firstLangPartMatch.group(0)!.length;
-
-          while (_cursor < line.length && line[_cursor] == '-') {
-              _cursor++; // Consume '-'
-              _checkNotEof(line, 'language subtag', _cursor + 1);
-              final subtagMatch = RegExp('^[a-zA-Z0-9]+').firstMatch(line.substring(_cursor));
-              if (subtagMatch == null) {
-                 throw ParseError('Expected language subtag after -', lineNumber, _cursor + 1);
-              }
-              _cursor += subtagMatch.group(0)!.length;
+          // It's just a single '-', expect alphanumeric subtag
+          _cursor++; // Consume '-'
+          _checkNotEof(line, 'language subtag', _cursor + 1);
+          final subtagMatch = RegExp(
+            '^[a-zA-Z0-9]+',
+          ).firstMatch(line.substring(_cursor));
+          if (subtagMatch == null) {
+            throw ParseError(
+              'Expected language subtag after -',
+              lineNumber,
+              _cursor + 1,
+            );
           }
+          _cursor += subtagMatch.group(0)!.length;
+        }
 
-          // Check for optional direction part: '--' [a-zA-Z]+
-          if (_cursor + 1 < line.length && line.startsWith('--', _cursor)) {
-              final directionStartCursor = _cursor; // For error reporting
-              _cursor += 2; // Consume '--'
-              _checkNotEof(line, 'language direction', _cursor + 1);
-              final dirMatch = RegExp('^[a-zA-Z]+').firstMatch(line.substring(_cursor));
-               if (dirMatch == null) {
-                   throw ParseError('Expected direction (ltr/rtl) after --', lineNumber, _cursor + 1);
-               }
-              final directionStr = dirMatch.group(0)!;
-              _cursor += directionStr.length;
+        // Remember the end of the BCP47 part before checking for direction
+        final bcp47EndCursor = _cursor;
 
-              // Validate direction string
-              if (directionStr == 'ltr') {
-                  parsedDirection = TextDirection.ltr;
-              } else if (directionStr == 'rtl') {
-                  parsedDirection = TextDirection.rtl;
-              } else {
-                   throw ParseError('Invalid direction "$directionStr", expected "ltr" or "rtl"', lineNumber, directionStartCursor + 3); // Point to start of direction string
-              }
+        // 3. Check for optional direction part: ( '--' [a-zA-Z]+ )?
+        if (_cursor + 1 < line.length && line.startsWith('--', _cursor)) {
+          final directionStartCursor = _cursor; // For error reporting col
+          _cursor += 2; // Consume '--'
+          _checkNotEof(
+            line,
+            'language direction',
+            directionStartCursor + 3,
+          ); // Check after --
+          final dirMatch = RegExp(
+            '^[a-zA-Z]+',
+          ).firstMatch(line.substring(_cursor));
+          if (dirMatch == null) {
+            throw ParseError(
+              'Expected direction (ltr/rtl) after --',
+              lineNumber,
+              directionStartCursor + 3,
+            );
           }
-          // Extract the full tag (including potential --dir) for the Literal constructor
-          parsedLanguageTag = line.substring(tagStartCursor, _cursor);
-          // Datatype is implicitly rdf:langString (or rdf:dirLangString handled by Literal constructor)
-          parsedDatatype = RDF.langString;
+          final directionStr = dirMatch.group(0)!;
+          _cursor += directionStr.length;
 
+          // Validate direction string
+          if (directionStr == 'ltr') {
+            parsedDirection = TextDirection.ltr;
+          } else if (directionStr == 'rtl') {
+            parsedDirection = TextDirection.rtl;
+          } else {
+            // Error points to the start of the invalid direction string
+            throw ParseError(
+              'Invalid direction "$directionStr", expected "ltr" or "rtl"',
+              lineNumber,
+              directionStartCursor + 3,
+            );
+          }
+        }
+
+        // Extract the pure BCP47 part (up to where -- started, or end if no dir)
+        pureLanguageTag = line.substring(tagStartCursor, bcp47EndCursor);
+
+        // Datatype is implicitly rdf:langString (Literal constructor handles actual type based on direction)
+        parsedDatatype = RDF.langString;
       } else if (line[_cursor] == '^') {
         // --- Parse Datatype IRI ---
-          _checkNotEof(line, 'datatype separator ^^', suffixStartCol);
-          if (_cursor + 1 >= line.length || line[_cursor + 1] != '^') {
-             throw ParseError('Expected second ^ for datatype', lineNumber, _cursor + 2);
-          }
-          _cursor += 2; // Consume '^^'
-          _skipOptionalWhitespace(line); // Allow whitespace before IRI starts
-          _checkNotEof(line, 'datatype IRI', _cursor + 1);
+        _checkNotEof(line, 'datatype separator ^^', suffixStartCol);
+        if (_cursor + 1 >= line.length || line[_cursor + 1] != '^') {
+          throw ParseError(
+            'Expected second ^ for datatype',
+            lineNumber,
+            _cursor + 2,
+          );
+        }
+        _cursor += 2; // Consume '^^'
+        _skipOptionalWhitespace(line); // Allow whitespace before IRI starts
+        _checkNotEof(line, 'datatype IRI', _cursor + 1);
 
-          if (line[_cursor] != '<') {
-             throw ParseError('Expected < to start datatype IRI', lineNumber, _cursor + 1);
-          }
-          // Re-use IRI parser, which handles cursor update
-          final iriTerm = _parseIri(line, lineNumber);
-          parsedDatatype = iriTerm.value;
+        if (line[_cursor] != '<') {
+          throw ParseError(
+            'Expected < to start datatype IRI',
+            lineNumber,
+            _cursor + 1,
+          );
+        }
+        // Re-use IRI parser, which handles cursor update
+        final iriTerm = _parseIri(line, lineNumber);
+        parsedDatatype = iriTerm.value;
+
+        // Language tag must be null if datatype is explicitly provided
+        pureLanguageTag = null;
+        parsedDirection = null;
       }
       // If neither @ nor ^, the literal ends after the closing quote.
       // The calling function (_parseTripleLine) checks what follows (whitespace/dot).
@@ -602,38 +700,51 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
 
     // Variable to hold the 1-based column where the language tag started, if applicable
     int? languageTagStartCol;
-    if (parsedLanguageTag != null) {
-        // Calculate where the tag started: after the closing quote and the '@'
-        // This assumes no whitespace is allowed between '"' and '@',
-        // and between '@' and the tag itself, which aligns with LANG_DIR grammar.
-        // Find the position of '@' by working backwards from the current cursor.
-        final atPos = line.lastIndexOf('@', _cursor);
-        if (atPos != -1) {
-           languageTagStartCol = atPos + 2; // Column after '@'
-        } else {
-           languageTagStartCol = startCol; // Fallback if calculation fails
-        }
+    if (pureLanguageTag != null) {
+      // Calculate where the tag started: after the closing quote and the '@'
+      // This assumes no whitespace is allowed between '"' and '@',
+      // and between '@' and the tag itself, which aligns with LANG_DIR grammar.
+      // Find the position of '@' by working backwards from the current cursor.
+      final atPos = line.lastIndexOf('@', _cursor);
+      if (atPos != -1) {
+        languageTagStartCol = atPos + 2; // Column after '@'
+      } else {
+        languageTagStartCol = startCol; // Fallback if calculation fails
+      }
     }
 
     // Construct the Literal - this performs final validation
     try {
-        return Literal(lexicalForm, finalDatatype, parsedLanguageTag, parsedDirection);
+      return Literal(
+        lexicalForm,
+        finalDatatype,
+        pureLanguageTag,
+        parsedDirection,
+      );
     } on LiteralConstraintException catch (e) {
-        // Wrap constraint errors from constructor (e.g., lang tag mismatch)
-        throw ParseError('Invalid literal arguments: $e', lineNumber, startCol);
+      // Wrap constraint errors from constructor (e.g., lang tag mismatch)
+      throw ParseError('Invalid literal arguments: $e', lineNumber, startCol);
     } on InvalidLexicalFormException catch (e) {
-        // Wrap lexical validation errors from constructor (if value parsing fails)
-        throw ParseError('Invalid lexical form for datatype ${e.datatypeIri}: "${e.lexicalForm}" ($e)', lineNumber, contentStartCol);
+      // Wrap lexical validation errors from constructor (if value parsing fails)
+      throw ParseError(
+        'Invalid lexical form for datatype ${e.datatypeIri}: "${e.lexicalForm}" ($e)',
+        lineNumber,
+        contentStartCol,
+      );
     } on InvalidLanguageTagException catch (e) {
-         // Wrap invalid language tag errors
-        throw ParseError('Invalid language tag: "${e.languageTag}" ($e)', lineNumber, languageTagStartCol ?? startCol); // Use specific tag start column if found
+      // Wrap invalid language tag errors
+      throw ParseError(
+        'Invalid language tag: "${e.languageTag}" ($e)',
+        lineNumber,
+        languageTagStartCol ?? startCol,
+      ); // Use specific tag start column if found
     } catch (e) {
-        // Catch other potential errors during Literal creation
-        throw ParseError('Error creating literal: $e', lineNumber, startCol);
+      // Catch other potential errors during Literal creation
+      throw ParseError('Error creating literal: $e', lineNumber, startCol);
     }
   }
 
- /// Parses an N-Triples Triple Term at the current cursor position.
+  /// Parses an N-Triples Triple Term at the current cursor position.
   /// Assumes the cursor points to the starting '<' of '<<('.
   /// Updates the cursor past the closing ')>>'.
   /// Throws [ParseError] on syntax violations.
@@ -642,7 +753,11 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
 
     // Check for starting '<<(' - defensive, usually handled by _parseObject lookahead
     if (_cursor + 2 >= line.length || !line.startsWith('<<(', _cursor)) {
-        throw ParseError("Internal Error: Expected Triple Term to start with '<<('", lineNumber, startCol);
+      throw ParseError(
+        "Internal Error: Expected Triple Term to start with '<<('",
+        lineNumber,
+        startCol,
+      );
     }
     _cursor += 3; // Consume '<<('
 
@@ -669,7 +784,11 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
     // Check for closing ')>>'
     final closingMarkStartCol = _cursor + 1;
     if (_cursor + 2 >= line.length || !line.startsWith(')>>', _cursor)) {
-        throw ParseError("Expected Triple Term to end with ')>>'", lineNumber, closingMarkStartCol);
+      throw ParseError(
+        "Expected Triple Term to end with ')>>'",
+        lineNumber,
+        closingMarkStartCol,
+      );
     }
     _cursor += 3; // Consume ')>>'
 
@@ -710,7 +829,7 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
         throw const FormatException('Invalid hex digits');
       }
       codePoint = int.parse(hexString, radix: 16);
-    } catch (_) {
+    } on FormatException catch (_) {
       // Corrected ParseError call
       throw ParseError(
         'Invalid UCHAR escape sequence (bad hex)',
@@ -793,8 +912,8 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
   /// Based on N-Triples EBNF Grammar [17].
   bool _isPnChars(int c) {
     return
-        // Check PN_CHARS_U first
-        _isPnCharsU(c) ||
+    // Check PN_CHARS_U first
+    _isPnCharsU(c) ||
         // Hyphen (U+002D)
         c == 0x2D ||
         // Digits 0-9
