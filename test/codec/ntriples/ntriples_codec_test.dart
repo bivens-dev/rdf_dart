@@ -21,15 +21,15 @@ void main() {
           expect(decoded.first.object, isA<TripleTerm>());
           expect(
             (decoded.first.object as TripleTerm).triple.subject,
-            equals(IRI('http://example/s')),
+            equals(IRITerm(IRI('http://example/s'))),
           );
           expect(
             (decoded.first.object as TripleTerm).triple.predicate,
-            equals(IRI('http://example/p')),
+            equals(IRITerm(IRI('http://example/p'))),
           );
           expect(
             (decoded.first.object as TripleTerm).triple.object,
-            equals(IRI('http://example/o')),
+            equals(IRITerm(IRI('http://example/o'))),
           );
         });
 
@@ -47,15 +47,15 @@ void main() {
           expect(decoded.first.object, isA<TripleTerm>());
           expect(
             (decoded.first.object as TripleTerm).triple.subject,
-            equals(IRI('http://example/s2')),
+            equals(IRITerm(IRI('http://example/s2'))),
           );
           expect(
             (decoded.first.object as TripleTerm).triple.predicate,
-            equals(IRI('http://example/p2')),
+            equals(IRITerm(IRI('http://example/p2'))),
           );
           expect(
             (decoded.first.object as TripleTerm).triple.object,
-            equals(IRI('http://example/o2')),
+            equals(IRITerm(IRI('http://example/o2'))),
           );
         });
 
@@ -73,34 +73,34 @@ void main() {
           expect(decoded.first.object, isA<TripleTerm>());
           expect(
             (decoded.first.object as TripleTerm).triple.subject,
-            equals(IRI('http://example/s2')),
+            equals(IRITerm(IRI('http://example/s2'))),
           );
           expect(
             (decoded.first.object as TripleTerm).triple.predicate,
-            equals(IRI('http://example/q2')),
+            equals(IRITerm(IRI('http://example/q2'))),
           );
           expect(
             (decoded.first.object as TripleTerm).triple.object,
             isA<TripleTerm>(),
           );
           expect(
-            ((decoded.first.object as TripleTerm).triple.subject as TripleTerm)
+            ((decoded.first.object as TripleTerm).triple.object as TripleTerm)
                 .triple
                 .subject,
-            equals(IRI('http://example/s3')),
+            equals(IRITerm(IRI('http://example/s3'))),
           );
           expect(
-            ((decoded.first.object as TripleTerm).triple.predicate
+            ((decoded.first.object as TripleTerm).triple.object
                     as TripleTerm)
                 .triple
-                .subject,
-            equals(IRI('http://example/p3')),
+                .predicate,
+            equals(IRITerm(IRI('http://example/p3'))),
           );
           expect(
             ((decoded.first.object as TripleTerm).triple.object as TripleTerm)
                 .triple
-                .subject,
-            equals(IRI('http://example/o3')),
+                .object,
+            equals(IRITerm(IRI('http://example/o3'))),
           );
         });
 
@@ -120,7 +120,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
             equals(IRI('http://example/p')),
           );
           expect(
-            (decoded.first.subject as IRITerm).value,
+            (decoded.first.object as IRITerm).value,
             equals(IRI('http://example/o')),
           );
 
@@ -162,36 +162,36 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
 
           expect(decoded.length, 3);
 
-          expect(firstTriple.subject, isA<IRITerm>);
+          expect(firstTriple.subject, isA<IRITerm>());
           expect(firstTriple.subject.isIRI, isTrue);
           expect(
             (firstTriple.subject as IRITerm).value,
             equals(IRI('http://example/s')),
           );
-          expect(firstTriple.predicate, isA<IRITerm>);
+          expect(firstTriple.predicate, isA<IRITerm>());
           expect(firstTriple.predicate.isIRI, isTrue);
           expect(firstTriple.predicate.value, equals(IRI('http://example/p')));
-          expect(firstTriple.object, isA<IRITerm>);
+          expect(firstTriple.object, isA<IRITerm>());
           expect(firstTriple.object.isIRI, isTrue);
           expect(
             (firstTriple.object as IRITerm).value,
             equals(IRI('http://example/o')),
           );
 
-          expect(secondTriple.subject, isA<IRITerm>);
+          expect(secondTriple.subject, isA<IRITerm>());
           expect(secondTriple.subject.isIRI, isTrue);
           expect(
             (secondTriple.subject as IRITerm).value,
             equals(IRI('http://example/a')),
           );
-          expect(secondTriple.predicate, isA<IRITerm>);
+          expect(secondTriple.predicate, isA<IRITerm>());
           expect(secondTriple.predicate.isIRI, isTrue);
           expect(secondTriple.predicate.value, equals(RDF.reifies));
-          expect(secondTriple.object, isA<TripleTerm>);
+          expect(secondTriple.object, isA<TripleTerm>());
           expect(secondTriple.object.isTripleTerm, isTrue);
           expect(
             (secondTriple.object as TripleTerm).triple.subject,
-            isA<IRITerm>,
+            isA<IRITerm>(),
           );
           expect(
             (secondTriple.object as TripleTerm).triple.subject.isIRI,
@@ -204,7 +204,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           );
           expect(
             (secondTriple.object as TripleTerm).triple.predicate,
-            isA<IRITerm>,
+            isA<IRITerm>(),
           );
           expect(
             (secondTriple.object as TripleTerm).triple.predicate.isIRI,
@@ -216,7 +216,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           );
           expect(
             (secondTriple.object as TripleTerm).triple.object,
-            isA<IRITerm>,
+            isA<IRITerm>(),
           );
           expect(
             (secondTriple.object as TripleTerm).triple.object.isIRI,
@@ -228,25 +228,25 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
             equals(IRI('http://example/o1')),
           );
 
-          expect(thirdTriple.subject, isA<IRITerm>);
+          expect(thirdTriple.subject, isA<IRITerm>());
           expect(thirdTriple.subject.isIRI, isTrue);
           expect(
             (thirdTriple.subject as IRITerm).value,
             equals(IRI('http://example/r')),
           );
-          expect(thirdTriple.predicate, isA<IRITerm>);
+          expect(thirdTriple.predicate, isA<IRITerm>());
           expect(thirdTriple.predicate.isIRI, isTrue);
           expect(thirdTriple.predicate.value, equals(RDF.reifies));
-          expect(thirdTriple.object, isA<TripleTerm>);
+          expect(thirdTriple.object, isA<TripleTerm>());
           expect(thirdTriple.object.isTripleTerm, isTrue);
           expect(
             ((thirdTriple.object as TripleTerm).triple.subject as IRITerm)
                 .value,
-            equals(IRI('http://example/s23')),
+            equals(IRI('http://example/23')),
           );
           expect(
             (thirdTriple.object as TripleTerm).triple.predicate,
-            isA<IRITerm>,
+            isA<IRITerm>(),
           );
           expect(
             (thirdTriple.object as TripleTerm).triple.predicate.isIRI,
@@ -258,7 +258,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           );
           expect(
             (thirdTriple.object as TripleTerm).triple.object,
-            isA<TripleTerm>,
+            isA<TripleTerm>(),
           );
           expect(
             (thirdTriple.object as TripleTerm).triple.object.isTripleTerm,
@@ -268,7 +268,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
             ((thirdTriple.object as TripleTerm).triple.object as TripleTerm)
                 .triple
                 .subject,
-            isA<IRITerm>,
+            isA<IRITerm>(),
           );
           expect(
             ((thirdTriple.object as TripleTerm).triple.object as TripleTerm)
@@ -333,7 +333,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           // );
         });
 
-        test('literal with base direction ltr', () {
+        test('literal with base direction rtl', () {
           final ntriple =
               '<http://example/a> <http://example/b> "Hello"@en--rtl .';
           final decoded = nTriplesCodec.decode(ntriple);
@@ -371,7 +371,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           final ntriple =
               '<http://example/a> <<( <http://example/s> <http://example/p> <http://example/o> )>>  <http://example/z> .';
 
-          expect(() => nTriplesCodec.decode(ntriple), throwsA(ParseError));
+          expect(() => nTriplesCodec.decode(ntriple), throwsA(isA<ParseError>()));
         });
 
         // ntriples-star-bad-02
@@ -379,7 +379,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           final ntriple =
               '<http://example/q> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( "XYZ" <http://example/p> <http://example/o> )>> .';
 
-          expect(() => nTriplesCodec.decode(ntriple), throwsA(ParseError));
+          expect(() => nTriplesCodec.decode(ntriple), throwsA(isA<ParseError>()));
         });
 
         // ntriples-star-bad-03
@@ -387,7 +387,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           final ntriple =
               '<http://example/q> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( <http://example/s> "XYZ" <http://example/o> )>> .';
 
-          expect(() => nTriplesCodec.decode(ntriple), throwsA(ParseError));
+          expect(() => nTriplesCodec.decode(ntriple), throwsA(isA<ParseError>()));
         });
 
         // ntriples-star-bad-04
@@ -395,7 +395,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           final ntriple =
               '<http://example/q> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> << <http://example/s> _:label <http://example/o> >> .';
 
-          expect(() => nTriplesCodec.decode(ntriple), throwsA(ParseError));
+          expect(() => nTriplesCodec.decode(ntriple), throwsA(isA<ParseError>()));
         });
 
         // ntriples-star-bad-05
@@ -403,7 +403,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           final ntriple =
               '<http://example/a> <<( <http://example/s> <http://example/p>  <http://example/o> )>> <http://example/z> .';
 
-          expect(() => nTriplesCodec.decode(ntriple), throwsA(ParseError));
+          expect(() => nTriplesCodec.decode(ntriple), throwsA(isA<ParseError>()));
         });
 
         // ntriples-star-bad-06
@@ -411,7 +411,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           final ntriple =
               '<<( "XYZ" <http://example/p> <http://example/o> )>> <http://example/q> <http://example/z> .';
 
-          expect(() => nTriplesCodec.decode(ntriple), throwsA(ParseError));
+          expect(() => nTriplesCodec.decode(ntriple), throwsA(isA<ParseError>()));
         });
 
         // ntriples-star-bad-07
@@ -419,7 +419,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           final ntriple =
               '<<( <http://example/s> "XYZ" <http://example/o> )>> <http://example/q> <http://example/z> .';
 
-          expect(() => nTriplesCodec.decode(ntriple), throwsA(ParseError));
+          expect(() => nTriplesCodec.decode(ntriple), throwsA(isA<ParseError>()));
         });
 
         // ntriples-star-bad-08
@@ -427,7 +427,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           final ntriple =
               '<<( <http://example/s> _:label <http://example/o> )>> <http://example/q> <http://example/z> .';
 
-          expect(() => nTriplesCodec.decode(ntriple), throwsA(ParseError));
+          expect(() => nTriplesCodec.decode(ntriple), throwsA(isA<ParseError>()));
         });
 
         // ntriples-star-bad-09
@@ -435,7 +435,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           final ntriple =
               '<http://example/a> <http://example/b> << <http://example/s> <http://example/p> <http://example/o> >> .';
 
-          expect(() => nTriplesCodec.decode(ntriple), throwsA(ParseError));
+          expect(() => nTriplesCodec.decode(ntriple), throwsA(isA<ParseError>()));
         });
 
         // ntriples-star-bad-10
@@ -443,7 +443,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           final ntriple =
               '<<( <http://example/s> <http://example/p> <http://example/o> )>> <http://example/a> <http://example/z> .';
 
-          expect(() => nTriplesCodec.decode(ntriple), throwsA(ParseError));
+          expect(() => nTriplesCodec.decode(ntriple), throwsA(isA<ParseError>()));
         });
 
         // ntriples-star-bad-reified-1
@@ -451,7 +451,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           final ntriple =
               '<< <http://example/s> <http://example/p> <http://example/o> >> <http://example/q> <http://example/z> .';
 
-          expect(() => nTriplesCodec.decode(ntriple), throwsA(ParseError));
+          expect(() => nTriplesCodec.decode(ntriple), throwsA(isA<ParseError>()));
         });
 
         // ntriples-star-bad-reified-2
@@ -459,7 +459,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           final ntriple =
               '<http://example/x> <http://example/p> << <http://example/s> <http://example/p> <http://example/o> >> .';
 
-          expect(() => nTriplesCodec.decode(ntriple), throwsA(ParseError));
+          expect(() => nTriplesCodec.decode(ntriple), throwsA(isA<ParseError>()));
         });
 
         // ntriples-star-bad-reified-3
@@ -467,7 +467,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           final ntriple =
               '<< <http://example/s1> <http://example/p1> <http://example/o1> >> <http://example/q> << <http://example/s2> <http://example/p2> <http://example/o2> >> .';
 
-          expect(() => nTriplesCodec.decode(ntriple), throwsA(ParseError));
+          expect(() => nTriplesCodec.decode(ntriple), throwsA(isA<ParseError>()));
         });
 
         // ntriples-star-bad-reified-4
@@ -475,7 +475,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           final ntriple =
               '<http://example/x> << <http://example/s> <http://example/p> <http://example/o> >> <http://example/z> .';
 
-          expect(() => nTriplesCodec.decode(ntriple), throwsA(ParseError));
+          expect(() => nTriplesCodec.decode(ntriple), throwsA(isA<ParseError>()));
         });
 
         // ntriples-star-bnode-bad-annotated-syntax-1
@@ -483,7 +483,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           final ntriple =
               '_:b0 <http://example/p> <http://example/o> {| <http://example/q> "ABC" |} .';
 
-          expect(() => nTriplesCodec.decode(ntriple), throwsA(ParseError));
+          expect(() => nTriplesCodec.decode(ntriple), throwsA(isA<ParseError>()));
         });
 
         // ntriples-star-bnode-bad-annotated-syntax-2
@@ -491,7 +491,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           final ntriple =
               '<http://example/s> <http://example/p> _:b1 {| <http://example/q> "456"^^<http://www.w3.org/2001/XMLSchema#integer> |} .';
 
-          expect(() => nTriplesCodec.decode(ntriple), throwsA(ParseError));
+          expect(() => nTriplesCodec.decode(ntriple), throwsA(isA<ParseError>()));
         });
 
         // ntriples-langdir-bad-1
@@ -499,7 +499,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           final ntriple =
               '<http://example/a> <http://example/b> "Hello"@en--unk .';
 
-          expect(() => nTriplesCodec.decode(ntriple), throwsA(ParseError));
+          expect(() => nTriplesCodec.decode(ntriple), throwsA(isA<ParseError>()));
         });
 
         // ntriples-langdir-bad-2
@@ -507,7 +507,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           final ntriple =
               '<http://example/a> <http://example/b> "Hello"@en--LTR .';
 
-          expect(() => nTriplesCodec.decode(ntriple), throwsA(ParseError));
+          expect(() => nTriplesCodec.decode(ntriple), throwsA(isA<ParseError>()));
         });
       });
     });
