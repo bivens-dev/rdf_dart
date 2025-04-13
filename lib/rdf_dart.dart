@@ -79,6 +79,7 @@
 library;
 
 export 'src/blank_node.dart';
+export 'src/codec/ntriples/ntriples_codec.dart';
 export 'src/data_types/duration.dart' show XSDDuration;
 export 'src/dataset.dart';
 export 'src/exceptions.dart';
