@@ -7,26 +7,30 @@ RDF.dart is a Dart library designed to make it easy to work with [RDF (Resource 
 
 ## Features
 
-* **Core RDF 1.2 Data Structures:**
-    * `IRI`: Represents an Internationalized Resource Identifier string.
-    * `IRITerm`: Represents an IRI used as an RDF term (subject, predicate, object, or graph name).
-    * `Literal`: Represents an RDF literal with datatype and optional language tag.
-    * `BlankNode`: Represents an RDF blank node.
-    * `TripleTerm`: Represents an RDF triple used as an RDF term (subject or object) as defined in RDF 1.2.
-    * `RdfTerm`: The abstract base class for all RDF terms (`IRITerm`, `BlankNode`, `Literal`, `TripleTerm`).
-    * `Triple`: Represents an RDF triple (subject, predicate, object - where object can be any `RdfTerm`, including a `TripleTerm`).
-    * `Graph`: Represents a collection of RDF triples.
-    * `Dataset`: Represents a collection consisting of one default graph and zero or more named graphs.
-* **Datatype Handling:**
-    * Built-in support and validation for common XSD datatypes (e.g., `xsd:string`, `xsd:integer`, `xsd:double`, `xsd:dateTime`, `xsd:boolean`, `xsd:date`, `xsd:duration`, and more). See `XSD` class.
-    * Support for `rdf:langString`.
-    * *(Planned)* `DatatypeRegistry` for managing custom datatypes.
-* **IRI Validation & Parsing:**
-    * Robust IRI parsing based on RFC 3987.
-    * Validation checks for IRIs.
-    * Access to IRI components (scheme, authority, path, query, fragment).
-* **Immutability:** Core data structures (`IRITerm`, `BlankNode`, `Literal`, `TripleTerm`, `Triple`, `IRI`) are immutable.
-* **Well-Tested:** Core features have comprehensive unit tests.
+*   **Core RDF 1.2 Data Structures:**
+    *   `IRI`: Represents an Internationalized Resource Identifier string.
+    *   `IRITerm`: Represents an IRI used as an RDF term (subject, predicate, object, or graph name).
+    *   `Literal`: Represents an RDF literal with datatype and optional language tag.
+    *   `BlankNode`: Represents an RDF blank node.
+    *   `TripleTerm`: Represents an RDF triple used as an RDF term (subject or object) as defined in RDF 1.2.
+    *   `RdfTerm`: The abstract base class for all RDF terms (`IRITerm`, `BlankNode`, `Literal`, `TripleTerm`).
+    *   `Triple`: Represents an RDF triple (subject, predicate, object - where object can be any `RdfTerm`, including a `TripleTerm`).
+    *   `Graph`: Represents a collection of RDF triples.
+    *   `Dataset`: Represents a collection consisting of one default graph and zero or more named graphs.
+*   **Datatype Handling:**
+    *   Built-in support and validation for common XSD datatypes (e.g., `xsd:string`, `xsd:integer`, `xsd:double`, `xsd:dateTime`, `xsd:boolean`, `xsd:date`, `xsd:duration`, and more). See `XSD` class.
+    *   Support for `rdf:langString`.
+    *   *(Planned)* `DatatypeRegistry` for managing custom datatypes.
+*   **IRI Validation & Parsing:**
+    *   Robust IRI parsing based on RFC 3987.
+    *   Validation checks for IRIs.
+    *   Access to IRI components (scheme, authority, path, query, fragment).
+*   **N-Triples Serialization/Deserialization:**
+    *   Provides `nTriplesCodec`, a streaming encoder/decoder compliant with the `dart:convert` Codec interface.
+    *   Easily encode lists of `Triple` objects to N-Triples strings and decode N-Triples strings back into `Triple` objects.
+    *   Integrates seamlessly with Dart's I/O streams for efficient processing of large files.
+*   **Immutability:** Core data structures (`IRITerm`, `BlankNode`, `Literal`, `TripleTerm`, `Triple`, `IRI`) are immutable.
+*   **Well-Tested:** Core features have comprehensive unit tests.
 
 ## Getting Started
 
@@ -77,5 +81,14 @@ void main() {
 
   // Add the Triple to the Dataset
   dataset.defaultGraph.add(triple);
+
+  // Encode the triple using the N-Triples codec
+  final nTriplesString = nTriplesCodec.encode([triple]);
+  print(nTriplesString);
+  // Output: <http://example.org/subject> <http://example.org/predicate> <http://example.org/object> .
+
+  // Decode the N-Triples string
+  final decodedTriples = nTriplesCodec.decode(nTriplesString);
+  print(decodedTriples.first == triple); // Output: true
 }
 ```
