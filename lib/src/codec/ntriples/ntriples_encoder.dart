@@ -27,6 +27,18 @@ class NTriplesEncoder extends Converter<List<Triple>, String> {
     return buffer.toString();
   }
 
+  /// Starts a chunked conversion.
+  ///
+  /// The converter consumes lists of [Triple] objects and outputs multi-line
+  /// N-Triples [String] chunks.
+  @override
+  ChunkedConversionSink<List<Triple>> startChunkedConversion(
+    Sink<String> sink,
+  ) {
+    // Return the specialized sink that handles the chunked logic.
+    return _NTriplesEncoderSink(sink, this);
+  }
+
   /// Formats a single Triple according to N-Triples syntax.
   /// triple ::= subject predicate object '.'
   String _formatTriple(Triple triple) {
@@ -68,7 +80,8 @@ class NTriplesEncoder extends Converter<List<Triple>, String> {
           rune == 0x7C || // |
           rune == 0x5E || // ^
           rune == 0x60 || // `
-          rune == 0x5C) { // \
+          rune == 0x5C) {
+        // \
         sb.write(_escapeRune(rune)); // Use UCHAR escape (\uXXXX or \UXXXXXXXX)
       } else {
         sb.writeCharCode(rune); // Append allowed character directly
@@ -90,12 +103,12 @@ class NTriplesEncoder extends Converter<List<Triple>, String> {
   /// literal ::= STRING_LITERAL_QUOTE ('^^' IRIREF | LANG_DIR )?
   String _formatLiteral(Literal literal) {
     final sb = StringBuffer();
-    sb.write('"'); // Start delimiter for STRING_LITERAL_QUOTE 
+    sb.write('"'); // Start delimiter for STRING_LITERAL_QUOTE
 
     // Escape lexical form according to STRING_LITERAL_QUOTE rules
-    // Spec section 2.4 mandates escaping: ", \, LF, CR 
+    // Spec section 2.4 mandates escaping: ", \, LF, CR
     // We use ECHAR where possible (\n, \r, \", \\, \t) and UCHAR otherwise.
-    final lexical = literal.lexicalForm; 
+    final lexical = literal.lexicalForm;
     for (final rune in lexical.runes) {
       switch (rune) {
         case 0x22: // " Quotation mark
@@ -114,7 +127,8 @@ class NTriplesEncoder extends Converter<List<Triple>, String> {
               rune == 0x0B || // Vertical Tab
               rune == 0x0C || // Form Feed
               (rune >= 0x0E && rune <= 0x1F) ||
-              rune == 0x7F) { // Delete
+              rune == 0x7F) {
+            // Delete
             sb.write(_escapeRune(rune));
           } else {
             // Append other characters directly
@@ -128,7 +142,8 @@ class NTriplesEncoder extends Converter<List<Triple>, String> {
     if (literal.language != null) {
       sb.write('@');
       sb.write(literal.language!.toLanguageTag()); // BCP47 format
-      if (literal.baseDirection != null) { // RDF 1.2 feature 
+      if (literal.baseDirection != null) {
+        // RDF 1.2 feature
         // LANG_DIR
         sb.write('--');
         sb.write(literal.baseDirection == TextDirection.ltr ? 'ltr' : 'rtl');
@@ -168,5 +183,44 @@ class NTriplesEncoder extends Converter<List<Triple>, String> {
       // Use \U for characters outside BMP
       return '\\U${rune.toRadixString(16).toUpperCase().padLeft(8, '0')}';
     }
+  }
+}
+
+/// Internal sink implementation for chunked N-Triples encoding.
+class _NTriplesEncoderSink implements ChunkedConversionSink<List<Triple>> {
+  /// The output sink receiving the formatted N-Triples strings.
+  final Sink<String> _outSink;
+
+  /// Reference to the encoder to access formatting helpers.
+  final NTriplesEncoder _encoder;
+
+  _NTriplesEncoderSink(this._outSink, this._encoder);
+
+  /// Processes a chunk of triples.
+  ///
+  /// Each triple in the chunk is formatted and added to the output sink,
+  /// followed by a newline.
+  @override
+  void add(List<Triple> chunk) {
+    // Avoid processing if the chunk is empty.
+    if (chunk.isEmpty) return;
+
+    final buffer = StringBuffer();
+    for (var i = 0; i < chunk.length; i++) {
+      // Use the encoder's helper method to format the triple.
+      buffer.write(_encoder._formatTriple(chunk[i]));
+      // Append a newline after each triple string.
+      buffer.write('\n');
+    }
+    // Add the formatted string chunk to the output sink.
+    _outSink.add(buffer.toString());
+  }
+
+  /// Closes the underlying output sink.
+  ///
+  /// This indicates that no more chunks will be added.
+  @override
+  void close() {
+    _outSink.close();
   }
 }
