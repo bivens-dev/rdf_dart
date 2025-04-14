@@ -607,15 +607,6 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
     });
 
     group('Canonicalization', () {
-      // FIXME: Test currently fails with the following message:
-      // Parse Error (L2:C59): Unexpected characters after final dot (.)
-      // package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart 212:7   _NTriplesDecoderSink._parseTripleLine
-      // package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart 163:22  _NTriplesDecoderSink._processLine
-      // package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart 134:7   _NTriplesDecoderSink._processBuffer
-      // package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart 80:5    _NTriplesDecoderSink.add
-      // package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart 32:20   NTriplesDecoder.convert
-      // dart:convert                                                      Codec.decode
-      // test/codec/ntriples/ntriples_codec_test.dart 619:39               main.<fn>.<fn>.<fn>
       test('Tests canonicalization of triples including comments', (){
         final input = '''
 # comment
