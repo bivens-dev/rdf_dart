@@ -650,19 +650,6 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
         expect(reencoded, equals(expectedOutput));
       });
 
-      // FIXME: Test currently fails with the following message:
-      // Expected: '<http://a.example/s> <http://a.example/p> "\\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\b\\t\\u000B\\f\\u000E\\u000F\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F" .\n'
-      //      ''
-      // Actual: '<http://a.example/s> <http://a.example/p> "\\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\u0008\\t\\u000B\\u000C\\u000E\\u000F\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F" .\n'
-      //      ''
-      // Which: is different.
-      //    Expected: ... 6\\u0007\\b\\t\\u000 ...
-      //      Actual: ... 6\\u0007\\u0008\\t\\ ...
-      //                            ^
-      //     Differ at offset 101
-      //
-      // package:matcher                                     expect
-      // test/codec/ntriples/ntriples_codec_test.dart 686:9  main.<fn>.<fn>.<fn>
       test('Tests canonicalization of literals with control characters', (){
         final input = r'''
 <http://a.example/s> <http://a.example/p> "\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\t\u000B\u000C\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F" .
@@ -691,19 +678,6 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
         expect(reencoded, equals(expectedOutput));
       });
 
-      // FIXME: Test currently fails with the following message:
-      // Expected: '<http://a.example/s> <http://a.example/p> "\\u0000\\t\\u000B\\f\\u000E&([]\\u007F" .\n'
-      //       ''
-      // Actual: '<http://a.example/s> <http://a.example/p> "\\u0000\\t\\u000B\\u000C\\u000E&([]\\u007F" .\n'
-      //      ''
-      // Which: is different.
-      //    Expected: ... t\\u000B\\f\\u000E&( ...
-      //      Actual: ... t\\u000B\\u000C\\u00 ...
-      //                            ^
-      //     Differ at offset 62
-      //
-      // package:matcher                                     expect
-      // test/codec/ntriples/ntriples_codec_test.dart 727:9  main.<fn>.<fn>.<fn>
       test(r"Tests canonicalization of literal_ascii_boundaries '\x00\x26\x28...'", (){
         final input = '''
 <http://a.example/s> <http://a.example/p> " 	&([]" .
@@ -746,19 +720,6 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
         expect(reencoded, equals(expectedOutput));
       });
 
-      // FIXME: Test fails with the following message:
-      // Expected: '<http://a.example/s> <http://a.example/p> "\b" .\n'
-      //      ''
-      // Actual: '<http://a.example/s> <http://a.example/p> "\\u0008" .\n'
-      //      ''
-      // Which: is different.
-      //    Expected: ... mple/p> "\b" .\n
-      //      Actual: ... mple/p> "\\u0008" .\ ...
-      //                            ^
-      //     Differ at offset 44
-      //
-      // package:matcher                                     expect
-      // test/codec/ntriples/ntriples_codec_test.dart 733:9  main.<fn>.<fn>.<fn>
       test('Tests canonicalization of literals with backspace', (){
         final input = r'''
 <http://a.example/s> <http://a.example/p> "\b" .
@@ -801,14 +762,6 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
         expect(reencoded, equals(expectedOutput));
       });
 
-      // FIXME: Current test fails with message: 
-      // Parse Error (L1:C46): Expected final dot (.)
-      // package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart 205:7   _NTriplesDecoderSink._parseTripleLine
-      // package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart 163:22  _NTriplesDecoderSink._processLine
-      // package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart 93:7    _NTriplesDecoderSink.close
-      // package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart 35:20   NTriplesDecoder.convert
-      // dart:convert                                                      Codec.decode
-      // test/codec/ntriples/ntriples_codec_test.dart 782:39               main.<fn>.<fn>.<fn>
       test('Tests canonicalization of literals with double quote', (){
         final input = r'''
 <http://a.example/s> <http://a.example/p> "x\"y" .
@@ -823,18 +776,6 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
         expect(reencoded, equals(expectedOutput));
       });
 
-      // FIXME: Test currently fails with the following message:
-      // Expected: '<http://a.example/s> <http://a.example/p> "\f" .'
-      // Actual: '<http://a.example/s> <http://a.example/p> "\\u000C" .\n'
-      //      ''
-      // Which: is different.
-      //    Expected: ... mple/p> "\f" .
-      //      Actual: ... mple/p> "\\u000C" .\ ...
-      //                            ^
-      //     Differ at offset 45
-      //
-      // package:matcher                                     expect
-      // test/codec/ntriples/ntriples_codec_test.dart 858:9  main.<fn>.<fn>.<fn>
       test('Tests canonicalization of literals with form feed', (){
         final input = r'''
 <http://a.example/s> <http://a.example/p> "\f" .
@@ -1039,7 +980,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
       // package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart 80:5    _NTriplesDecoderSink.add
       // package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart 32:20   NTriplesDecoder.convert
       // dart:convert                                                      Codec.decode
-      // test/codec/ntriples/ntriples_codec_test.dart 1060:39              main.<fn>.<fn>.<fn>
+      // test/codec/ntriples/ntriples_codec_test.dart 992:39              main.<fn>.<fn>.<fn>
       test('Tests canonicalization of triples with extra whitespace 3', (){
         final input = '''
 <http://example/s>  <http://example/p>  "Alice" @en  .
@@ -1062,7 +1003,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
       // package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart 80:5    _NTriplesDecoderSink.add
       // package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart 32:20   NTriplesDecoder.convert
       // dart:convert                                                      Codec.decode
-      // test/codec/ntriples/ntriples_codec_test.dart 1083:39              main.<fn>.<fn>.<fn>
+      // test/codec/ntriples/ntriples_codec_test.dart 1015:39              main.<fn>.<fn>.<fn>
       test('Tests canonicalization of triples with extra whitespace 4', (){
         final input = '''
 <http://example/s>  <http://example/p>  "2"  ^^  <http://www.w3.org/2001/XMLSchema#integer>  .
@@ -1133,7 +1074,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
       //     Differ at offset 128
       //
       // package:matcher                                      expect
-      // test/codec/ntriples/ntriples_codec_test.dart 1158:9  main.<fn>.<fn>.<fn>
+      // test/codec/ntriples/ntriples_codec_test.dart 1090:9  main.<fn>.<fn>.<fn>
       test('Tests canonicalization of IRIs #4', (){
         final input = r'''
 # IRI with all chars in it.

@@ -121,14 +121,16 @@ class NTriplesEncoder extends Converter<List<Triple>, String> {
           sb.write(r'\r');
         case 0x09: // Tab (Optional ECHAR, good practice)
           sb.write(r'\t');
+        case 0x08: // Backspace (BS)
+          sb.write(r'\b');
+        case 0x0C: // Form Feed (FF)
+          sb.write(r'\f');
         default:
           // Use UCHAR for other control characters (U+00-U+1F, excluding \t, \n, \r) and DEL (U+7F)
           if ((rune >= 0x00 && rune <= 0x08) ||
               rune == 0x0B || // Vertical Tab
-              rune == 0x0C || // Form Feed
               (rune >= 0x0E && rune <= 0x1F) ||
               rune == 0x7F) {
-            // Delete
             sb.write(_escapeRune(rune));
           } else {
             // Append other characters directly
