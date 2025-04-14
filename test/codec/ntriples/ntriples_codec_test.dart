@@ -972,15 +972,6 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
         expect(reencoded, equals(expectedOutput));
       });
 
-      // FIXME: Test fails with the following message:
-      // Parse Error (L1:C49): Expected final dot (.)
-      // package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart 205:7   _NTriplesDecoderSink._parseTripleLine
-      // package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart 163:22  _NTriplesDecoderSink._processLine
-      // package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart 134:7   _NTriplesDecoderSink._processBuffer
-      // package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart 80:5    _NTriplesDecoderSink.add
-      // package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart 32:20   NTriplesDecoder.convert
-      // dart:convert                                                      Codec.decode
-      // test/codec/ntriples/ntriples_codec_test.dart 992:39              main.<fn>.<fn>.<fn>
       test('Tests canonicalization of triples with extra whitespace 3', (){
         final input = '''
 <http://example/s>  <http://example/p>  "Alice" @en  .
@@ -995,15 +986,6 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
         expect(reencoded, equals(expectedOutput));
       });
 
-      // FIXME: Test fails with the following message:
-      // Parse Error (L1:C46): Expected final dot (.)
-      // package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart 205:7   _NTriplesDecoderSink._parseTripleLine
-      // package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart 163:22  _NTriplesDecoderSink._processLine
-      // package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart 134:7   _NTriplesDecoderSink._processBuffer
-      // package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart 80:5    _NTriplesDecoderSink.add
-      // package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart 32:20   NTriplesDecoder.convert
-      // dart:convert                                                      Codec.decode
-      // test/codec/ntriples/ntriples_codec_test.dart 1015:39              main.<fn>.<fn>.<fn>
       test('Tests canonicalization of triples with extra whitespace 4', (){
         final input = '''
 <http://example/s>  <http://example/p>  "2"  ^^  <http://www.w3.org/2001/XMLSchema#integer>  .

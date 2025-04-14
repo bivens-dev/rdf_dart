@@ -574,6 +574,8 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
     IRI? parsedDatatype;
     String? pureLanguageTag; // Store only the BCP47 part
 
+    _skipOptionalWhitespace(line); // Allow whitespace after closing quote
+
     if (_cursor < line.length) {
       final suffixStartCol = _cursor + 1;
       if (line[_cursor] == '@') {
