@@ -205,9 +205,10 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
       throw ParseError('Expected final dot (.)', lineNumber, _cursor + 1);
     }
     _cursor++; // Consume the dot
+    _skipOptionalWhitespace(line); // Skip any spaces/tabs after the dot
 
-    // 6. Ensure nothing else follows the dot on the trimmed line
-    if (_cursor < line.length && line.substring(_cursor).trim().isNotEmpty) {
+    // 6. Ensure we are at the end of the line OR a comment starts
+    if (_cursor < line.length && line[_cursor] != '#') {
       // Corrected: message, lineNumber, columnNumber
       throw ParseError(
         'Unexpected characters after final dot (.)',
@@ -572,6 +573,8 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
     TextDirection? parsedDirection;
     IRI? parsedDatatype;
     String? pureLanguageTag; // Store only the BCP47 part
+
+    _skipOptionalWhitespace(line); // Allow whitespace after closing quote
 
     if (_cursor < line.length) {
       final suffixStartCol = _cursor + 1;

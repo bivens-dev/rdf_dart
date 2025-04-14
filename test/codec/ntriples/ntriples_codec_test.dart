@@ -605,5 +605,514 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
         expect(encoded, equals(expectedOutcome));
       });
     });
+
+    group('Canonicalization', () {
+      test('Tests canonicalization of triples including comments', (){
+        final input = '''
+# comment
+<http://example/s> <http://example/p> <http://example/o> . # comment
+''';
+        final expectedOutput = '''
+<http://example/s> <http://example/p> <http://example/o> .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of triples including language-tagged string', (){
+        final input = '''
+<http://a.example/s> <http://a.example/p> "chat"@en .
+''';
+        final expectedOutput = '''
+<http://a.example/s> <http://a.example/p> "chat"@en .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of triples including directional language-tagged string', (){
+        final input = '''
+<http://a.example/s> <http://a.example/p> "chat"@en--ltr .
+''';
+        final expectedOutput = '''
+<http://a.example/s> <http://a.example/p> "chat"@en--ltr .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of literals with control characters', (){
+        final input = r'''
+<http://a.example/s> <http://a.example/p> "\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\t\u000B\u000C\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F" .
+''';
+        final expectedOutput = r'''
+<http://a.example/s> <http://a.example/p> "\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\b\t\u000B\f\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of literals with punctuation characters', (){
+        final input = r'''
+<http://a.example/s> <http://a.example/p> " !\"#$%&():;<=>?@[]^_`{|}~" .
+''';
+        final expectedOutput = r'''
+<http://a.example/s> <http://a.example/p> " !\"#$%&():;<=>?@[]^_`{|}~" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test(r"Tests canonicalization of literal_ascii_boundaries '\x00\x26\x28...'", (){
+        final input = '''
+<http://a.example/s> <http://a.example/p> " 	&([]" .
+''';
+        final expectedOutput = r'''
+<http://a.example/s> <http://a.example/p> "\u0000\t\u000B\f\u000E&([]\u007F" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test(r'Tests canonicalization of literal with 2 dquotes \"\"\"a\"\"b\"\"\"', (){
+        final input = r'''
+<http://a.example/s> <http://a.example/p> "x\"\"y" .
+''';
+        final expectedOutput = r'''
+<http://a.example/s> <http://a.example/p> "x\"\"y" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test("Tests canonicalization of literal with 2 squotes \"x''y\"", (){
+        final input = '''
+<http://a.example/s> <http://a.example/p> "x''y" .
+''';
+        final expectedOutput = '''
+<http://a.example/s> <http://a.example/p> "x''y" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of literals with backspace', (){
+        final input = r'''
+<http://a.example/s> <http://a.example/p> "\b" .
+''';
+        final expectedOutput = r'''
+<http://a.example/s> <http://a.example/p> "\b" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of literals with carriage return', (){
+        final input = r'''
+<http://a.example/s> <http://a.example/p> "\r" .
+''';
+        final expectedOutput = r'''
+<http://a.example/s> <http://a.example/p> "\r" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of literals with character tabulation', (){
+        final input = r'''
+<http://a.example/s> <http://a.example/p> "\t" .
+''';
+        final expectedOutput = r'''
+<http://a.example/s> <http://a.example/p> "\t" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of literals with double quote', (){
+        final input = r'''
+<http://a.example/s> <http://a.example/p> "x\"y" .
+''';
+        final expectedOutput = r'''
+<http://a.example/s> <http://a.example/p> "x\"y" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of literals with form feed', (){
+        final input = r'''
+<http://a.example/s> <http://a.example/p> "\f" .
+''';
+        final expectedOutput = r'''
+<http://a.example/s> <http://a.example/p> "\f" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of literals with line feed', (){
+        final input = r'''
+<http://a.example/s> <http://a.example/p> "\n" .
+''';
+        final expectedOutput = r'''
+<http://a.example/s> <http://a.example/p> "\n" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of literals with numeric escapes', (){
+        final input = r'''
+<http://a.example/s> <http://a.example/p> "\u006F" .
+''';
+        final expectedOutput = '''
+<http://a.example/s> <http://a.example/p> "o" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of literals with numeric escapes 4', (){
+        final input = r'''
+<http://a.example/s> <http://a.example/p> "\u006F" .
+''';
+        final expectedOutput = '''
+<http://a.example/s> <http://a.example/p> "o" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of literals with numeric escapes 8', (){
+        final input = r'''
+<http://a.example/s> <http://a.example/p> "\U0000006F" .
+''';
+        final expectedOutput = '''
+<http://a.example/s> <http://a.example/p> "o" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of literals with reverse solidus', (){
+        final input = r'''
+<http://a.example/s> <http://a.example/p> "\\" .
+''';
+        final expectedOutput = r'''
+<http://a.example/s> <http://a.example/p> "\\" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of literals with reverse solidus 2', (){
+        final input = r'''
+<http://example.org/ns#s> <http://example.org/ns#p1> "test-\\" .
+''';
+        final expectedOutput = r'''
+<http://example.org/ns#s> <http://example.org/ns#p1> "test-\\" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of literals with single quotes', (){
+        final input = '''
+<http://a.example/s> <http://a.example/p> "x'y" .
+''';
+        final expectedOutput = '''
+<http://a.example/s> <http://a.example/p> "x'y" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of literal with explicit xsd:string', (){
+        final input = '''
+<http://example/s> <http://example/p> "foo"^^<http://www.w3.org/2001/XMLSchema#string> .
+''';
+        final expectedOutput = '''
+<http://example/s> <http://example/p> "foo" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of literals with UTF8 boundaries', (){
+        final input = '''
+<http://a.example/s> <http://a.example/p> "߿ࠀ࿿က쿿퀀퟿�𐀀𿿽񀀀󿿽􀀀􏿽" .
+''';
+        final expectedOutput = '''
+<http://a.example/s> <http://a.example/p> "߿ࠀ࿿က쿿퀀퟿�𐀀𿿽񀀀󿿽􀀀􏿽" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of triples without optional whitespace', (){
+        final input = '''
+<http://example/s><http://example/p><http://example/o>.
+''';
+        final expectedOutput = '''
+<http://example/s> <http://example/p> <http://example/o> .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of triples without optional whitespace 2', (){
+        final input = '''
+<http://example/s><http://example/p>"Alice".
+''';
+        final expectedOutput = '''
+<http://example/s> <http://example/p> "Alice" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of triples with extra whitespace', (){
+        final input = '''
+<http://example/s>  <http://example/p>  <http://example/o>  .  
+''';
+        final expectedOutput = '''
+<http://example/s> <http://example/p> <http://example/o> .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of triples with extra whitespace 2', (){
+        final input = '''
+<http://example/s>  <http://example/p>  "Alice"  .
+''';
+        final expectedOutput = '''
+<http://example/s> <http://example/p> "Alice" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of triples with extra whitespace 3', (){
+        final input = '''
+<http://example/s>  <http://example/p>  "Alice" @en  .
+''';
+        final expectedOutput = '''
+<http://example/s> <http://example/p> "Alice"@en .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of triples with extra whitespace 4', (){
+        final input = '''
+<http://example/s>  <http://example/p>  "2"  ^^  <http://www.w3.org/2001/XMLSchema#integer>  .
+''';
+        final expectedOutput = '''
+<http://example/s> <http://example/p> "2"^^<http://www.w3.org/2001/XMLSchema#integer> .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of IRIs', (){
+        final input = '''
+<http://example/s> <http://example/p> <http://example/o> .
+''';
+        final expectedOutput = '''
+<http://example/s> <http://example/p> <http://example/o> .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of IRIs #2', (){
+        final input = '''
+# x53 is capital S
+<http://example/\u0053> <http://example/p> <http://example/o> .
+''';
+        final expectedOutput = '''
+<http://example/S> <http://example/p> <http://example/o> .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of IRIs #3', (){
+        final input = r'''
+# x53 is capital S
+<http://example/\U00000053> <http://example/p> <http://example/o> .
+''';
+        final expectedOutput = '''
+<http://example/S> <http://example/p> <http://example/o> .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      // FIXME: Test fails with the following message:
+      // Expected: '<http://example/s> <http://example/p> <scheme:!$%25&\'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~?#> .\n'
+      //      ''
+      // Actual: '<http://example/s> <http://example/p> <scheme:!$%25&\'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~#> .\n'
+      //      ''
+      // Which: is different.
+      //    Expected: ... rstuvwxyz~?#> .\n
+      //      Actual: ... rstuvwxyz~#> .\n
+      //                            ^
+      //     Differ at offset 128
+      //
+      // package:matcher                                      expect
+      // test/codec/ntriples/ntriples_codec_test.dart 1090:9  main.<fn>.<fn>.<fn>
+      test('Tests canonicalization of IRIs #4', (){
+        final input = r'''
+# IRI with all chars in it.
+<http://example/s> <http://example/p> <scheme:!$%25&'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~?#> .
+''';
+        final expectedOutput = r'''
+<http://example/s> <http://example/p> <scheme:!$%25&'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~?#> .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of string escapes', (){
+        final input = r'''
+<http://example/s> <http://example/p> "a\n" .
+''';
+        final expectedOutput = r'''
+<http://example/s> <http://example/p> "a\n" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of string escapes #2', (){
+        final input = r'''
+<http://example/s> <http://example/p> "a\u0020b" .
+''';
+        final expectedOutput = '''
+<http://example/s> <http://example/p> "a b" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('Tests canonicalization of string escapes #3', (){
+        final input = r'''
+<http://example/s> <http://example/p> "a\U00000020b" .
+''';
+        final expectedOutput = '''
+<http://example/s> <http://example/p> "a b" .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+    });
   });
 }
