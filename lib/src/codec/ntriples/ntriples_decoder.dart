@@ -238,7 +238,16 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
     _checkNotEof(line, 'subject', startCol);
     final char = line[_cursor];
     if (char == '<') {
-      return _parseIri(line, lineNumber);
+      final iri = _parseIri(line, lineNumber);
+      if (iri.value.hasScheme) {
+        return iri;
+      } else {
+        throw ParseError(
+          'Relative IRI <$iri> not allowed as subject (absolute IRI required)',
+          lineNumber,
+          startCol,
+        );
+      }
     } else if (char == '_' &&
         _cursor + 1 < line.length &&
         line[_cursor + 1] == ':') {
@@ -256,7 +265,17 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
     final startCol = _cursor + 1;
     _checkNotEof(line, 'predicate', startCol);
     if (line[_cursor] == '<') {
-      return _parseIri(line, lineNumber);
+      // return _parseIri(line, lineNumber);
+      final iri = _parseIri(line, lineNumber);
+      if (iri.value.hasScheme) {
+        return iri;
+      } else {
+        throw ParseError(
+          'Relative IRI <$iri> not allowed as predicate (absolute IRI required)',
+          lineNumber,
+          startCol,
+        );
+      }
     } else {
       throw ParseError('Expected IRI to start predicate', lineNumber, startCol);
     }
@@ -274,7 +293,16 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
         return _parseTripleTerm(line, lineNumber);
       } else {
         // Assume IRI if not TripleTerm start sequence
-        return _parseIri(line, lineNumber);
+        final iri = _parseIri(line, lineNumber);
+        if (iri.value.hasScheme) {
+          return iri;
+        } else {
+          throw ParseError(
+            'Relative IRI <$iri> not allowed as object (absolute IRI required)',
+            lineNumber,
+            startCol,
+          );
+        }
       }
     } else if (char == '_' &&
         _cursor + 1 < line.length &&
@@ -430,8 +458,24 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
     // No need for labelIntermediateStartCursor here
     while (_cursor < line.length) {
       final currentCharCode = line.codeUnitAt(_cursor);
+      final isDot = currentCharCode == 0x2E; /* '.' */
+
+      // Check if this character is potentially the triple terminator dot
+      // It's a potential terminator if it's a dot AND followed by EOL, whitespace, or comment
+      final isPotentialTerminator =
+          isDot &&
+          (_cursor + 1 == line.length ||
+              line[_cursor + 1] == ' ' ||
+              line[_cursor + 1] == '\t' ||
+              line[_cursor + 1] == '#');
+
       if (_isPnChars(currentCharCode) || currentCharCode == 0x2E /* '.' */ ) {
-        _cursor++;
+        // Only consume if it's NOT the potential terminator dot
+        if (!isPotentialTerminator) {
+          _cursor++;
+        } else {
+          break; // Stop before consuming the potential terminator dot
+        }
       } else {
         break; // End of label characters
       }
