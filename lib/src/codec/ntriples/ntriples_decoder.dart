@@ -265,7 +265,6 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
     final startCol = _cursor + 1;
     _checkNotEof(line, 'predicate', startCol);
     if (line[_cursor] == '<') {
-      // return _parseIri(line, lineNumber);
       final iri = _parseIri(line, lineNumber);
       if (iri.value.hasScheme) {
         return iri;
