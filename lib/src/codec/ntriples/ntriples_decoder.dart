@@ -258,14 +258,17 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
     final startCol = _cursor + 1;
     _checkNotEof(line, 'predicate', startCol);
     if (line[_cursor] == '<') {
-      final iri = _parseIri(line, lineNumber);
-      if (iri.value.hasScheme) {
-        return iri;
+      final iriResult = NFormatsParserUtils.parseIri(line, _cursor, lineNumber);
+      // Update the sink's cursor from the result record
+      _cursor = iriResult.cursor;
+      final iriTerm = iriResult.term;
+      if (iriTerm.value.hasScheme) {
+        return iriTerm;
       } else {
         throw ParseError(
-          'Relative IRI <$iri> not allowed as predicate (absolute IRI required)',
+          'Relative IRI <${iriTerm.value}> not allowed as predicate (absolute IRI required)',
           lineNumber,
-          startCol,
+          startCol, // Error relates to the start of the term
         );
       }
     } else {
