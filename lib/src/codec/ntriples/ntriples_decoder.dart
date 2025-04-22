@@ -2,7 +2,7 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:rdf_dart/rdf_dart.dart';
-import 'package:rdf_dart/src/codec/ntriples/parse_error.dart';
+import 'package:rdf_dart/src/codec/n_formats/parse_error.dart';
 
 /// Converts an N-Triples string representation into a `List<Triple>`.
 ///
