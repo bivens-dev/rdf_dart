@@ -306,30 +306,111 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
     _checkNotEof(line, 'object', startCol);
     final char = line[_cursor];
     if (char == '<') {
-      // Could be IRI or Triple Term
+      // --- IRI or Triple Term Path ---
       // Look ahead more carefully
       if (_cursor + 2 < line.length && line.startsWith('<<(', _cursor)) {
         // Check for '<<( '
         return _parseTripleTerm(line, lineNumber);
       } else {
-        // Assume IRI if not TripleTerm start sequence
-        final iri = _parseIri(line, lineNumber);
-        if (iri.value.hasScheme) {
-          return iri;
+        // --- IRI Path ---
+        final iriResult = NFormatsParserUtils.parseIri(
+          line,
+          _cursor,
+          lineNumber,
+        );
+        // Update the sink's cursor
+        _cursor = iriResult.cursor;
+        // Use the term from the result
+        final iriTerm = iriResult.term;
+        if (iriTerm.value.hasScheme) {
+          return iriTerm;
         } else {
           throw ParseError(
-            'Relative IRI <$iri> not allowed as object (absolute IRI required)',
+            'Relative IRI <${iriTerm.value}> not allowed as object (absolute IRI required)',
             lineNumber,
-            startCol,
+            startCol, // Error relates to the start of the term
           );
         }
       }
     } else if (char == '_' &&
         _cursor + 1 < line.length &&
         line[_cursor + 1] == ':') {
-      return _parseBlankNode(line, lineNumber);
+      // --- Blank Node Path ---
+      final bnodeResult = NFormatsParserUtils.parseBlankNodeLabel(line, _cursor, lineNumber);
+      // Update the sink's cursor
+      _cursor = bnodeResult.cursor;
+      // Get the parsed label string
+      final label = bnodeResult.label;
+
+      // Re-integrate the caching logic (same as in _parseSubject)
+      if (_bnodeLabels.containsKey(label)) {
+        return _bnodeLabels[label]!;
+      } else {
+        final newNode = BlankNode(label);
+        _bnodeLabels[label] = newNode;
+        return newNode;
+      }
     } else if (char == '"') {
-      return _parseLiteral(line, lineNumber);
+      // --- Literal Path ---
+      // return _parseLiteral(line, lineNumber);
+      final literalResult = NFormatsParserUtils.parseLiteralComponents(line, _cursor, lineNumber);
+      // Update the sink's cursor *before* trying to construct the Literal
+      _cursor = literalResult.cursor;
+
+      // Now, re-integrate Literal construction using the returned components
+
+      // Determine the correct datatype for the constructor
+      final IRI datatypeForConstructor;
+      if (literalResult.languageTag != null) {
+        // If language tag is present, datatype MUST be rdf:langString
+        datatypeForConstructor = RDF.langString;
+      } else {
+        // Otherwise, use the parsed datatype, or default to xsd:string
+        datatypeForConstructor = literalResult.datatypeIri ?? XSD.string;
+      }
+
+      // Calculate language tag start column for potential errors (same logic as original _parseLiteral)
+      int? languageTagStartCol;
+       if (literalResult.languageTag != null) {
+         // Find the '@' before the current cursor
+         final atPos = line.lastIndexOf('@', _cursor);
+         if (atPos != -1 && atPos > startCol) { // Ensure '@' is after term start
+            languageTagStartCol = atPos + 2;
+         } else {
+            languageTagStartCol = startCol; // Fallback
+         }
+      }
+      // Column where the literal content started (after opening quote)
+      // We need to calculate this based on where the literal started.
+      // startCol is the position of '"', so content starts at startCol + 1
+      final contentStartCol = startCol + 1;
+
+      // Construct the Literal - include the original try/catch block
+      try {
+        return Literal(
+          literalResult.lexicalForm,
+          datatypeForConstructor, // Use determined datatype
+          literalResult.languageTag,
+          literalResult.direction,
+        );
+      } on LiteralConstraintException catch (e) {
+        throw ParseError('Invalid literal arguments: $e', lineNumber, startCol);
+      } on InvalidLexicalFormException catch (e) {
+        throw ParseError(
+          'Invalid lexical form for datatype ${e.datatypeIri}: "${e.lexicalForm}" ($e)',
+          lineNumber,
+          contentStartCol,
+        );
+      } on InvalidLanguageTagException catch (e) {
+        throw ParseError(
+          'Invalid language tag: "${e.languageTag}" ($e)',
+          lineNumber,
+          languageTagStartCol ?? startCol,
+        );
+      } catch (e) {
+        // Catch other potential errors during Literal creation
+        throw ParseError('Error creating literal: $e', lineNumber, startCol);
+      }
     } else {
       throw ParseError(
         'Expected IRI, Blank Node, Literal or Triple Term to start object',
