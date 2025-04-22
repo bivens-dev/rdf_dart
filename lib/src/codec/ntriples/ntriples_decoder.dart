@@ -206,7 +206,10 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
       throw ParseError('Expected final dot (.)', lineNumber, _cursor + 1);
     }
     _cursor++; // Consume the dot
-    _cursor = NFormatsParserUtils.skipOptionalWhitespace(line, _cursor); // Skip any spaces/tabs after the dot
+    _cursor = NFormatsParserUtils.skipOptionalWhitespace(
+      line,
+      _cursor,
+    ); // Skip any spaces/tabs after the dot
 
     // 6. Ensure we are at the end of the line OR a comment starts
     if (_cursor < line.length && line[_cursor] != '#') {
@@ -231,12 +234,17 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
     _checkNotEof(line, 'subject', startCol);
     final char = line[_cursor];
     if (char == '<') {
-      final iri = _parseIri(line, lineNumber);
-      if (iri.value.hasScheme) {
-        return iri;
+      // --- IRI Path ---
+      final iriResult = NFormatsParserUtils.parseIri(line, _cursor, lineNumber);
+      // Update the sink's cursor
+      _cursor = iriResult.cursor;
+      // Use the term from the result
+      final iriTerm = iriResult.term;
+      if (iriTerm.value.hasScheme) {
+        return iriTerm;
       } else {
         throw ParseError(
-          'Relative IRI <$iri> not allowed as subject (absolute IRI required)',
+          'Relative IRI <${iriTerm.value}> not allowed as subject (absolute IRI required)',
           lineNumber,
           startCol,
         );
@@ -244,7 +252,24 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
     } else if (char == '_' &&
         _cursor + 1 < line.length &&
         line[_cursor + 1] == ':') {
-      return _parseBlankNode(line, lineNumber);
+      // --- Blank Node Path ---
+      final bnodeResult = NFormatsParserUtils.parseBlankNodeLabel(
+        line,
+        _cursor,
+        lineNumber,
+      );
+      // Update the sink's cursor
+      _cursor = bnodeResult.cursor;
+      // Get the parsed label string
+      final label = bnodeResult.label;
+      // Re-integrate the caching logic using the sink's _bnodeLabels map
+      if (_bnodeLabels.containsKey(label)) {
+        return _bnodeLabels[label]!;
+      } else {
+        final newNode = BlankNode(label); // Create BlankNode object here
+        _bnodeLabels[label] = newNode; // Cache it in the sink
+        return newNode;
+      }
     } else {
       throw ParseError(
         'Expected IRI or Blank Node to start subject',
@@ -613,7 +638,10 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
     IRI? parsedDatatype;
     String? pureLanguageTag; // Store only the BCP47 part
 
-    _cursor = NFormatsParserUtils.skipOptionalWhitespace(line, _cursor); // Allow whitespace after closing quote
+    _cursor = NFormatsParserUtils.skipOptionalWhitespace(
+      line,
+      _cursor,
+    ); // Allow whitespace after closing quote
 
     if (_cursor < line.length) {
       final suffixStartCol = _cursor + 1;
@@ -715,7 +743,10 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
           );
         }
         _cursor += 2; // Consume '^^'
-        _cursor = NFormatsParserUtils.skipOptionalWhitespace(line, _cursor); // Allow whitespace before IRI starts
+        _cursor = NFormatsParserUtils.skipOptionalWhitespace(
+          line,
+          _cursor,
+        ); // Allow whitespace before IRI starts
         _checkNotEof(line, 'datatype IRI', _cursor + 1);
 
         if (line[_cursor] != '<') {
@@ -803,7 +834,10 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
     }
     _cursor += 3; // Consume '<<('
 
-    _cursor = NFormatsParserUtils.skipOptionalWhitespace(line, _cursor); // Allow whitespace after '<<('
+    _cursor = NFormatsParserUtils.skipOptionalWhitespace(
+      line,
+      _cursor,
+    ); // Allow whitespace after '<<('
 
     // --- Parse inner triple components recursively ---
     // These calls will update the _cursor internally
@@ -814,14 +848,20 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
 
     // 2. Parse Inner Predicate
     final predicate = _parsePredicate(line, lineNumber);
-    _cursor = NFormatsParserUtils.skipOptionalWhitespace(line, _cursor); // Require whitespace after inner predicate
+    _cursor = NFormatsParserUtils.skipOptionalWhitespace(
+      line,
+      _cursor,
+    ); // Require whitespace after inner predicate
 
     // 3. Parse Inner Object
     final object = _parseObject(line, lineNumber);
 
     // --- End of inner triple components ---
 
-    _cursor = NFormatsParserUtils.skipOptionalWhitespace(line, _cursor); // Allow whitespace before closing ')>>'
+    _cursor = NFormatsParserUtils.skipOptionalWhitespace(
+      line,
+      _cursor,
+    ); // Allow whitespace before closing ')>>'
 
     // Check for closing ')>>'
     final closingMarkStartCol = _cursor + 1;
