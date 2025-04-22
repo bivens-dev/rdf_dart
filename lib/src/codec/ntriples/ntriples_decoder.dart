@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:rdf_dart/rdf_dart.dart';
+import 'package:rdf_dart/src/codec/n_formats/n_formats_parser_utils.dart';
 import 'package:rdf_dart/src/codec/n_formats/parse_error.dart';
 
 /// Converts an N-Triples string representation into a `List<Triple>`.
@@ -188,24 +189,24 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
 
     // 1. Parse Subject
     final subject = _parseSubject(line, lineNumber);
-    _skipOptionalWhitespace(line);
+    _cursor = NFormatsParserUtils.skipOptionalWhitespace(line, _cursor);
 
     // 2. Parse Predicate
     final predicate = _parsePredicate(line, lineNumber);
-    _skipOptionalWhitespace(line);
+    _cursor = NFormatsParserUtils.skipOptionalWhitespace(line, _cursor);
 
     // 3. Parse Object - it extends to the final '.'
     final object = _parseObject(line, lineNumber);
 
     // 4. Skip optional whitespace before the final dot
-    _skipOptionalWhitespace(line);
+    _cursor = NFormatsParserUtils.skipOptionalWhitespace(line, _cursor);
 
     // 5. Validate the final dot
     if (_cursor >= line.length || line[_cursor] != '.') {
       throw ParseError('Expected final dot (.)', lineNumber, _cursor + 1);
     }
     _cursor++; // Consume the dot
-    _skipOptionalWhitespace(line); // Skip any spaces/tabs after the dot
+    _cursor = NFormatsParserUtils.skipOptionalWhitespace(line, _cursor); // Skip any spaces/tabs after the dot
 
     // 6. Ensure we are at the end of the line OR a comment starts
     if (_cursor < line.length && line[_cursor] != '#') {
@@ -219,14 +220,6 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
     _cursor = line.length;
 
     return Triple(subject, predicate, object);
-  }
-
-  /// Skips zero or more whitespace characters (space or tab).
-  void _skipOptionalWhitespace(String line) {
-    while (_cursor < line.length &&
-        (line[_cursor] == ' ' || line[_cursor] == '\t')) {
-      _cursor++;
-    }
   }
 
   // --- Term Parsing ---
@@ -617,7 +610,7 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
     IRI? parsedDatatype;
     String? pureLanguageTag; // Store only the BCP47 part
 
-    _skipOptionalWhitespace(line); // Allow whitespace after closing quote
+    _cursor = NFormatsParserUtils.skipOptionalWhitespace(line, _cursor); // Allow whitespace after closing quote
 
     if (_cursor < line.length) {
       final suffixStartCol = _cursor + 1;
@@ -719,7 +712,7 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
           );
         }
         _cursor += 2; // Consume '^^'
-        _skipOptionalWhitespace(line); // Allow whitespace before IRI starts
+        _cursor = NFormatsParserUtils.skipOptionalWhitespace(line, _cursor); // Allow whitespace before IRI starts
         _checkNotEof(line, 'datatype IRI', _cursor + 1);
 
         if (line[_cursor] != '<') {
@@ -807,25 +800,25 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
     }
     _cursor += 3; // Consume '<<('
 
-    _skipOptionalWhitespace(line); // Allow whitespace after '<<('
+    _cursor = NFormatsParserUtils.skipOptionalWhitespace(line, _cursor); // Allow whitespace after '<<('
 
     // --- Parse inner triple components recursively ---
     // These calls will update the _cursor internally
 
     // 1. Parse Inner Subject
     final subject = _parseSubject(line, lineNumber);
-    _skipOptionalWhitespace(line);
+    _cursor = NFormatsParserUtils.skipOptionalWhitespace(line, _cursor);
 
     // 2. Parse Inner Predicate
     final predicate = _parsePredicate(line, lineNumber);
-    _skipOptionalWhitespace(line); // Require whitespace after inner predicate
+    _cursor = NFormatsParserUtils.skipOptionalWhitespace(line, _cursor); // Require whitespace after inner predicate
 
     // 3. Parse Inner Object
     final object = _parseObject(line, lineNumber);
 
     // --- End of inner triple components ---
 
-    _skipOptionalWhitespace(line); // Allow whitespace before closing ')>>'
+    _cursor = NFormatsParserUtils.skipOptionalWhitespace(line, _cursor); // Allow whitespace before closing ')>>'
 
     // Check for closing ')>>'
     final closingMarkStartCol = _cursor + 1;
