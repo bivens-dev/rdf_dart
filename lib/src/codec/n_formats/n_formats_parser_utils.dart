@@ -15,7 +15,7 @@ class NFormatsParserUtils {
   /// [lineNumber] is the 1-based line number for error reporting.
   /// [context] is a string describing what was being parsed.
   /// [contextCol] is the 1-based column number where the context started.
-  static void _checkNotEof(
+  static void checkNotEof(
     String line,
     int cursor,
     int lineNumber,
@@ -186,7 +186,7 @@ class NFormatsParserUtils {
         final escapeStartCol = currentCursor + 1;
         currentCursor++; // Consume '\'
         // Use static helper (make public if needed, or keep private if only called here)
-        _checkNotEof(
+        checkNotEof(
           line,
           currentCursor,
           lineNumber,
@@ -325,7 +325,7 @@ class NFormatsParserUtils {
         final escapeStartCol = currentCursor + 1;
         currentCursor++; // Consume '\'
         // Call static helper, passing current state
-        _checkNotEof(
+        checkNotEof(
           line,
           currentCursor,
           lineNumber,
@@ -425,7 +425,7 @@ class NFormatsParserUtils {
     currentCursor += 2; // Consume '_:'
 
     // Use static helper _checkNotEof (adjust if made public)
-    _checkNotEof(
+    checkNotEof(
       line,
       currentCursor,
       lineNumber,
@@ -549,7 +549,7 @@ class NFormatsParserUtils {
         // --- Parse LANG_DIR ---
         currentCursor = cursorAfterWhitespace + 1; // Consume '@'
         final tagStartCursor = currentCursor;
-        _checkNotEof(
+        checkNotEof(
           line,
           currentCursor,
           lineNumber,
@@ -577,7 +577,7 @@ class NFormatsParserUtils {
             break; // Found '--', potential direction separator
           }
           currentCursor++; // Consume '-'
-          _checkNotEof(
+          checkNotEof(
             line,
             currentCursor,
             lineNumber,
@@ -603,7 +603,7 @@ class NFormatsParserUtils {
             line.startsWith('--', currentCursor)) {
           final directionStartCursor = currentCursor;
           currentCursor += 2; // Consume '--'
-          _checkNotEof(
+          checkNotEof(
             line,
             currentCursor,
             lineNumber,
@@ -638,7 +638,7 @@ class NFormatsParserUtils {
         parsedLanguageTag = line.substring(tagStartCursor, bcp47EndCursor);
       } else if (line[cursorAfterWhitespace] == '^') {
         // --- Parse Datatype IRI ---
-        _checkNotEof(
+        checkNotEof(
           line,
           cursorAfterWhitespace,
           lineNumber,
@@ -658,7 +658,7 @@ class NFormatsParserUtils {
           line,
           currentCursor,
         ); // Allow whitespace
-        _checkNotEof(
+        checkNotEof(
           line,
           currentCursor,
           lineNumber,
