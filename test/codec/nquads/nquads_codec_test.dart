@@ -1529,24 +1529,95 @@ void main() {
         expect(encodedResult, equals(expectedResult));
       });
 
-      // FIXME: Currently we don't support creating named graphs with BlankNode identifiers
-      // test('BNode graph with URI triple', () async {
-      //   // <http://example/s> <http://example/p> <http://example/o> _:g .
-      //   final expectedResult = await _loadTestFile('nq-syntax-uri-05.nq');
-      //   final dataset = Dataset();
-      //   final graph = Graph();
-      //   graph.add(
-      //     Triple(
-      //       IRITerm(IRI('http://example/s')),
-      //       IRITerm(IRI('http://example/p')),
-      //       Literal('o', RDF.langString, 'en'),
-      //     ),
-      //   );
-      //   dataset.addNamedGraph(IRITerm(), graph);
-      //   final encodedResult = nQuadsCodec.encoder.convert(dataset);
+      test('BNode graph with URI triple', () async {
+        // <http://example/s> <http://example/p> <http://example/o> _:g .
+        final expectedResult = await _loadTestFile('nq-syntax-uri-05.nq');
+        final dataset = Dataset();
+        final graph = Graph();
+        graph.add(
+          Triple(
+            IRITerm(IRI('http://example/s')),
+            IRITerm(IRI('http://example/p')),
+            Literal('o', RDF.langString, 'en'),
+          ),
+        );
+        dataset.addNamedGraph(BlankNode('g'), graph);
+        final encodedResult = nQuadsCodec.encoder.convert(dataset);
 
-      //   expect(encodedResult, equals(expectedResult));
-      // });
+        expect(encodedResult, equals(expectedResult));
+      });
+
+      test('BNode graph with BNode subject', () async {
+        // _:s <http://example/p> <http://example/o> _:g .
+        final expectedResult = await _loadTestFile('nq-syntax-bnode-02.nq');
+        final dataset = Dataset();
+        final graph = Graph();
+        graph.add(
+          Triple(
+            BlankNode('s'),
+            IRITerm(IRI('http://example/p')),
+            IRITerm(IRI('http://example/o')),
+          ),
+        );
+        dataset.addNamedGraph(BlankNode('g'), graph);
+        final encodedResult = nQuadsCodec.encoder.convert(dataset);
+
+        expect(encodedResult, equals(expectedResult));
+      });
+
+      test('BNode graph with BNode object', () async {
+        // <http://example/s> <http://example/p> _:o _:g .
+        final expectedResult = await _loadTestFile('nq-syntax-bnode-03.nq');
+        final dataset = Dataset();
+        final graph = Graph();
+        graph.add(
+          Triple(
+            IRITerm(IRI('http://example/s')),
+            IRITerm(IRI('http://example/p')),
+            BlankNode('o'),
+          ),
+        );
+        dataset.addNamedGraph(BlankNode('g'), graph);
+        final encodedResult = nQuadsCodec.encoder.convert(dataset);
+
+        expect(encodedResult, equals(expectedResult));
+      });
+
+      test('BNode graph with language tagged literal', () async {
+        // <http://example/s> <http://example/p> "o"@en _:g .
+        final expectedResult = await _loadTestFile('nq-syntax-bnode-05.nq');
+        final dataset = Dataset();
+        final graph = Graph();
+        graph.add(
+          Triple(
+            IRITerm(IRI('http://example/s')),
+            IRITerm(IRI('http://example/p')),
+            Literal('o', RDF.langString, 'en'),
+          ),
+        );
+        dataset.addNamedGraph(BlankNode('g'), graph);
+        final encodedResult = nQuadsCodec.encoder.convert(dataset);
+
+        expect(encodedResult, equals(expectedResult));
+      });
+
+      test('BNode graph with simple literal', () async {
+        // <http://example/s> <http://example/p> "o" _:g .
+        final expectedResult = await _loadTestFile('nq-syntax-bnode-04.nq');
+        final dataset = Dataset();
+        final graph = Graph();
+        graph.add(
+          Triple(
+            IRITerm(IRI('http://example/s')),
+            IRITerm(IRI('http://example/p')),
+            Literal('o', XSD.string),
+          ),
+        );
+        dataset.addNamedGraph(BlankNode('g'), graph);
+        final encodedResult = nQuadsCodec.encoder.convert(dataset);
+
+        expect(encodedResult, equals(expectedResult));
+      });
 
       test('Empty Dataset', () async {
         //
