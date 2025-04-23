@@ -1,6 +1,12 @@
 // Tests for N-Quads Codec
 
 import 'dart:io';
+import 'package:rdf_dart/src/blank_node.dart';
+import 'package:rdf_dart/src/codec/n_formats/parse_error.dart';
+import 'package:rdf_dart/src/codec/nquads/nquads_codec.dart';
+import 'package:rdf_dart/src/dataset.dart';
+import 'package:rdf_dart/src/iri.dart';
+import 'package:rdf_dart/src/iri_term.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -17,15 +23,51 @@ void main() {
     group('Syntax', () {
       group('Positive', () {
         test('URI graph with URI triple', () async {
+          // <http://example/s> <http://example/p> <http://example/o> <http://example/g> .
           final quads = await _loadTestFile('nq-syntax-uri-01.nq');
+          final result = nQuadsCodec.decoder.convert(quads);
+          final namedGraph = result.namedGraphs[IRITerm(IRI('http://example/g'))]!;
+          final parsedTriple = namedGraph.triples.first;
+
+          expect(result, isA<Dataset>());
+          expect(result.defaultGraph.triples.length, equals(0));
+          expect(namedGraph.triples.length, equals(1));
+          expect(result.namedGraphs.length, equals(1));
+          expect(parsedTriple.subject, equals(IRITerm(IRI('http://example/s'))));
+          expect(parsedTriple.predicate, equals(IRITerm(IRI('http://example/p'))));
+          expect(parsedTriple.object, equals(IRITerm(IRI('http://example/o'))));
         });
 
         test('URI graph with BNode subject', () async {
+          // _:s <http://example/p> <http://example/o> <http://example/g> .
           final quads = await _loadTestFile('nq-syntax-uri-02.nq');
+          final result = nQuadsCodec.decoder.convert(quads);
+          final namedGraph = result.namedGraphs[IRITerm(IRI('http://example/g'))]!;
+          final parsedTriple = namedGraph.triples.first;
+
+          expect(result, isA<Dataset>());
+          expect(result.defaultGraph.triples.length, equals(0));
+          expect(namedGraph.triples.length, equals(1));
+          expect(result.namedGraphs.length, equals(1));
+          expect(parsedTriple.subject, equals(BlankNode('s')));
+          expect(parsedTriple.predicate, equals(IRITerm(IRI('http://example/p'))));
+          expect(parsedTriple.object, equals(IRITerm(IRI('http://example/o'))));
         });
 
         test('URI graph with BNode object', () async {
+          // <http://example/s> <http://example/p> _:o <http://example/g> .
           final quads = await _loadTestFile('nq-syntax-uri-03.nq');
+          final result = nQuadsCodec.decoder.convert(quads);
+          final namedGraph = result.namedGraphs[IRITerm(IRI('http://example/g'))]!;
+          final parsedTriple = namedGraph.triples.first;
+
+          expect(result, isA<Dataset>());
+          expect(result.defaultGraph.triples.length, equals(0));
+          expect(namedGraph.triples.length, equals(1));
+          expect(result.namedGraphs.length, equals(1));
+          expect(parsedTriple.subject, equals(IRITerm(IRI('http://example/s'))));
+          expect(parsedTriple.predicate, equals(IRITerm(IRI('http://example/p'))));
+          expect(parsedTriple.object, equals(BlankNode('s')));
         });
 
         test('URI graph with simple literal', () async {
@@ -235,142 +277,282 @@ void main() {
       group('Negative', () {
         test('Graph name may not be a simple literal', () async {
           final quads = await _loadTestFile('nq-syntax-bad-literal-01.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('Graph name may not be a language tagged literal', () async {
           final quads = await _loadTestFile('nq-syntax-bad-literal-02.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('Graph name may not be a datatyped literal', () async {
           final quads = await _loadTestFile('nq-syntax-bad-literal-03.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('Graph name URI must be absolute', () async {
           final quads = await _loadTestFile('nq-syntax-bad-uri-01.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('N-Quads does not have a fifth element', () async {
           final quads = await _loadTestFile('nq-syntax-bad-quint-01.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('N-Quads does not have a fifth element', () async {
           final quads = await _loadTestFile('nq-syntax-bad-quint-01.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('Bad IRI : space', () async {
           final quads = await _loadTestFile('nt-syntax-bad-uri-01.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('Bad IRI : bad escape', () async {
           final quads = await _loadTestFile('nt-syntax-bad-uri-02.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('Bad IRI : bad long escape', () async {
           final quads = await _loadTestFile('nt-syntax-bad-uri-03.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('Bad IRI : character escapes not allowed', () async {
           final quads = await _loadTestFile('nt-syntax-bad-uri-04.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('Bad IRI : character escapes not allowed (2)', () async {
           final quads = await _loadTestFile('nt-syntax-bad-uri-05.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('Bad IRI : relative IRI not allowed in subject', () async {
           final quads = await _loadTestFile('nt-syntax-bad-uri-06.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('Bad IRI : relative IRI not allowed in predicate', () async {
           final quads = await _loadTestFile('nt-syntax-bad-uri-07.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('Bad IRI : relative IRI not allowed in object', () async {
           final quads = await _loadTestFile('nt-syntax-bad-uri-08.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('Bad IRI : relative IRI not allowed in datatype', () async {
           final quads = await _loadTestFile('nt-syntax-bad-uri-09.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('@prefix not allowed in N-Quads', () async {
           final quads = await _loadTestFile('nt-syntax-bad-prefix-01.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('@base not allowed in N-Quads', () async {
           final quads = await _loadTestFile('nt-syntax-bad-base-01.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('Colon in bnode label not allowed', () async {
           final quads = await _loadTestFile('nt-syntax-bad-bnode-01.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('Colon in bnode label not allowed (2)', () async {
           final quads = await _loadTestFile('nt-syntax-bad-bnode-01.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('N-Quads does not have objectList', () async {
           final quads = await _loadTestFile('nt-syntax-bad-struct-01.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('N-Quads does not have predicateObjectList', () async {
           final quads = await _loadTestFile('nt-syntax-bad-struct-02.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('langString with bad lang', () async {
           final quads = await _loadTestFile('nt-syntax-bad-lang-01.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('Bad string escape', () async {
           final quads = await _loadTestFile('nt-syntax-bad-esc-01.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('Bad string escape (2)', () async {
           final quads = await _loadTestFile('nt-syntax-bad-esc-02.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('Bad string escape (3)', () async {
           final quads = await _loadTestFile('nt-syntax-bad-esc-03.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('mismatching string literal open/close', () async {
           final quads = await _loadTestFile('nt-syntax-bad-string-01.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('mismatching string literal open/close (2)', () async {
           final quads = await _loadTestFile('nt-syntax-bad-string-02.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('single quotes', () async {
           final quads = await _loadTestFile('nt-syntax-bad-string-03.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('long single string literal', () async {
           final quads = await _loadTestFile('nt-syntax-bad-string-04.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('long double string literal', () async {
           final quads = await _loadTestFile('nt-syntax-bad-string-05.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('string literal with no end', () async {
           final quads = await _loadTestFile('nt-syntax-bad-string-06.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('string literal with no start', () async {
           final quads = await _loadTestFile('nt-syntax-bad-string-07.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('no numbers in N-Quads (integer)', () async {
           final quads = await _loadTestFile('nt-syntax-bad-num-01.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('no numbers in N-Quads (decimal)', () async {
           final quads = await _loadTestFile('nt-syntax-bad-num-02.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
 
         test('no numbers in N-Quads (float)', () async {
           final quads = await _loadTestFile('nt-syntax-bad-num-03.nq');
+          expect(
+            () => nQuadsCodec.decode(quads),
+            throwsA(isA<ParseError>()),
+          );
         });
       });
     });
