@@ -11,6 +11,7 @@ import 'package:rdf_dart/src/iri.dart';
 import 'package:rdf_dart/src/iri_term.dart';
 import 'package:rdf_dart/src/literal.dart';
 import 'package:rdf_dart/src/triple.dart';
+import 'package:rdf_dart/src/triple_term.dart';
 import 'package:rdf_dart/src/vocab/rdf_vocab.dart';
 import 'package:rdf_dart/src/vocab/xsd_vocab.dart';
 import 'package:test/test.dart';
@@ -21,9 +22,74 @@ void main() {
 
     group('Decoding', () {
       group('Syntax', () {
-        group('Positive', () {});
+        group('Positive', () {
+          test('Object Triple Term', () async {
+            // <http://example/x> <http://example/p> <<( <http://example/s> <http://example/p> <http://example/o> )>> <http://example/g> .
+            final quads = await _loadTestFile('nquads-star-syntax-2.nq');
+            final result = nQuadsCodec.decoder.convert(quads);
+            final namedGraph =
+                result.namedGraphs[IRITerm(IRI('http://example/g'))]!;
+            final parsedTriple = namedGraph.triples.first;
 
-        group('Negative', () {});
+            expect(result, isA<Dataset>());
+            expect(result.defaultGraph.triples.length, equals(0));
+            expect(namedGraph.triples.length, equals(1));
+            expect(result.namedGraphs.length, equals(1));
+            expect(
+              parsedTriple.subject,
+              equals(IRITerm(IRI('http://example/s'))),
+            );
+            expect(
+              parsedTriple.predicate,
+              equals(IRITerm(IRI('http://example/p'))),
+            );
+            expect(
+              parsedTriple.object,
+              equals(
+                TripleTerm(
+                  Triple(
+                    IRITerm(IRI('http://example/s')),
+                    IRITerm(IRI('http://example/p')),
+                    IRITerm(IRI('http://example/o')),
+                  ),
+                ),
+              ),
+            );
+          });
+        });
+
+        group('Negative', () {
+          test('Subject Triple Term', () async {
+            // <<( <http://example/s> <http://example/p> <http://example/o> )>> <http://example/q> <http://example/z> <http://example/g> .
+            final quads = await _loadTestFile('nquads-star-syntax-1.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+
+          test('Subject and Object Triple Term', () async {
+            // <<( <http://example/s1> <http://example/p1> <http://example/o1> )>> <http://example/q> <<( <http://example/s2> <http://example/p2> <http://example/o2> )>> <http://example/g> .
+            final quads = await _loadTestFile('nquads-star-syntax-3.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+
+          test('Subject and Object Triple Term without spaces', () async {
+            // <<(<http://example/s1><http://example/p1><http://example/o1>)>><http://example/q><<(<http://example/s2><http://example/p2><http://example/o2>)>><http://example/g>.
+            final quads = await _loadTestFile('nquads-star-syntax-4.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+
+          test('Nested Subject Triple Term ', () async {
+            // <<(<<(<http://example/s1><http://example/p1><http://example/o1>)>><http://example/q1><<(<http://example/s2><http://example/p2><http://example/o2>)>>)>><http://example/q2><<(<<(<http://example/s3><http://example/p3><http://example/o3>)>><http://example/q3><<(<http://example/s4><http://example/p4><http://example/o4>)>>)>><http://example/g>.
+            final quads = await _loadTestFile('nquads-star-syntax-5.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+
+          test('Triple Term with a Blank Node in Subject Position ', () async {
+            // _:b0 <http://example/p> <http://example/o> .
+            // <<( _:b0 <http://example/p> <http://example/o> )>> <http://example/q> "ABC" <http://example/g> .
+            final quads = await _loadTestFile('nquads-star-bnode-1.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+        });
       });
     });
   });
@@ -1428,7 +1494,7 @@ void main() {
       });
 
       test('URI graph with simple literal', () async {
-            // <http://example/s> <http://example/p> "o" <http://example/g> .
+        // <http://example/s> <http://example/p> "o" <http://example/g> .
         final expectedResult = await _loadTestFile('nq-syntax-uri-04.nq');
         final dataset = Dataset();
         final graph = Graph();
