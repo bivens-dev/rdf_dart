@@ -1,5 +1,6 @@
 import 'package:rdf_dart/src/graph.dart';
 import 'package:rdf_dart/src/iri_term.dart';
+import 'package:rdf_dart/src/subject_type.dart';
 
 /// Represents an RDF Dataset, which is a collection of RDF graphs.
 ///
@@ -20,10 +21,10 @@ class Dataset {
 
   /// The named graphs of the dataset.
   ///
-  /// This map associates an [IRITerm] with a [Graph], where the IRI is the name
-  /// of the graph and the Graph is the set of triples associated with that
-  /// name.
-  final Map<IRITerm, Graph> namedGraphs;
+  /// This map associates an [SubjectTerm] with a [Graph], where the [IRITerm] or 
+  /// the [BlankNode] is the name of the graph and the Graph is the set of 
+  /// triples associated with that name.
+  final Map<SubjectTerm, Graph> namedGraphs;
 
   /// Creates a new empty Dataset.
   ///
@@ -46,7 +47,7 @@ class Dataset {
   /// final name = IRI('http://example.com/graph');
   /// dataset.addNamedGraph(name, graph);
   /// ```
-  void addNamedGraph(IRITerm name, Graph graph) {
+  void addNamedGraph(SubjectTerm name, Graph graph) {
     namedGraphs[name] = graph;
   }
 
@@ -65,7 +66,7 @@ class Dataset {
   /// // remove the graph
   /// dataset.removeNamedGraph(name);
   /// ```
-  void removeNamedGraph(IRITerm name) {
+  void removeNamedGraph(SubjectTerm name) {
     namedGraphs.remove(name);
   }
 }
