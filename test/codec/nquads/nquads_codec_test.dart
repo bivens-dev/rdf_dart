@@ -67,7 +67,7 @@ void main() {
           expect(result.namedGraphs.length, equals(1));
           expect(parsedTriple.subject, equals(IRITerm(IRI('http://example/s'))));
           expect(parsedTriple.predicate, equals(IRITerm(IRI('http://example/p'))));
-          expect(parsedTriple.object, equals(BlankNode('s')));
+          expect(parsedTriple.object, equals(BlankNode('o')));
         });
 
         test('URI graph with simple literal', () async {
