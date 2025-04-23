@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:rdf_dart/src/codec/nquads/nquads_decoder.dart';
+import 'package:rdf_dart/src/codec/nquads/nquads_encoder.dart';
 import 'package:rdf_dart/src/dataset.dart';
 
 /// A [Codec] for encoding and decoding RDF [Dataset] objects to and from
@@ -19,7 +20,7 @@ class NQuadsCodec extends Codec<Dataset, String> {
 
   /// Returns the [NQuadsEncoder] for converting a [Dataset] to an N-Quads string.
   @override
-  Converter<Dataset, String> get encoder => throw UnimplementedError();
+  Converter<Dataset, String> get encoder => const NQuadsEncoder();
 
   /// Returns the [NQuadsDecoder] for converting an N-Quads string to a [Dataset].
   @override

@@ -1488,9 +1488,10 @@ void main() {
     });
 
     group('Encoding', () {
-      test('URI graph with URI triple', () async {
-        // <http://example/s> <http://example/p> <http://example/o> <http://example/g> .
-        final expectedResult = await _loadTestFile('nq-syntax-uri-01.nq');
+      test('URI graph with URI triple', ()  {
+        final expectedResult = '''
+<http://example/s> <http://example/p> <http://example/o> <http://example/g> .
+''';
         final dataset = Dataset();
         final graph = Graph();
         graph.add(
@@ -1506,9 +1507,10 @@ void main() {
         expect(encodedResult, equals(expectedResult));
       });
 
-      test('URI graph with BNode subject', () async {
-        // _:s <http://example/p> <http://example/o> <http://example/g> .
-        final expectedResult = await _loadTestFile('nq-syntax-uri-02.nq');
+      test('URI graph with BNode subject', () {
+        final expectedResult = '''
+_:s <http://example/p> <http://example/o> <http://example/g> .
+''';
         final dataset = Dataset();
         final graph = Graph();
         graph.add(
@@ -1524,9 +1526,10 @@ void main() {
         expect(encodedResult, equals(expectedResult));
       });
 
-      test('URI graph with BNode object', () async {
-        // <http://example/s> <http://example/p> _:o <http://example/g> .
-        final expectedResult = await _loadTestFile('nq-syntax-uri-03.nq');
+      test('URI graph with BNode object', () {
+        final expectedResult = '''
+<http://example/s> <http://example/p> _:o <http://example/g> .
+''';
         final dataset = Dataset();
         final graph = Graph();
         graph.add(
@@ -1542,9 +1545,10 @@ void main() {
         expect(encodedResult, equals(expectedResult));
       });
 
-      test('URI graph with simple literal', () async {
-        // <http://example/s> <http://example/p> "o" <http://example/g> .
-        final expectedResult = await _loadTestFile('nq-syntax-uri-04.nq');
+      test('URI graph with simple literal', () {
+        final expectedResult = '''
+<http://example/s> <http://example/p> "o" <http://example/g> .
+''';
         final dataset = Dataset();
         final graph = Graph();
         graph.add(
@@ -1560,9 +1564,10 @@ void main() {
         expect(encodedResult, equals(expectedResult));
       });
 
-      test('URI graph with language tagged literal', () async {
-        // <http://example/s> <http://example/p> "o"@en <http://example/g> .
-        final expectedResult = await _loadTestFile('nq-syntax-uri-05.nq');
+      test('URI graph with language tagged literal', () {
+        final expectedResult = '''
+<http://example/s> <http://example/p> "o"@en <http://example/g> .
+''';
         final dataset = Dataset();
         final graph = Graph();
         graph.add(
@@ -1578,16 +1583,17 @@ void main() {
         expect(encodedResult, equals(expectedResult));
       });
 
-      test('BNode graph with URI triple', () async {
-        // <http://example/s> <http://example/p> <http://example/o> _:g .
-        final expectedResult = await _loadTestFile('nq-syntax-uri-05.nq');
+      test('BNode graph with URI triple', ()  {
+        final expectedResult = '''
+<http://example/s> <http://example/p> <http://example/o> _:g .
+''';
         final dataset = Dataset();
         final graph = Graph();
         graph.add(
           Triple(
             IRITerm(IRI('http://example/s')),
             IRITerm(IRI('http://example/p')),
-            Literal('o', RDF.langString, 'en'),
+            IRITerm(IRI('http://example/o')),
           ),
         );
         dataset.addNamedGraph(BlankNode('g'), graph);
@@ -1596,9 +1602,10 @@ void main() {
         expect(encodedResult, equals(expectedResult));
       });
 
-      test('BNode graph with BNode subject', () async {
-        // _:s <http://example/p> <http://example/o> _:g .
-        final expectedResult = await _loadTestFile('nq-syntax-bnode-02.nq');
+      test('BNode graph with BNode subject', () {
+        final expectedResult = '''
+_:s <http://example/p> <http://example/o> _:g .
+''';
         final dataset = Dataset();
         final graph = Graph();
         graph.add(
@@ -1614,9 +1621,10 @@ void main() {
         expect(encodedResult, equals(expectedResult));
       });
 
-      test('BNode graph with BNode object', () async {
-        // <http://example/s> <http://example/p> _:o _:g .
-        final expectedResult = await _loadTestFile('nq-syntax-bnode-03.nq');
+      test('BNode graph with BNode object', () {
+        final expectedResult = '''
+<http://example/s> <http://example/p> _:o _:g .
+''';
         final dataset = Dataset();
         final graph = Graph();
         graph.add(
@@ -1632,9 +1640,10 @@ void main() {
         expect(encodedResult, equals(expectedResult));
       });
 
-      test('BNode graph with language tagged literal', () async {
-        // <http://example/s> <http://example/p> "o"@en _:g .
-        final expectedResult = await _loadTestFile('nq-syntax-bnode-05.nq');
+      test('BNode graph with language tagged literal', () {
+        final expectedResult = '''
+<http://example/s> <http://example/p> "o"@en _:g .
+''';
         final dataset = Dataset();
         final graph = Graph();
         graph.add(
@@ -1650,9 +1659,11 @@ void main() {
         expect(encodedResult, equals(expectedResult));
       });
 
-      test('BNode graph with simple literal', () async {
-        // <http://example/s> <http://example/p> "o" _:g .
-        final expectedResult = await _loadTestFile('nq-syntax-bnode-04.nq');
+      test('BNode graph with simple literal', () {
+        // 
+        final expectedResult = '''
+<http://example/s> <http://example/p> "o" _:g .
+''';
         final dataset = Dataset();
         final graph = Graph();
         graph.add(
@@ -1669,7 +1680,6 @@ void main() {
       });
 
       test('Empty Dataset', () async {
-        //
         final expectedResult = await _loadTestFile('nt-syntax-file-01.nq');
         final dataset = Dataset();
         final encodedResult = nQuadsCodec.encoder.convert(dataset);
