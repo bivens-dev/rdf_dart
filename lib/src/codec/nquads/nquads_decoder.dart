@@ -342,7 +342,11 @@ class _NQuadsDecoderSink implements ChunkedConversionSink<String> {
         _cursor + 1 < line.length &&
         line[_cursor + 1] == ':') {
       // --- Blank Node Path ---
-      final bnodeResult = NFormatsParserUtils.parseBlankNodeLabel(line, _cursor, lineNumber);
+      final bnodeResult = NFormatsParserUtils.parseBlankNodeLabel(
+        line,
+        _cursor,
+        lineNumber,
+      );
       _cursor = bnodeResult.cursor;
       final label = bnodeResult.label;
       // Return from cache or create/add/return new BlankNode
@@ -431,7 +435,11 @@ class _NQuadsDecoderSink implements ChunkedConversionSink<String> {
         _cursor + 1 < line.length &&
         line[_cursor + 1] == ':') {
       // --- Blank Node Path ---
-      final bnodeResult = NFormatsParserUtils.parseBlankNodeLabel(line, _cursor, lineNumber);
+      final bnodeResult = NFormatsParserUtils.parseBlankNodeLabel(
+        line,
+        _cursor,
+        lineNumber,
+      );
       _cursor = bnodeResult.cursor;
       final label = bnodeResult.label;
       // Return from cache or create/add/return new BlankNode
@@ -496,7 +504,11 @@ class _NQuadsDecoderSink implements ChunkedConversionSink<String> {
         );
       } catch (e, s) {
         // Catch other potential errors during Literal creation
-        throw ParseError('Internal error creating literal: $e\n$s', lineNumber, startCol);
+        throw ParseError(
+          'Internal error creating literal: $e\n$s',
+          lineNumber,
+          startCol,
+        );
       }
     } else {
       throw ParseError(

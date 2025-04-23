@@ -530,10 +530,7 @@ void main() {
               parsedTriple.predicate,
               equals(IRITerm(IRI('http://example/p'))),
             );
-            expect(
-              parsedTriple.object,
-              equals(Literal('string', XSD.string)),
-            );
+            expect(parsedTriple.object, equals(Literal('string', XSD.string)));
           });
 
           test('langString literal', () async {
@@ -1079,10 +1076,7 @@ void main() {
               parsedTriple.predicate,
               equals(IRITerm(IRI('http://a.example/p'))),
             );
-            expect(
-              parsedTriple.object,
-              equals(Literal('\u006F', XSD.string)),
-            );
+            expect(parsedTriple.object, equals(Literal('\u006F', XSD.string)));
           });
 
           test(r'literal with numeric escape8 \U', () async {
@@ -1104,10 +1098,7 @@ void main() {
               parsedTriple.predicate,
               equals(IRITerm(IRI('http://a.example/p'))),
             );
-            expect(
-              parsedTriple.object,
-              equals(Literal('\u006F', XSD.string)),
-            );
+            expect(parsedTriple.object, equals(Literal('\u006F', XSD.string)));
           });
 
           test('literal with REVERSE SOLIDUS', () async {
@@ -1151,10 +1142,7 @@ void main() {
               parsedTriple.predicate,
               equals(IRITerm(IRI('http://example.org/ns#p1'))),
             );
-            expect(
-              parsedTriple.object,
-              equals(Literal(r'test-\', XSD.string)),
-            );
+            expect(parsedTriple.object, equals(Literal(r'test-\', XSD.string)));
           });
 
           test('literal with squote "x\'y"', () async {
@@ -1488,7 +1476,7 @@ void main() {
     });
 
     group('Encoding', () {
-      test('URI graph with URI triple', ()  {
+      test('URI graph with URI triple', () {
         final expectedResult = '''
 <http://example/s> <http://example/p> <http://example/o> <http://example/g> .
 ''';
@@ -1583,7 +1571,7 @@ _:s <http://example/p> <http://example/o> <http://example/g> .
         expect(encodedResult, equals(expectedResult));
       });
 
-      test('BNode graph with URI triple', ()  {
+      test('BNode graph with URI triple', () {
         final expectedResult = '''
 <http://example/s> <http://example/p> <http://example/o> _:g .
 ''';
@@ -1660,7 +1648,7 @@ _:s <http://example/p> <http://example/o> _:g .
       });
 
       test('BNode graph with simple literal', () {
-        // 
+        //
         final expectedResult = '''
 <http://example/s> <http://example/p> "o" _:g .
 ''';

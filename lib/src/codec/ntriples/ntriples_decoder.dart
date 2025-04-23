@@ -231,7 +231,13 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
 
   SubjectTerm _parseSubject(String line, int lineNumber) {
     final startCol = _cursor + 1;
-    NFormatsParserUtils.checkNotEof(line, _cursor, lineNumber, 'subject', startCol);
+    NFormatsParserUtils.checkNotEof(
+      line,
+      _cursor,
+      lineNumber,
+      'subject',
+      startCol,
+    );
     final char = line[_cursor];
     if (char == '<') {
       // --- IRI Path ---
@@ -281,7 +287,13 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
 
   IRITerm _parsePredicate(String line, int lineNumber) {
     final startCol = _cursor + 1;
-    NFormatsParserUtils.checkNotEof(line, _cursor, lineNumber, 'predicate', startCol);
+    NFormatsParserUtils.checkNotEof(
+      line,
+      _cursor,
+      lineNumber,
+      'predicate',
+      startCol,
+    );
     if (line[_cursor] == '<') {
       final iriResult = NFormatsParserUtils.parseIri(line, _cursor, lineNumber);
       // Update the sink's cursor from the result record
@@ -303,7 +315,13 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
 
   RdfTerm _parseObject(String line, int lineNumber) {
     final startCol = _cursor + 1;
-    NFormatsParserUtils.checkNotEof(line, _cursor, lineNumber, 'object', startCol);
+    NFormatsParserUtils.checkNotEof(
+      line,
+      _cursor,
+      lineNumber,
+      'object',
+      startCol,
+    );
     final char = line[_cursor];
     if (char == '<') {
       // --- IRI or Triple Term Path ---

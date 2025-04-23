@@ -61,7 +61,8 @@ class NQuadsEncoder extends Converter<Dataset, String> {
       // Validate graphLabel type (must be IRI or BlankNode for N-Quads)
       if (graphLabel is! IRITerm && graphLabel is! BlankNode) {
         throw ArgumentError(
-            'Invalid graph label type for N-Quads serialization: ${graphLabel.runtimeType}. Must be IRITerm or BlankNode.');
+          'Invalid graph label type for N-Quads serialization: ${graphLabel.runtimeType}. Must be IRITerm or BlankNode.',
+        );
       }
       final graphLabelStr = _formatTerm(graphLabel);
 
@@ -90,7 +91,7 @@ class _NQuadsEncoderSink implements ChunkedConversionSink<Dataset> {
   // Keep a reference to the encoder to use its private formatting helpers
   final NQuadsEncoder _encoder;
 
-   _NQuadsEncoderSink(this._outSink, this._encoder);
+  _NQuadsEncoderSink(this._outSink, this._encoder);
 
   @override
   void add(Dataset chunk) {
@@ -98,20 +99,21 @@ class _NQuadsEncoderSink implements ChunkedConversionSink<Dataset> {
 
     // 1. Serialize triples from the chunk's default graph
     for (final triple in chunk.defaultGraph.triples) {
-       final subjStr = _encoder._formatTerm(triple.subject);
-       final predStr = _encoder._formatTerm(triple.predicate);
-       final objStr = _encoder._formatTerm(triple.object);
-       buffer.write('$subjStr $predStr $objStr .\n');
+      final subjStr = _encoder._formatTerm(triple.subject);
+      final predStr = _encoder._formatTerm(triple.predicate);
+      final objStr = _encoder._formatTerm(triple.object);
+      buffer.write('$subjStr $predStr $objStr .\n');
     }
 
     // 2. Serialize quads from the chunk's named graphs
     chunk.namedGraphs.forEach((graphLabel, graph) {
       // Consistent validation as in the convert method
       if (graphLabel is! IRITerm && graphLabel is! BlankNode) {
-         // Let the error propagate. Applications using chunked conversion
-         // should handle potential errors from the stream/sink.
-         throw ArgumentError(
-            'Invalid graph label type for N-Quads serialization: ${graphLabel.runtimeType}. Must be IRITerm or BlankNode.');
+        // Let the error propagate. Applications using chunked conversion
+        // should handle potential errors from the stream/sink.
+        throw ArgumentError(
+          'Invalid graph label type for N-Quads serialization: ${graphLabel.runtimeType}. Must be IRITerm or BlankNode.',
+        );
       }
       final graphLabelStr = _encoder._formatTerm(graphLabel);
 
@@ -125,7 +127,7 @@ class _NQuadsEncoderSink implements ChunkedConversionSink<Dataset> {
 
     // Add the formatted string chunk to the output sink if it's not empty
     if (buffer.isNotEmpty) {
-        _outSink.add(buffer.toString());
+      _outSink.add(buffer.toString());
     }
   }
 

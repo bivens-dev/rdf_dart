@@ -21,8 +21,8 @@ class Dataset {
 
   /// The named graphs of the dataset.
   ///
-  /// This map associates an [SubjectTerm] with a [Graph], where the [IRITerm] or 
-  /// the [BlankNode] is the name of the graph and the Graph is the set of 
+  /// This map associates an [SubjectTerm] with a [Graph], where the [IRITerm] or
+  /// the [BlankNode] is the name of the graph and the Graph is the set of
   /// triples associated with that name.
   final Map<SubjectTerm, Graph> namedGraphs;
 

@@ -6,7 +6,6 @@ import 'package:rdf_dart/src/vocab/xsd_vocab.dart' show XSD;
 // ignore: avoid_classes_with_only_static_members
 /// Utility functions for serializing RDF terms into N-Triples/N-Quads format.
 class NFormatsSerializerUtils {
-
   /// Creates a UCHAR escape sequence (`\\uXXXX` or `\\UXXXXXXXX`) for a rune.
   ///
   /// This is used for escaping characters in IRIs and string literals according
@@ -67,7 +66,8 @@ class NFormatsSerializerUtils {
           if ((rune >= 0x00 && rune <= 0x07) || // Before BS (\b)
               rune == 0x0B || // Vertical Tab (After LF \n, Before FF \f)
               (rune >= 0x0E && rune <= 0x1F) || // After CR (\r) up to US
-              rune == 0x7F) { // DEL
+              rune == 0x7F) {
+            // DEL
             buffer.write(escapeRune(rune));
           } else {
             // Append other characters (printable ASCII, high-value UTF-8) directly
@@ -100,8 +100,9 @@ class NFormatsSerializerUtils {
           rune == 0x7C || // |
           rune == 0x5E || // ^
           rune == 0x60 || // `
-          rune == 0x5C // \
-          ) {
+          rune ==
+              0x5C // \
+              ) {
         buffer.write(escapeRune(rune));
       } else {
         buffer.writeCharCode(rune);
@@ -160,7 +161,9 @@ class NFormatsSerializerUtils {
       // RDF 1.2 Directionality suffix
       if (literal.baseDirection != null) {
         buffer.write('--');
-        buffer.write(literal.baseDirection == TextDirection.ltr ? 'ltr' : 'rtl');
+        buffer.write(
+          literal.baseDirection == TextDirection.ltr ? 'ltr' : 'rtl',
+        );
       }
       // Datatype for language-tagged strings (rdf:langString or rdf:dirLangString)
       // MUST NOT be written explicitly.

@@ -1,5 +1,5 @@
 /// Represents a syntax error encountered during N-Triples or N-Quads parsing.
-      ///
+///
 /// Contains information about the error message, the location (line and column)
 /// where the error occurred.
 class ParseError implements Exception {
