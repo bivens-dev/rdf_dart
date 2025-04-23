@@ -25,9 +25,10 @@ RDF.dart is a Dart library designed to make it easy to work with [RDF (Resource 
     *   Robust IRI parsing based on RFC 3987.
     *   Validation checks for IRIs.
     *   Access to IRI components (scheme, authority, path, query, fragment).
-*   **N-Triples Serialization/Deserialization:**
-    *   Provides `nTriplesCodec`, a streaming encoder/decoder compliant with the `dart:convert` Codec interface.
+*   **N-Triples & N-Quads Serialization/Deserialization:**
+    *   Provides `nTriplesCodec` and `nQuadsCodec`, a streaming encoder/decoder compliant with the `dart:convert` Codec interface.
     *   Easily encode lists of `Triple` objects to N-Triples strings and decode N-Triples strings back into `Triple` objects.
+    *   Easily encode `Dataset` objects to N-Quads strings and decode N-Quads strings back into `Dataset` objects.
     *   Integrates seamlessly with Dart's I/O streams for efficient processing of large files.
 *   **Immutability:** Core data structures (`IRITerm`, `BlankNode`, `Literal`, `TripleTerm`, `Triple`, `IRI`) are immutable.
 *   **Well-Tested:** Core features have comprehensive unit tests.
