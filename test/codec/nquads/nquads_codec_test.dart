@@ -37,7 +37,7 @@ void main() {
             expect(result.namedGraphs.length, equals(1));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/s'))),
+              equals(IRITerm(IRI('http://example/x'))),
             );
             expect(
               parsedTriple.predicate,
@@ -429,7 +429,7 @@ void main() {
               equals(IRITerm(IRI('http://example/p'))),
             );
             expect(
-              parsedTriple.predicate,
+              parsedTriple.object,
               equals(IRITerm(IRI('http://example/o'))),
             );
           });
@@ -453,7 +453,7 @@ void main() {
               equals(IRITerm(IRI('http://example/p'))),
             );
             expect(
-              parsedTriple.predicate,
+              parsedTriple.object,
               equals(IRITerm(IRI('http://example/o'))),
             );
           });
@@ -477,7 +477,7 @@ void main() {
               equals(IRITerm(IRI('http://example/p'))),
             );
             expect(
-              parsedTriple.predicate,
+              parsedTriple.object,
               equals(IRITerm(IRI('http://example/o'))),
             );
           });
@@ -502,7 +502,7 @@ void main() {
               equals(IRITerm(IRI('http://example/p'))),
             );
             expect(
-              parsedTriple.predicate,
+              parsedTriple.object,
               equals(
                 IRITerm(
                   IRI(
@@ -531,7 +531,7 @@ void main() {
               equals(IRITerm(IRI('http://example/p'))),
             );
             expect(
-              parsedTriple.predicate,
+              parsedTriple.object,
               equals(Literal('string', XSD.string)),
             );
           });
@@ -554,7 +554,7 @@ void main() {
               equals(IRITerm(IRI('http://example/p'))),
             );
             expect(
-              parsedTriple.predicate,
+              parsedTriple.object,
               equals(Literal('string', RDF.langString, 'en')),
             );
           });
@@ -577,7 +577,7 @@ void main() {
               equals(IRITerm(IRI('http://example/p'))),
             );
             expect(
-              parsedTriple.predicate,
+              parsedTriple.object,
               equals(Literal('string', RDF.langString, 'en-uk')),
             );
           });
@@ -599,7 +599,7 @@ void main() {
               parsedTriple.predicate,
               equals(IRITerm(IRI('http://example/p'))),
             );
-            expect(parsedTriple.predicate, equals(Literal('a\n', XSD.string)));
+            expect(parsedTriple.object, equals(Literal('a\n', XSD.string)));
           });
 
           test('string literal with Unicode escape', () async {
@@ -619,7 +619,7 @@ void main() {
               parsedTriple.predicate,
               equals(IRITerm(IRI('http://example/p'))),
             );
-            expect(parsedTriple.predicate, equals(Literal('a b', XSD.string)));
+            expect(parsedTriple.object, equals(Literal('a b', XSD.string)));
           });
 
           test('string literal with long Unicode escape', () async {
@@ -639,7 +639,7 @@ void main() {
               parsedTriple.predicate,
               equals(IRITerm(IRI('http://example/p'))),
             );
-            expect(parsedTriple.predicate, equals(Literal('a b', XSD.string)));
+            expect(parsedTriple.object, equals(Literal('a b', XSD.string)));
           });
 
           test('bnode subject', () async {
@@ -741,7 +741,7 @@ void main() {
               parsedTriple.predicate,
               equals(IRITerm(IRI('http://example/p'))),
             );
-            expect(parsedTriple.predicate, equals(Literal('123', XSD.byte)));
+            expect(parsedTriple.object, equals(Literal('123', XSD.byte)));
           });
 
           test('integer as xsd:string', () async {
@@ -761,7 +761,7 @@ void main() {
               parsedTriple.predicate,
               equals(IRITerm(IRI('http://example/p'))),
             );
-            expect(parsedTriple.predicate, equals(Literal('123', XSD.string)));
+            expect(parsedTriple.object, equals(Literal('123', XSD.string)));
           });
 
           test('Submission test from Original RDF Test Cases', () async {
@@ -784,6 +784,12 @@ void main() {
           });
 
           test('Tests comments after a triple', () async {
+            DatatypeRegistry().registerDatatype(
+              IRI('http://example/dt'),
+              String,
+              (String lexicalForm) => lexicalForm,
+              (Object value) => value.toString(),
+            );
             // <http://example/s> <http://example/p> <http://example/o> . # comment
             // <http://example/s> <http://example/p> _:o . # comment
             // <http://example/s> <http://example/p> "o" . # comment
@@ -812,7 +818,7 @@ void main() {
               parsedTriple.predicate,
               equals(IRITerm(IRI('http://a.example/p'))),
             );
-            expect(parsedTriple.predicate, equals(Literal('x', XSD.string)));
+            expect(parsedTriple.object, equals(Literal('x', XSD.string)));
           });
 
           test(r'literal_all_controls \x00\x01\x02\x03\x04…', () async {
@@ -833,7 +839,7 @@ void main() {
               equals(IRITerm(IRI('http://a.example/p'))),
             );
             expect(
-              parsedTriple.predicate,
+              parsedTriple.object,
               equals(
                 Literal(
                   '\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\t\u000B\u000C\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F',
@@ -861,7 +867,7 @@ void main() {
               equals(IRITerm(IRI('http://a.example/p'))),
             );
             expect(
-              parsedTriple.predicate,
+              parsedTriple.object,
               equals(Literal(r' !"#$%&():;<=>?@[]^_`{|}~', XSD.string)),
             );
           });
@@ -884,7 +890,7 @@ void main() {
               equals(IRITerm(IRI('http://a.example/p'))),
             );
             expect(
-              parsedTriple.predicate,
+              parsedTriple.object,
               equals(Literal(' 	&([]', XSD.string)),
             );
           });
@@ -906,7 +912,7 @@ void main() {
               parsedTriple.predicate,
               equals(IRITerm(IRI('http://a.example/p'))),
             );
-            expect(parsedTriple.predicate, equals(Literal('x""y', XSD.string)));
+            expect(parsedTriple.object, equals(Literal('x""y', XSD.string)));
           });
 
           test('literal with 2 squotes "x'
@@ -927,7 +933,7 @@ void main() {
               parsedTriple.predicate,
               equals(IRITerm(IRI('http://a.example/p'))),
             );
-            expect(parsedTriple.predicate, equals(Literal("x''y", XSD.string)));
+            expect(parsedTriple.object, equals(Literal("x''y", XSD.string)));
           });
 
           test('literal with BACKSPACE', () async {
@@ -947,7 +953,7 @@ void main() {
               parsedTriple.predicate,
               equals(IRITerm(IRI('http://a.example/p'))),
             );
-            expect(parsedTriple.predicate, equals(Literal('\b', XSD.string)));
+            expect(parsedTriple.object, equals(Literal('\b', XSD.string)));
           });
 
           test('literal with CARRIAGE RETURN', () async {
@@ -969,7 +975,7 @@ void main() {
               parsedTriple.predicate,
               equals(IRITerm(IRI('http://a.example/p'))),
             );
-            expect(parsedTriple.predicate, equals(Literal('\r', XSD.string)));
+            expect(parsedTriple.object, equals(Literal('\r', XSD.string)));
           });
 
           test('literal with CHARACTER TABULATION', () async {
@@ -991,7 +997,7 @@ void main() {
               parsedTriple.predicate,
               equals(IRITerm(IRI('http://a.example/p'))),
             );
-            expect(parsedTriple.predicate, equals(Literal('\t', XSD.string)));
+            expect(parsedTriple.object, equals(Literal('\t', XSD.string)));
           });
 
           test('literal with dquote "x"y"', () async {
@@ -1011,7 +1017,7 @@ void main() {
               parsedTriple.predicate,
               equals(IRITerm(IRI('http://a.example/p'))),
             );
-            expect(parsedTriple.predicate, equals(Literal('x"y', XSD.string)));
+            expect(parsedTriple.object, equals(Literal('x"y', XSD.string)));
           });
 
           test('literal with FORM FEED', () async {
@@ -1031,7 +1037,7 @@ void main() {
               parsedTriple.predicate,
               equals(IRITerm(IRI('http://a.example/p'))),
             );
-            expect(parsedTriple.predicate, equals(Literal('\f', XSD.string)));
+            expect(parsedTriple.object, equals(Literal('\f', XSD.string)));
           });
 
           test('literal with LINE FEED', () async {
@@ -1051,7 +1057,7 @@ void main() {
               parsedTriple.predicate,
               equals(IRITerm(IRI('http://a.example/p'))),
             );
-            expect(parsedTriple.predicate, equals(Literal('\n', XSD.string)));
+            expect(parsedTriple.object, equals(Literal('\n', XSD.string)));
           });
 
           test(r'literal with numeric escape4 \u', () async {
@@ -1074,7 +1080,7 @@ void main() {
               equals(IRITerm(IRI('http://a.example/p'))),
             );
             expect(
-              parsedTriple.predicate,
+              parsedTriple.object,
               equals(Literal('\u006F', XSD.string)),
             );
           });
@@ -1099,7 +1105,7 @@ void main() {
               equals(IRITerm(IRI('http://a.example/p'))),
             );
             expect(
-              parsedTriple.predicate,
+              parsedTriple.object,
               equals(Literal('\u006F', XSD.string)),
             );
           });
@@ -1123,13 +1129,13 @@ void main() {
               parsedTriple.predicate,
               equals(IRITerm(IRI('http://a.example/p'))),
             );
-            expect(parsedTriple.predicate, equals(Literal(r'\', XSD.string)));
+            expect(parsedTriple.object, equals(Literal(r'\', XSD.string)));
           });
 
           test('REVERSE SOLIDUS at end of literal', () async {
             // <http://example.org/ns#s> <http://example.org/ns#p1> "test-\\" .
             final quads = await _loadTestFile(
-              'literal_with_REVERSE_SOLIDUS.nq',
+              'literal_with_REVERSE_SOLIDUS2.nq',
             );
             final result = nQuadsCodec.decoder.convert(quads);
             final parsedTriple = result.defaultGraph.triples.first;
@@ -1139,14 +1145,14 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://a.example/s'))),
+              equals(IRITerm(IRI('http://example.org/ns#s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://a.example/p'))),
+              equals(IRITerm(IRI('http://example.org/ns#p1'))),
             );
             expect(
-              parsedTriple.predicate,
+              parsedTriple.object,
               equals(Literal(r'test-\', XSD.string)),
             );
           });
@@ -1168,7 +1174,7 @@ void main() {
               parsedTriple.predicate,
               equals(IRITerm(IRI('http://a.example/p'))),
             );
-            expect(parsedTriple.predicate, equals(Literal("x'y", XSD.string)));
+            expect(parsedTriple.object, equals(Literal("x'y", XSD.string)));
           });
 
           test(r"literal_with_UTF8_boundaries '\x80\x7ff\x800\xfff…'", () async {
@@ -1191,7 +1197,7 @@ void main() {
               equals(IRITerm(IRI('http://a.example/p'))),
             );
             expect(
-              parsedTriple.predicate,
+              parsedTriple.object,
               equals(Literal('߿ࠀ࿿က쿿퀀퟿�𐀀𿿽񀀀󿿽􀀀􏿽', XSD.string)),
             );
           });
@@ -1214,7 +1220,7 @@ void main() {
               equals(IRITerm(IRI('http://a.example/p'))),
             );
             expect(
-              parsedTriple.predicate,
+              parsedTriple.object,
               equals(Literal('chat', RDF.langString, 'en')),
             );
           });
@@ -1230,14 +1236,14 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://a.example/s'))),
+              equals(IRITerm(IRI('http://example.org/ex#a'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://a.example/p'))),
+              equals(IRITerm(IRI('http://example.org/ex#b'))),
             );
             expect(
-              parsedTriple.predicate,
+              parsedTriple.object,
               equals(Literal('Cheers', RDF.langString, 'en-uk')),
             );
           });
@@ -1261,131 +1267,166 @@ void main() {
 
         group('Negative', () {
           test('Graph name may not be a simple literal', () async {
+            // <http://example/s> <http://example/p> <http://example/o> "o" .
             final quads = await _loadTestFile('nq-syntax-bad-literal-01.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('Graph name may not be a language tagged literal', () async {
+            // <http://example/s> <http://example/p> <http://example/o> "o"@en .
             final quads = await _loadTestFile('nq-syntax-bad-literal-02.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('Graph name may not be a datatyped literal', () async {
+            // <http://example/s> <http://example/p> <http://example/o> "o"^^<http://www.w3.org/2001/XMLSchema#string> .
             final quads = await _loadTestFile('nq-syntax-bad-literal-03.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('Graph name URI must be absolute', () async {
+            // # No relative IRIs in N-Quads
+            // <http://example/s> <http://example/p> <http://example/o> <g>.
             final quads = await _loadTestFile('nq-syntax-bad-uri-01.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('N-Quads does not have a fifth element', () async {
-            final quads = await _loadTestFile('nq-syntax-bad-quint-01.nq');
-            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
-          });
-
-          test('N-Quads does not have a fifth element', () async {
+            // # N-Quads rejects a quint
+            // <http://example/s> <http://example/p> <http://example/o> <http://example/g> <http://example/n> .
             final quads = await _loadTestFile('nq-syntax-bad-quint-01.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('Bad IRI : space', () async {
+            // # Bad IRI : space.
+            // <http://example/ space> <http://example/p> <http://example/o> .
             final quads = await _loadTestFile('nt-syntax-bad-uri-01.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('Bad IRI : bad escape', () async {
+            // # Bad IRI : bad escape
+            // <http://example/\u00ZZ11> <http://example/p> <http://example/o> .
             final quads = await _loadTestFile('nt-syntax-bad-uri-02.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('Bad IRI : bad long escape', () async {
+            // # Bad IRI : bad escape
+            // <http://example/\U00ZZ1111> <http://example/p> <http://example/o> .
             final quads = await _loadTestFile('nt-syntax-bad-uri-03.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('Bad IRI : character escapes not allowed', () async {
+            // # Bad IRI : character escapes not allowed.
+            // <http://example/\n> <http://example/p> <http://example/o> .
             final quads = await _loadTestFile('nt-syntax-bad-uri-04.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('Bad IRI : character escapes not allowed (2)', () async {
+            // # Bad IRI : character escapes not allowed.
+            // <http://example/\/> <http://example/p> <http://example/o> .
             final quads = await _loadTestFile('nt-syntax-bad-uri-05.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('Bad IRI : relative IRI not allowed in subject', () async {
+            // # No relative IRIs in N-Quads
+            // <s> <http://example/p> <http://example/o> .
             final quads = await _loadTestFile('nt-syntax-bad-uri-06.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('Bad IRI : relative IRI not allowed in predicate', () async {
+            // # No relative IRIs in N-Quads
+            // <http://example/s> <p> <http://example/o> .
             final quads = await _loadTestFile('nt-syntax-bad-uri-07.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('Bad IRI : relative IRI not allowed in object', () async {
+            // # No relative IRIs in N-Quads
+            // <http://example/s> <http://example/p> <o> .
             final quads = await _loadTestFile('nt-syntax-bad-uri-08.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('Bad IRI : relative IRI not allowed in datatype', () async {
+            // # No relative IRIs in N-Quads
+            // <http://example/s> <http://example/p> "foo"^^<dt> .
             final quads = await _loadTestFile('nt-syntax-bad-uri-09.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('@prefix not allowed in N-Quads', () async {
+            // @prefix : <http://example/> .
             final quads = await _loadTestFile('nt-syntax-bad-prefix-01.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('@base not allowed in N-Quads', () async {
+            // @base <http://example/> .
             final quads = await _loadTestFile('nt-syntax-bad-base-01.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('Colon in bnode label not allowed', () async {
+            // _::a  <http://example/p> <http://example/o> .
             final quads = await _loadTestFile('nt-syntax-bad-bnode-01.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('Colon in bnode label not allowed (2)', () async {
-            final quads = await _loadTestFile('nt-syntax-bad-bnode-01.nq');
+            // _:abc:def  <http://example/p> <http://example/o> .
+            final quads = await _loadTestFile('nt-syntax-bad-bnode-02.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('N-Quads does not have objectList', () async {
+            // <http://example/s> <http://example/p> <http://example/o>, <http://example/o2> .
             final quads = await _loadTestFile('nt-syntax-bad-struct-01.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('N-Quads does not have predicateObjectList', () async {
+            // <http://example/s> <http://example/p> <http://example/o>; <http://example/p2>, <http://example/o2> .
             final quads = await _loadTestFile('nt-syntax-bad-struct-02.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('langString with bad lang', () async {
+            // # Bad lang tag
+            // <http://example/s> <http://example/p> "string"@1 .
             final quads = await _loadTestFile('nt-syntax-bad-lang-01.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('Bad string escape', () async {
+            // # Bad string escape
+            // <http://example/s> <http://example/p> "a\zb" .
             final quads = await _loadTestFile('nt-syntax-bad-esc-01.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('Bad string escape (2)', () async {
+            // # Bad string escape
+            // <http://example/s> <http://example/p> "\uWXYZ" .
             final quads = await _loadTestFile('nt-syntax-bad-esc-02.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('Bad string escape (3)', () async {
+            // # Bad string escape
+            // <http://example/s> <http://example/p> "\U0000WXYZ" .
             final quads = await _loadTestFile('nt-syntax-bad-esc-03.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('mismatching string literal open/close', () async {
+            // <http://example/s> <http://example/p> "abc' .
             final quads = await _loadTestFile('nt-syntax-bad-string-01.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
@@ -1396,41 +1437,49 @@ void main() {
           });
 
           test('single quotes', () async {
+            // <http://example/s> <http://example/p> 1.0e1 .
             final quads = await _loadTestFile('nt-syntax-bad-string-03.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('long single string literal', () async {
+            // <http://example/s> <http://example/p> '''abc''' .
             final quads = await _loadTestFile('nt-syntax-bad-string-04.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('long double string literal', () async {
+            // <http://example/s> <http://example/p> """abc""" .
             final quads = await _loadTestFile('nt-syntax-bad-string-05.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('string literal with no end', () async {
+            // <http://example/s> <http://example/p> "abc .
             final quads = await _loadTestFile('nt-syntax-bad-string-06.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('string literal with no start', () async {
+            // <http://example/s> <http://example/p> abc" .
             final quads = await _loadTestFile('nt-syntax-bad-string-07.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('no numbers in N-Quads (integer)', () async {
+            // <http://example/s> <http://example/p> 1 .
             final quads = await _loadTestFile('nt-syntax-bad-num-01.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('no numbers in N-Quads (decimal)', () async {
+            // <http://example/s> <http://example/p> 1.0 .
             final quads = await _loadTestFile('nt-syntax-bad-num-02.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
           test('no numbers in N-Quads (float)', () async {
+            // <http://example/s> <http://example/p> 1.0e0 .
             final quads = await _loadTestFile('nt-syntax-bad-num-03.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
