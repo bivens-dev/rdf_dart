@@ -6,9 +6,11 @@ import 'package:rdf_dart/src/codec/n_formats/parse_error.dart';
 import 'package:rdf_dart/src/codec/nquads/nquads_codec.dart';
 import 'package:rdf_dart/src/data_types.dart' show DatatypeRegistry;
 import 'package:rdf_dart/src/dataset.dart';
+import 'package:rdf_dart/src/graph.dart';
 import 'package:rdf_dart/src/iri.dart';
 import 'package:rdf_dart/src/iri_term.dart';
 import 'package:rdf_dart/src/literal.dart';
+import 'package:rdf_dart/src/triple.dart';
 import 'package:rdf_dart/src/vocab/rdf_vocab.dart';
 import 'package:rdf_dart/src/vocab/xsd_vocab.dart';
 import 'package:test/test.dart';
@@ -171,7 +173,7 @@ void main() {
               parsedTriple.predicate,
               equals(IRITerm(IRI('http://example/p'))),
             );
-            expect(parsedTriple.object, equals(Literal('o', XSD.string, 'en')));
+            expect(parsedTriple.object, equals(Literal('o', XSD.string)));
           });
 
           test('BNode graph with URI triple', () async {
@@ -1367,6 +1369,126 @@ void main() {
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
         });
+      });
+    });
+
+    group('Encoding', () {
+      test('URI graph with URI triple', () async {
+        // <http://example/s> <http://example/p> <http://example/o> <http://example/g> .
+        final expectedResult = await _loadTestFile('nq-syntax-uri-01.nq');
+        final dataset = Dataset();
+        final graph = Graph();
+        graph.add(
+          Triple(
+            IRITerm(IRI('http://example/s')),
+            IRITerm(IRI('http://example/p')),
+            IRITerm(IRI('http://example/o')),
+          ),
+        );
+        dataset.addNamedGraph(IRITerm(IRI('http://example/g')), graph);
+        final encodedResult = nQuadsCodec.encoder.convert(dataset);
+
+        expect(encodedResult, equals(expectedResult));
+      });
+
+      test('URI graph with BNode subject', () async {
+        // _:s <http://example/p> <http://example/o> <http://example/g> .
+        final expectedResult = await _loadTestFile('nq-syntax-uri-02.nq');
+        final dataset = Dataset();
+        final graph = Graph();
+        graph.add(
+          Triple(
+            BlankNode('s'),
+            IRITerm(IRI('http://example/p')),
+            IRITerm(IRI('http://example/o')),
+          ),
+        );
+        dataset.addNamedGraph(IRITerm(IRI('http://example/g')), graph);
+        final encodedResult = nQuadsCodec.encoder.convert(dataset);
+
+        expect(encodedResult, equals(expectedResult));
+      });
+
+      test('URI graph with BNode object', () async {
+        // <http://example/s> <http://example/p> _:o <http://example/g> .
+        final expectedResult = await _loadTestFile('nq-syntax-uri-03.nq');
+        final dataset = Dataset();
+        final graph = Graph();
+        graph.add(
+          Triple(
+            IRITerm(IRI('http://example/s')),
+            IRITerm(IRI('http://example/p')),
+            BlankNode('o'),
+          ),
+        );
+        dataset.addNamedGraph(IRITerm(IRI('http://example/g')), graph);
+        final encodedResult = nQuadsCodec.encoder.convert(dataset);
+
+        expect(encodedResult, equals(expectedResult));
+      });
+
+      test('URI graph with simple literal', () async {
+            // <http://example/s> <http://example/p> "o" <http://example/g> .
+        final expectedResult = await _loadTestFile('nq-syntax-uri-04.nq');
+        final dataset = Dataset();
+        final graph = Graph();
+        graph.add(
+          Triple(
+            IRITerm(IRI('http://example/s')),
+            IRITerm(IRI('http://example/p')),
+            Literal('o', XSD.string),
+          ),
+        );
+        dataset.addNamedGraph(IRITerm(IRI('http://example/g')), graph);
+        final encodedResult = nQuadsCodec.encoder.convert(dataset);
+
+        expect(encodedResult, equals(expectedResult));
+      });
+
+      test('URI graph with language tagged literal', () async {
+        // <http://example/s> <http://example/p> "o"@en <http://example/g> .
+        final expectedResult = await _loadTestFile('nq-syntax-uri-05.nq');
+        final dataset = Dataset();
+        final graph = Graph();
+        graph.add(
+          Triple(
+            IRITerm(IRI('http://example/s')),
+            IRITerm(IRI('http://example/p')),
+            Literal('o', RDF.langString, 'en'),
+          ),
+        );
+        dataset.addNamedGraph(IRITerm(IRI('http://example/g')), graph);
+        final encodedResult = nQuadsCodec.encoder.convert(dataset);
+
+        expect(encodedResult, equals(expectedResult));
+      });
+
+      // FIXME: Currently we don't support creating named graphs with BlankNode identifiers
+      // test('BNode graph with URI triple', () async {
+      //   // <http://example/s> <http://example/p> <http://example/o> _:g .
+      //   final expectedResult = await _loadTestFile('nq-syntax-uri-05.nq');
+      //   final dataset = Dataset();
+      //   final graph = Graph();
+      //   graph.add(
+      //     Triple(
+      //       IRITerm(IRI('http://example/s')),
+      //       IRITerm(IRI('http://example/p')),
+      //       Literal('o', RDF.langString, 'en'),
+      //     ),
+      //   );
+      //   dataset.addNamedGraph(IRITerm(), graph);
+      //   final encodedResult = nQuadsCodec.encoder.convert(dataset);
+
+      //   expect(encodedResult, equals(expectedResult));
+      // });
+
+      test('Empty Dataset', () async {
+        //
+        final expectedResult = await _loadTestFile('nt-syntax-file-01.nq');
+        final dataset = Dataset();
+        final encodedResult = nQuadsCodec.encoder.convert(dataset);
+
+        expect(encodedResult, equals(expectedResult));
       });
     });
   });
