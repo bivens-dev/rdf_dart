@@ -1,8 +1,7 @@
-/// Represents a syntax error encountered during N-Triples parsing.
-///
+/// Represents a syntax error encountered during N-Triples or N-Quads parsing.
+      ///
 /// Contains information about the error message, the location (line and column)
-/// where the error occurred, and optionally the expected token type versus the
-/// actual token found at that location.
+/// where the error occurred.
 class ParseError implements Exception {
   /// A human-readable message describing the parse error.
   final String message;
@@ -19,15 +18,14 @@ class ParseError implements Exception {
   const ParseError(this.message, this.line, this.column);
 
   /// Provides a user-friendly string representation of the parse error,
-  /// including location and token details if available.
+  /// including location.
   @override
   String toString() {
     final location = 'L$line:C$column';
     return 'Parse Error ($location): $message';
   }
 
-  /// Allows comparing ParseError objects for equality, useful for testing
-  /// or storing unique errors.
+  /// Allows comparing ParseError objects for equality.
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -39,5 +37,5 @@ class ParseError implements Exception {
 
   /// Provides a hash code consistent with the equality comparison.
   @override
-  int get hashCode => message.hashCode ^ line.hashCode ^ column.hashCode; // Hash combines relevant fields
+  int get hashCode => message.hashCode ^ line.hashCode ^ column.hashCode;
 }

@@ -76,6 +76,14 @@
 <li>Access to IRI components (scheme, authority, path, query, fragment).</li>
 </ul>
 </li>
+<li><strong>N-Triples &amp; N-Quads Serialization/Deserialization:</strong>
+<ul>
+<li>Provides <code>nTriplesCodec</code> and <code>nQuadsCodec</code>, a streaming encoder/decoder compliant with the <code>dart:convert</code> Codec interface.</li>
+<li>Easily encode lists of <code>Triple</code> objects to N-Triples strings and decode N-Triples strings back into <code>Triple</code> objects.</li>
+<li>Easily encode <code>Dataset</code> objects to N-Quads strings and decode N-Quads strings back into <code>Dataset</code> objects.</li>
+<li>Integrates seamlessly with Dart's I/O streams for efficient processing of large files.</li>
+</ul>
+</li>
 <li><strong>Immutability:</strong> Core data structures (<code>IRITerm</code>, <code>BlankNode</code>, <code>Literal</code>, <code>TripleTerm</code>, <code>Triple</code>, <code>IRI</code>) are immutable.</li>
 <li><strong>Well-Tested:</strong> Core features have comprehensive unit tests.</li>
 </ul>
@@ -123,6 +131,15 @@ void main() {
 
   // Add the Triple to the Dataset
   dataset.defaultGraph.add(triple);
+
+  // Encode the triple using the N-Triples codec
+  final nTriplesString = nTriplesCodec.encode([triple]);
+  print(nTriplesString);
+  // Output: &lt;http://example.org/subject&gt; &lt;http://example.org/predicate&gt; &lt;http://example.org/object&gt; .
+
+  // Decode the N-Triples string
+  final decodedTriples = nTriplesCodec.decode(nTriplesString);
+  print(decodedTriples.first == triple); // Output: true
 }
 </code></pre>
 </section>

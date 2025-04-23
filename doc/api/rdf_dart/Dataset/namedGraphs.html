@@ -55,7 +55,7 @@
     
       <section class="multi-line-signature">
         
-        <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../rdf_dart/IRITerm-class.html">IRITerm</a></span>, <span class="type-parameter"><a href="../../rdf_dart/Graph-class.html">Graph</a></span>&gt;</span>
+        <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../rdf_dart/SubjectTerm-class.html">SubjectTerm</a></span>, <span class="type-parameter"><a href="../../rdf_dart/Graph-class.html">Graph</a></span>&gt;</span>
         <span class="name ">namedGraphs</span>
         <div class="features"><span class="feature">final</span></div>
 
@@ -63,15 +63,15 @@
       
 <section class="desc markdown">
   <p>The named graphs of the dataset.</p>
-<p>This map associates an <a href="../../rdf_dart/IRITerm-class.html">IRITerm</a> with a <a href="../../rdf_dart/Graph-class.html">Graph</a>, where the IRI is the name
-of the graph and the Graph is the set of triples associated with that
-name.</p>
+<p>This map associates an <a href="../../rdf_dart/SubjectTerm-class.html">SubjectTerm</a> with a <a href="../../rdf_dart/Graph-class.html">Graph</a>, where the <a href="../../rdf_dart/IRITerm-class.html">IRITerm</a> or
+the <a href="../../rdf_dart/BlankNode-class.html">BlankNode</a> is the name of the graph and the Graph is the set of
+triples associated with that name.</p>
 </section>
 
       
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">final Map&lt;IRITerm, Graph&gt; namedGraphs;</code></pre>
+  <pre class="language-dart"><code class="language-dart">final Map&lt;SubjectTerm, Graph&gt; namedGraphs;</code></pre>
 </section>
 
 

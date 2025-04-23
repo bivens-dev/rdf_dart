@@ -55,7 +55,7 @@
     <section class="multi-line-signature">
       
 <span class="returntype">void</span>
-<span class="name ">addNamedGraph</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="addNamedGraph-param-name"><span class="type-annotation"><a href="../../rdf_dart/IRITerm-class.html">IRITerm</a></span> <span class="parameter-name">name</span>, </span></li>
+<span class="name ">addNamedGraph</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="addNamedGraph-param-name"><span class="type-annotation"><a href="../../rdf_dart/SubjectTerm-class.html">SubjectTerm</a></span> <span class="parameter-name">name</span>, </span></li>
 <li><span class="parameter" id="addNamedGraph-param-graph"><span class="type-annotation"><a href="../../rdf_dart/Graph-class.html">Graph</a></span> <span class="parameter-name">graph</span></span></li>
 </ol>)
 
@@ -81,7 +81,7 @@ dataset.addNamedGraph(name, graph);
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">void addNamedGraph(IRITerm name, Graph graph) {
+  <pre class="language-dart"><code class="language-dart">void addNamedGraph(SubjectTerm name, Graph graph) {
   namedGraphs[name] = graph;
 }</code></pre>
 </section>

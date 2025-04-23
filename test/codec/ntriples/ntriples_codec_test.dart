@@ -1,6 +1,6 @@
 import 'package:intl/locale.dart';
 import 'package:rdf_dart/rdf_dart.dart';
-import 'package:rdf_dart/src/codec/ntriples/parse_error.dart';
+import 'package:rdf_dart/src/codec/n_formats/parse_error.dart';
 import 'package:rdf_dart/src/data_types.dart' show DatatypeRegistry;
 import 'package:test/test.dart';
 
