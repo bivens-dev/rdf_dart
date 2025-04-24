@@ -185,5 +185,192 @@ void main() {
         },
       );
     });
+
+    group('match API', () {
+      // More diverse test data
+      final s1 = IRITerm(IRI('http://example.com/s1'));
+      final s2 = BlankNode('b1');
+      final p1 = IRITerm(IRI('http://example.com/p1'));
+      final p2 = IRITerm(IRI('http://example.com/p2'));
+      final o1 = IRITerm(IRI('http://example.com/o1'));
+      final o2 = Literal('hello', XSD.string);
+      final o3 = Literal('bonjour', RDF.langString, 'fr');
+      final o4 = BlankNode('b2');
+
+      final t1 = Triple(s1, p1, o1);
+      final t2 = Triple(s1, p1, o2); // Same s, p; different o
+      final t3 = Triple(s1, p2, o3); // Same s; different p, o
+      final t4 = Triple(s2, p1, o1); // Different s; same p, o
+      final t5 = Triple(s2, p2, o4); // Different s, p, o
+
+      setUp(() {
+        // Reset graph and add diverse triples for each test in this group
+        graph = Graph();
+        graph.addAll([t1, t2, t3, t4, t5]);
+      });
+
+      group('match', () {
+        test('match(S, P, O) returns specific triple', () {
+          final result = graph.match(s1, p1, o1).toSet();
+          expect(result, equals({t1}));
+        });
+
+        test('match(S, P, O) returns empty set if triple not present', () {
+          final nonExistentObject = Literal('goodbye', XSD.string);
+          final result = graph.match(s1, p1, nonExistentObject).toSet();
+          expect(result, isEmpty);
+        });
+
+        test('match(S, P, null) returns triples with specific S and P', () {
+          final result = graph.match(s1, p1, null).toSet();
+          expect(result, equals({t1, t2}));
+        });
+
+        test('match(S, null, O) returns triples with specific S and O', () {
+          final result = graph.match(s1, null, o1).toSet();
+          expect(result, equals({t1})); // Only t1 matches s1 and o1
+        });
+
+        test('match(null, P, O) returns triples with specific P and O', () {
+          final result = graph.match(null, p1, o1).toSet();
+          expect(result, equals({t1, t4}));
+        });
+
+        test('match(S, null, null) returns triples with specific S', () {
+          final result = graph.match(s1, null, null).toSet();
+          expect(result, equals({t1, t2, t3}));
+        });
+
+        test('match(null, P, null) returns triples with specific P', () {
+          final result = graph.match(null, p1, null).toSet();
+          expect(result, equals({t1, t2, t4}));
+        });
+
+        test('match(null, null, O) returns triples with specific O', () {
+          final result = graph.match(null, null, o1).toSet();
+          expect(result, equals({t1, t4}));
+        });
+
+        test(
+          'match(null, null, O) returns triples with specific Literal O',
+          () {
+            final result = graph.match(null, null, o2).toSet();
+            expect(result, equals({t2}));
+          },
+        );
+
+        test('match(null, null, O) returns triples with specific BNode O', () {
+          final result = graph.match(null, null, o4).toSet();
+          expect(result, equals({t5}));
+        });
+
+        test('match(null, null, null) returns all triples', () {
+          final result = graph.match(null, null, null).toSet();
+          expect(result, equals({t1, t2, t3, t4, t5}));
+        });
+
+        test('match returns empty set for non-matching pattern', () {
+          final nonExistentSubject = IRITerm(IRI('http://example.com/s_none'));
+          final result = graph.match(nonExistentSubject, null, null).toSet();
+          expect(result, isEmpty);
+        });
+      });
+
+      group('subjects', () {
+        test('returns unique subjects matching P and O', () {
+          final result = graph.subjects(predicate: p1, object: o1).toSet();
+          expect(result, equals({s1, s2}));
+        });
+
+        test('returns unique subjects matching P', () {
+          final result = graph.subjects(predicate: p1).toSet();
+          expect(result, equals({s1, s2}));
+        });
+
+        test('returns unique subjects matching O', () {
+          final result = graph.subjects(object: o1).toSet();
+          expect(result, equals({s1, s2}));
+        });
+
+        test('returns empty set when no subjects match', () {
+          final nonExistentPredicate = IRITerm(
+            IRI('http://example.com/p_none'),
+          );
+          final result =
+              graph.subjects(predicate: nonExistentPredicate).toSet();
+          expect(result, isEmpty);
+        });
+      });
+
+      group('predicates', () {
+        test('returns unique predicates matching S and O', () {
+          final result = graph.predicates(subject: s1, object: o1).toSet();
+          expect(result, equals({p1}));
+        });
+
+        test('returns unique predicates matching S', () {
+          final result = graph.predicates(subject: s1).toSet();
+          expect(result, equals({p1, p2}));
+        });
+
+        test('returns unique predicates matching O', () {
+          final result = graph.predicates(object: o1).toSet();
+          expect(result, equals({p1}));
+        });
+
+        test('returns empty set when no predicates match', () {
+          final nonExistentSubject = IRITerm(IRI('http://example.com/s_none'));
+          final result = graph.predicates(subject: nonExistentSubject).toSet();
+          expect(result, isEmpty);
+        });
+      });
+
+      group('objects', () {
+        test('returns unique objects matching S and P', () {
+          final result = graph.objects(subject: s1, predicate: p1).toSet();
+          expect(result, equals({o1, o2}));
+        });
+
+        test('returns unique objects matching S', () {
+          final result = graph.objects(subject: s1).toSet();
+          expect(result, equals({o1, o2, o3}));
+        });
+
+        test('returns unique objects matching P', () {
+          final result = graph.objects(predicate: p1).toSet();
+          expect(
+            result,
+            equals({o1, o2}),
+          ); // o1 appears twice but result is unique
+        });
+
+        test('returns empty set when no objects match', () {
+          final nonExistentSubject = IRITerm(IRI('http://example.com/s_none'));
+          final result = graph.objects(subject: nonExistentSubject).toSet();
+          expect(result, isEmpty);
+        });
+      });
+
+      group('object (singular)', () {
+        test('returns the object when exactly one matches S and P', () {
+          // Use s1, p2 which only maps to o3
+          final result = graph.object(s1, p2);
+          expect(result, equals(o3));
+        });
+
+        test('returns null when no object matches S and P', () {
+          final nonExistentPredicate = IRITerm(
+            IRI('http://example.com/p_none'),
+          );
+          final result = graph.object(s1, nonExistentPredicate);
+          expect(result, isNull);
+        });
+
+        test('throws StateError when multiple objects match S and P', () {
+          // Use s1, p1 which maps to o1 and o2
+          expect(() => graph.object(s1, p1), throwsStateError);
+        });
+      });
+    });
   });
 }
