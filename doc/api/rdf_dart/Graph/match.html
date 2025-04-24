@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the match method from the Graph class, for the Dart programming language.">
+  <title>match method - Graph class - rdf_dart library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">rdf_dart</a></li>
+    <li><a href="../../rdf_dart/">rdf_dart.dart</a></li>
+    <li><a href="../../rdf_dart/Graph-class.html">Graph</a></li>
+    <li class="self-crumb">match method</li>
+  </ol>
+  <div class="self-name">match</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="rdf_dart&#47;Graph-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">match</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../rdf_dart/Triple-class.html">Triple</a></span>&gt;</span></span>
+<span class="name ">match</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="match-param-subject"><span class="type-annotation"><a href="../../rdf_dart/SubjectTerm-class.html">SubjectTerm</a>?</span> <span class="parameter-name">subject</span>, </span></li>
+<li><span class="parameter" id="match-param-predicate"><span class="type-annotation"><a href="../../rdf_dart/IRITerm-class.html">IRITerm</a>?</span> <span class="parameter-name">predicate</span>, </span></li>
+<li><span class="parameter" id="match-param-object"><span class="type-annotation"><a href="../../rdf_dart/RdfTerm-class.html">RdfTerm</a>?</span> <span class="parameter-name">object</span></span></li>
+</ol>)
+
+      
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Finds triples in the graph that match the specified pattern.</p>
+<p>Null values act as wildcards. For example:</p>
+<ul>
+<li><code>match(s, p, o)</code>: Finds the specific triple (s, p, o). Equivalent to <code>contains</code>.</li>
+<li><code>match(s, p, null)</code>: Finds all triples with subject <code>s</code> and predicate <code>p</code>.</li>
+<li><code>match(null, p, null)</code>: Finds all triples with predicate <code>p</code>.</li>
+<li><code>match(null, null, null)</code>: Returns all triples in the graph.</li>
+</ul>
+<p>Returns an <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Iterable-class.html">Iterable</a> of matching <a href="../../rdf_dart/Triple-class.html">Triple</a>s, evaluated lazily.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Iterable&lt;Triple&gt; match(
+  SubjectTerm? subject,
+  IRITerm? predicate,
+  RdfTerm? object,
+) sync* {
+  &#47;&#47; Optimization: if all are specified, just check contains
+  if (subject != null &amp;&amp; predicate != null &amp;&amp; object != null) {
+    final specificTriple = Triple(subject, predicate, object);
+    &#47;&#47; Note: _triples.contains() has O(1) average time complexity because it&#39;s a HashSet.
+    if (_triples.contains(specificTriple)) {
+      yield specificTriple;
+    }
+    return; &#47;&#47; Exit early
+  }
+
+  &#47;&#47; Iterate through all triples
+  &#47;&#47; Note: This iteration is O(N) where N is the number of triples in the graph.
+  for (final triple in _triples) {
+    &#47;&#47; Check subject match (if subject pattern is not null)
+    if (subject != null &amp;&amp; triple.subject != subject) {
+      continue; &#47;&#47; Doesn&#39;t match subject, skip
+    }
+    &#47;&#47; Check predicate match (if predicate pattern is not null)
+    if (predicate != null &amp;&amp; triple.predicate != predicate) {
+      continue; &#47;&#47; Doesn&#39;t match predicate, skip
+    }
+    &#47;&#47; Check object match (if object pattern is not null)
+    if (object != null &amp;&amp; triple.object != object) {
+      continue; &#47;&#47; Doesn&#39;t match object, skip
+    }
+    &#47;&#47; If we reach here, the triple matches the pattern
+    yield triple;
+  }
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">rdf_dart</a></li>
+    <li><a href="../../rdf_dart/">rdf_dart</a></li>
+    <li><a href="../../rdf_dart/Graph-class.html">Graph</a></li>
+    <li class="self-crumb">match method</li>
+</ol>
+
+    <h5>Graph class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    rdf_dart
+      1.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+
