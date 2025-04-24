@@ -166,6 +166,19 @@ adding, removing, and checking for the presence of triples.</p>
 
 </dd>
 
+        <dt id="match" class="callable">
+  <span class="name"><a href="../rdf_dart/Graph/match.html">match</a></span><span class="signature">(<wbr><span class="parameter" id="match-param-subject"><span class="type-annotation"><a href="../rdf_dart/SubjectTerm-class.html">SubjectTerm</a>?</span> <span class="parameter-name">subject</span>, </span><span class="parameter" id="match-param-predicate"><span class="type-annotation"><a href="../rdf_dart/IRITerm-class.html">IRITerm</a>?</span> <span class="parameter-name">predicate</span>, </span><span class="parameter" id="match-param-object"><span class="type-annotation"><a href="../rdf_dart/RdfTerm-class.html">RdfTerm</a>?</span> <span class="parameter-name">object</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../rdf_dart/Triple-class.html">Triple</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Finds triples in the graph that match the specified pattern.
+  
+
+</dd>
+
         <dt id="noSuchMethod" class="callable inherited">
   <span class="name"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
     <span class="returntype parameter">&#8594; dynamic</span>
@@ -179,6 +192,49 @@ adding, removing, and checking for the presence of triples.</p>
 
 </dd>
 
+        <dt id="object" class="callable">
+  <span class="name"><a href="../rdf_dart/Graph/object.html">object</a></span><span class="signature">(<wbr><span class="parameter" id="object-param-subject"><span class="type-annotation"><a href="../rdf_dart/SubjectTerm-class.html">SubjectTerm</a></span> <span class="parameter-name">subject</span>, </span><span class="parameter" id="object-param-predicate"><span class="type-annotation"><a href="../rdf_dart/IRITerm-class.html">IRITerm</a></span> <span class="parameter-name">predicate</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../rdf_dart/RdfTerm-class.html">RdfTerm</a>?</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the single object for a given subject and predicate, if exactly one exists.
+Throws StateError if zero or more than one object exists.
+Returns null if no matching triple exists.
+  
+
+</dd>
+
+        <dt id="objects" class="callable">
+  <span class="name"><a href="../rdf_dart/Graph/objects.html">objects</a></span><span class="signature">(<wbr>{<span class="parameter" id="objects-param-subject"><span class="type-annotation"><a href="../rdf_dart/SubjectTerm-class.html">SubjectTerm</a>?</span> <span class="parameter-name">subject</span>, </span><span class="parameter" id="objects-param-predicate"><span class="type-annotation"><a href="../rdf_dart/IRITerm-class.html">IRITerm</a>?</span> <span class="parameter-name">predicate</span></span>})
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../rdf_dart/RdfTerm-class.html">RdfTerm</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns an iterable of objects that match the given subject and predicate.
+Null subject or predicate acts as a wildcard.
+  
+
+</dd>
+
+        <dt id="predicates" class="callable">
+  <span class="name"><a href="../rdf_dart/Graph/predicates.html">predicates</a></span><span class="signature">(<wbr>{<span class="parameter" id="predicates-param-subject"><span class="type-annotation"><a href="../rdf_dart/SubjectTerm-class.html">SubjectTerm</a>?</span> <span class="parameter-name">subject</span>, </span><span class="parameter" id="predicates-param-object"><span class="type-annotation"><a href="../rdf_dart/RdfTerm-class.html">RdfTerm</a>?</span> <span class="parameter-name">object</span></span>})
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../rdf_dart/IRITerm-class.html">IRITerm</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns an iterable of predicates that match the given subject and object.
+Null subject or object acts as a wildcard.
+  
+
+</dd>
+
         <dt id="remove" class="callable">
   <span class="name"><a href="../rdf_dart/Graph/remove.html">remove</a></span><span class="signature">(<wbr><span class="parameter" id="remove-param-triple"><span class="type-annotation"><a href="../rdf_dart/Triple-class.html">Triple</a></span> <span class="parameter-name">triple</span></span>)
     <span class="returntype parameter">&#8594; void</span>
@@ -188,6 +244,20 @@ adding, removing, and checking for the presence of triples.</p>
 </dt>
 <dd>
   Removes a <code>triple</code> from this graph.
+  
+
+</dd>
+
+        <dt id="subjects" class="callable">
+  <span class="name"><a href="../rdf_dart/Graph/subjects.html">subjects</a></span><span class="signature">(<wbr>{<span class="parameter" id="subjects-param-predicate"><span class="type-annotation"><a href="../rdf_dart/IRITerm-class.html">IRITerm</a>?</span> <span class="parameter-name">predicate</span>, </span><span class="parameter" id="subjects-param-object"><span class="type-annotation"><a href="../rdf_dart/RdfTerm-class.html">RdfTerm</a>?</span> <span class="parameter-name">object</span></span>})
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../rdf_dart/SubjectTerm-class.html">SubjectTerm</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns an iterable of subjects that match the given predicate and object.
+Null predicate or object acts as a wildcard.
   
 
 </dd>

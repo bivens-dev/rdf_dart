@@ -222,4 +222,82 @@ class Graph {
   bool contains(Triple triple) {
     return _triples.contains(triple);
   }
+
+  /// Finds triples in the graph that match the specified pattern.
+  ///
+  /// Null values act as wildcards. For example:
+  /// - `match(s, p, o)`: Finds the specific triple (s, p, o). Equivalent to `contains`.
+  /// - `match(s, p, null)`: Finds all triples with subject `s` and predicate `p`.
+  /// - `match(null, p, null)`: Finds all triples with predicate `p`.
+  /// - `match(null, null, null)`: Returns all triples in the graph.
+  ///
+  /// Returns an [Iterable] of matching [Triple]s, evaluated lazily.
+  Iterable<Triple> match(
+    SubjectTerm? subject,
+    IRITerm? predicate,
+    RdfTerm? object,
+  ) sync* {
+    // Optimization: if all are specified, just check contains
+    if (subject != null && predicate != null && object != null) {
+      final specificTriple = Triple(subject, predicate, object);
+      // Note: _triples.contains() has O(1) average time complexity because it's a HashSet.
+      if (_triples.contains(specificTriple)) {
+        yield specificTriple;
+      }
+      return; // Exit early
+    }
+
+    // Iterate through all triples
+    // Note: This iteration is O(N) where N is the number of triples in the graph.
+    for (final triple in _triples) {
+      // Check subject match (if subject pattern is not null)
+      if (subject != null && triple.subject != subject) {
+        continue; // Doesn't match subject, skip
+      }
+      // Check predicate match (if predicate pattern is not null)
+      if (predicate != null && triple.predicate != predicate) {
+        continue; // Doesn't match predicate, skip
+      }
+      // Check object match (if object pattern is not null)
+      if (object != null && triple.object != object) {
+        continue; // Doesn't match object, skip
+      }
+      // If we reach here, the triple matches the pattern
+      yield triple;
+    }
+  }
+
+  /// Returns an iterable of subjects that match the given predicate and object.
+  /// Null predicate or object acts as a wildcard.
+  Iterable<SubjectTerm> subjects({IRITerm? predicate, RdfTerm? object}) sync* {
+    yield* match(null, predicate, object).map((t) => t.subject).toSet();
+  }
+
+  /// Returns an iterable of predicates that match the given subject and object.
+  /// Null subject or object acts as a wildcard.
+  Iterable<IRITerm> predicates({SubjectTerm? subject, RdfTerm? object}) sync* {
+    yield* match(subject, null, object).map((t) => t.predicate).toSet();
+  }
+
+  /// Returns an iterable of objects that match the given subject and predicate.
+  /// Null subject or predicate acts as a wildcard.
+  Iterable<RdfTerm> objects({SubjectTerm? subject, IRITerm? predicate}) sync* {
+    yield* match(subject, predicate, null).map((t) => t.object).toSet();
+  }
+
+  /// Returns the single object for a given subject and predicate, if exactly one exists.
+  /// Throws StateError if zero or more than one object exists.
+  /// Returns null if no matching triple exists.
+  RdfTerm? object(SubjectTerm subject, IRITerm predicate) {
+    final results = objects(subject: subject, predicate: predicate).toList();
+    if (results.length == 1) {
+      return results.first;
+    } else if (results.isEmpty) {
+      return null;
+    } else {
+      throw StateError(
+        'Expected one object for ($subject, $predicate), found ${results.length}',
+      );
+    }
+  }
 }
