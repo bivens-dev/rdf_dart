@@ -5,6 +5,7 @@ import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalization_algorithm.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalization_state.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalizer.dart';
+import 'package:rdf_dart/src/canonicalization/identifier_issuer.dart';
 import 'package:rdf_dart/src/canonicalization/quad.dart';
 import 'package:rdf_dart/src/codec/n_formats/n_formats_serializer_utils.dart';
 
@@ -160,6 +161,68 @@ class Rdfc10Canonicalizer implements Canonicalizer {
         'Unsupported RDF term type for hashing: ${term.runtimeType}',
       );
     }
+  }
+
+  /// Performs Algorithm 4.7: Hash Related Blank Node (hrbn).
+  ///
+  /// Creates a hash representing the connection between a reference blank node
+  /// (implicit from the calling context of Algorithm 4.8) and a related
+  /// adjacent blank node.
+  ///
+  /// Takes the canonicalization state, the ID of the related blank node,
+  /// the quad connecting them, the temporary issuer for the current path,
+  /// and the position ('s', 'o', or 'g') of the related node in the quad.
+  /// Returns the resulting hash string.
+  /// Spec Section: 4.7
+  String _hashRelatedBlankNode(
+    CanonicalizationState state,
+    String relatedBnodeId, // The ID of the adjacent blank node
+    Quad quad,             // The quad containing the relationship
+    IdentifierIssuer temporaryIssuer, // The issuer for the current N-degree path
+    String position,       // 's', 'o', or 'g'
+  ) {
+    // Algorithm 4.7, Step hrbn.1: Initialize input string with position.
+    final inputBuffer = StringBuffer(position);
+
+    // Algorithm 4.7, Step hrbn.2: Append predicate if position is not 'g'.
+    if (position != 'g') {
+      // Spec: append '<', the value of the predicate, and '>'
+      inputBuffer.write('<');
+      // quad.predicate is IRITerm, its value is IRI
+      inputBuffer.write(quad.predicate.value.toString());
+      inputBuffer.write('>');
+    }
+
+    // Algorithm 4.7, Step hrbn.3: Check canonical and temporary issuers.
+    String? issuedId;
+    // Check canonical issuer first
+    if (state.canonicalIssuer.issued.containsKey(relatedBnodeId)) {
+      issuedId = state.canonicalIssuer.issued[relatedBnodeId]!;
+    }
+    // Otherwise check the temporary issuer for the current N-degree path
+    else if (temporaryIssuer.issued.containsKey(relatedBnodeId)) {
+      issuedId = temporaryIssuer.issued[relatedBnodeId]!;
+    }
+
+    if (issuedId != null) {
+      // Append the N-Quads representation: _:identifier
+      inputBuffer.write('_:');
+      inputBuffer.write(issuedId);
+    }
+    // Algorithm 4.7, Step hrbn.4: Otherwise, append first degree hash.
+    else {
+      // Note: Spec says "append the result of the Hash First Degree Quads
+      // algorithm". This means appending the hash string itself.
+      // Call the h1dq implementation, passing the *related* node's ID.
+      final h1dqHash = _hashFirstDegreeQuads(state, relatedBnodeId);
+      inputBuffer.write(h1dqHash);
+    }
+
+    // Algorithm 4.7, Step hrbn.5: Hash the final input string.
+    final inputString = inputBuffer.toString();
+    final bytesToHash = utf8.encode(inputString);
+    final digest = sha256.convert(bytesToHash);
+    return digest.toString(); // Return the hash string
   }
 
   // --- Placeholders for subsequent algorithm steps ---
