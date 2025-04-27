@@ -57,4 +57,17 @@ class IdentifierIssuer {
 
   /// Returns the prefix used by this issuer.
   String get prefix => _prefix;
+
+  /// Creates a deep copy of this IdentifierIssuer instance.
+  ///
+  /// The copy will have the same prefix, the same current counter value,
+  /// and a separate copy of the issued identifiers map, preserving the
+  /// original's issuance order.
+  IdentifierIssuer deepCopy() {
+    final copy = IdentifierIssuer(_prefix);
+    copy._counter = _counter;
+    // Create a new LinkedHashMap from the existing one to ensure independence
+    copy._issuedIdentifiers.addAll(LinkedHashMap<String, String>.from(_issuedIdentifiers));
+    return copy;
+  }
 }
