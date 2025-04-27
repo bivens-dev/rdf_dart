@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:rdf_dart/rdf_dart.dart';
+import 'package:rdf_dart/src/canonicalization/canonicalization_algorithm.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalization_state.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalizer.dart';
 import 'package:rdf_dart/src/canonicalization/quad.dart';
@@ -28,7 +29,28 @@ class Rdfc10Canonicalizer implements Canonicalizer {
       bnodesForHash.add(bnodeId);
     });
 
-    // RDFC-1.0 Algorithm 4.4, Step ca.5 calls Algorithm 4.8 (hndq)
+    // RDFC-1.0 Algorithm 4.4, Step ca.4: Process unique hashes
+    final hashesToRemove = <String>[]; // Track unique hashes to remove later
+    // Get hashes and sort them (code point ordered by hash)
+    final sortedHashes = state.hashToBlankNodesMap.keys.toList()..sort();
+
+    for (final hash in sortedHashes) {
+      final identifierList = state.hashToBlankNodesMap[hash]!;
+      // Step ca.4.1: Check if identifierList has only one entry
+      if (identifierList.length == 1) {
+        final bnodeId = identifierList.first;
+        // Step ca.4.2: Issue canonical identifier using Algorithm 4.5
+        state.canonicalIssuer.getId(bnodeId);
+        // Step ca.4.3: Mark hash for removal
+        hashesToRemove.add(hash);
+      }
+      // If list has more than one entry, continue (handled in Step ca.5)
+    }
+    // Remove the entries for unique hashes
+    for (final hash in hashesToRemove) {
+      state.hashToBlankNodesMap.remove(hash);
+    }
+
     // _hashNDegreeQuads(state); // To be implemented
 
     // RDFC-1.0 Algorithm 4.4, Step ca.7
