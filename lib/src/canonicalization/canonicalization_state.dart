@@ -72,10 +72,4 @@ class CanonicalizationState {
       }
     }
   }
-
-  // --- Potential methods to interact with the state could be added here ---
-  // For example:
-  // List<Quad> getQuadsForBlankNode(String bnodeId) => blankNodeToQuadsMap[bnodeId] ?? [];
-  // void addBlankNodeForHash(String hash, String bnodeId) { ... }
-  // etc.
 }
