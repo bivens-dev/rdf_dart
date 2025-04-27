@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:rdf_dart/rdf_dart.dart';
-import 'package:rdf_dart/src/canonicalization/canonicalization_algorithm.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalization_state.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalizer.dart';
 import 'package:rdf_dart/src/canonicalization/identifier_issuer.dart';
+import 'package:rdf_dart/src/canonicalization/permuter.dart';
 import 'package:rdf_dart/src/canonicalization/quad.dart';
 import 'package:rdf_dart/src/codec/n_formats/n_formats_serializer_utils.dart';
 
@@ -52,12 +52,59 @@ class Rdfc10Canonicalizer implements Canonicalizer {
       state.hashToBlankNodesMap.remove(hash);
     }
 
-    // _hashNDegreeQuads(state); // To be implemented
+    // RDFC-1.0 Algorithm 4.4, Step ca.5: Process non-unique hashes
+    // Create a copy of the keys to iterate over, as the map might be modified
+    final nonUniqueHashes = state.hashToBlankNodesMap.keys.toList()..sort();
 
-    // RDFC-1.0 Algorithm 4.4, Step ca.7
-    // return _serializeCanonicalNQuads(state); // To be implemented
+    for (final hash in nonUniqueHashes) {
+      // Check if the hash still exists, as nested calls might have resolved some nodes
+      if (!state.hashToBlankNodesMap.containsKey(hash)) {
+        continue;
+      }
+      final identifierList = state.hashToBlankNodesMap[hash]!;
 
-    throw UnimplementedError('RDFC-1.0 canonicalization steps pending.');
+      // Step ca.5.1: Initialize hash path list (implicitly handled by loop)
+      final hashPathList =
+          <
+            (String hash, IdentifierIssuer issuer, String originalBlankNodeId)
+          >[];
+
+      // Step ca.5.2: For each identifier `n` in the list for this hash
+      for (final n in identifierList) {
+        // Step ca.5.2.1: Skip if canonical ID already issued
+        if (state.canonicalIssuer.issued.containsKey(n)) {
+          continue;
+        }
+
+        // Step ca.5.2.2: Create temporary issuer with prefix 'b'
+        final temporaryIssuer = IdentifierIssuer('b');
+
+        // Step ca.5.2.3: Issue temporary ID for n (e.g., b0)
+        // Note: getId also stores the mapping in temporaryIssuer
+        temporaryIssuer.getId(n);
+
+        // Step ca.5.2.4: Run Algorithm 4.8 (hndq)
+        final hndqResult = _hashNDegreeQuads(state, n, temporaryIssuer);
+        hashPathList.add((hndqResult.$1, hndqResult.$2, n));
+      }
+
+      // Step ca.5.3: Sort results by hash
+      hashPathList.sort((a, b) => a.$1.compareTo(b.$1)); // Sort by hash
+
+      // Step ca.5.3.1: Issue canonical IDs based on sorted results
+      for (final result in hashPathList) {
+        // Iterate through the identifiers issued by the temporary issuer *in order*
+        // The result.issuer.issued map (LinkedHashMap) maintains insertion order.
+        result.$2.issued.forEach((existingIdentifier, temporaryId) {
+          // Ensure canonical ID hasn't been issued by a parallel path
+          if (!state.canonicalIssuer.issued.containsKey(existingIdentifier)) {
+            state.canonicalIssuer.getId(existingIdentifier);
+          }
+        });
+      }
+    }
+
+    return _serializeCanonicalNQuads(state);
   }
 
   /// Performs Algorithm 4.6: Hash First Degree Quads (h1dq).
@@ -177,9 +224,10 @@ class Rdfc10Canonicalizer implements Canonicalizer {
   String _hashRelatedBlankNode(
     CanonicalizationState state,
     String relatedBnodeId, // The ID of the adjacent blank node
-    Quad quad,             // The quad containing the relationship
-    IdentifierIssuer temporaryIssuer, // The issuer for the current N-degree path
-    String position,       // 's', 'o', or 'g'
+    Quad quad, // The quad containing the relationship
+    IdentifierIssuer
+    temporaryIssuer, // The issuer for the current N-degree path
+    String position, // 's', 'o', or 'g'
   ) {
     // Algorithm 4.7, Step hrbn.1: Initialize input string with position.
     final inputBuffer = StringBuffer(position);
@@ -225,35 +273,205 @@ class Rdfc10Canonicalizer implements Canonicalizer {
     return digest.toString(); // Return the hash string
   }
 
-  // --- Placeholders for subsequent algorithm steps ---
-  // void _hashNDegreeQuads(CanonicalizationState state) { ... } // Algorithm 4.8
-  // String _serializeCanonicalNQuads(CanonicalizationState state) { ... } // Section 5
-}
+  /// Performs Algorithm 4.8: Hash N-Degree Quads (hndq).
+  ///
+  /// Calculates a hash for a blank node by recursively exploring its connected
+  /// quads and blank nodes. Uses a temporary issuer to track visited nodes
+  /// within the current exploration path.
+  /// Returns the calculated hash and the final state of the temporary issuer.
+  /// Spec Section: 4.8
+  (String hash, IdentifierIssuer issuer) _hashNDegreeQuads(
+    CanonicalizationState state,
+    String identifier, // The blank node ID we are calculating the hash for
+    IdentifierIssuer issuer, // The temporary issuer for this path
+  ) {
+    // Step hndq.1: Initialize Hn map.
+    final hnMap = <String, List<String>>{};
+    // Step hndq.2: Get quads for the identifier.
+    final quads = state.blankNodeToQuadsMap[identifier] ?? [];
+    // Step hndq.3: Calculate related hashes.
+    for (final quad in quads) {
+      final components = <(RdfTerm?, String)>[
+        (quad.subject, 's'),
+        (quad.object, 'o'),
+        if (quad.graphLabel != null) (quad.graphLabel, 'g'),
+      ];
+      for (final entry in components) {
+        final term = entry.$1;
+        final position = entry.$2;
+        if (term != null &&
+            term.isBlankNode &&
+            (term as BlankNode).id != identifier) {
+          final relatedBnodeId = term.id;
+          // Step hndq.3.1.1: Calculate hash using Algorithm 4.7 (hrbn)
+          final relatedHash = _hashRelatedBlankNode(
+            state,
+            relatedBnodeId,
+            quad,
+            issuer,
+            position,
+          );
+          // Step hndq.3.1.2: Add mapping to Hn
+          hnMap.putIfAbsent(relatedHash, () => []).add(relatedBnodeId);
+        }
+      }
+    }
+    // Step hndq.4: Initialize dataToHash.
+    final dataToHash = StringBuffer();
+    // Step hndq.5: Process Hn sorted by related hash.
+    final sortedRelatedHashes = hnMap.keys.toList()..sort();
 
-// void main() {
-//   final dataset = Dataset();
-//   dataset.defaultGraph.addAll([
-//     Triple(
-//       IRITerm(IRI('http://example.com/#p')),
-//       IRITerm(IRI('http://example.com/#q')),
-//       BlankNode('e0'),
-//     ),
-//     Triple(
-//       IRITerm(IRI('http://example.com/#p')),
-//       IRITerm(IRI('http://example.com/#r')),
-//       BlankNode('e1'),
-//     ),
-//     Triple(
-//       BlankNode('e0'),
-//       IRITerm(IRI('http://example.com/#s')),
-//       IRITerm(IRI('http://example.com/#u')),
-//     ),
-//     Triple(
-//       BlankNode('e1'),
-//       IRITerm(IRI('http://example.com/#t')),
-//       IRITerm(IRI('http://example.com/#u')),
-//     ),
-//   ]);
-//   final canonicalizer = Canonicalizer.create(CanonicalizationAlgorithm.rdfc10);
-//   canonicalizer.canonicalize(dataset);
-// }
+    for (final relatedHash in sortedRelatedHashes) {
+      final blankNodeList = hnMap[relatedHash]!;
+      blankNodeList.sort(); // Sort list for deterministic permutation start
+
+      // Step hndq.5.1: Append related hash to dataToHash.
+      dataToHash.write(relatedHash);
+      // Step hndq.5.2 & 5.3: Initialize chosenPath & chosenIssuer.
+      var chosenPath = '';
+      IdentifierIssuer? chosenIssuer;
+
+      // --- Step hndq.5.4: Iterate through permutations ---
+      final permuter = Permuter(blankNodeList); // Use the Permuter
+      while (permuter.hasNext()) {
+        final p = permuter.next()!; // Get next permutation
+
+        // Step hndq.5.4.1: Create issuer copy using the implemented deepCopy
+        var issuerCopy = issuer.deepCopy();
+
+        // Step hndq.5.4.2 & 5.4.3: Initialize path & recursionList
+        final path = StringBuffer();
+        final recursionList = <String>[];
+
+        // Step hndq.5.4.4: Process each related node in permutation p.
+        var skipPermutation = false;
+        for (final related in p) {
+          // Step hndq.5.4.4.1: Check canonical issuer
+          if (state.canonicalIssuer.issued.containsKey(related)) {
+            path.write('_:');
+            path.write(state.canonicalIssuer.issued[related]!);
+          }
+          // Step hndq.5.4.4.2: Check temporary/issue if needed
+          else {
+            if (!issuerCopy.issued.containsKey(related)) {
+              // hndq.5.4.4.2.1
+              recursionList.add(related);
+            }
+            final tempIssuedId = issuerCopy.getId(related); // hndq.5.4.4.2.2
+            path.write('_:');
+            path.write(tempIssuedId);
+          }
+          // Step hndq.5.4.4.3: Optimization check
+          if (chosenPath.isNotEmpty &&
+              path.length >= chosenPath.length &&
+              path.toString().compareTo(chosenPath) > 0) {
+            skipPermutation = true;
+            break;
+          }
+        }
+        if (skipPermutation) continue;
+
+        // Step hndq.5.4.5: Recurse on nodes in recursionList
+        for (final related in recursionList) {
+          // Step hndq.5.4.5.1: Recursive call
+          final result = _hashNDegreeQuads(state, related, issuerCopy);
+          // Step hndq.5.4.5.2: Append temporary ID
+          path.write('_:');
+          path.write(issuerCopy.getId(related));
+          // Step hndq.5.4.5.3: Append <hash> from result
+          path.write('<');
+          path.write(result.$1);
+          path.write('>');
+          // Step hndq.5.4.5.4: Update issuerCopy with returned issuer state
+          issuerCopy = result.$2.deepCopy(); // Use deepCopy from result
+          // Step hndq.5.4.5.5: Optimization check
+          if (chosenPath.isNotEmpty &&
+              path.length >= chosenPath.length &&
+              path.toString().compareTo(chosenPath) > 0) {
+            skipPermutation = true;
+            break;
+          }
+        }
+        if (skipPermutation) continue;
+
+        // Step hndq.5.4.6: Update chosenPath and chosenIssuer if current path is better
+        final currentPath = path.toString();
+        if (chosenPath.isEmpty || currentPath.compareTo(chosenPath) < 0) {
+          chosenPath = currentPath;
+          chosenIssuer = issuerCopy;
+        }
+      } // End of permutation loop (while permuter.hasNext())
+
+      // Step hndq.5.5: Append chosenPath to dataToHash.
+      dataToHash.write(chosenPath);
+      // Step hndq.5.6: Update the main issuer reference if a best path was found.
+      if (chosenIssuer != null) {
+        issuer =
+            chosenIssuer; // Update issuer state with the one from the best path
+      }
+    } // End of loop through sortedRelatedHashes
+
+    // Step hndq.6: Hash final dataToHash and return hash + issuer.
+    final finalHash =
+        sha256.convert(utf8.encode(dataToHash.toString())).toString();
+    return (finalHash, issuer); // Return using positional fields
+  }
+
+  /// Serializes the canonicalized dataset into the final N-Quads string.
+  /// Needs access to the final canonical issuer mapping.
+  /// Spec Section: 5
+  String _serializeCanonicalNQuads(CanonicalizationState state) {
+    final canonicalQuads = <String>[];
+    final canonicalIdMap = state.canonicalIssuer.issued;
+
+    // Helper to get canonical ID or format other terms
+    String formatTermCanonical(RdfTerm term) {
+      if (term.isIRI) {
+        return NFormatsSerializerUtils.formatIri((term as IRITerm).value);
+      } else if (term.isLiteral) {
+        return NFormatsSerializerUtils.formatLiteral(term as Literal);
+      } else if (term.isBlankNode) {
+        final originalId = (term as BlankNode).id;
+        // Lookup in canonical map; should always be present if algorithm is correct
+        final canonicalId =
+            canonicalIdMap[originalId] ??
+            (throw StateError(
+              'Canonical ID not found for blank node: $originalId',
+            ));
+        // Format using the canonical ID (e.g., _:c14n0)
+        // We need a BlankNode instance with the canonical ID to format correctly
+        return NFormatsSerializerUtils.formatBlankNode(BlankNode(canonicalId));
+      } else {
+        throw ArgumentError(
+          'Unsupported RDF term type for final serialization: ${term.runtimeType}',
+        );
+      }
+    }
+
+    // Iterate through original dataset quads (order doesn't matter here, will sort later)
+    state.blankNodeToQuadsMap.values.expand((quads) => quads).toSet().forEach((
+      quad,
+    ) {
+      final s = formatTermCanonical(quad.subject);
+      final p = formatTermCanonical(quad.predicate);
+      final o = formatTermCanonical(quad.object);
+
+      final buffer = StringBuffer();
+      buffer.write('$s $p $o');
+
+      if (quad.graphLabel != null) {
+        buffer.write(' ');
+        final g = formatTermCanonical(quad.graphLabel!);
+        buffer.write(g);
+      }
+      buffer.write(' .\n');
+      canonicalQuads.add(buffer.toString());
+    });
+
+    // Sort the final list of canonical N-Quad strings
+    canonicalQuads.sort();
+
+    // Join them into the final document
+    return canonicalQuads.join();
+  }
+}
