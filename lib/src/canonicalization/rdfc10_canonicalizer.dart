@@ -6,8 +6,8 @@ import 'package:rdf_dart/src/canonicalization/canonicalization_state.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalizer.dart';
 import 'package:rdf_dart/src/canonicalization/identifier_issuer.dart';
 import 'package:rdf_dart/src/canonicalization/permuter.dart';
-import 'package:rdf_dart/src/quad.dart';
 import 'package:rdf_dart/src/codec/n_formats/n_formats_serializer_utils.dart';
+import 'package:rdf_dart/src/quad.dart';
 
 /// Implements the RDFC-1.0 canonicalization algorithm.
 /// Spec: https://www.w3.org/TR/rdf-canon/
