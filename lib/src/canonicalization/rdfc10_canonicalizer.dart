@@ -6,7 +6,7 @@ import 'package:rdf_dart/src/canonicalization/canonicalization_state.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalizer.dart';
 import 'package:rdf_dart/src/canonicalization/identifier_issuer.dart';
 import 'package:rdf_dart/src/canonicalization/permuter.dart';
-import 'package:rdf_dart/src/canonicalization/quad.dart';
+import 'package:rdf_dart/src/quad.dart';
 import 'package:rdf_dart/src/codec/n_formats/n_formats_serializer_utils.dart';
 
 /// Implements the RDFC-1.0 canonicalization algorithm.
@@ -104,7 +104,7 @@ class Rdfc10Canonicalizer implements Canonicalizer {
       }
     }
 
-    return _serializeCanonicalNQuads(state);
+    return _serializeCanonicalNQuads(dataset, state);
   }
 
   /// Performs Algorithm 4.6: Hash First Degree Quads (h1dq).
@@ -420,7 +420,7 @@ class Rdfc10Canonicalizer implements Canonicalizer {
   /// Serializes the canonicalized dataset into the final N-Quads string.
   /// Needs access to the final canonical issuer mapping.
   /// Spec Section: 5
-  String _serializeCanonicalNQuads(CanonicalizationState state) {
+  String _serializeCanonicalNQuads(Dataset originalDataset, CanonicalizationState state) {
     final canonicalQuads = <String>[];
     final canonicalIdMap = state.canonicalIssuer.issued;
 
@@ -449,9 +449,7 @@ class Rdfc10Canonicalizer implements Canonicalizer {
     }
 
     // Iterate through original dataset quads (order doesn't matter here, will sort later)
-    state.blankNodeToQuadsMap.values.expand((quads) => quads).toSet().forEach((
-      quad,
-    ) {
+    for (final quad in originalDataset.quads) {
       final s = formatTermCanonical(quad.subject);
       final p = formatTermCanonical(quad.predicate);
       final o = formatTermCanonical(quad.object);
@@ -466,7 +464,7 @@ class Rdfc10Canonicalizer implements Canonicalizer {
       }
       buffer.write(' .\n');
       canonicalQuads.add(buffer.toString());
-    });
+    }
 
     // Sort the final list of canonical N-Quad strings
     canonicalQuads.sort();
