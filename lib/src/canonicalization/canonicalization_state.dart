@@ -1,7 +1,7 @@
 import 'package:rdf_dart/src/blank_node.dart';
 import 'package:rdf_dart/src/canonicalization/identifier_issuer.dart';
-import 'package:rdf_dart/src/canonicalization/quad.dart';
 import 'package:rdf_dart/src/dataset.dart';
+import 'package:rdf_dart/src/quad.dart';
 
 /// Holds the state required during the RDF Dataset canonicalization process,
 /// corresponding to Section 4.2 of the RDFC-1.0 specification.
@@ -31,31 +31,9 @@ class CanonicalizationState {
 
   /// Populates the blankNodeToQuadsMap by iterating through the input dataset.
   void _initializeBlankNodeToQuadsMap(Dataset dataset) {
-    // Process default graph triples (graphLabel = null)
-    for (final triple in dataset.defaultGraph.triples) {
-      final quad = (
-        subject: triple.subject,
-        predicate: triple.predicate,
-        object: triple.object,
-        graphLabel: null, // Default graph
-      );
+    for (final quad in dataset.quads) {
       _addQuadToMapForBlankNodes(quad);
     }
-
-    // Process named graph triples (graphLabel = graph name)
-    dataset.namedGraphs.forEach((graphLabel, graph) {
-      // Ensure graphLabel is SubjectTerm (IRITerm or BlankNode)
-      // This check is already done by the Dataset structure.
-      for (final triple in graph.triples) {
-        final quad = (
-          subject: triple.subject,
-          predicate: triple.predicate,
-          object: triple.object,
-          graphLabel: graphLabel, // Named graph
-        );
-        _addQuadToMapForBlankNodes(quad);
-      }
-    });
   }
 
   /// Helper to add a quad to the map for each blank node it contains.
