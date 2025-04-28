@@ -1,5 +1,7 @@
+import 'package:collection/collection.dart';
 import 'package:rdf_dart/src/graph.dart';
 import 'package:rdf_dart/src/iri_term.dart';
+import 'package:rdf_dart/src/quad.dart';
 import 'package:rdf_dart/src/subject_type.dart';
 
 /// Represents an RDF Dataset, which is a collection of RDF graphs.
@@ -68,5 +70,56 @@ class Dataset {
   /// ```
   void removeNamedGraph(SubjectTerm name) {
     namedGraphs.remove(name);
+  }
+
+  /// Returns an unmodifiable view of all quads in the dataset.
+  ///
+  /// This getter aggregates all triples from the [defaultGraph] (treating them
+  /// as quads with a `null` graph label) and all triples from each graph in
+  /// [namedGraphs] (using the corresponding graph name as the graph label).
+  ///
+  /// The resulting set represents the entire dataset as a collection of quads,
+  /// suitable for serialization or processing algorithms that operate on quads.
+  ///
+  /// Example:
+  /// ```dart
+  /// final dataset = Dataset();
+  /// // Add some triples to default and named graphs...
+  /// for (final quad in dataset.quads) {
+  ///   print(quad);
+  /// }
+  /// ```
+  ///
+  /// Returns:
+  ///   An [UnmodifiableSetView]<[Quad]> containing all quads in the dataset.
+  Set<Quad> get quads {
+    final quads = <Quad>{};
+    // Process default graph triples (graphLabel = null)
+    for (final triple in defaultGraph.triples) {
+      final quad = (
+        subject: triple.subject,
+        predicate: triple.predicate,
+        object: triple.object,
+        graphLabel: null, // Default graph
+      );
+      quads.add(quad);
+    }
+
+    // Process named graph triples (graphLabel = graph name)
+    namedGraphs.forEach((graphLabel, graph) {
+      // Ensure graphLabel is SubjectTerm (IRITerm or BlankNode)
+      // This check is already done by the Dataset structure.
+      for (final triple in graph.triples) {
+        final quad = (
+          subject: triple.subject,
+          predicate: triple.predicate,
+          object: triple.object,
+          graphLabel: graphLabel, // Named graph
+        );
+        quads.add(quad);
+      }
+    });
+  
+    return UnmodifiableSetView(quads);
   }
 }
