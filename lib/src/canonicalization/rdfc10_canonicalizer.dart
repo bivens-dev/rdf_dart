@@ -12,6 +12,12 @@ import 'package:rdf_dart/src/quad.dart';
 /// Implements the RDFC-1.0 canonicalization algorithm.
 /// Spec: https://www.w3.org/TR/rdf-canon/
 class Rdfc10Canonicalizer implements Canonicalizer {
+
+  final Hash hashAlgorithm;
+
+  /// Creates an RDFC-1.0 canonicalizer instance using the specified hash algorithm.
+  Rdfc10Canonicalizer(this.hashAlgorithm);
+
   @override
   String canonicalize(Dataset dataset) {
     // RDFC-1.0 Algorithm 4.4, Step 1
@@ -151,7 +157,7 @@ class Rdfc10Canonicalizer implements Canonicalizer {
 
     // Algorithm 4.6, Step h1dq.5: Return the hash.
     final bytesToHash = utf8.encode(dataToHash);
-    final digest = sha256.convert(bytesToHash);
+    final digest = hashAlgorithm.convert(bytesToHash);
     return digest.toString(); // Return the computed hash string
   }
 
@@ -269,7 +275,7 @@ class Rdfc10Canonicalizer implements Canonicalizer {
     // Algorithm 4.7, Step hrbn.5: Hash the final input string.
     final inputString = inputBuffer.toString();
     final bytesToHash = utf8.encode(inputString);
-    final digest = sha256.convert(bytesToHash);
+    final digest = hashAlgorithm.convert(bytesToHash);
     return digest.toString(); // Return the hash string
   }
 
@@ -413,7 +419,7 @@ class Rdfc10Canonicalizer implements Canonicalizer {
 
     // Step hndq.6: Hash final dataToHash and return hash + issuer.
     final finalHash =
-        sha256.convert(utf8.encode(dataToHash.toString())).toString();
+        hashAlgorithm.convert(utf8.encode(dataToHash.toString())).toString();
     return (finalHash, issuer); // Return using positional fields
   }
 

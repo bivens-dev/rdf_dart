@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:crypto/crypto.dart';
 import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalization_algorithm.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalizer.dart';
@@ -1674,8 +1675,6 @@ void main() {
       expect(() => canonicalizer.canonicalize(inputDataset), throwsException);
     });
 
-    // FIXME: We don't currently have a way to set the hashing algorithm so this will fail
-    // Same as test020 except for using SHA-384
     test('test075c: blank node - diamond (uses SHA-384)', () async {
       // Input File Contents:
       // <http://example.org/vocab#test> <http://example.org/vocab#A> _:e0 .
@@ -1686,6 +1685,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
+        hashAlgorithm: sha384
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
