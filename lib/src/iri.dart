@@ -20,6 +20,10 @@ class IRI {
 
   // Accessors
 
+  /// Returns the original, un-normalized string value used to create this IRI.
+  /// Uses the stored code points to reconstruct the string.
+  String get originalValue => String.fromCharCodes(_codepoints);
+
   /// The scheme component of the IRI.
   ///
   /// The value is the empty string if there is no scheme component.
