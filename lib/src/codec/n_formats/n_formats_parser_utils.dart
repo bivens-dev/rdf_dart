@@ -209,6 +209,9 @@ class NFormatsParserUtils {
           case 'r':
             lexicalBuffer.write('\r');
             currentCursor++;
+          case "'": //
+            lexicalBuffer.write("'");
+            currentCursor++;
           case 'f':
             lexicalBuffer.write('\f');
             currentCursor++;
