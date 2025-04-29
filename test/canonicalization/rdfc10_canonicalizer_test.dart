@@ -1120,20 +1120,6 @@ void main() {
       expect(canonicalDataset, equals(expectedQuads));
     });
 
-    // TEST FAILS with message:
-    // Expected: '_:c14n0 <http://example.org/vocab#p> <http://example.com> .\n'
-    //        '_:c14n0 <http://example.org/vocab#p> _:c14n1 .\n'
-    //        '_:c14n1 <http://example.org/vocab#p> <http://example.org> .\n'
-    //        ''
-    // Actual: '_:c14n0 <http://example.org/vocab#p> <http://example.org/> .\n'
-    //        '_:c14n1 <http://example.org/vocab#p> <http://example.com/> .\n'
-    //        '_:c14n1 <http://example.org/vocab#p> _:c14n0 .\n'
-    //        ''
-    // Which: is different.
-    //      Expected: ... //example.com> .\n_: ...
-    //        Actual: ... //example.org/> .\n_ ...
-    //                              ^
-    //       Differ at offset 53
     test('test055c: simple reorder (1)', () async {
       // Input File Contents:
       // _:e0 <http://example.org/vocab#p> _:e1 .
@@ -1153,20 +1139,6 @@ void main() {
       expect(canonicalDataset, equals(expectedQuads));
     });
 
-    // TEST fails with message:
-    // Expected: '_:c14n0 <http://example.org/vocab#p> <http://example.com> .\n'
-    //        '_:c14n0 <http://example.org/vocab#p> _:c14n1 .\n'
-    //        '_:c14n1 <http://example.org/vocab#p> <http://example.org> .\n'
-    //        ''
-    // Actual: '_:c14n0 <http://example.org/vocab#p> <http://example.org/> .\n'
-    //         '_:c14n1 <http://example.org/vocab#p> <http://example.com/> .\n'
-    //         '_:c14n1 <http://example.org/vocab#p> _:c14n0 .\n'
-    //         ''
-    //  Which: is different.
-    //      Expected: ... //example.com> .\n_: ...
-    //      Actual: ... //example.org/> .\n_ ...
-    //                            ^
-    //       Differ at offset 53
     test('test056c: simple reorder (2)', () async {
       // Input File Contents:
       // _:e0 <http://example.org/vocab#p> <http://example.org> .
@@ -1249,18 +1221,6 @@ void main() {
       expect(canonicalDataset, equals(expectedQuads));
     });
 
-    // TEST FAILS with message:
-    // Parse Error (L11:C48): Invalid escape sequence in literal: \'
-    // package:rdf_dart/src/codec/n_formats/n_formats_parser_utils.dart 245:13  NFormatsParserUtils._parseLiteralStringContent
-    // package:rdf_dart/src/codec/n_formats/n_formats_parser_utils.dart 528:27  NFormatsParserUtils.parseLiteralComponents
-    // package:rdf_dart/src/codec/nquads/nquads_decoder.dart 449:49             _NQuadsDecoderSink._parseObject
-    // package:rdf_dart/src/codec/nquads/nquads_decoder.dart 250:20             _NQuadsDecoderSink._parseQuadLine
-    // package:rdf_dart/src/codec/nquads/nquads_decoder.dart 212:7              _NQuadsDecoderSink._processLine
-    // package:rdf_dart/src/codec/nquads/nquads_decoder.dart 182:7              _NQuadsDecoderSink._processBuffer
-    // package:rdf_dart/src/codec/nquads/nquads_decoder.dart 123:5              _NQuadsDecoderSink.add
-    // package:rdf_dart/src/codec/nquads/nquads_decoder.dart 48:16              NQuadsDecoder.convert
-    // dart:convert                                                             Codec.decode
-    // test/canonicalization/rdfc10_canonicalizer_test.dart 1309:40             main.<fn>.<fn>
     test('test060c: n-quads escaping', () async {
       // Input File Contents:
       // <urn:ex:s:000:s\u20701> <urn:ex:000:p\u2070> <urn:ex:000:o\u2070> <urn:ex:000:g\u2070> .
@@ -1307,6 +1267,25 @@ void main() {
       // <urn:ex:s:006> <urn:ex:039> "\u0009\u0020<>\"{}|^`\\" .
       // <urn:ex:s:007> <urn:ex:040> "\U00000000\U00000001\U00000002\U00000003\U00000004\U00000005\U00000006\U00000007\U00000008\U00000009\U0000000a\U0000000b\U0000000c\U0000000d\U0000000e\U0000000f" .
       final quads = await _loadTestFile('test060-in.nq');
+       // Add the custom datatypes to the registry so they can be parsed correctly
+      DatatypeRegistry().registerDatatype(
+        IRI('urn:ex:ὃ'),
+        String,
+        (String lexicalForm) => lexicalForm,
+        (Object value) => value.toString(),
+      );
+      DatatypeRegistry().registerDatatype(
+        IRI('urn:ex:dt'),
+        String,
+        (String lexicalForm) => lexicalForm,
+        (Object value) => value.toString(),
+      );
+      DatatypeRegistry().registerDatatype(
+        IRI('urn:ex:d'),
+        String,
+        (String lexicalForm) => lexicalForm,
+        (Object value) => value.toString(),
+      );
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
@@ -1360,18 +1339,6 @@ void main() {
       expect(canonicalDataset, equals(expectedQuads));
     });
 
-    // TEST FAILS with message:
-    // Expected: '<http://example.com> <http://example.com/label> "test"@en .\n'
-    //        '<http://example.com> <http://example.com/label> "test"@fr .\n'
-    //        ''
-    // Actual: '<http://example.com/> <http://example.com/label> "test"@en .\n'
-    //        '<http://example.com/> <http://example.com/label> "test"@fr .\n'
-    //        ''
-    // Which: is different.
-    //      Expected: ... xample.com> <http:// ...
-    //        Actual: ... xample.com/> <http:/ ...
-    //                              ^
-    //       Differ at offset 19
     test('test061c: same literal value with multiple languages', () async {
       // Input File Contents:
       // <http://example.com> <http://example.com/label> "test"@en .
@@ -1389,18 +1356,6 @@ void main() {
       expect(canonicalDataset, equals(expectedQuads));
     });
 
-    // TEST FAILS with message:
-    // Expected: '<http://example.com> <http://example.com/label> "test"^^<http://example.com/t1> .\n'
-    //        '<http://example.com> <http://example.com/label> "test"^^<http://example.com/t2> .\n'
-    //        ''
-    // Actual: '<http://example.com/> <http://example.com/label> "test"^^<http://example.com/t1> .\n'
-    //        '<http://example.com/> <http://example.com/label> "test"^^<http://example.com/t2> .\n'
-    //        ''
-    // Which: is different.
-    //      Expected: ... xample.com> <http:// ...
-    //        Actual: ... xample.com/> <http:/ ...
-    //                              ^
-    //       Differ at offset 19
     test('test062c: same literal value with multiple datatypes', () async {
       // Input File Contents:
       // <http://example.com> <http://example.com/label> "test"^^<http://example.com/t1> .
