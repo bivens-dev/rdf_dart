@@ -119,7 +119,7 @@ class NFormatsSerializerUtils {
   /// Returns:
   ///   The formatted IRI string (e.g., `<http://example.org/resource>`).
   static String formatIri(IRI iri) {
-    final escapedValue = escapeIriString(iri.toString());
+    final escapedValue = escapeIriString(iri.originalValue);
     return '<$escapedValue>';
   }
 
