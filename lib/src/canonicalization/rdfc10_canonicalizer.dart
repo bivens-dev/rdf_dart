@@ -356,8 +356,8 @@ final class Rdfc10Canonicalizer extends Canonicalizer {
 
       // --- Step hndq.5.4: Iterate through permutations ---
       final permuter = Permuter(blankNodeList); // Use the Permuter
-      while (permuter.hasNext()) {
-        final p = permuter.next()!; // Get next permutation
+      while (permuter.moveNext()) {
+        final p = permuter.current; // Get next permutation
 
         // Step hndq.5.4.1: Create issuer copy using the implemented deepCopy
         var issuerCopy = issuer.deepCopy();
