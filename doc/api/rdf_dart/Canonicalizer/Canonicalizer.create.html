@@ -88,9 +88,9 @@ Defaults to <code>ComplexityLimits.high</code>.</li>
     case CanonicalizationAlgorithm.rdfc10:
       return Rdfc10Canonicalizer(hashAlgorithm, complexityLimits);
     case CanonicalizationAlgorithm.urdna2015:
-      return Urdna2015Canonicalizer(hashAlgorithm, complexityLimits);
+      throw UnimplementedError(&#39;URGNA2015 canonicalization is not implemented.&#39;);
     case CanonicalizationAlgorithm.urgna2012:
-      return Urgna2012Canonicalizer(hashAlgorithm, complexityLimits);
+      throw UnimplementedError(&#39;URGNA2012 canonicalization is not implemented.&#39;);
   }
 }</code></pre>
 </section>

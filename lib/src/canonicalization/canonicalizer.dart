@@ -3,8 +3,6 @@ import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalization_algorithm.dart';
 import 'package:rdf_dart/src/canonicalization/complexity_limits.dart';
 import 'package:rdf_dart/src/canonicalization/rdfc10_canonicalizer.dart';
-import 'package:rdf_dart/src/canonicalization/urdna2015_canonicalizer.dart';
-import 'package:rdf_dart/src/canonicalization/urgna2012_canonicalizer.dart';
 
 /// Defines a standard way to create a unique, textual representation
 /// (canonical form) of an RDF dataset.
@@ -74,9 +72,9 @@ abstract base class Canonicalizer {
       case CanonicalizationAlgorithm.rdfc10:
         return Rdfc10Canonicalizer(hashAlgorithm, complexityLimits);
       case CanonicalizationAlgorithm.urdna2015:
-        return Urdna2015Canonicalizer(hashAlgorithm, complexityLimits);
+        throw UnimplementedError('URGNA2015 canonicalization is not implemented.');
       case CanonicalizationAlgorithm.urgna2012:
-        return Urgna2012Canonicalizer(hashAlgorithm, complexityLimits);
+        throw UnimplementedError('URGNA2012 canonicalization is not implemented.');
     }
   }
 }
