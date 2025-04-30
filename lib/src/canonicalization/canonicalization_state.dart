@@ -1,7 +1,7 @@
-import 'package:rdf_dart/src/blank_node.dart';
 import 'package:rdf_dart/src/canonicalization/identifier_issuer.dart';
-import 'package:rdf_dart/src/dataset.dart';
-import 'package:rdf_dart/src/quad.dart';
+import 'package:rdf_dart/src/model/blank_node.dart';
+import 'package:rdf_dart/src/model/dataset.dart';
+import 'package:rdf_dart/src/model/quad.dart';
 
 /// Holds the state required during the RDF Dataset canonicalization process,
 /// corresponding to Section 4.2 of the RDFC-1.0 specification.

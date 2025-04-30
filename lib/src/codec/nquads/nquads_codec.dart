@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:rdf_dart/src/codec/nquads/nquads_decoder.dart';
 import 'package:rdf_dart/src/codec/nquads/nquads_encoder.dart';
-import 'package:rdf_dart/src/dataset.dart';
+import 'package:rdf_dart/src/model/dataset.dart';
 
 /// A [Codec] for encoding and decoding RDF [Dataset] objects to and from
 /// N-Quads formatted strings.

@@ -1,8 +1,8 @@
 import 'package:meta/meta.dart';
 import 'package:rdf_dart/src/iri.dart';
-import 'package:rdf_dart/src/rdf_term.dart';
-import 'package:rdf_dart/src/subject_type.dart';
-import 'package:rdf_dart/src/term_type.dart';
+import 'package:rdf_dart/src/model/rdf_term.dart';
+import 'package:rdf_dart/src/model/subject_type.dart';
+import 'package:rdf_dart/src/model/term_type.dart';
 
 /// Represents an Internationalized Resource Identifier (IRI).
 ///

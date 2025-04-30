@@ -1,10 +1,10 @@
 
-import 'package:rdf_dart/src/blank_node.dart';
-import 'package:rdf_dart/src/iri_term.dart';
-import 'package:rdf_dart/src/rdf_term.dart';
-import 'package:rdf_dart/src/subject_type.dart';
-import 'package:rdf_dart/src/triple.dart';
-import 'package:rdf_dart/src/triple_term.dart';
+import 'package:rdf_dart/src/model/blank_node.dart';
+import 'package:rdf_dart/src/model/iri_term.dart';
+import 'package:rdf_dart/src/model/rdf_term.dart';
+import 'package:rdf_dart/src/model/subject_type.dart';
+import 'package:rdf_dart/src/model/triple.dart';
+import 'package:rdf_dart/src/model/triple_term.dart';
 import 'package:rdf_dart/src/vocab/rdf_vocab.dart';
 
 /// Represents an RDF graph, which is a collection of RDF triples.

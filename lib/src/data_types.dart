@@ -24,7 +24,7 @@ import 'package:rdf_dart/src/data_types/unsigned_byte.dart';
 import 'package:rdf_dart/src/data_types/unsigned_int.dart';
 import 'package:rdf_dart/src/data_types/unsigned_long.dart';
 import 'package:rdf_dart/src/data_types/unsigned_short.dart';
-import 'package:rdf_dart/src/exceptions.dart';
+import 'package:rdf_dart/src/exceptions/datatype_not_found_exception.dart';
 import 'package:rdf_dart/src/iri.dart';
 import 'package:rdf_dart/src/vocab/rdf_vocab.dart';
 import 'package:rdf_dart/src/vocab/xsd_vocab.dart';

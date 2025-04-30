@@ -1,8 +1,8 @@
 import 'package:collection/collection.dart';
-import 'package:rdf_dart/src/graph.dart';
-import 'package:rdf_dart/src/iri_term.dart';
-import 'package:rdf_dart/src/quad.dart';
-import 'package:rdf_dart/src/subject_type.dart';
+import 'package:rdf_dart/src/model/graph.dart';
+import 'package:rdf_dart/src/model/iri_term.dart';
+import 'package:rdf_dart/src/model/quad.dart';
+import 'package:rdf_dart/src/model/subject_type.dart';
 
 /// Represents an RDF Dataset, which is a collection of RDF graphs.
 ///

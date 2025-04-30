@@ -1,17 +1,19 @@
 import 'dart:collection';
 import 'dart:convert';
 
-import 'package:rdf_dart/src/blank_node.dart';
 import 'package:rdf_dart/src/codec/n_formats/n_formats_parser_utils.dart';
 import 'package:rdf_dart/src/codec/n_formats/parse_error.dart';
-import 'package:rdf_dart/src/exceptions.dart';
+import 'package:rdf_dart/src/exceptions/invalid_language_tag_exception.dart';
+import 'package:rdf_dart/src/exceptions/invalid_lexical_form_exception.dart';
+import 'package:rdf_dart/src/exceptions/literal_constraint_exception.dart';
 import 'package:rdf_dart/src/iri.dart';
-import 'package:rdf_dart/src/iri_term.dart';
-import 'package:rdf_dart/src/literal.dart';
-import 'package:rdf_dart/src/rdf_term.dart';
-import 'package:rdf_dart/src/subject_type.dart';
-import 'package:rdf_dart/src/triple.dart';
-import 'package:rdf_dart/src/triple_term.dart';
+import 'package:rdf_dart/src/model/blank_node.dart';
+import 'package:rdf_dart/src/model/iri_term.dart';
+import 'package:rdf_dart/src/model/literal.dart';
+import 'package:rdf_dart/src/model/rdf_term.dart';
+import 'package:rdf_dart/src/model/subject_type.dart';
+import 'package:rdf_dart/src/model/triple.dart';
+import 'package:rdf_dart/src/model/triple_term.dart';
 import 'package:rdf_dart/src/vocab/rdf_vocab.dart';
 import 'package:rdf_dart/src/vocab/xsd_vocab.dart';
 

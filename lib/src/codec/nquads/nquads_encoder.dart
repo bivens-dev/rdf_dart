@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-import 'package:rdf_dart/src/blank_node.dart';
 import 'package:rdf_dart/src/codec/n_formats/n_formats_serializer_utils.dart';
-import 'package:rdf_dart/src/dataset.dart';
-import 'package:rdf_dart/src/iri_term.dart';
-import 'package:rdf_dart/src/literal.dart';
-import 'package:rdf_dart/src/rdf_term.dart';
-import 'package:rdf_dart/src/term_type.dart';
-import 'package:rdf_dart/src/triple_term.dart';
+import 'package:rdf_dart/src/model/blank_node.dart';
+import 'package:rdf_dart/src/model/dataset.dart';
+import 'package:rdf_dart/src/model/iri_term.dart';
+import 'package:rdf_dart/src/model/literal.dart';
+import 'package:rdf_dart/src/model/rdf_term.dart';
+import 'package:rdf_dart/src/model/term_type.dart';
+import 'package:rdf_dart/src/model/triple_term.dart';
 
 /// Converts a [Dataset] to its N-Quads string representation.
 ///

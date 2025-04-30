@@ -2,7 +2,7 @@
 // ignore_for_file: comment_references
 
 import 'package:meta/meta.dart';
-import 'package:rdf_dart/src/term_type.dart';
+import 'package:rdf_dart/src/model/term_type.dart';
 
 /// The abstract base class for all RDF terms.
 ///
