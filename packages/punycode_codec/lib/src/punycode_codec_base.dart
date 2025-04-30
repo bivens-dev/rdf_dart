@@ -8,8 +8,8 @@
 
 import 'dart:convert';
 
-import 'package:rdf_dart/src/punycode/decoder.dart';
-import 'package:rdf_dart/src/punycode/encoder.dart';
+import 'package:punycode_codec/src/decoder.dart';
+import 'package:punycode_codec/src/encoder.dart';
 
 /// A codec for encoding and decoding strings using the Punycode algorithm.
 ///

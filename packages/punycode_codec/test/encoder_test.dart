@@ -1,5 +1,4 @@
-import '../../punycode/encoder.dart';
-import '../../punycode/punycode_codec.dart';
+import 'package:punycode_codec/punycode_codec.dart';
 import 'package:test/test.dart';
 
 void main() {

@@ -6,7 +6,7 @@
 
 import 'dart:convert';
 
-import 'package:rdf_dart/src/punycode/shared.dart';
+import 'shared.dart';
 
 /// The canonical version of the Punycode Decoder
 const punycodeDecoder = PunycodeDecoder._();
