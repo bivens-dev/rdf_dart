@@ -30,6 +30,8 @@ RDF.dart is a Dart library designed to make it easy to work with [RDF (Resource 
     *   Easily encode lists of `Triple` objects to N-Triples strings and decode N-Triples strings back into `Triple` objects.
     *   Easily encode `Dataset` objects to N-Quads strings and decode N-Quads strings back into `Dataset` objects.
     *   Integrates seamlessly with Dart's I/O streams for efficient processing of large files.
+*   **RDF Dataset Canonicalization:**
+    *   Supports dataset canonicalization according to the [RDF Dataset Canonicalization (RDFC) 1.0](https://www.w3.org/TR/rdf11-datasets-canonicalization/) specification.
 *   **Immutability:** Core data structures (`IRITerm`, `BlankNode`, `Literal`, `TripleTerm`, `Triple`, `IRI`) are immutable.
 *   **Well-Tested:** Core features have comprehensive unit tests.
 

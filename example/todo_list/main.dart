@@ -15,6 +15,7 @@ void main() async {
   await application.saveData();
   await application.loadData();
   application.displayTaskLists();
+  await application.exportData();
 }
 
 class TodoApp {
@@ -23,16 +24,25 @@ class TodoApp {
 
   TodoApp({required this.dataRepository, required this.taskLists});
 
+  /// Load the various lists and task from the disk
   Future<void> loadData() async {
     _log('\nLoading data...');
     taskLists = await dataRepository.loadData();
     _log('Data loaded.');
   }
 
+  /// Save the data to disk
   Future<void> saveData() async {
     _log('Saving data...');
     await dataRepository.saveData(taskLists);
     _log('Data saved.');
+  }
+
+  /// Save the data in the official canonical dataset format
+  Future<void> exportData() async {
+    _log('Exporting data...');
+    await dataRepository.export(taskLists);
+    _log('Data exported.');
   }
 
   void displayTaskLists() {
