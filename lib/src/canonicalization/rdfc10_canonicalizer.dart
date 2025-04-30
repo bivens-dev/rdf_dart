@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:crypto/crypto.dart';
 import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalization_state.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalizer.dart';
@@ -11,12 +10,10 @@ import 'package:rdf_dart/src/quad.dart';
 
 /// Implements the RDFC-1.0 canonicalization algorithm.
 /// Spec: https://www.w3.org/TR/rdf-canon/
-class Rdfc10Canonicalizer implements Canonicalizer {
-
-  final Hash hashAlgorithm;
+final class Rdfc10Canonicalizer extends Canonicalizer {
 
   /// Creates an RDFC-1.0 canonicalizer instance using the specified hash algorithm.
-  Rdfc10Canonicalizer(this.hashAlgorithm);
+  Rdfc10Canonicalizer(super.hashAlgorithm);
 
   @override
   String canonicalize(Dataset dataset) {

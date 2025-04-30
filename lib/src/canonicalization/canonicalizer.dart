@@ -9,8 +9,11 @@ import 'package:rdf_dart/src/canonicalization/urgna2012_canonicalizer.dart';
 ///
 /// Provides a common interface for different canonicalization algorithms like
 /// RDFC-1.0 and URDNA2015.
-abstract class Canonicalizer {
-  
+abstract base class Canonicalizer {
+  final Hash hashAlgorithm;
+
+  Canonicalizer(this.hashAlgorithm);
+
   /// Canonicalizes the input RDF [dataset] according to the specific algorithm.
   ///
   /// Returns the canonical representation of the dataset as a single string,
@@ -29,9 +32,9 @@ abstract class Canonicalizer {
       case CanonicalizationAlgorithm.rdfc10:
         return Rdfc10Canonicalizer(hashAlgorithm);
       case CanonicalizationAlgorithm.urdna2015:
-        return Urdna2015Canonicalizer();
+        return Urdna2015Canonicalizer(hashAlgorithm);
       case CanonicalizationAlgorithm.urgna2012:
-        return Urgna2012Canonicalizer();
+        return Urgna2012Canonicalizer(hashAlgorithm);
     }
   }
 }

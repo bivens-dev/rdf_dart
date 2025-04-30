@@ -3,7 +3,10 @@ import 'package:rdf_dart/src/canonicalization/canonicalizer.dart';
 
 /// Placeholder for the URGNA2012 canonicalization algorithm.
 /// This algorithm is generally superseded and not planned for initial implementation.
-class Urgna2012Canonicalizer implements Canonicalizer {
+final class Urgna2012Canonicalizer extends Canonicalizer {
+
+  Urgna2012Canonicalizer(super.hashAlgorithm);
+
   @override
   String canonicalize(Dataset dataset) {
     throw UnimplementedError(
