@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalization_state.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalizer.dart';
 import 'package:rdf_dart/src/canonicalization/identifier_issuer.dart';
+import 'package:rdf_dart/src/canonicalization/max_iterations_exception.dart';
 import 'package:rdf_dart/src/canonicalization/permuter.dart';
 import 'package:rdf_dart/src/codec/n_formats/n_formats_serializer_utils.dart';
 import 'package:rdf_dart/src/quad.dart';
@@ -12,8 +14,13 @@ import 'package:rdf_dart/src/quad.dart';
 /// Spec: https://www.w3.org/TR/rdf-canon/
 final class Rdfc10Canonicalizer extends Canonicalizer {
 
+  /// The calculated maximum number of deep iterations allowed for this run.
+  late num _effectiveMaxIterations;
+  /// The remaining number of deep iterations allowed.
+  late num _remainingIterations;
+
   /// Creates an RDFC-1.0 canonicalizer instance using the specified hash algorithm.
-  Rdfc10Canonicalizer(super.hashAlgorithm);
+  Rdfc10Canonicalizer(super.hashAlgorithm, super.complexityLimits);
 
   @override
   String canonicalize(Dataset dataset) {
@@ -37,6 +44,8 @@ final class Rdfc10Canonicalizer extends Canonicalizer {
     final hashesToRemove = <String>[]; // Track unique hashes to remove later
     // Get hashes and sort them (code point ordered by hash)
     final sortedHashes = state.hashToBlankNodesMap.keys.toList()..sort();
+    final nonUniqueLists = <List<String>>[]; // Store lists for Step ca.5
+    var nonUniqueBNodeCount = 0; // Counter for limit calculation
 
     for (final hash in sortedHashes) {
       final identifierList = state.hashToBlankNodesMap[hash]!;
@@ -44,16 +53,25 @@ final class Rdfc10Canonicalizer extends Canonicalizer {
       if (identifierList.length == 1) {
         final bnodeId = identifierList.first;
         // Step ca.4.2: Issue canonical identifier using Algorithm 4.5
-        state.canonicalIssuer.getId(bnodeId);
+        // Only issue if not already issued (though unlikely at this stage)
+        if (!state.canonicalIssuer.issued.containsKey(bnodeId)) {
+           state.canonicalIssuer.getId(bnodeId);
+        }
         // Step ca.4.3: Mark hash for removal
         hashesToRemove.add(hash);
+      } else {
+        // This hash group is non-unique
+        nonUniqueLists.add(identifierList);
+        nonUniqueBNodeCount += identifierList.length; // <-- Count nodes for limit
+        // If list has more than one entry, continue (handled in Step ca.5)
       }
-      // If list has more than one entry, continue (handled in Step ca.5)
     }
     // Remove the entries for unique hashes
     for (final hash in hashesToRemove) {
       state.hashToBlankNodesMap.remove(hash);
     }
+
+    _calculateComplexity(nonUniqueBNodeCount);
 
     // RDFC-1.0 Algorithm 4.4, Step ca.5: Process non-unique hashes
     // Create a copy of the keys to iterate over, as the map might be modified
@@ -288,6 +306,7 @@ final class Rdfc10Canonicalizer extends Canonicalizer {
     String identifier, // The blank node ID we are calculating the hash for
     IdentifierIssuer issuer, // The temporary issuer for this path
   ) {
+    _enforceComplexityLimitations();
     // Step hndq.1: Initialize Hn map.
     final hnMap = <String, List<String>>{};
     // Step hndq.2: Get quads for the identifier.
@@ -474,5 +493,36 @@ final class Rdfc10Canonicalizer extends Canonicalizer {
 
     // Join them into the final document
     return canonicalQuads.join();
+  }
+
+  void _calculateComplexity(int nonUniqueBNodeCount){
+    final factor = super.complexityLimits.maxWorkFactor;
+
+    if (factor == 0) {
+      _effectiveMaxIterations = 0;
+    } else if (factor == double.infinity) {
+      _effectiveMaxIterations = double.infinity;
+    } else {
+      // Calculate based on work factor: n ^ factor
+      _effectiveMaxIterations = pow(nonUniqueBNodeCount, factor);
+      // Handle potential overflow to infinity
+      if (!_effectiveMaxIterations.isFinite) {
+         _effectiveMaxIterations = double.infinity;
+      }
+    }
+    // Ensure it's not negative (e.g., pow(0, 3) is 0)
+    _effectiveMaxIterations = max(0, _effectiveMaxIterations);
+    _remainingIterations = _effectiveMaxIterations; // Initialize counter
+  }
+  
+  void _enforceComplexityLimitations() {
+    if (_remainingIterations == 0) {
+      // Throw the specific exception
+      throw MaxIterationsExceededException(_effectiveMaxIterations);
+    }
+    if (_remainingIterations != double.infinity) {
+       // Decrement only if it's a finite limit
+       _remainingIterations--;
+    }
   }
 }

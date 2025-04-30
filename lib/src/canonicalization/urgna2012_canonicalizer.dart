@@ -5,7 +5,7 @@ import 'package:rdf_dart/src/canonicalization/canonicalizer.dart';
 /// This algorithm is generally superseded and not planned for initial implementation.
 final class Urgna2012Canonicalizer extends Canonicalizer {
 
-  Urgna2012Canonicalizer(super.hashAlgorithm);
+  Urgna2012Canonicalizer(super.hashAlgorithm, super.complexityLimits);
 
   @override
   String canonicalize(Dataset dataset) {

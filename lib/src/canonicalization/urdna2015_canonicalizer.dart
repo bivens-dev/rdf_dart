@@ -4,7 +4,7 @@ import 'package:rdf_dart/src/canonicalization/canonicalizer.dart';
 /// Implements the URDNA2015 canonicalization algorithm.
 final class Urdna2015Canonicalizer extends Canonicalizer {
 
-  Urdna2015Canonicalizer(super.hashAlgorithm);
+  Urdna2015Canonicalizer(super.hashAlgorithm, super.complexityLimits);
 
   @override
   String canonicalize(Dataset dataset) {

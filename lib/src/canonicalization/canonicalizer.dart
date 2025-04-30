@@ -4,6 +4,7 @@ import 'package:rdf_dart/src/canonicalization/canonicalization_algorithm.dart';
 import 'package:rdf_dart/src/canonicalization/rdfc10_canonicalizer.dart';
 import 'package:rdf_dart/src/canonicalization/urdna2015_canonicalizer.dart';
 import 'package:rdf_dart/src/canonicalization/urgna2012_canonicalizer.dart';
+import 'package:rdf_dart/src/canonicalization/complexity_limits.dart';
 
 /// Abstract base class for RDF Dataset canonicalization algorithms (Strategy Pattern).
 ///
@@ -12,7 +13,9 @@ import 'package:rdf_dart/src/canonicalization/urgna2012_canonicalizer.dart';
 abstract base class Canonicalizer {
   final Hash hashAlgorithm;
 
-  Canonicalizer(this.hashAlgorithm);
+  final ComplexityLimits complexityLimits;
+
+  Canonicalizer(this.hashAlgorithm, this.complexityLimits);
 
   /// Canonicalizes the input RDF [dataset] according to the specific algorithm.
   ///
@@ -27,14 +30,15 @@ abstract base class Canonicalizer {
   /// Factory constructor to get an instance of a specific canonicalizer.
   factory Canonicalizer.create(CanonicalizationAlgorithm algorithm, {
     Hash hashAlgorithm = sha256, 
+    ComplexityLimits complexityLimits = ComplexityLimits.high
   }) {
     switch (algorithm) {
       case CanonicalizationAlgorithm.rdfc10:
-        return Rdfc10Canonicalizer(hashAlgorithm);
+        return Rdfc10Canonicalizer(hashAlgorithm, complexityLimits);
       case CanonicalizationAlgorithm.urdna2015:
-        return Urdna2015Canonicalizer(hashAlgorithm);
+        return Urdna2015Canonicalizer(hashAlgorithm, complexityLimits);
       case CanonicalizationAlgorithm.urgna2012:
-        return Urgna2012Canonicalizer(hashAlgorithm);
+        return Urgna2012Canonicalizer(hashAlgorithm, complexityLimits);
     }
   }
 }

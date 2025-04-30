@@ -4,6 +4,7 @@ import 'package:crypto/crypto.dart';
 import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalization_algorithm.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalizer.dart';
+import 'package:rdf_dart/src/canonicalization/complexity_limits.dart';
 import 'package:rdf_dart/src/data_types.dart';
 import 'package:test/test.dart';
 
@@ -330,6 +331,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
+        complexityLimits: ComplexityLimits.medium
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -349,6 +351,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
+        complexityLimits: ComplexityLimits.medium
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -369,6 +372,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
+        complexityLimits: ComplexityLimits.medium
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -391,6 +395,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
+        complexityLimits: ComplexityLimits.medium
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -416,6 +421,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
+        complexityLimits: ComplexityLimits.medium
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -441,6 +447,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
+        complexityLimits: ComplexityLimits.medium
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -466,6 +473,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
+        complexityLimits: ComplexityLimits.medium
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -491,6 +499,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
+        complexityLimits: ComplexityLimits.medium
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -516,6 +525,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
+        complexityLimits: ComplexityLimits.medium
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -764,6 +774,8 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
+        complexityLimits: ComplexityLimits.low
+        
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -850,6 +862,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
+        complexityLimits: ComplexityLimits.low
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -936,6 +949,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
+        complexityLimits: ComplexityLimits.low
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -1420,6 +1434,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
+        complexityLimits: ComplexityLimits.medium
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -1445,6 +1460,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
+        complexityLimits: ComplexityLimits.medium
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -1470,6 +1486,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
+        complexityLimits: ComplexityLimits.medium
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -1495,6 +1512,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
+        complexityLimits: ComplexityLimits.medium
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -1520,6 +1538,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
+        complexityLimits: ComplexityLimits.medium
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -1545,6 +1564,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
+        complexityLimits: ComplexityLimits.medium
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -1671,6 +1691,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
+        complexityLimits: ComplexityLimits.low
       );
       expect(() => canonicalizer.canonicalize(inputDataset), throwsException);
     });
