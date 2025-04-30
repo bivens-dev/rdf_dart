@@ -31,11 +31,8 @@ class Permuter<T extends Comparable<T>> {
   /// Returns the next permutation as a `List<T>`.
   ///
   /// Returns null if no more permutations exist.
-  /// Throws [StateError] if called after hasNext() returns false.
   List<T>? next() {
     if (_done) {
-      // Optional: Throw StateError if called after completion
-      // throw StateError('No more permutations.');
       return null;
     }
 

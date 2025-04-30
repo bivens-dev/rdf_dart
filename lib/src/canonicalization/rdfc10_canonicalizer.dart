@@ -19,7 +19,8 @@ final class Rdfc10Canonicalizer extends Canonicalizer {
   /// The remaining number of deep iterations allowed.
   late num _remainingIterations;
 
-  /// Creates an RDFC-1.0 canonicalizer instance using the specified hash algorithm.
+  /// Creates an RDFC-1.0 canonicalizer instance using the specified 
+  /// hash algorithm and complexity constraints.
   Rdfc10Canonicalizer(super.hashAlgorithm, super.complexityLimits);
 
   @override

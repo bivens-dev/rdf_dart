@@ -5,7 +5,7 @@ enum CanonicalizationAlgorithm {
   rdfc10,
 
   /// Universal RDF Dataset Normalization Algorithm 2015 (URDNA2015)
-  /// Spec: Referenced within RDFC-1.0 spec and older drafts.
+  /// Spec: https://www.w3.org/community/reports/credentials/CG-FINAL-rdf-dataset-canonicalization-20221009/
   urdna2015,
 
   /// Universal RDF Graph Normalization Algorithm 2012 (URGNA2012)

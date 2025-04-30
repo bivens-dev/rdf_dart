@@ -5,6 +5,8 @@ import 'package:rdf_dart/src/canonicalization/canonicalizer.dart';
 /// This algorithm is generally superseded and not planned for initial implementation.
 final class Urgna2012Canonicalizer extends Canonicalizer {
 
+  /// Creates an URDNA2012 canonicalizer instance using the specified 
+  /// hash algorithm and complexity constraints.
   Urgna2012Canonicalizer(super.hashAlgorithm, super.complexityLimits);
 
   @override
