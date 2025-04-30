@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'package:convert/convert.dart';
 import 'package:decimal/decimal.dart';
 import 'package:intl/locale.dart';
-import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/data_types/boolean.dart';
 import 'package:rdf_dart/src/data_types/byte.dart';
 import 'package:rdf_dart/src/data_types/date.dart';
@@ -25,6 +24,10 @@ import 'package:rdf_dart/src/data_types/unsigned_byte.dart';
 import 'package:rdf_dart/src/data_types/unsigned_int.dart';
 import 'package:rdf_dart/src/data_types/unsigned_long.dart';
 import 'package:rdf_dart/src/data_types/unsigned_short.dart';
+import 'package:rdf_dart/src/exceptions.dart';
+import 'package:rdf_dart/src/iri.dart';
+import 'package:rdf_dart/src/vocab/rdf_vocab.dart';
+import 'package:rdf_dart/src/vocab/xsd_vocab.dart';
 
 /// A function that takes a lexical form (a string) and returns a Dart object.
 ///

@@ -1,7 +1,13 @@
 import 'dart:convert';
 
-import 'package:rdf_dart/rdf_dart.dart';
+import 'package:rdf_dart/src/blank_node.dart';
 import 'package:rdf_dart/src/codec/n_formats/n_formats_serializer_utils.dart';
+import 'package:rdf_dart/src/iri_term.dart';
+import 'package:rdf_dart/src/literal.dart';
+import 'package:rdf_dart/src/rdf_term.dart';
+import 'package:rdf_dart/src/term_type.dart';
+import 'package:rdf_dart/src/triple.dart';
+import 'package:rdf_dart/src/triple_term.dart';
 
 /// Converts a `List<Triple>` to its N-Triples string representation.
 ///

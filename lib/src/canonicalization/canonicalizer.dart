@@ -1,8 +1,8 @@
 import 'package:crypto/crypto.dart';
-import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalization_algorithm.dart';
 import 'package:rdf_dart/src/canonicalization/complexity_limits.dart';
 import 'package:rdf_dart/src/canonicalization/rdfc10_canonicalizer.dart';
+import 'package:rdf_dart/src/dataset.dart';
 
 /// Defines a standard way to create a unique, textual representation
 /// (canonical form) of an RDF dataset.

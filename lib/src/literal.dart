@@ -1,7 +1,12 @@
 import 'package:intl/locale.dart';
 import 'package:meta/meta.dart';
-import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/data_types.dart';
+import 'package:rdf_dart/src/exceptions.dart';
+import 'package:rdf_dart/src/iri.dart';
+import 'package:rdf_dart/src/rdf_term.dart';
+import 'package:rdf_dart/src/term_type.dart';
+import 'package:rdf_dart/src/vocab/rdf_vocab.dart';
+import 'package:rdf_dart/src/vocab/xsd_vocab.dart';
 
 /// Represents a literal value in an RDF graph.
 ///

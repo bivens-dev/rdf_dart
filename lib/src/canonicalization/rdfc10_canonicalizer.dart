@@ -1,14 +1,18 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:rdf_dart/rdf_dart.dart';
+import 'package:rdf_dart/src/blank_node.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalization_state.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalizer.dart';
 import 'package:rdf_dart/src/canonicalization/identifier_issuer.dart';
 import 'package:rdf_dart/src/canonicalization/max_iterations_exception.dart';
 import 'package:rdf_dart/src/canonicalization/permuter.dart';
 import 'package:rdf_dart/src/codec/n_formats/n_formats_serializer_utils.dart';
+import 'package:rdf_dart/src/dataset.dart';
+import 'package:rdf_dart/src/iri_term.dart';
+import 'package:rdf_dart/src/literal.dart';
 import 'package:rdf_dart/src/quad.dart';
+import 'package:rdf_dart/src/rdf_term.dart';
 
 /// Implements the RDFC-1.0 canonicalization algorithm.
 /// Spec: https://www.w3.org/TR/rdf-canon/
