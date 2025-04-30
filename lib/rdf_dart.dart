@@ -78,21 +78,21 @@
 /// ```
 library;
 
-export 'src/blank_node.dart';
 export 'src/canonicalization/canonicalizer.dart';
 export 'src/codec/nquads/nquads_codec.dart';
 export 'src/codec/ntriples/ntriples_codec.dart';
 export 'src/data_types/duration.dart' show XSDDuration;
-export 'src/dataset.dart';
-export 'src/exceptions.dart';
-export 'src/graph.dart';
+export 'src/exceptions/exceptions.dart';
 export 'src/iri.dart';
-export 'src/iri_term.dart';
-export 'src/literal.dart';
-export 'src/rdf_term.dart';
-export 'src/subject_type.dart';
-export 'src/term_type.dart';
-export 'src/triple.dart';
-export 'src/triple_term.dart';
+export 'src/model/blank_node.dart';
+export 'src/model/dataset.dart';
+export 'src/model/graph.dart';
+export 'src/model/iri_term.dart';
+export 'src/model/literal.dart';
+export 'src/model/rdf_term.dart';
+export 'src/model/subject_type.dart';
+export 'src/model/term_type.dart';
+export 'src/model/triple.dart';
+export 'src/model/triple_term.dart';
 export 'src/vocab/rdf_vocab.dart';
 export 'src/vocab/xsd_vocab.dart';

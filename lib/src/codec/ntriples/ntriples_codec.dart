@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:rdf_dart/src/codec/ntriples/ntriples_decoder.dart';
 import 'package:rdf_dart/src/codec/ntriples/ntriples_encoder.dart';
-import 'package:rdf_dart/src/triple.dart';
+import 'package:rdf_dart/src/model/triple.dart';
 
 /// A [Codec] for encoding and decoding RDF triples according to the
 /// N-Triples specification.

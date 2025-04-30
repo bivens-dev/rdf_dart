@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
-import 'package:rdf_dart/src/rdf_term.dart';
-import 'package:rdf_dart/src/term_type.dart';
-import 'package:rdf_dart/src/triple.dart';
+import 'package:rdf_dart/src/model/rdf_term.dart';
+import 'package:rdf_dart/src/model/term_type.dart';
+import 'package:rdf_dart/src/model/triple.dart';
 
 /// Represents an RDF Triple used as an RDF Term (RDF 1.2).
 ///

@@ -1,17 +1,18 @@
 // Tests for N-Quads Codec
 
 import 'dart:io';
-import 'package:rdf_dart/src/blank_node.dart';
+
 import 'package:rdf_dart/src/codec/n_formats/parse_error.dart';
 import 'package:rdf_dart/src/codec/nquads/nquads_codec.dart';
 import 'package:rdf_dart/src/data_types.dart' show DatatypeRegistry;
-import 'package:rdf_dart/src/dataset.dart';
-import 'package:rdf_dart/src/graph.dart';
 import 'package:rdf_dart/src/iri.dart';
-import 'package:rdf_dart/src/iri_term.dart';
-import 'package:rdf_dart/src/literal.dart';
-import 'package:rdf_dart/src/triple.dart';
-import 'package:rdf_dart/src/triple_term.dart';
+import 'package:rdf_dart/src/model/blank_node.dart';
+import 'package:rdf_dart/src/model/dataset.dart';
+import 'package:rdf_dart/src/model/graph.dart';
+import 'package:rdf_dart/src/model/iri_term.dart';
+import 'package:rdf_dart/src/model/literal.dart';
+import 'package:rdf_dart/src/model/triple.dart';
+import 'package:rdf_dart/src/model/triple_term.dart';
 import 'package:rdf_dart/src/vocab/rdf_vocab.dart';
 import 'package:rdf_dart/src/vocab/xsd_vocab.dart';
 import 'package:test/test.dart';

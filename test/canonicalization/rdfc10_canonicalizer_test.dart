@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalization_algorithm.dart';
-import 'package:rdf_dart/src/canonicalization/canonicalizer.dart';
 import 'package:rdf_dart/src/canonicalization/complexity_limits.dart';
 import 'package:rdf_dart/src/data_types.dart';
 import 'package:test/test.dart';

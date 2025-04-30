@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
-import 'package:rdf_dart/src/rdf_term.dart';
-import 'package:rdf_dart/src/subject_type.dart';
-import 'package:rdf_dart/src/term_type.dart';
+import 'package:rdf_dart/src/model/rdf_term.dart';
+import 'package:rdf_dart/src/model/subject_type.dart';
+import 'package:rdf_dart/src/model/term_type.dart';
 import 'package:uuid/uuid.dart';
 
 /// Represents a blank node in an RDF graph.

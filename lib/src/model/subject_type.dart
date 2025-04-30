@@ -1,6 +1,6 @@
 // ignore_for_file: comment_references
 
-import 'package:rdf_dart/src/rdf_term.dart';
+import 'package:rdf_dart/src/model/rdf_term.dart';
 
 /// Abstract marker class for RDF terms that can function as the subject of an
 /// RDF [Triple].

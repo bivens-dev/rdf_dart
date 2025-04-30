@@ -1,6 +1,6 @@
-import 'package:rdf_dart/src/iri_term.dart';
-import 'package:rdf_dart/src/rdf_term.dart';
-import 'package:rdf_dart/src/subject_type.dart';
+import 'package:rdf_dart/src/model/iri_term.dart';
+import 'package:rdf_dart/src/model/rdf_term.dart';
+import 'package:rdf_dart/src/model/subject_type.dart';
 
 /// Represents an RDF Quad (subject, predicate, object, graphLabel)
 /// GraphLabel is null for quads in the default graph.

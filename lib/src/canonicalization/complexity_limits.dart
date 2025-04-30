@@ -1,3 +1,5 @@
+import 'package:rdf_dart/src/canonicalization/max_iterations_exception.dart' show MaxIterationsExceededException;
+
 /// Controls the computational complexity allowed during the RDF canonicalization
 /// process, specifically related to the deep comparison of blank nodes.
 ///

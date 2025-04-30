@@ -1,7 +1,7 @@
 import 'package:rdf_dart/src/codec/n_formats/parse_error.dart';
 import 'package:rdf_dart/src/iri.dart';
-import 'package:rdf_dart/src/iri_term.dart';
-import 'package:rdf_dart/src/literal.dart';
+import 'package:rdf_dart/src/model/iri_term.dart';
+import 'package:rdf_dart/src/model/literal.dart';
 
 // ignore: avoid_classes_with_only_static_members
 /// Utility class for parsing elements common to N-Triples/N-Quads syntax.
