@@ -1,4 +1,3 @@
-import 'package:xsd/src/codecs/date/date_codec.dart';
 import 'package:xsd/xsd.dart';
 
 void main() {
