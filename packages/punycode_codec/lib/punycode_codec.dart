@@ -42,9 +42,9 @@
 ///   final decodedDomain = decoder.toUnicode('xn--ls8h.la');
 ///   print(decodedDomain); // Output: 💩.la
 ///
-///   final email = '[email address removed]';
+///   final email = 'bücher@xn--bcher-kva.com';
 ///   final decodedEmail = decoder.toUnicode(email);
-///   print(decodedEmail); // Output: [email address removed]
+///   print(decodedEmail); // Output: bücher@bücher.com
 /// }
 /// ```
 ///
