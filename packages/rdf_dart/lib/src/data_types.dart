@@ -4,30 +4,11 @@ import 'dart:typed_data';
 import 'package:convert/convert.dart';
 import 'package:decimal/decimal.dart';
 import 'package:intl/locale.dart';
-import 'package:rdf_dart/src/data_types/boolean.dart';
-import 'package:rdf_dart/src/data_types/byte.dart';
-import 'package:rdf_dart/src/data_types/date.dart';
-import 'package:rdf_dart/src/data_types/decimal.dart';
-import 'package:rdf_dart/src/data_types/double.dart';
-import 'package:rdf_dart/src/data_types/duration.dart';
-import 'package:rdf_dart/src/data_types/g_month_day.dart';
-import 'package:rdf_dart/src/data_types/helper.dart';
-import 'package:rdf_dart/src/data_types/int.dart';
-import 'package:rdf_dart/src/data_types/integer.dart';
-import 'package:rdf_dart/src/data_types/long.dart';
-import 'package:rdf_dart/src/data_types/negative_integer.dart';
-import 'package:rdf_dart/src/data_types/non_negative_integer.dart';
-import 'package:rdf_dart/src/data_types/non_positive_integer.dart';
-import 'package:rdf_dart/src/data_types/positive_integer.dart';
-import 'package:rdf_dart/src/data_types/short.dart';
-import 'package:rdf_dart/src/data_types/unsigned_byte.dart';
-import 'package:rdf_dart/src/data_types/unsigned_int.dart';
-import 'package:rdf_dart/src/data_types/unsigned_long.dart';
-import 'package:rdf_dart/src/data_types/unsigned_short.dart';
 import 'package:rdf_dart/src/exceptions/datatype_not_found_exception.dart';
 import 'package:rdf_dart/src/iri.dart';
 import 'package:rdf_dart/src/vocab/rdf_vocab.dart';
 import 'package:rdf_dart/src/vocab/xsd_vocab.dart';
+import 'package:xsd/xsd.dart';
 
 /// A function that takes a lexical form (a string) and returns a Dart object.
 ///
@@ -146,7 +127,7 @@ class DatatypeRegistry {
     );
     registerDatatype(
       XSD.date,
-      XsdDate,
+      Date,
       xsdDateCodec.encoder.convert,
       xsdDateCodec.decoder.convert as LiteralFormatter,
     );

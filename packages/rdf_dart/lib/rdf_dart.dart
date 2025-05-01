@@ -81,7 +81,6 @@ library;
 export 'src/canonicalization/canonicalizer.dart';
 export 'src/codec/nquads/nquads_codec.dart';
 export 'src/codec/ntriples/ntriples_codec.dart';
-export 'src/data_types/duration.dart' show XSDDuration;
 export 'src/exceptions/exceptions.dart';
 export 'src/iri.dart';
 export 'src/model/blank_node.dart';

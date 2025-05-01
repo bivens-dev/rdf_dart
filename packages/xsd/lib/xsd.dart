@@ -25,3 +25,4 @@ export 'src/codecs/unsignedShort/unsigned_short_codec.dart';
 export 'src/implementations/date.dart';
 export 'src/implementations/duration.dart';
 export 'src/implementations/g_month_day.dart';
+export 'src/helpers/whitespace.dart';
