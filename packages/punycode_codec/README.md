@@ -1,5 +1,6 @@
 [![pub package](https://img.shields.io/pub/v/punycode_codec.svg)](https://pub.dev/packages/punycode_codec)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) 
+# Punycode Codec
 A Dart implementation of the Punycode (RFC 3492) encoding algorithm used for
 Internationalized Domain Names in Applications (IDNA).
 
