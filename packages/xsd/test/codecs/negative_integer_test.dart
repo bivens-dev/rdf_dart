@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:xsd/src/codecs/negativeInteger/negative_integer.dart';
+import 'package:xsd/src/codecs/negativeInteger/negative_integer_codec.dart';
 
 void main() {
   group('NegativeIntegerCodec (xsd:negativeInteger)', () {

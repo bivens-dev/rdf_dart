@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:xsd/src/codecs/unsignedShort/unsigned_short.dart';
+import 'package:xsd/src/codecs/unsignedShort/unsigned_short_codec.dart';
 
 void main() {
   group('UnsignedShortCodec (xsd:unsignedShort)', () {
