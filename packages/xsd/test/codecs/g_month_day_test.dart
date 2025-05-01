@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:xsd/src/codecs/gMonthDay/g_month_day_codec.dart.dart';
+import 'package:xsd/src/codecs/gMonthDay/g_month_day_codec.dart';
 import 'package:xsd/src/implementations/g_month_day.dart';
 
 void main() {

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:xsd/src/codecs/gMonthDay/config.dart';
-import 'package:xsd/src/codecs/gMonthDay/g_month_day_codec.dart.dart';
+import 'package:xsd/src/codecs/gMonthDay/g_month_day_codec.dart';
 import 'package:xsd/src/helpers/whitespace.dart';
 import 'package:xsd/src/implementations/g_month_day.dart';
 
