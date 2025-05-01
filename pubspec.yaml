@@ -6,3 +6,4 @@ workspace:
   - packages/rdf_dart
   - packages/punycode_codec
   - packages/xsd
+  - packages/iri
