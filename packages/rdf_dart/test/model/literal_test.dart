@@ -2,10 +2,13 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:intl/locale.dart';
-import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/exceptions/invalid_language_tag_exception.dart';
 import 'package:rdf_dart/src/exceptions/invalid_lexical_form_exception.dart';
 import 'package:rdf_dart/src/exceptions/literal_constraint_exception.dart';
+import 'package:rdf_dart/src/model/literal.dart';
+import 'package:rdf_dart/src/model/term_type.dart';
+import 'package:rdf_dart/src/vocab/rdf_vocab.dart';
+import 'package:rdf_dart/src/vocab/xsd_vocab.dart';
 import 'package:test/test.dart';
 
 void main() {
