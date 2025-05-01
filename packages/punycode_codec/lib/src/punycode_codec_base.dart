@@ -22,7 +22,7 @@ import 'package:punycode_codec/src/encoder.dart';
 ///
 /// Example:
 /// ```dart
-/// import 'package:rdf_dart/src/punycode/punycode_codec.dart';
+/// import 'package:punycode_codec/punycode_codec.dart';
 ///
 /// void main() {
 ///   const codec = PunycodeCodec();
@@ -33,16 +33,11 @@ import 'package:punycode_codec/src/encoder.dart';
 /// }
 /// ```
 class PunycodeCodec extends Codec<String, String> {
-  final Converter<String, String> _encoder;
-  final Converter<String, String> _decoder;
-
-  const PunycodeCodec()
-    : _decoder = punycodeDecoder,
-      _encoder = punycodeEncoder;
+  const PunycodeCodec();
 
   @override
-  Converter<String, String> get decoder => _decoder;
+  Converter<String, String> get decoder => punycodeDecoder;
 
   @override
-  Converter<String, String> get encoder => _encoder;
+  Converter<String, String> get encoder => punycodeEncoder;
 }
