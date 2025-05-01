@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
+import 'package:iri/iri.dart';
 import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalization_algorithm.dart';
 import 'package:rdf_dart/src/canonicalization/complexity_limits.dart';
@@ -1683,8 +1684,6 @@ void main() {
       expect(canonicalDataset, equals(expectedQuads));
     });
 
-    // FIXME: We don't currently attempt to identify and bail out of poison datasets so this will run forever and fail
-    // A 10-node Clique of blank node resources all inter-related.
     test('test074c: poison - Clique Graph (negative test)', () async {
       final quads = await _loadTestFile('test074-in.nq');
       final inputDataset = nQuadsCodec.decode(quads);

@@ -1,4 +1,4 @@
-import 'package:rdf_dart/src/iri.dart';
+import 'package:iri/iri.dart';
 import 'package:rdf_dart/src/model/blank_node.dart';
 import 'package:rdf_dart/src/model/literal.dart';
 import 'package:rdf_dart/src/vocab/xsd_vocab.dart' show XSD;

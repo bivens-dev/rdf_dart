@@ -1,3 +1,4 @@
+import 'package:iri/iri.dart';
 import 'package:rdf_dart/rdf_dart.dart'; // Assuming main library export
 // Import the new class
 import 'package:test/test.dart';

@@ -1,4 +1,5 @@
-import 'package:rdf_dart/src/iri.dart';
+
+import 'package:iri/iri.dart';
 
 /// Provides constants for XML Schema Definition (XSD) datatype IRIs.
 ///

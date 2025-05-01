@@ -1,5 +1,5 @@
+import 'package:iri/iri.dart';
 import 'package:rdf_dart/src/codec/n_formats/parse_error.dart';
-import 'package:rdf_dart/src/iri.dart';
 import 'package:rdf_dart/src/model/iri_term.dart';
 import 'package:rdf_dart/src/model/literal.dart';
 

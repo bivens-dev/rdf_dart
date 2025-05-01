@@ -1,3 +1,4 @@
+import 'package:iri/iri.dart';
 import 'package:rdf_dart/rdf_dart.dart';
 
 // Example demonstrating encoding various RDF concepts into N-Triples format.

@@ -82,7 +82,6 @@ export 'src/canonicalization/canonicalizer.dart';
 export 'src/codec/nquads/nquads_codec.dart';
 export 'src/codec/ntriples/ntriples_codec.dart';
 export 'src/exceptions/exceptions.dart';
-export 'src/iri.dart';
 export 'src/model/blank_node.dart';
 export 'src/model/dataset.dart';
 export 'src/model/graph.dart';

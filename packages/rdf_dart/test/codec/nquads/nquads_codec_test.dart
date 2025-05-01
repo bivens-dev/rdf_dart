@@ -2,10 +2,10 @@
 
 import 'dart:io';
 
+import 'package:iri/iri.dart';
 import 'package:rdf_dart/src/codec/n_formats/parse_error.dart';
 import 'package:rdf_dart/src/codec/nquads/nquads_codec.dart';
 import 'package:rdf_dart/src/data_types.dart' show DatatypeRegistry;
-import 'package:rdf_dart/src/iri.dart';
 import 'package:rdf_dart/src/model/blank_node.dart';
 import 'package:rdf_dart/src/model/dataset.dart';
 import 'package:rdf_dart/src/model/graph.dart';

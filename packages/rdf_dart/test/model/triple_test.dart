@@ -1,3 +1,4 @@
+import 'package:iri/iri.dart';
 import 'package:rdf_dart/rdf_dart.dart';
 import 'package:test/test.dart';
 

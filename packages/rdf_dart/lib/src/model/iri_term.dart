@@ -1,5 +1,5 @@
+import 'package:iri/iri.dart';
 import 'package:meta/meta.dart';
-import 'package:rdf_dart/src/iri.dart';
 import 'package:rdf_dart/src/model/rdf_term.dart';
 import 'package:rdf_dart/src/model/subject_type.dart';
 import 'package:rdf_dart/src/model/term_type.dart';

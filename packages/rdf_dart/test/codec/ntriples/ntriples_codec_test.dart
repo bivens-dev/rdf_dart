@@ -1,4 +1,5 @@
 import 'package:intl/locale.dart';
+import 'package:iri/iri.dart';
 import 'package:rdf_dart/rdf_dart.dart';
 import 'package:rdf_dart/src/codec/n_formats/parse_error.dart';
 import 'package:rdf_dart/src/data_types.dart' show DatatypeRegistry;
