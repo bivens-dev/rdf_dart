@@ -190,7 +190,6 @@ void main() {
       });
 
       test('With emoji', () {
-        // TODO: Test currently fails but it's unclear why
         expect(punycodeEncoder.toAscii('\uD83D\uDCA9.la'), 'xn--ls8h.la');
       });
 

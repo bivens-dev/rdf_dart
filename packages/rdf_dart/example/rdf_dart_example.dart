@@ -1,3 +1,4 @@
+// Ignore this directive for demo purposes
 // ignore_for_file: avoid_print
 
 import 'package:iri/iri.dart';

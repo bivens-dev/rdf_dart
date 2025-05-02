@@ -3,6 +3,7 @@ import 'package:rdf_dart/src/model/blank_node.dart';
 import 'package:rdf_dart/src/model/literal.dart';
 import 'package:rdf_dart/src/vocab/xsd_vocab.dart' show XSD;
 
+// Explicitly creating a helper class of useful related methods
 // ignore: avoid_classes_with_only_static_members
 /// Utility functions for serializing RDF terms into N-Triples/N-Quads format.
 class NFormatsSerializerUtils {

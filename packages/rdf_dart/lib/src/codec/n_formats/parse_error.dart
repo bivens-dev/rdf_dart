@@ -1,7 +1,10 @@
+import 'package:meta/meta.dart';
+
 /// Represents a syntax error encountered during N-Triples or N-Quads parsing.
 ///
 /// Contains information about the error message, the location (line and column)
 /// where the error occurred.
+@immutable
 class ParseError implements Exception {
   /// A human-readable message describing the parse error.
   final String message;

@@ -3,10 +3,11 @@ import 'package:rdf_dart/src/codec/n_formats/parse_error.dart';
 import 'package:rdf_dart/src/model/iri_term.dart';
 import 'package:rdf_dart/src/model/literal.dart';
 
+// Explicitly creating a helper class of useful related methods
 // ignore: avoid_classes_with_only_static_members
 /// Utility class for parsing elements common to N-Triples/N-Quads syntax.
 ///
-/// Methods operate on the input string [line] starting from the given [cursor]
+/// Methods operate on the input string `line` starting from the given `cursor`
 /// position and return the parsed result along with the updated cursor position.
 /// They throw [ParseError] on syntax violations.
 class NFormatsParserUtils {

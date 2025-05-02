@@ -1,3 +1,4 @@
+// Ignore the following lints in this file
 // ignore_for_file: comment_references
 
 import 'package:rdf_dart/src/model/rdf_term.dart';

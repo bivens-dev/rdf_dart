@@ -1,3 +1,6 @@
+// Ignore lint directives for this example
+// ignore_for_file: avoid_print
+
 import 'package:iri/iri.dart';
 import 'package:rdf_dart/rdf_dart.dart';
 

@@ -12,8 +12,9 @@ import 'package:rdf_dart/src/model/triple_term.dart';
 /// Converts a `List<Triple>` to its N-Triples string representation.
 ///
 /// Follows the RDF 1.2 N-Triples specification for formatting terms and triples.
-/// https://www.w3.org/TR/rdf12-n-triples/ [cite: 1]
+/// https://www.w3.org/TR/rdf12-n-triples/
 class NTriplesEncoder extends Converter<List<Triple>, String> {
+  /// Creates an N-Triples Encoder
   const NTriplesEncoder();
 
   @override

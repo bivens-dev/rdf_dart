@@ -23,6 +23,7 @@ import 'package:rdf_dart/src/vocab/xsd_vocab.dart';
 /// Follows the RDF 1.2 N-Triples specification:
 /// https://www.w3.org/TR/rdf12-n-triples/
 class NTriplesDecoder extends Converter<String, List<Triple>> {
+  /// Creates an N-Triples Decoder
   const NTriplesDecoder();
 
   @override

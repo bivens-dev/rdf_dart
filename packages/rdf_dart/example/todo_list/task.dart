@@ -1,6 +1,8 @@
+import 'package:meta/meta.dart';
 import 'package:rdf_dart/rdf_dart.dart';
 import 'repository.dart'; // For Schema constants
 
+@immutable
 class Task {
   // Use IRINode for ID
   final IRINode id;

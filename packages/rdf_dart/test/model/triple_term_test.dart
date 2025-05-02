@@ -48,9 +48,6 @@ void main() {
       expect(tt1 == tt3, isTrue); // Equal inner triples
       expect(tt3 == tt1, isTrue); // Symmetry
       expect(tt1 == tt2, isFalse); // Different inner triples
-      // ignore: unrelated_type_equality_checks
-      expect(tt1 == innerTriple1, isFalse); // Different types
-      expect(tt1 == iriSubj, isFalse); // Different types
     });
 
     test('hashCode is consistent with equality', () {

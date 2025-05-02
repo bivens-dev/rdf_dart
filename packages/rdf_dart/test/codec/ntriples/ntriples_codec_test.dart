@@ -1117,19 +1117,6 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
         expect(reencoded, equals(expectedOutput));
       });
 
-      // FIXME: Test fails with the following message:
-      // Expected: '<http://example/s> <http://example/p> <scheme:!$%25&\'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~?#> .\n'
-      //      ''
-      // Actual: '<http://example/s> <http://example/p> <scheme:!$%25&\'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~#> .\n'
-      //      ''
-      // Which: is different.
-      //    Expected: ... rstuvwxyz~?#> .\n
-      //      Actual: ... rstuvwxyz~#> .\n
-      //                            ^
-      //     Differ at offset 128
-      //
-      // package:matcher                                      expect
-      // test/codec/ntriples/ntriples_codec_test.dart 1090:9  main.<fn>.<fn>.<fn>
       test('Tests canonicalization of IRIs #4', () {
         final input = r'''
 # IRI with all chars in it.
