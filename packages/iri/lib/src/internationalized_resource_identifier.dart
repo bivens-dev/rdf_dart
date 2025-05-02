@@ -13,6 +13,8 @@ class IRI {
   final Uri _encodedUri;
   final Runes _codepoints;
 
+  static final PunycodeCodec _punycodeCodec = PunycodeCodec();
+
   IRI(String originalValue)
     : _encodedUri = _convertToUri(originalValue),
       _codepoints = originalValue.runes;
@@ -61,7 +63,7 @@ class IRI {
   String get host {
     // The host component of a URI is encoded using Punycode. We need to decode it.
     // Note that strings that are not encoded using Punycode will be returned as-is.
-    return punycodeDecoder.toUnicode(_encodedUri.host);
+    return _punycodeCodec.decode(_encodedUri.host);
   }
 
   /// The path component.
@@ -236,7 +238,7 @@ class IRI {
           // Only apply Punycode to registered names
           try {
             // Use the normalized host (already lowercased) for Punycode
-            finalHostForUri = punycodeEncoder.toAscii(hostNormalized);
+            finalHostForUri = _punycodeCodec.encode(hostNormalized);
           } catch (e) {
             // Handle potential Punycode errors
             throw FormatException(
