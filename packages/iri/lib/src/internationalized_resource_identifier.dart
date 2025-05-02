@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
-import 'package:punycode_codec/punycode_codec.dart';
+import 'package:punycoder/punycoder.dart';
 
 /// Represents an Internationalized Resource Identifier (IRI) according to RFC 3987.
 ///

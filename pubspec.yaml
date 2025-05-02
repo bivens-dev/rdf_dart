@@ -4,6 +4,5 @@ environment:
   sdk: ^3.7.2
 workspace:
   - packages/rdf_dart
-  - packages/punycode_codec
   - packages/xsd
   - packages/iri
