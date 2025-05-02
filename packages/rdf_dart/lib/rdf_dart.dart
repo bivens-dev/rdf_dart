@@ -85,7 +85,7 @@ export 'src/exceptions/exceptions.dart';
 export 'src/model/blank_node.dart';
 export 'src/model/dataset.dart';
 export 'src/model/graph.dart';
-export 'src/model/iri_term.dart';
+export 'src/model/iri_node.dart';
 export 'src/model/literal.dart';
 export 'src/model/rdf_term.dart';
 export 'src/model/subject_type.dart';

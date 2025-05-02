@@ -1,6 +1,6 @@
 
 import 'package:rdf_dart/src/model/blank_node.dart';
-import 'package:rdf_dart/src/model/iri_term.dart';
+import 'package:rdf_dart/src/model/iri_node.dart';
 import 'package:rdf_dart/src/model/rdf_term.dart';
 import 'package:rdf_dart/src/model/subject_type.dart';
 import 'package:rdf_dart/src/model/triple.dart';

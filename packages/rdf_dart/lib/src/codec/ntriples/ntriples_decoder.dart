@@ -8,7 +8,7 @@ import 'package:rdf_dart/src/exceptions/invalid_language_tag_exception.dart';
 import 'package:rdf_dart/src/exceptions/invalid_lexical_form_exception.dart';
 import 'package:rdf_dart/src/exceptions/literal_constraint_exception.dart';
 import 'package:rdf_dart/src/model/blank_node.dart';
-import 'package:rdf_dart/src/model/iri_term.dart';
+import 'package:rdf_dart/src/model/iri_node.dart';
 import 'package:rdf_dart/src/model/literal.dart';
 import 'package:rdf_dart/src/model/rdf_term.dart';
 import 'package:rdf_dart/src/model/subject_type.dart';

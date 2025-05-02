@@ -9,7 +9,7 @@ import 'package:rdf_dart/src/canonicalization/permuter.dart';
 import 'package:rdf_dart/src/codec/n_formats/n_formats_serializer_utils.dart';
 import 'package:rdf_dart/src/model/blank_node.dart';
 import 'package:rdf_dart/src/model/dataset.dart';
-import 'package:rdf_dart/src/model/iri_term.dart';
+import 'package:rdf_dart/src/model/iri_node.dart';
 import 'package:rdf_dart/src/model/literal.dart';
 import 'package:rdf_dart/src/model/quad.dart';
 import 'package:rdf_dart/src/model/rdf_term.dart';

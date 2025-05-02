@@ -2,7 +2,7 @@
 // ignore_for_file: comment_references
 
 import 'package:meta/meta.dart';
-import 'package:rdf_dart/src/model/iri_term.dart';
+import 'package:rdf_dart/src/model/iri_node.dart';
 import 'package:rdf_dart/src/model/rdf_term.dart';
 import 'package:rdf_dart/src/model/subject_type.dart';
 
