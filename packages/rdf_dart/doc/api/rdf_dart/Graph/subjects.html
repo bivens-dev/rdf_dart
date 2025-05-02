@@ -55,7 +55,7 @@
     <section class="multi-line-signature">
       
 <span class="returntype"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../rdf_dart/SubjectTerm-class.html">SubjectTerm</a></span>&gt;</span></span>
-<span class="name ">subjects</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="subjects-param-predicate"><span class="type-annotation"><a href="../../rdf_dart/IRITerm-class.html">IRITerm</a>?</span> <span class="parameter-name">predicate</span>, </span></li>
+<span class="name ">subjects</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="subjects-param-predicate"><span class="type-annotation"><a href="../../rdf_dart/IRINode-class.html">IRINode</a>?</span> <span class="parameter-name">predicate</span>, </span></li>
 <li><span class="parameter" id="subjects-param-object"><span class="type-annotation"><a href="../../rdf_dart/RdfTerm-class.html">RdfTerm</a>?</span> <span class="parameter-name">object</span>, </span></li>
 </ol>})
 
@@ -72,7 +72,7 @@ Null predicate or object acts as a wildcard.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Iterable&lt;SubjectTerm&gt; subjects({IRITerm? predicate, RdfTerm? object}) sync* {
+  <pre class="language-dart"><code class="language-dart">Iterable&lt;SubjectTerm&gt; subjects({IRINode? predicate, RdfTerm? object}) sync* {
   yield* match(null, predicate, object).map((t) =&gt; t.subject).toSet();
 }</code></pre>
 </section>

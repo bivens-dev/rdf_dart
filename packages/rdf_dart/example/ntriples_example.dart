@@ -6,11 +6,11 @@ void main() {
   // --- Define some common terms ---
   ex(String local) =>
       IRI('http://example.org/$local'); // Helper for example IRIs
-  final name = IRITerm(ex('name'));
-  final knows = IRITerm(ex('knows'));
-  final age = IRITerm(ex('age'));
-  final alice = IRITerm(ex('alice'));
-  final bob = IRITerm(ex('bob'));
+  final name = IRINode(ex('name'));
+  final knows = IRINode(ex('knows'));
+  final age = IRINode(ex('age'));
+  final alice = IRINode(ex('alice'));
+  final bob = IRINode(ex('bob'));
   final charlie = BlankNode(); // Create a blank node for someone anonymous
 
   // --- Create a list of diverse triples ---
@@ -27,12 +27,12 @@ void main() {
     Triple(alice, age, Literal('30', XSD.integer)),
 
     // Literal with a datatype: Bob is fictional (boolean)
-    Triple(bob, IRITerm(ex('isFictional')), Literal('true', XSD.boolean)),
+    Triple(bob, IRINode(ex('isFictional')), Literal('true', XSD.boolean)),
 
     // Literal with characters needing escaping
     Triple(
       alice,
-      IRITerm(ex('comment')),
+      IRINode(ex('comment')),
       Literal(r'This has a "quote" and a \ backslash.', XSD.string),
     ),
 
@@ -45,25 +45,25 @@ void main() {
     // Reification: Stating that the triple "alice knows bob" is true
     // Note: RDF 1.2 recommends using rdf:reifies for this structure
     Triple(
-      IRITerm(ex('statement1')), // Subject identifying the reification
-      IRITerm(RDF.type), // Indicate this is a statement
-      IRITerm(
+      IRINode(ex('statement1')), // Subject identifying the reification
+      IRINode(RDF.type), // Indicate this is a statement
+      IRINode(
         IRI('http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement'),
       ), // The class of RDF statements
     ),
     Triple(
-      IRITerm(ex('statement1')),
-      IRITerm(RDF.subject), // The subject of the reified triple
+      IRINode(ex('statement1')),
+      IRINode(RDF.subject), // The subject of the reified triple
       alice,
     ),
     Triple(
-      IRITerm(ex('statement1')),
-      IRITerm(RDF.predicate), // The predicate of the reified triple
+      IRINode(ex('statement1')),
+      IRINode(RDF.predicate), // The predicate of the reified triple
       knows,
     ),
     Triple(
-      IRITerm(ex('statement1')),
-      IRITerm(RDF.object), // The object of the reified triple
+      IRINode(ex('statement1')),
+      IRINode(RDF.object), // The object of the reified triple
       bob,
     ),
 
@@ -71,7 +71,7 @@ void main() {
     // Example: Charlie says that "alice knows bob"
     Triple(
       charlie, // Subject is the blank node 'charlie'
-      IRITerm(ex('says')), // Predicate
+      IRINode(ex('says')), // Predicate
       TripleTerm(
         // Object is the triple "alice knows bob"
         Triple(alice, knows, bob),
@@ -81,11 +81,11 @@ void main() {
     // Nested Triple Term: Alice says that (Charlie says that (alice knows bob))
     Triple(
       alice,
-      IRITerm(ex('says')),
+      IRINode(ex('says')),
       TripleTerm(
         Triple(
           charlie,
-          IRITerm(ex('says')),
+          IRINode(ex('says')),
           TripleTerm(Triple(alice, knows, bob)),
         ),
       ),

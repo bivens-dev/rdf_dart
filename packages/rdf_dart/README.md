@@ -9,11 +9,11 @@ RDF.dart is a Dart library designed to make it easy to work with [RDF (Resource 
 
 *   **Core RDF 1.2 Data Structures:**
     *   `IRI`: Represents an Internationalized Resource Identifier string.
-    *   `IRITerm`: Represents an IRI used as an RDF term (subject, predicate, object, or graph name).
+    *   `IRINode`: Represents an IRI used as an RDF term (subject, predicate, object, or graph name).
     *   `Literal`: Represents an RDF literal with datatype and optional language tag.
     *   `BlankNode`: Represents an RDF blank node.
     *   `TripleTerm`: Represents an RDF triple used as an RDF term (subject or object) as defined in RDF 1.2.
-    *   `RdfTerm`: The abstract base class for all RDF terms (`IRITerm`, `BlankNode`, `Literal`, `TripleTerm`).
+    *   `RdfTerm`: The abstract base class for all RDF terms (`IRINode`, `BlankNode`, `Literal`, `TripleTerm`).
     *   `Triple`: Represents an RDF triple (subject, predicate, object - where object can be any `RdfTerm`, including a `TripleTerm`).
     *   `Graph`: Represents a collection of RDF triples.
     *   `Dataset`: Represents a collection consisting of one default graph and zero or more named graphs.
@@ -32,7 +32,7 @@ RDF.dart is a Dart library designed to make it easy to work with [RDF (Resource 
     *   Integrates seamlessly with Dart's I/O streams for efficient processing of large files.
 *   **RDF Dataset Canonicalization:**
     *   Supports dataset canonicalization according to the [RDF Dataset Canonicalization (RDFC) 1.0](https://www.w3.org/TR/rdf11-datasets-canonicalization/) specification.
-*   **Immutability:** Core data structures (`IRITerm`, `BlankNode`, `Literal`, `TripleTerm`, `Triple`, `IRI`) are immutable.
+*   **Immutability:** Core data structures (`IRINode`, `BlankNode`, `Literal`, `TripleTerm`, `Triple`, `IRI`) are immutable.
 *   **Well-Tested:** Core features have comprehensive unit tests.
 
 ## Getting Started
@@ -68,9 +68,9 @@ import 'package:rdf_dart/rdf_dart.dart';
 
 void main() {
   // Create some IRIs
-  final subject = IRITerm(IRI('http://example.org/subject'));
-  final predicate = IRITerm(IRI('http://example.org/predicate'));
-  final object = IRITerm(IRI('http://example.org/object'));
+  final subject = IRINode(IRI('http://example.org/subject'));
+  final predicate = IRINode(IRI('http://example.org/predicate'));
+  final object = IRINode(IRI('http://example.org/object'));
 
   // Create a string literal
   final stringLiteral = Literal('Hello, world!', XSD.string);

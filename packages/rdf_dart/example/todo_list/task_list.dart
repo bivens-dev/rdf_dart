@@ -5,8 +5,8 @@ import 'repository.dart'; // For Schema constants
 import 'task.dart';
 
 class TaskList {
-  // Use IRITerm for ID
-  final IRITerm id;
+  // Use IRINode for ID
+  final IRINode id;
   final String name;
   final String? description; // Optional description
   final Set<Task> _tasks = {};
@@ -16,8 +16,8 @@ class TaskList {
   // Factory to create TaskList from Graph data
   factory TaskList.fromGraph(
     Graph graph,
-    IRITerm subject,
-    Map<IRITerm, Task> allTasks,
+    IRINode subject,
+    Map<IRINode, Task> allTasks,
   ) {
     final nameLiteral = graph.object(subject, Schema.name);
     // Description is optional, use graph.objects which returns Iterable
@@ -53,7 +53,7 @@ class TaskList {
       if (itemElementNode is SubjectTerm) {
         // Must be SubjectTerm to be subject of next triple
         final itemNode = graph.object(itemElementNode, Schema.item);
-        if (itemNode is IRITerm) {
+        if (itemNode is IRINode) {
           // The item should be the Task's IRI
           final task = allTasks[itemNode]; // Look up pre-hydrated task
           if (task != null) {
@@ -70,7 +70,7 @@ class TaskList {
     return taskList;
   }
 
-  // Generate triples using the IRITerm ID
+  // Generate triples using the IRINode ID
   Set<Triple> toTriples() {
     final triples = <Triple>{};
     triples.addAll({

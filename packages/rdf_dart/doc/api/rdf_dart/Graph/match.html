@@ -56,7 +56,7 @@
       
 <span class="returntype"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../rdf_dart/Triple-class.html">Triple</a></span>&gt;</span></span>
 <span class="name ">match</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="match-param-subject"><span class="type-annotation"><a href="../../rdf_dart/SubjectTerm-class.html">SubjectTerm</a>?</span> <span class="parameter-name">subject</span>, </span></li>
-<li><span class="parameter" id="match-param-predicate"><span class="type-annotation"><a href="../../rdf_dart/IRITerm-class.html">IRITerm</a>?</span> <span class="parameter-name">predicate</span>, </span></li>
+<li><span class="parameter" id="match-param-predicate"><span class="type-annotation"><a href="../../rdf_dart/IRINode-class.html">IRINode</a>?</span> <span class="parameter-name">predicate</span>, </span></li>
 <li><span class="parameter" id="match-param-object"><span class="type-annotation"><a href="../../rdf_dart/RdfTerm-class.html">RdfTerm</a>?</span> <span class="parameter-name">object</span></span></li>
 </ol>)
 
@@ -82,7 +82,7 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Iterable&lt;Triple&gt; match(
   SubjectTerm? subject,
-  IRITerm? predicate,
+  IRINode? predicate,
   RdfTerm? object,
 ) sync* {
   &#47;&#47; Optimization: if all are specified, just check contains

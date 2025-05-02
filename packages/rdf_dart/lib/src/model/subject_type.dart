@@ -6,8 +6,8 @@ import 'package:rdf_dart/src/model/rdf_term.dart';
 /// RDF [Triple].
 ///
 /// According to the RDF 1.2 specification, the subject of a triple must be
-/// either an [IRITerm] or a [BlankNode]. This abstract class is implemented
-/// by those specific term types (`IRITerm`, `BlankNode`) to allow for
+/// either an [IRINode] or a [BlankNode]. This abstract class is implemented
+/// by those specific term types (`IRINode`, `BlankNode`) to allow for
 /// compile-time type checking when constructing [Triple] instances.
 ///
 /// This ensures that attempts to create a [Triple] with an invalid subject type

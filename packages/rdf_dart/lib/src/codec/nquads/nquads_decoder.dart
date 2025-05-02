@@ -255,7 +255,7 @@ class _NQuadsDecoderSink implements ChunkedConversionSink<String> {
 
     // 4. Parse Optional Graph Label
     SubjectTerm?
-    graphLabel; // Use SubjectTerm as graph can be IRITerm or BlankNode
+    graphLabel; // Use SubjectTerm as graph can be IRINode or BlankNode
     if (_cursor < line.length && line[_cursor] != '.') {
       // Check if it looks like a valid start for a graph label term
       if (line[_cursor] == '<' || line[_cursor] == '_') {
@@ -330,13 +330,13 @@ class _NQuadsDecoderSink implements ChunkedConversionSink<String> {
       // Update the sink's cursor
       _cursor = iriResult.cursor;
       // Use the term from the result
-      final iriTerm = iriResult.term;
+      final IRINode = iriResult.term;
       // N-Triples/N-Quads require absolute IRIs for subject
-      if (iriTerm.value.hasScheme) {
-        return iriTerm;
+      if (IRINode.value.hasScheme) {
+        return IRINode;
       } else {
         throw ParseError(
-          'Relative IRI <${iriTerm.value}> not allowed as subject (absolute IRI required)',
+          'Relative IRI <${IRINode.value}> not allowed as subject (absolute IRI required)',
           lineNumber,
           startCol,
         );
@@ -365,7 +365,7 @@ class _NQuadsDecoderSink implements ChunkedConversionSink<String> {
 
   /// Parses an N-Quads predicate term (IRI) at the current cursor position
   /// and updates the sink's cursor.
-  IRITerm _parsePredicate(String line, int lineNumber) {
+  IRINode _parsePredicate(String line, int lineNumber) {
     final startCol = _cursor + 1;
     NFormatsParserUtils.checkNotEof(
       line,
@@ -378,13 +378,13 @@ class _NQuadsDecoderSink implements ChunkedConversionSink<String> {
       final iriResult = NFormatsParserUtils.parseIri(line, _cursor, lineNumber);
       // Update the sink's cursor from the result record
       _cursor = iriResult.cursor;
-      final iriTerm = iriResult.term;
+      final IRINode = iriResult.term;
       // N-Triples/N-Quads require absolute IRIs for predicate
-      if (iriTerm.value.hasScheme) {
-        return iriTerm;
+      if (IRINode.value.hasScheme) {
+        return IRINode;
       } else {
         throw ParseError(
-          'Relative IRI <${iriTerm.value}> not allowed as predicate (absolute IRI required)',
+          'Relative IRI <${IRINode.value}> not allowed as predicate (absolute IRI required)',
           lineNumber,
           startCol, // Error relates to the start of the term
         );
@@ -422,13 +422,13 @@ class _NQuadsDecoderSink implements ChunkedConversionSink<String> {
         // Update the sink's cursor
         _cursor = iriResult.cursor;
         // Use the term from the result
-        final iriTerm = iriResult.term;
+        final IRINode = iriResult.term;
         // N-Triples/N-Quads require absolute IRIs for object
-        if (iriTerm.value.hasScheme) {
-          return iriTerm;
+        if (IRINode.value.hasScheme) {
+          return IRINode;
         } else {
           throw ParseError(
-            'Relative IRI <${iriTerm.value}> not allowed as object (absolute IRI required)',
+            'Relative IRI <${IRINode.value}> not allowed as object (absolute IRI required)',
             lineNumber,
             startCol, // Error relates to the start of the term
           );

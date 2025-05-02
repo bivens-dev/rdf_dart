@@ -7,10 +7,10 @@ import 'package:rdf_dart/src/model/term_type.dart';
 /// The abstract base class for all RDF terms.
 ///
 /// RDF terms are the fundamental building blocks of RDF data. They can be
-/// one of three types: [IRITerm], [BlankNode], or [Literal]. This abstract class
+/// one of three types: [IRINode], [BlankNode], or [Literal]. This abstract class
 /// defines the common properties and methods shared by all RDF terms.
 ///
-/// All concrete RDF term classes (such as [IRITerm], [BlankNode], [Literal]
+/// All concrete RDF term classes (such as [IRINode], [BlankNode], [Literal]
 /// and [TripleTerm]) must extend this class and implement its abstract members.
 @immutable
 abstract class RdfTerm {
@@ -37,7 +37,7 @@ abstract class RdfTerm {
 
   /// Returns the [TermType] of this term.
   ///
-  /// The [TermType] enum indicates whether the term is an [IRITerm], a
+  /// The [TermType] enum indicates whether the term is an [IRINode], a
   /// [BlankNode], a [Literal], or a [TripleTerm].
   TermType get termType;
 

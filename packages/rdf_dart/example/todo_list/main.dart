@@ -71,8 +71,8 @@ class TodoApp {
 
   static List<TaskList> createSeedData() {
     // Helper function to create app IRIs
-    IRITerm taskIRI(String id) => IRITerm(IRI('app:task/$id'));
-    IRITerm listIRI(String id) => IRITerm(IRI('app:list/$id'));
+    IRINode taskIRI(String id) => IRINode(IRI('app:task/$id'));
+    IRINode listIRI(String id) => IRINode(IRI('app:list/$id'));
 
     // Create some task lists using IRIs
     final taskList1 = TaskList(id: listIRI('work'), name: 'Work Tasks');

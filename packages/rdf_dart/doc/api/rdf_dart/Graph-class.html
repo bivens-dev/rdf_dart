@@ -167,7 +167,7 @@ adding, removing, and checking for the presence of triples.</p>
 </dd>
 
         <dt id="match" class="callable">
-  <span class="name"><a href="../rdf_dart/Graph/match.html">match</a></span><span class="signature">(<wbr><span class="parameter" id="match-param-subject"><span class="type-annotation"><a href="../rdf_dart/SubjectTerm-class.html">SubjectTerm</a>?</span> <span class="parameter-name">subject</span>, </span><span class="parameter" id="match-param-predicate"><span class="type-annotation"><a href="../rdf_dart/IRITerm-class.html">IRITerm</a>?</span> <span class="parameter-name">predicate</span>, </span><span class="parameter" id="match-param-object"><span class="type-annotation"><a href="../rdf_dart/RdfTerm-class.html">RdfTerm</a>?</span> <span class="parameter-name">object</span></span>)
+  <span class="name"><a href="../rdf_dart/Graph/match.html">match</a></span><span class="signature">(<wbr><span class="parameter" id="match-param-subject"><span class="type-annotation"><a href="../rdf_dart/SubjectTerm-class.html">SubjectTerm</a>?</span> <span class="parameter-name">subject</span>, </span><span class="parameter" id="match-param-predicate"><span class="type-annotation"><a href="../rdf_dart/IRINode-class.html">IRINode</a>?</span> <span class="parameter-name">predicate</span>, </span><span class="parameter" id="match-param-object"><span class="type-annotation"><a href="../rdf_dart/RdfTerm-class.html">RdfTerm</a>?</span> <span class="parameter-name">object</span></span>)
     <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../rdf_dart/Triple-class.html">Triple</a></span>&gt;</span></span>
   </span>
   
@@ -193,7 +193,7 @@ adding, removing, and checking for the presence of triples.</p>
 </dd>
 
         <dt id="object" class="callable">
-  <span class="name"><a href="../rdf_dart/Graph/object.html">object</a></span><span class="signature">(<wbr><span class="parameter" id="object-param-subject"><span class="type-annotation"><a href="../rdf_dart/SubjectTerm-class.html">SubjectTerm</a></span> <span class="parameter-name">subject</span>, </span><span class="parameter" id="object-param-predicate"><span class="type-annotation"><a href="../rdf_dart/IRITerm-class.html">IRITerm</a></span> <span class="parameter-name">predicate</span></span>)
+  <span class="name"><a href="../rdf_dart/Graph/object.html">object</a></span><span class="signature">(<wbr><span class="parameter" id="object-param-subject"><span class="type-annotation"><a href="../rdf_dart/SubjectTerm-class.html">SubjectTerm</a></span> <span class="parameter-name">subject</span>, </span><span class="parameter" id="object-param-predicate"><span class="type-annotation"><a href="../rdf_dart/IRINode-class.html">IRINode</a></span> <span class="parameter-name">predicate</span></span>)
     <span class="returntype parameter">&#8594; <a href="../rdf_dart/RdfTerm-class.html">RdfTerm</a>?</span>
   </span>
   
@@ -208,7 +208,7 @@ Returns null if no matching triple exists.
 </dd>
 
         <dt id="objects" class="callable">
-  <span class="name"><a href="../rdf_dart/Graph/objects.html">objects</a></span><span class="signature">(<wbr>{<span class="parameter" id="objects-param-subject"><span class="type-annotation"><a href="../rdf_dart/SubjectTerm-class.html">SubjectTerm</a>?</span> <span class="parameter-name">subject</span>, </span><span class="parameter" id="objects-param-predicate"><span class="type-annotation"><a href="../rdf_dart/IRITerm-class.html">IRITerm</a>?</span> <span class="parameter-name">predicate</span></span>})
+  <span class="name"><a href="../rdf_dart/Graph/objects.html">objects</a></span><span class="signature">(<wbr>{<span class="parameter" id="objects-param-subject"><span class="type-annotation"><a href="../rdf_dart/SubjectTerm-class.html">SubjectTerm</a>?</span> <span class="parameter-name">subject</span>, </span><span class="parameter" id="objects-param-predicate"><span class="type-annotation"><a href="../rdf_dart/IRINode-class.html">IRINode</a>?</span> <span class="parameter-name">predicate</span></span>})
     <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../rdf_dart/RdfTerm-class.html">RdfTerm</a></span>&gt;</span></span>
   </span>
   
@@ -223,7 +223,7 @@ Null subject or predicate acts as a wildcard.
 
         <dt id="predicates" class="callable">
   <span class="name"><a href="../rdf_dart/Graph/predicates.html">predicates</a></span><span class="signature">(<wbr>{<span class="parameter" id="predicates-param-subject"><span class="type-annotation"><a href="../rdf_dart/SubjectTerm-class.html">SubjectTerm</a>?</span> <span class="parameter-name">subject</span>, </span><span class="parameter" id="predicates-param-object"><span class="type-annotation"><a href="../rdf_dart/RdfTerm-class.html">RdfTerm</a>?</span> <span class="parameter-name">object</span></span>})
-    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../rdf_dart/IRITerm-class.html">IRITerm</a></span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../rdf_dart/IRINode-class.html">IRINode</a></span>&gt;</span></span>
   </span>
   
 
@@ -249,7 +249,7 @@ Null subject or object acts as a wildcard.
 </dd>
 
         <dt id="subjects" class="callable">
-  <span class="name"><a href="../rdf_dart/Graph/subjects.html">subjects</a></span><span class="signature">(<wbr>{<span class="parameter" id="subjects-param-predicate"><span class="type-annotation"><a href="../rdf_dart/IRITerm-class.html">IRITerm</a>?</span> <span class="parameter-name">predicate</span>, </span><span class="parameter" id="subjects-param-object"><span class="type-annotation"><a href="../rdf_dart/RdfTerm-class.html">RdfTerm</a>?</span> <span class="parameter-name">object</span></span>})
+  <span class="name"><a href="../rdf_dart/Graph/subjects.html">subjects</a></span><span class="signature">(<wbr>{<span class="parameter" id="subjects-param-predicate"><span class="type-annotation"><a href="../rdf_dart/IRINode-class.html">IRINode</a>?</span> <span class="parameter-name">predicate</span>, </span><span class="parameter" id="subjects-param-object"><span class="type-annotation"><a href="../rdf_dart/RdfTerm-class.html">RdfTerm</a>?</span> <span class="parameter-name">object</span></span>})
     <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../rdf_dart/SubjectTerm-class.html">SubjectTerm</a></span>&gt;</span></span>
   </span>
   

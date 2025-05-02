@@ -84,8 +84,8 @@
   for (final triple in fullGraph.triples) {
     &#47;&#47; 4.1 If s is a blank node, p is rdf:type and o is rdf:TripleTerm, then:
     if (triple.subject is BlankNode &amp;&amp;
-        triple.predicate == IRITerm(RDF.type) &amp;&amp;
-        triple.object == IRITerm(RDF.tripleTerm)) {
+        triple.predicate == IRINode(RDF.type) &amp;&amp;
+        triple.object == IRINode(RDF.tripleTerm)) {
       &#47;&#47; 4.1.1 If inputKind is &quot;full&quot; then exit with an error.
       if (inputKind == &#39;full&#39;) {
         throw Exception(&#39;Input graph is not classicizable&#39;);

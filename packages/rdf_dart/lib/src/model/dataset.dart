@@ -23,7 +23,7 @@ class Dataset {
 
   /// The named graphs of the dataset.
   ///
-  /// This map associates an [SubjectTerm] with a [Graph], where the [IRITerm] or
+  /// This map associates an [SubjectTerm] with a [Graph], where the [IRINode] or
   /// the name of a BlankNode is the name of the graph and the Graph is the set of
   /// triples associated with that name.
   final Map<SubjectTerm, Graph> namedGraphs;
@@ -107,7 +107,7 @@ class Dataset {
 
     // Process named graph triples (graphLabel = graph name)
     namedGraphs.forEach((graphLabel, graph) {
-      // Ensure graphLabel is SubjectTerm (IRITerm or BlankNode)
+      // Ensure graphLabel is SubjectTerm (IRINode or BlankNode)
       // This check is already done by the Dataset structure.
       for (final triple in graph.triples) {
         final quad = (

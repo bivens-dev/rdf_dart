@@ -5,16 +5,16 @@ import 'package:test/test.dart';
 void main() {
   group('Graph', () {
     late Graph graph;
-    late IRITerm subject;
-    late IRITerm predicate;
-    late IRITerm object;
+    late IRINode subject;
+    late IRINode predicate;
+    late IRINode object;
     late Triple triple;
 
     setUp(() {
       graph = Graph();
-      subject = IRITerm(IRI('http://example.com/subject'));
-      predicate = IRITerm(IRI('http://example.com/predicate'));
-      object = IRITerm(IRI('http://example.com/object'));
+      subject = IRINode(IRI('http://example.com/subject'));
+      predicate = IRINode(IRI('http://example.com/predicate'));
+      object = IRINode(IRI('http://example.com/object'));
       triple = Triple(subject, predicate, object);
     });
 
@@ -36,7 +36,7 @@ void main() {
         final triple2 = Triple(
           subject,
           predicate,
-          IRITerm(IRI('http://example.com/object2')),
+          IRINode(IRI('http://example.com/object2')),
         );
         graph.addAll([triple, triple2]);
         expect(graph.triples, containsAll([triple, triple2]));
@@ -49,7 +49,7 @@ void main() {
           final triple2 = Triple(
             subject,
             predicate,
-            IRITerm(IRI('http://example.com/object2')),
+            IRINode(IRI('http://example.com/object2')),
           );
           graph.addAll([triple, triple, triple2, triple2]);
           expect(graph.triples.length, 2);
@@ -91,10 +91,10 @@ void main() {
         'converts an RDF full graph to a RDF classic graph successfully',
         () {
           graph.addAll([
-            Triple(BlankNode('r1'), IRITerm(RDF.reifies), TripleTerm(triple)),
+            Triple(BlankNode('r1'), IRINode(RDF.reifies), TripleTerm(triple)),
             Triple(
               BlankNode('r1'),
-              IRITerm(IRI('http://example.org/q')),
+              IRINode(IRI('http://example.org/q')),
               Literal('some value', XSD.string),
             ),
           ]);
@@ -103,7 +103,7 @@ void main() {
           // Find the triple in the classicgraph where the predicate
           // is http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies
           final reifierTriple = classicGraph.triples.firstWhere(
-            (triple) => triple.predicate == IRITerm(RDF.reifies),
+            (triple) => triple.predicate == IRINode(RDF.reifies),
           );
           final generatedBlankNode = reifierTriple.object as BlankNode;
 
@@ -111,7 +111,7 @@ void main() {
             classicGraph.triples.contains(
               Triple(
                 BlankNode('r1'),
-                IRITerm(IRI('http://example.org/q')),
+                IRINode(IRI('http://example.org/q')),
                 Literal('some value', XSD.string),
               ),
             ),
@@ -120,7 +120,7 @@ void main() {
 
           expect(
             classicGraph.triples.contains(
-              Triple(BlankNode('r1'), IRITerm(RDF.reifies), generatedBlankNode),
+              Triple(BlankNode('r1'), IRINode(RDF.reifies), generatedBlankNode),
             ),
             isTrue,
           );
@@ -129,8 +129,8 @@ void main() {
             classicGraph.triples.contains(
               Triple(
                 generatedBlankNode,
-                IRITerm(RDF.type),
-                IRITerm(RDF.tripleTerm),
+                IRINode(RDF.type),
+                IRINode(RDF.tripleTerm),
               ),
             ),
             isTrue,
@@ -138,21 +138,21 @@ void main() {
 
           expect(
             classicGraph.triples.contains(
-              Triple(generatedBlankNode, IRITerm(RDF.ttSubject), subject),
+              Triple(generatedBlankNode, IRINode(RDF.ttSubject), subject),
             ),
             isTrue,
           );
 
           expect(
             classicGraph.triples.contains(
-              Triple(generatedBlankNode, IRITerm(RDF.ttPredicate), predicate),
+              Triple(generatedBlankNode, IRINode(RDF.ttPredicate), predicate),
             ),
             isTrue,
           );
 
           expect(
             classicGraph.triples.contains(
-              Triple(generatedBlankNode, IRITerm(RDF.ttObject), object),
+              Triple(generatedBlankNode, IRINode(RDF.ttObject), object),
             ),
             isTrue,
           );
@@ -172,10 +172,10 @@ void main() {
         'Applying a transformation several times to a graph should have the same effect as applying it once',
         () {
           graph.addAll([
-            Triple(BlankNode('r1'), IRITerm(RDF.reifies), TripleTerm(triple)),
+            Triple(BlankNode('r1'), IRINode(RDF.reifies), TripleTerm(triple)),
             Triple(
               BlankNode('r1'),
-              IRITerm(IRI('http://example.org/q')),
+              IRINode(IRI('http://example.org/q')),
               Literal('some value', XSD.string),
             ),
           ]);
@@ -189,11 +189,11 @@ void main() {
 
     group('match API', () {
       // More diverse test data
-      final s1 = IRITerm(IRI('http://example.com/s1'));
+      final s1 = IRINode(IRI('http://example.com/s1'));
       final s2 = BlankNode('b1');
-      final p1 = IRITerm(IRI('http://example.com/p1'));
-      final p2 = IRITerm(IRI('http://example.com/p2'));
-      final o1 = IRITerm(IRI('http://example.com/o1'));
+      final p1 = IRINode(IRI('http://example.com/p1'));
+      final p2 = IRINode(IRI('http://example.com/p2'));
+      final o1 = IRINode(IRI('http://example.com/o1'));
       final o2 = Literal('hello', XSD.string);
       final o3 = Literal('bonjour', RDF.langString, 'fr');
       final o4 = BlankNode('b2');
@@ -271,7 +271,7 @@ void main() {
         });
 
         test('match returns empty set for non-matching pattern', () {
-          final nonExistentSubject = IRITerm(IRI('http://example.com/s_none'));
+          final nonExistentSubject = IRINode(IRI('http://example.com/s_none'));
           final result = graph.match(nonExistentSubject, null, null).toSet();
           expect(result, isEmpty);
         });
@@ -294,7 +294,7 @@ void main() {
         });
 
         test('returns empty set when no subjects match', () {
-          final nonExistentPredicate = IRITerm(
+          final nonExistentPredicate = IRINode(
             IRI('http://example.com/p_none'),
           );
           final result =
@@ -320,7 +320,7 @@ void main() {
         });
 
         test('returns empty set when no predicates match', () {
-          final nonExistentSubject = IRITerm(IRI('http://example.com/s_none'));
+          final nonExistentSubject = IRINode(IRI('http://example.com/s_none'));
           final result = graph.predicates(subject: nonExistentSubject).toSet();
           expect(result, isEmpty);
         });
@@ -346,7 +346,7 @@ void main() {
         });
 
         test('returns empty set when no objects match', () {
-          final nonExistentSubject = IRITerm(IRI('http://example.com/s_none'));
+          final nonExistentSubject = IRINode(IRI('http://example.com/s_none'));
           final result = graph.objects(subject: nonExistentSubject).toSet();
           expect(result, isEmpty);
         });
@@ -360,7 +360,7 @@ void main() {
         });
 
         test('returns null when no object matches S and P', () {
-          final nonExistentPredicate = IRITerm(
+          final nonExistentPredicate = IRINode(
             IRI('http://example.com/p_none'),
           );
           final result = graph.object(s1, nonExistentPredicate);

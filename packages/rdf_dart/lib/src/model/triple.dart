@@ -12,10 +12,10 @@ import 'package:rdf_dart/src/model/subject_type.dart';
 /// The triple asserts that the relationship described by the [predicate]
 /// holds between the [subject] and the [object].
 ///
-///   * The [subject] must be a [SubjectTerm] (specifically, an [IRITerm] or
+///   * The [subject] must be a [SubjectTerm] (specifically, an [IRINode] or
 ///     a [BlankNode]), representing the resource being described.
-///   * The [predicate] must be an [IRITerm], representing the relationship.
-///   * The [object] can be any [RdfTerm] ([IRITerm], [BlankNode], [Literal],
+///   * The [predicate] must be an [IRINode], representing the relationship.
+///   * The [object] can be any [RdfTerm] ([IRINode], [BlankNode], [Literal],
 ///     or [TripleTerm]), representing the value or resource related to the
 ///     subject.
 ///
@@ -23,9 +23,9 @@ import 'package:rdf_dart/src/model/subject_type.dart';
 ///
 /// ```dart
 /// // Use the specific Term classes for clarity
-/// final subject = IRITerm(IRI('http://example.com/person/john'));
-/// final predicate = IRITerm(IRI('http://xmlns.com/foaf/0.1/knows'));
-/// final object = IRITerm(IRI('http://example.com/person/jane'));
+/// final subject = IRINode(IRI('http://example.com/person/john'));
+/// final predicate = IRINode(IRI('http://xmlns.com/foaf/0.1/knows'));
+/// final object = IRINode(IRI('http://example.com/person/jane'));
 /// final triple = Triple(subject, predicate, object);
 /// print(triple); // Output: http://example.com/person/john http://xmlns.com/foaf/0.1/knows http://example.com/person/jane .
 /// ```
@@ -34,38 +34,38 @@ class Triple {
   /// The subject of this triple.
   ///
   /// The subject is the resource that the triple is describing. It must be a
-  /// [SubjectTerm], which restricts it to being either an [IRITerm] or a
+  /// [SubjectTerm], which restricts it to being either an [IRINode] or a
   /// [BlankNode], according to the RDF specification.
   final SubjectTerm subject;
 
   /// The predicate of this triple.
   ///
   /// The predicate is the relationship between the [subject] and the [object].
-  /// It must be an [IRITerm].
-  final IRITerm predicate;
+  /// It must be an [IRINode].
+  final IRINode predicate;
 
   /// The object of this triple.
   ///
   /// The object is the value or resource related to the [subject] by the
-  /// [predicate]. It can be any concrete [RdfTerm]: an [IRITerm], a
+  /// [predicate]. It can be any concrete [RdfTerm]: an [IRINode], a
   /// [BlankNode], a [Literal], or (in RDF 1.2) a [TripleTerm].
   final RdfTerm object;
 
   /// Creates a new Triple with the given [subject], [predicate], and [object].
   ///
-  /// The [subject] must be an [IRITerm] or a [BlankNode].
-  /// The [predicate] must be an [IRITerm].
-  /// The [object] can be any [RdfTerm] ([IRITerm], [BlankNode], [Literal], or [TripleTerm]).
+  /// The [subject] must be an [IRINode] or a [BlankNode].
+  /// The [predicate] must be an [IRINode].
+  /// The [object] can be any [RdfTerm] ([IRINode], [BlankNode], [Literal], or [TripleTerm]).
   ///
   /// Example:
   /// ```dart
-  /// final subject = IRITerm(IRI('http://example.com/person/john'));
-  /// final predicate = IRITerm(IRI('http://xmlns.com/foaf/0.1/knows'));
-  /// final object = IRITerm(IRI('http://example.com/person/jane'));
+  /// final subject = IRINode(IRI('http://example.com/person/john'));
+  /// final predicate = IRINode(IRI('http://xmlns.com/foaf/0.1/knows'));
+  /// final object = IRINode(IRI('http://example.com/person/jane'));
   /// final triple = Triple(subject, predicate, object);
   ///
   /// final subjectB = BlankNode();
-  /// final predicateB = IRITerm(IRI('http://xmlns.com/foaf/0.1/name'));
+  /// final predicateB = IRINode(IRI('http://xmlns.com/foaf/0.1/name'));
   /// final objectB = Literal('Anonymous', XSD.string);
   /// final tripleB = Triple(subjectB, predicateB, objectB);
   /// ```

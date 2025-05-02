@@ -56,7 +56,7 @@
       
 <span class="returntype"><a href="../../rdf_dart/RdfTerm-class.html">RdfTerm</a>?</span>
 <span class="name ">object</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="object-param-subject"><span class="type-annotation"><a href="../../rdf_dart/SubjectTerm-class.html">SubjectTerm</a></span> <span class="parameter-name">subject</span>, </span></li>
-<li><span class="parameter" id="object-param-predicate"><span class="type-annotation"><a href="../../rdf_dart/IRITerm-class.html">IRITerm</a></span> <span class="parameter-name">predicate</span></span></li>
+<li><span class="parameter" id="object-param-predicate"><span class="type-annotation"><a href="../../rdf_dart/IRINode-class.html">IRINode</a></span> <span class="parameter-name">predicate</span></span></li>
 </ol>)
 
       
@@ -73,7 +73,7 @@ Returns null if no matching triple exists.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">RdfTerm? object(SubjectTerm subject, IRITerm predicate) {
+  <pre class="language-dart"><code class="language-dart">RdfTerm? object(SubjectTerm subject, IRINode predicate) {
   final results = objects(subject: subject, predicate: predicate).toList();
   if (results.length == 1) {
     return results.first;

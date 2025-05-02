@@ -6,7 +6,7 @@
 /// This library provides classes and utilities for representing and manipulating
 /// RDF data structures, including:
 ///
-/// *   **Terms:** [IRITerm], [BlankNode], [Literal], [RdfTerm], [TripleTerm]
+/// *   **Terms:** [IRINode], [BlankNode], [Literal], [RdfTerm], [TripleTerm]
 /// *   **Triples:** [Triple]
 /// *   **IRIs:**: [IRI]
 /// *   **Graphs:** [Graph]
@@ -72,7 +72,7 @@
 ///   print(literal);
 ///
 ///   // Create a Triple
-///   final triple = Triple(IRITerm(subject), IRITerm(predicate), literal);
+///   final triple = Triple(IRINode(subject), IRINode(predicate), literal);
 ///   print(triple);
 /// }
 /// ```

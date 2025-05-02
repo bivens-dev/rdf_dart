@@ -10,25 +10,25 @@ import 'task_list.dart';
 // Define vocabulary terms consistently
 // ignore: avoid_classes_with_only_static_members
 class Schema {
-  static final IRITerm type = IRITerm(RDF.type);
-  static final IRITerm name = IRITerm(IRI('https://schema.org/name'));
-  static final IRITerm description = IRITerm(
+  static final IRINode type = IRINode(RDF.type);
+  static final IRINode name = IRINode(IRI('https://schema.org/name'));
+  static final IRINode description = IRINode(
     IRI('https://schema.org/description'),
   );
-  static final IRITerm itemList = IRITerm(IRI('https://schema.org/ItemList'));
-  static final IRITerm itemListElement = IRITerm(
+  static final IRINode itemList = IRINode(IRI('https://schema.org/ItemList'));
+  static final IRINode itemListElement = IRINode(
     IRI('https://schema.org/itemListElement'),
   );
-  static final IRITerm listItem = IRITerm(IRI('https://schema.org/ListItem'));
-  static final IRITerm item = IRITerm(IRI('https://schema.org/item'));
+  static final IRINode listItem = IRINode(IRI('https://schema.org/ListItem'));
+  static final IRINode item = IRINode(IRI('https://schema.org/item'));
   // Define a Task type IRI (can be schema:Thing or something more specific)
-  static final IRITerm task = IRITerm(
+  static final IRINode task = IRINode(
     IRI('https://schema.org/Thing'),
   ); // Or e.g., app:Task
-  static final IRITerm itemListOrder = IRITerm(
+  static final IRINode itemListOrder = IRINode(
     IRI('https://schema.org/itemListOrder'),
   );
-  static final IRITerm itemListUnordered = IRITerm(
+  static final IRINode itemListUnordered = IRINode(
     IRI('https://schema.org/ItemListUnordered'),
   );
 }
@@ -41,7 +41,7 @@ abstract class DataRepository {
   // Rehydration logic using Graph querying
   static List<TaskList> createTaskListsFromGraph(Graph graph) {
     final taskLists = <TaskList>[];
-    final tasks = <IRITerm, Task>{}; // Map IRI -> Task
+    final tasks = <IRINode, Task>{}; // Map IRI -> Task
 
     // 1. Find and hydrate all Tasks first
     final taskSubjects = graph.subjects(
@@ -49,7 +49,7 @@ abstract class DataRepository {
       object: Schema.task,
     );
     for (final taskSubject in taskSubjects) {
-      if (taskSubject is IRITerm) {
+      if (taskSubject is IRINode) {
         // Ensure it's an IRI as expected
         try {
           final task = Task.fromGraph(graph, taskSubject);
@@ -71,7 +71,7 @@ abstract class DataRepository {
       object: Schema.itemList,
     );
     for (final taskListSubject in taskListSubjects) {
-      if (taskListSubject is IRITerm) {
+      if (taskListSubject is IRINode) {
         // Ensure it's an IRI as expected
         try {
           // Pass the map of already hydrated tasks

@@ -41,8 +41,8 @@ class Graph {
     for (final triple in fullGraph.triples) {
       // 4.1 If s is a blank node, p is rdf:type and o is rdf:TripleTerm, then:
       if (triple.subject is BlankNode &&
-          triple.predicate == IRITerm(RDF.type) &&
-          triple.object == IRITerm(RDF.tripleTerm)) {
+          triple.predicate == IRINode(RDF.type) &&
+          triple.object == IRINode(RDF.tripleTerm)) {
         // 4.1.1 If inputKind is "full" then exit with an error.
         if (inputKind == 'full') {
           throw Exception('Input graph is not classicizable');
@@ -145,10 +145,10 @@ class Graph {
       // 4.5 Add the triples (b, rdf:type, rdf:TripleTerm),
       // (b, rdf:ttSubject, s), (b, rdf:ttPredicate, p),
       // and (b, rdf:ttObject, o) in G.
-      g.add(Triple(b, IRITerm(RDF.type), IRITerm(RDF.tripleTerm)));
-      g.add(Triple(b, IRITerm(RDF.ttSubject), s));
-      g.add(Triple(b, IRITerm(RDF.ttPredicate), p));
-      g.add(Triple(b, IRITerm(RDF.ttObject), o));
+      g.add(Triple(b, IRINode(RDF.type), IRINode(RDF.tripleTerm)));
+      g.add(Triple(b, IRINode(RDF.ttSubject), s));
+      g.add(Triple(b, IRINode(RDF.ttPredicate), p));
+      g.add(Triple(b, IRINode(RDF.ttObject), o));
     }
 
     // 5. Return b, Mₒ and G.
@@ -241,7 +241,7 @@ class Graph {
   /// Returns an [Iterable] of matching [Triple]s, evaluated lazily.
   Iterable<Triple> match(
     SubjectTerm? subject,
-    IRITerm? predicate,
+    IRINode? predicate,
     RdfTerm? object,
   ) sync* {
     // Optimization: if all are specified, just check contains
@@ -276,26 +276,26 @@ class Graph {
 
   /// Returns an iterable of subjects that match the given predicate and object.
   /// Null predicate or object acts as a wildcard.
-  Iterable<SubjectTerm> subjects({IRITerm? predicate, RdfTerm? object}) sync* {
+  Iterable<SubjectTerm> subjects({IRINode? predicate, RdfTerm? object}) sync* {
     yield* match(null, predicate, object).map((t) => t.subject).toSet();
   }
 
   /// Returns an iterable of predicates that match the given subject and object.
   /// Null subject or object acts as a wildcard.
-  Iterable<IRITerm> predicates({SubjectTerm? subject, RdfTerm? object}) sync* {
+  Iterable<IRINode> predicates({SubjectTerm? subject, RdfTerm? object}) sync* {
     yield* match(subject, null, object).map((t) => t.predicate).toSet();
   }
 
   /// Returns an iterable of objects that match the given subject and predicate.
   /// Null subject or predicate acts as a wildcard.
-  Iterable<RdfTerm> objects({SubjectTerm? subject, IRITerm? predicate}) sync* {
+  Iterable<RdfTerm> objects({SubjectTerm? subject, IRINode? predicate}) sync* {
     yield* match(subject, predicate, null).map((t) => t.object).toSet();
   }
 
   /// Returns the single object for a given subject and predicate, if exactly one exists.
   /// Throws StateError if zero or more than one object exists.
   /// Returns null if no matching triple exists.
-  RdfTerm? object(SubjectTerm subject, IRITerm predicate) {
+  RdfTerm? object(SubjectTerm subject, IRINode predicate) {
     final results = objects(subject: subject, predicate: predicate).toList();
     if (results.length == 1) {
       return results.first;

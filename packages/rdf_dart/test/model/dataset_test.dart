@@ -5,12 +5,12 @@ import 'package:test/test.dart';
 void main() {
   group('Dataset', () {
     late Dataset dataset;
-    late IRITerm graphName;
+    late IRINode graphName;
     late Graph graph;
 
     setUp(() {
       dataset = Dataset();
-      graphName = IRITerm(IRI('http://example.com/graph'));
+      graphName = IRINode(IRI('http://example.com/graph'));
       graph = Graph();
     });
 
@@ -55,9 +55,9 @@ void main() {
 
     group('defaultGraph', () {
       test('can add triple to the default graph', () {
-        final subject = IRITerm(IRI('http://example.com/subject'));
-        final predicate = IRITerm(IRI('http://example.com/predicate'));
-        final object = IRITerm(IRI('http://example.com/object'));
+        final subject = IRINode(IRI('http://example.com/subject'));
+        final predicate = IRINode(IRI('http://example.com/predicate'));
+        final object = IRINode(IRI('http://example.com/object'));
         final triple = Triple(subject, predicate, object);
         dataset.defaultGraph.add(triple);
         expect(dataset.defaultGraph.triples, contains(triple));

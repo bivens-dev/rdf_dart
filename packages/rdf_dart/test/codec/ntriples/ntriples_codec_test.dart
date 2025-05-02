@@ -16,22 +16,22 @@ void main() {
           final decoded = nTriplesCodec.decode(ntriple);
           expect(decoded.length, 1);
           expect(
-            (decoded.first.subject as IRITerm).value,
+            (decoded.first.subject as IRINode).value,
             equals(IRI('http://example/a')),
           );
           expect(decoded.first.predicate.value, equals(RDF.reifies));
           expect(decoded.first.object, isA<TripleTerm>());
           expect(
             (decoded.first.object as TripleTerm).triple.subject,
-            equals(IRITerm(IRI('http://example/s'))),
+            equals(IRINode(IRI('http://example/s'))),
           );
           expect(
             (decoded.first.object as TripleTerm).triple.predicate,
-            equals(IRITerm(IRI('http://example/p'))),
+            equals(IRINode(IRI('http://example/p'))),
           );
           expect(
             (decoded.first.object as TripleTerm).triple.object,
-            equals(IRITerm(IRI('http://example/o'))),
+            equals(IRINode(IRI('http://example/o'))),
           );
         });
 
@@ -42,22 +42,22 @@ void main() {
           final decoded = nTriplesCodec.decode(ntriple);
           expect(decoded.length, 1);
           expect(
-            (decoded.first.subject as IRITerm).value,
+            (decoded.first.subject as IRINode).value,
             equals(IRI('http://example/s')),
           );
           expect(decoded.first.predicate.value, equals(RDF.reifies));
           expect(decoded.first.object, isA<TripleTerm>());
           expect(
             (decoded.first.object as TripleTerm).triple.subject,
-            equals(IRITerm(IRI('http://example/s2'))),
+            equals(IRINode(IRI('http://example/s2'))),
           );
           expect(
             (decoded.first.object as TripleTerm).triple.predicate,
-            equals(IRITerm(IRI('http://example/p2'))),
+            equals(IRINode(IRI('http://example/p2'))),
           );
           expect(
             (decoded.first.object as TripleTerm).triple.object,
-            equals(IRITerm(IRI('http://example/o2'))),
+            equals(IRINode(IRI('http://example/o2'))),
           );
         });
 
@@ -68,18 +68,18 @@ void main() {
           final decoded = nTriplesCodec.decode(ntriple);
           expect(decoded.length, 1);
           expect(
-            (decoded.first.subject as IRITerm).value,
+            (decoded.first.subject as IRINode).value,
             equals(IRI('http://example/s')),
           );
           expect(decoded.first.predicate.value, equals(RDF.reifies));
           expect(decoded.first.object, isA<TripleTerm>());
           expect(
             (decoded.first.object as TripleTerm).triple.subject,
-            equals(IRITerm(IRI('http://example/s2'))),
+            equals(IRINode(IRI('http://example/s2'))),
           );
           expect(
             (decoded.first.object as TripleTerm).triple.predicate,
-            equals(IRITerm(IRI('http://example/q2'))),
+            equals(IRINode(IRI('http://example/q2'))),
           );
           expect(
             (decoded.first.object as TripleTerm).triple.object,
@@ -89,19 +89,19 @@ void main() {
             ((decoded.first.object as TripleTerm).triple.object as TripleTerm)
                 .triple
                 .subject,
-            equals(IRITerm(IRI('http://example/s3'))),
+            equals(IRINode(IRI('http://example/s3'))),
           );
           expect(
             ((decoded.first.object as TripleTerm).triple.object as TripleTerm)
                 .triple
                 .predicate,
-            equals(IRITerm(IRI('http://example/p3'))),
+            equals(IRINode(IRI('http://example/p3'))),
           );
           expect(
             ((decoded.first.object as TripleTerm).triple.object as TripleTerm)
                 .triple
                 .object,
-            equals(IRITerm(IRI('http://example/o3'))),
+            equals(IRINode(IRI('http://example/o3'))),
           );
         });
 
@@ -121,7 +121,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
             equals(IRI('http://example/p')),
           );
           expect(
-            (decoded.first.object as IRITerm).value,
+            (decoded.first.object as IRINode).value,
             equals(IRI('http://example/o')),
           );
 
@@ -142,7 +142,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
             equals(IRI('http://example/p')),
           );
           expect(
-            ((decoded.last.object as TripleTerm).triple.object as IRITerm)
+            ((decoded.last.object as TripleTerm).triple.object as IRINode)
                 .value,
             equals(IRI('http://example/o')),
           );
@@ -163,49 +163,49 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
 
           expect(decoded.length, 3);
 
-          expect(firstTriple.subject, isA<IRITerm>());
+          expect(firstTriple.subject, isA<IRINode>());
           expect(firstTriple.subject.isIRI, isTrue);
           expect(
-            (firstTriple.subject as IRITerm).value,
+            (firstTriple.subject as IRINode).value,
             equals(IRI('http://example/s')),
           );
-          expect(firstTriple.predicate, isA<IRITerm>());
+          expect(firstTriple.predicate, isA<IRINode>());
           expect(firstTriple.predicate.isIRI, isTrue);
           expect(firstTriple.predicate.value, equals(IRI('http://example/p')));
-          expect(firstTriple.object, isA<IRITerm>());
+          expect(firstTriple.object, isA<IRINode>());
           expect(firstTriple.object.isIRI, isTrue);
           expect(
-            (firstTriple.object as IRITerm).value,
+            (firstTriple.object as IRINode).value,
             equals(IRI('http://example/o')),
           );
 
-          expect(secondTriple.subject, isA<IRITerm>());
+          expect(secondTriple.subject, isA<IRINode>());
           expect(secondTriple.subject.isIRI, isTrue);
           expect(
-            (secondTriple.subject as IRITerm).value,
+            (secondTriple.subject as IRINode).value,
             equals(IRI('http://example/a')),
           );
-          expect(secondTriple.predicate, isA<IRITerm>());
+          expect(secondTriple.predicate, isA<IRINode>());
           expect(secondTriple.predicate.isIRI, isTrue);
           expect(secondTriple.predicate.value, equals(RDF.reifies));
           expect(secondTriple.object, isA<TripleTerm>());
           expect(secondTriple.object.isTripleTerm, isTrue);
           expect(
             (secondTriple.object as TripleTerm).triple.subject,
-            isA<IRITerm>(),
+            isA<IRINode>(),
           );
           expect(
             (secondTriple.object as TripleTerm).triple.subject.isIRI,
             isTrue,
           );
           expect(
-            ((secondTriple.object as TripleTerm).triple.subject as IRITerm)
+            ((secondTriple.object as TripleTerm).triple.subject as IRINode)
                 .value,
             equals(IRI('http://example/s1')),
           );
           expect(
             (secondTriple.object as TripleTerm).triple.predicate,
-            isA<IRITerm>(),
+            isA<IRINode>(),
           );
           expect(
             (secondTriple.object as TripleTerm).triple.predicate.isIRI,
@@ -217,37 +217,37 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           );
           expect(
             (secondTriple.object as TripleTerm).triple.object,
-            isA<IRITerm>(),
+            isA<IRINode>(),
           );
           expect(
             (secondTriple.object as TripleTerm).triple.object.isIRI,
             isTrue,
           );
           expect(
-            ((secondTriple.object as TripleTerm).triple.object as IRITerm)
+            ((secondTriple.object as TripleTerm).triple.object as IRINode)
                 .value,
             equals(IRI('http://example/o1')),
           );
 
-          expect(thirdTriple.subject, isA<IRITerm>());
+          expect(thirdTriple.subject, isA<IRINode>());
           expect(thirdTriple.subject.isIRI, isTrue);
           expect(
-            (thirdTriple.subject as IRITerm).value,
+            (thirdTriple.subject as IRINode).value,
             equals(IRI('http://example/r')),
           );
-          expect(thirdTriple.predicate, isA<IRITerm>());
+          expect(thirdTriple.predicate, isA<IRINode>());
           expect(thirdTriple.predicate.isIRI, isTrue);
           expect(thirdTriple.predicate.value, equals(RDF.reifies));
           expect(thirdTriple.object, isA<TripleTerm>());
           expect(thirdTriple.object.isTripleTerm, isTrue);
           expect(
-            ((thirdTriple.object as TripleTerm).triple.subject as IRITerm)
+            ((thirdTriple.object as TripleTerm).triple.subject as IRINode)
                 .value,
             equals(IRI('http://example/23')),
           );
           expect(
             (thirdTriple.object as TripleTerm).triple.predicate,
-            isA<IRITerm>(),
+            isA<IRINode>(),
           );
           expect(
             (thirdTriple.object as TripleTerm).triple.predicate.isIRI,
@@ -269,7 +269,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
             ((thirdTriple.object as TripleTerm).triple.object as TripleTerm)
                 .triple
                 .subject,
-            isA<IRITerm>(),
+            isA<IRINode>(),
           );
           expect(
             ((thirdTriple.object as TripleTerm).triple.object as TripleTerm)
@@ -282,7 +282,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
             (((thirdTriple.object as TripleTerm).triple.object as TripleTerm)
                         .triple
                         .subject
-                    as IRITerm)
+                    as IRINode)
                 .value,
             equals(IRI('http://example/s3')),
           );
@@ -297,7 +297,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
             (((thirdTriple.object as TripleTerm).triple.object as TripleTerm)
                         .triple
                         .object
-                    as IRITerm)
+                    as IRINode)
                 .value,
             equals(IRI('http://example/o3')),
           );
@@ -309,7 +309,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           final decoded = nTriplesCodec.decode(ntriple);
           expect(decoded.length, 1);
           expect(
-            (decoded.first.subject as IRITerm).value,
+            (decoded.first.subject as IRINode).value,
             equals(IRI('http://example/a')),
           );
           expect(
@@ -339,7 +339,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           final decoded = nTriplesCodec.decode(ntriple);
           expect(decoded.length, 1);
           expect(
-            (decoded.first.subject as IRITerm).value,
+            (decoded.first.subject as IRINode).value,
             equals(IRI('http://example/a')),
           );
           expect(
@@ -568,13 +568,13 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
       // ntriples-star-syntax-01.nt
       test('object triple term', () {
         final triple = Triple(
-          IRITerm(IRI('http://example/a')),
-          IRITerm(RDF.reifies),
+          IRINode(IRI('http://example/a')),
+          IRINode(RDF.reifies),
           TripleTerm(
             Triple(
-              IRITerm(IRI('http://example/s')),
-              IRITerm(IRI('http://example/p')),
-              IRITerm(IRI('http://example/o')),
+              IRINode(IRI('http://example/s')),
+              IRINode(IRI('http://example/p')),
+              IRINode(IRI('http://example/o')),
             ),
           ),
         );
@@ -590,17 +590,17 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
         final triples = [
           Triple(
             BlankNode('b0'),
-            IRITerm(IRI('http://example/p')),
-            IRITerm(IRI('http://example/o')),
+            IRINode(IRI('http://example/p')),
+            IRINode(IRI('http://example/o')),
           ),
           Triple(
             BlankNode('b1'),
-            IRITerm(RDF.reifies),
+            IRINode(RDF.reifies),
             TripleTerm(
               Triple(
                 BlankNode('b0'),
-                IRITerm(IRI('http://example/p')),
-                IRITerm(IRI('http://example/o')),
+                IRINode(IRI('http://example/p')),
+                IRINode(IRI('http://example/o')),
               ),
             ),
           ),
@@ -617,33 +617,33 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
       test('Nested object term', () {
         final triples = [
           Triple(
-            IRITerm(IRI('http://example/s')),
-            IRITerm(IRI('http://example/p')),
-            IRITerm(IRI('http://example/o')),
+            IRINode(IRI('http://example/s')),
+            IRINode(IRI('http://example/p')),
+            IRINode(IRI('http://example/o')),
           ),
           Triple(
-            IRITerm(IRI('http://example/a')),
-            IRITerm(RDF.reifies),
+            IRINode(IRI('http://example/a')),
+            IRINode(RDF.reifies),
             TripleTerm(
               Triple(
-                IRITerm(IRI('http://example/s1')),
-                IRITerm(IRI('http://example/p1')),
-                IRITerm(IRI('http://example/o1')),
+                IRINode(IRI('http://example/s1')),
+                IRINode(IRI('http://example/p1')),
+                IRINode(IRI('http://example/o1')),
               ),
             ),
           ),
           Triple(
-            IRITerm(IRI('http://example/r')),
-            IRITerm(RDF.reifies),
+            IRINode(IRI('http://example/r')),
+            IRINode(RDF.reifies),
             TripleTerm(
               Triple(
-                IRITerm(IRI('http://example/23')),
-                IRITerm(RDF.reifies),
+                IRINode(IRI('http://example/23')),
+                IRINode(RDF.reifies),
                 TripleTerm(
                   Triple(
-                    IRITerm(IRI('http://example/s3')),
-                    IRITerm(IRI('http://example/p3')),
-                    IRITerm(IRI('http://example/o3')),
+                    IRINode(IRI('http://example/s3')),
+                    IRINode(IRI('http://example/p3')),
+                    IRINode(IRI('http://example/o3')),
                   ),
                 ),
               ),
@@ -1224,12 +1224,12 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
         final decoded = nTriplesCodec.decode(ntriple);
         expect(decoded.length, 1);
         expect(
-          (decoded.first.subject as IRITerm).value,
+          (decoded.first.subject as IRINode).value,
           equals(IRI('http://example/s')),
         );
         expect(decoded.first.predicate.value, equals(IRI('http://example/p')));
         expect(
-          (decoded.first.object as IRITerm).value,
+          (decoded.first.object as IRINode).value,
           equals(IRI('http://example/o')),
         );
       });
@@ -1244,12 +1244,12 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
         final decoded = nTriplesCodec.decode(ntriple);
         expect(decoded.length, 1);
         expect(
-          (decoded.first.subject as IRITerm).value,
+          (decoded.first.subject as IRINode).value,
           equals(IRI('http://example/S')),
         );
         expect(decoded.first.predicate.value, equals(IRI('http://example/p')));
         expect(
-          (decoded.first.object as IRITerm).value,
+          (decoded.first.object as IRINode).value,
           equals(IRI('http://example/o')),
         );
       });
@@ -1264,12 +1264,12 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
         final decoded = nTriplesCodec.decode(ntriple);
         expect(decoded.length, 1);
         expect(
-          (decoded.first.subject as IRITerm).value,
+          (decoded.first.subject as IRINode).value,
           equals(IRI('http://example/S')),
         );
         expect(decoded.first.predicate.value, equals(IRI('http://example/p')));
         expect(
-          (decoded.first.object as IRITerm).value,
+          (decoded.first.object as IRINode).value,
           equals(IRI('http://example/o')),
         );
       });
@@ -1283,12 +1283,12 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
         final decoded = nTriplesCodec.decode(ntriple);
         expect(decoded.length, 1);
         expect(
-          (decoded.first.subject as IRITerm).value,
+          (decoded.first.subject as IRINode).value,
           equals(IRI('http://example/s')),
         );
         expect(decoded.first.predicate.value, equals(IRI('http://example/p')));
         expect(
-          (decoded.first.object as IRITerm).value,
+          (decoded.first.object as IRINode).value,
           equals(
             IRI(
               r"scheme:!$%25&'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~?#",
@@ -1305,7 +1305,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
         final decoded = nTriplesCodec.decode(ntriple);
         expect(decoded.length, 1);
         expect(
-          (decoded.first.subject as IRITerm).value,
+          (decoded.first.subject as IRINode).value,
           equals(IRI('http://example/s')),
         );
         expect(decoded.first.predicate.value, equals(IRI('http://example/p')));
@@ -1321,7 +1321,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
         final decoded = nTriplesCodec.decode(ntriple);
         expect(decoded.length, 1);
         expect(
-          (decoded.first.subject as IRITerm).value,
+          (decoded.first.subject as IRINode).value,
           equals(IRI('http://example/s')),
         );
         expect(decoded.first.predicate.value, equals(IRI('http://example/p')));
@@ -1340,7 +1340,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
         final decoded = nTriplesCodec.decode(ntriple);
         expect(decoded.length, 1);
         expect(
-          (decoded.first.subject as IRITerm).value,
+          (decoded.first.subject as IRINode).value,
           equals(IRI('http://example/s')),
         );
         expect(decoded.first.predicate.value, equals(IRI('http://example/p')));
@@ -1359,7 +1359,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
         final decoded = nTriplesCodec.decode(ntriple);
         expect(decoded.length, 1);
         expect(
-          (decoded.first.subject as IRITerm).value,
+          (decoded.first.subject as IRINode).value,
           equals(IRI('http://example/s')),
         );
         expect(decoded.first.predicate.value, equals(IRI('http://example/p')));
@@ -1375,7 +1375,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
         final decoded = nTriplesCodec.decode(ntriple);
         expect(decoded.length, 1);
         expect(
-          (decoded.first.subject as IRITerm).value,
+          (decoded.first.subject as IRINode).value,
           equals(IRI('http://example/s')),
         );
         expect(decoded.first.predicate.value, equals(IRI('http://example/p')));
@@ -1391,7 +1391,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
         final decoded = nTriplesCodec.decode(ntriple);
         expect(decoded.length, 1);
         expect(
-          (decoded.first.subject as IRITerm).value,
+          (decoded.first.subject as IRINode).value,
           equals(IRI('http://example/s')),
         );
         expect(decoded.first.predicate.value, equals(IRI('http://example/p')));
@@ -1408,7 +1408,7 @@ _:a  <http://example/p> <http://example/o> .
         expect(decoded.length, 1);
         expect(decoded.first.subject, equals(BlankNode('a')));
         expect(decoded.first.predicate.value, equals(IRI('http://example/p')));
-        expect(decoded.first.object, equals(IRITerm(IRI('http://example/o'))));
+        expect(decoded.first.object, equals(IRINode(IRI('http://example/o'))));
       });
 
       // nt-syntax-bnode-02
@@ -1420,15 +1420,15 @@ _:a  <http://example/p> <http://example/o> .
 ''';
         final decoded = nTriplesCodec.decode(ntriple);
         expect(decoded.length, 2);
-        expect(decoded.first.subject, equals(IRITerm(IRI('http://example/s'))));
+        expect(decoded.first.subject, equals(IRINode(IRI('http://example/s'))));
         expect(decoded.first.predicate.value, equals(IRI('http://example/p')));
         expect(decoded.first.object, equals(BlankNode('a')));
         expect(decoded.last.subject, equals(BlankNode('a')));
         expect(
           decoded.last.predicate,
-          equals(IRITerm(IRI('http://example/p'))),
+          equals(IRINode(IRI('http://example/p'))),
         );
-        expect(decoded.last.object, equals(IRITerm(IRI('http://example/o'))));
+        expect(decoded.last.object, equals(IRINode(IRI('http://example/o'))));
       });
 
       // nt-syntax-bnode-03
@@ -1440,15 +1440,15 @@ _:1a  <http://example/p> <http://example/o> .
 ''';
         final decoded = nTriplesCodec.decode(ntriple);
         expect(decoded.length, 2);
-        expect(decoded.first.subject, equals(IRITerm(IRI('http://example/s'))));
+        expect(decoded.first.subject, equals(IRINode(IRI('http://example/s'))));
         expect(decoded.first.predicate.value, equals(IRI('http://example/p')));
         expect(decoded.first.object, equals(BlankNode('1a')));
         expect(decoded.last.subject, equals(BlankNode('1a')));
         expect(
           decoded.last.predicate,
-          equals(IRITerm(IRI('http://example/p'))),
+          equals(IRINode(IRI('http://example/p'))),
         );
-        expect(decoded.last.object, equals(IRITerm(IRI('http://example/o'))));
+        expect(decoded.last.object, equals(IRINode(IRI('http://example/o'))));
       });
 
       // nt-syntax-datatypes-01
@@ -1459,7 +1459,7 @@ _:1a  <http://example/p> <http://example/o> .
 ''';
         final decoded = nTriplesCodec.decode(ntriple);
         expect(decoded.length, 1);
-        expect(decoded.first.subject, equals(IRITerm(IRI('http://example/s'))));
+        expect(decoded.first.subject, equals(IRINode(IRI('http://example/s'))));
         expect(decoded.first.predicate.value, equals(IRI('http://example/p')));
         expect(decoded.first.object, equals(Literal('123', XSD.byte)));
       });
@@ -1472,7 +1472,7 @@ _:1a  <http://example/p> <http://example/o> .
 ''';
         final decoded = nTriplesCodec.decode(ntriple);
         expect(decoded.length, 1);
-        expect(decoded.first.subject, equals(IRITerm(IRI('http://example/s'))));
+        expect(decoded.first.subject, equals(IRINode(IRI('http://example/s'))));
         expect(decoded.first.predicate.value, equals(IRI('http://example/p')));
         expect(decoded.first.object, equals(Literal('123', XSD.string)));
       });
@@ -1607,7 +1607,7 @@ _:anon <http://example.org/property> <http://example.org/resource2> .
         expect(decoded.length, 1);
         expect(
           decoded.first.subject,
-          equals(IRITerm(IRI('http://a.example/s'))),
+          equals(IRINode(IRI('http://a.example/s'))),
         );
         expect(
           decoded.first.predicate.value,
@@ -1626,7 +1626,7 @@ _:anon <http://example.org/property> <http://example.org/resource2> .
         expect(decoded.length, 1);
         expect(
           decoded.first.subject,
-          equals(IRITerm(IRI('http://a.example/s'))),
+          equals(IRINode(IRI('http://a.example/s'))),
         );
         expect(
           decoded.first.predicate.value,
@@ -1653,7 +1653,7 @@ _:anon <http://example.org/property> <http://example.org/resource2> .
         expect(decoded.length, 1);
         expect(
           decoded.first.subject,
-          equals(IRITerm(IRI('http://a.example/s'))),
+          equals(IRINode(IRI('http://a.example/s'))),
         );
         expect(
           decoded.first.predicate.value,
@@ -1675,7 +1675,7 @@ _:anon <http://example.org/property> <http://example.org/resource2> .
         expect(decoded.length, 1);
         expect(
           decoded.first.subject,
-          equals(IRITerm(IRI('http://a.example/s'))),
+          equals(IRINode(IRI('http://a.example/s'))),
         );
         expect(
           decoded.first.predicate.value,
@@ -1694,7 +1694,7 @@ _:anon <http://example.org/property> <http://example.org/resource2> .
         expect(decoded.length, 1);
         expect(
           decoded.first.subject,
-          equals(IRITerm(IRI('http://a.example/s'))),
+          equals(IRINode(IRI('http://a.example/s'))),
         );
         expect(
           decoded.first.predicate.value,
@@ -1713,7 +1713,7 @@ _:anon <http://example.org/property> <http://example.org/resource2> .
         expect(decoded.length, 1);
         expect(
           decoded.first.subject,
-          equals(IRITerm(IRI('http://a.example/s'))),
+          equals(IRINode(IRI('http://a.example/s'))),
         );
         expect(
           decoded.first.predicate.value,
@@ -1732,7 +1732,7 @@ _:anon <http://example.org/property> <http://example.org/resource2> .
         expect(decoded.length, 1);
         expect(
           decoded.first.subject,
-          equals(IRITerm(IRI('http://a.example/s'))),
+          equals(IRINode(IRI('http://a.example/s'))),
         );
         expect(
           decoded.first.predicate.value,
@@ -1751,7 +1751,7 @@ _:anon <http://example.org/property> <http://example.org/resource2> .
         expect(decoded.length, 1);
         expect(
           decoded.first.subject,
-          equals(IRITerm(IRI('http://a.example/s'))),
+          equals(IRINode(IRI('http://a.example/s'))),
         );
         expect(
           decoded.first.predicate.value,
@@ -1770,7 +1770,7 @@ _:anon <http://example.org/property> <http://example.org/resource2> .
         expect(decoded.length, 1);
         expect(
           decoded.first.subject,
-          equals(IRITerm(IRI('http://a.example/s'))),
+          equals(IRINode(IRI('http://a.example/s'))),
         );
         expect(
           decoded.first.predicate.value,
@@ -1789,7 +1789,7 @@ _:anon <http://example.org/property> <http://example.org/resource2> .
         expect(decoded.length, 1);
         expect(
           decoded.first.subject,
-          equals(IRITerm(IRI('http://a.example/s'))),
+          equals(IRINode(IRI('http://a.example/s'))),
         );
         expect(
           decoded.first.predicate.value,
@@ -1808,7 +1808,7 @@ _:anon <http://example.org/property> <http://example.org/resource2> .
         expect(decoded.length, 1);
         expect(
           decoded.first.subject,
-          equals(IRITerm(IRI('http://a.example/s'))),
+          equals(IRINode(IRI('http://a.example/s'))),
         );
         expect(
           decoded.first.predicate.value,
@@ -1827,7 +1827,7 @@ _:anon <http://example.org/property> <http://example.org/resource2> .
         expect(decoded.length, 1);
         expect(
           decoded.first.subject,
-          equals(IRITerm(IRI('http://a.example/s'))),
+          equals(IRINode(IRI('http://a.example/s'))),
         );
         expect(
           decoded.first.predicate.value,
@@ -1846,7 +1846,7 @@ _:anon <http://example.org/property> <http://example.org/resource2> .
         expect(decoded.length, 1);
         expect(
           decoded.first.subject,
-          equals(IRITerm(IRI('http://a.example/s'))),
+          equals(IRINode(IRI('http://a.example/s'))),
         );
         expect(
           decoded.first.predicate.value,
@@ -1865,7 +1865,7 @@ _:anon <http://example.org/property> <http://example.org/resource2> .
         expect(decoded.length, 1);
         expect(
           decoded.first.subject,
-          equals(IRITerm(IRI('http://a.example/s'))),
+          equals(IRINode(IRI('http://a.example/s'))),
         );
         expect(
           decoded.first.predicate.value,
@@ -1884,7 +1884,7 @@ _:anon <http://example.org/property> <http://example.org/resource2> .
         expect(decoded.length, 1);
         expect(
           decoded.first.subject,
-          equals(IRITerm(IRI('http://a.example/s'))),
+          equals(IRINode(IRI('http://a.example/s'))),
         );
         expect(
           decoded.first.predicate.value,
@@ -1903,7 +1903,7 @@ _:anon <http://example.org/property> <http://example.org/resource2> .
         expect(decoded.length, 1);
         expect(
           decoded.first.subject,
-          equals(IRITerm(IRI('http://example.org/ns#s'))),
+          equals(IRINode(IRI('http://example.org/ns#s'))),
         );
         expect(
           decoded.first.predicate.value,
@@ -1922,7 +1922,7 @@ _:anon <http://example.org/property> <http://example.org/resource2> .
         expect(decoded.length, 1);
         expect(
           decoded.first.subject,
-          equals(IRITerm(IRI('http://a.example/s'))),
+          equals(IRINode(IRI('http://a.example/s'))),
         );
         expect(
           decoded.first.predicate.value,
@@ -1941,7 +1941,7 @@ _:anon <http://example.org/property> <http://example.org/resource2> .
         expect(decoded.length, 1);
         expect(
           decoded.first.subject,
-          equals(IRITerm(IRI('http://a.example/s'))),
+          equals(IRINode(IRI('http://a.example/s'))),
         );
         expect(
           decoded.first.predicate.value,
@@ -1963,7 +1963,7 @@ _:anon <http://example.org/property> <http://example.org/resource2> .
         expect(decoded.length, 1);
         expect(
           decoded.first.subject,
-          equals(IRITerm(IRI('http://a.example/s'))),
+          equals(IRINode(IRI('http://a.example/s'))),
         );
         expect(
           decoded.first.predicate.value,
@@ -1985,7 +1985,7 @@ _:anon <http://example.org/property> <http://example.org/resource2> .
         expect(decoded.length, 1);
         expect(
           decoded.first.subject,
-          equals(IRITerm(IRI('http://example.org/ex#a'))),
+          equals(IRINode(IRI('http://example.org/ex#a'))),
         );
         expect(
           decoded.first.predicate.value,

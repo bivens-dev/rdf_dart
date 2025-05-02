@@ -58,8 +58,8 @@
   <p>Abstract marker class for RDF terms that can function as the subject of an
 RDF <a href="../rdf_dart/Triple-class.html">Triple</a>.</p>
 <p>According to the RDF 1.2 specification, the subject of a triple must be
-either an <a href="../rdf_dart/IRITerm-class.html">IRITerm</a> or a <a href="../rdf_dart/BlankNode-class.html">BlankNode</a>. This abstract class is implemented
-by those specific term types (<code>IRITerm</code>, <code>BlankNode</code>) to allow for
+either an <a href="../rdf_dart/IRINode-class.html">IRINode</a> or a <a href="../rdf_dart/BlankNode-class.html">BlankNode</a>. This abstract class is implemented
+by those specific term types (<code>IRINode</code>, <code>BlankNode</code>) to allow for
 compile-time type checking when constructing <a href="../rdf_dart/Triple-class.html">Triple</a> instances.</p>
 <p>This ensures that attempts to create a <a href="../rdf_dart/Triple-class.html">Triple</a> with an invalid subject type
 (like a <a href="../rdf_dart/Literal-class.html">Literal</a> or <a href="../rdf_dart/TripleTerm-class.html">TripleTerm</a>) are caught by the Dart type system.</p>
@@ -87,7 +87,7 @@ existing term types based on their valid roles within a triple.</p>
           <dt>Implementers</dt>
           <dd><ul class="comma-separated clazz-relationships">
               <li><a href="../rdf_dart/BlankNode-class.html">BlankNode</a></li>
-              <li><a href="../rdf_dart/IRITerm-class.html">IRITerm</a></li>
+              <li><a href="../rdf_dart/IRINode-class.html">IRINode</a></li>
           </ul></dd>
 
         

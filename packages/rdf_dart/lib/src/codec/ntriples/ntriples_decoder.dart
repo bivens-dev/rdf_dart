@@ -257,12 +257,12 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
       // Update the sink's cursor
       _cursor = iriResult.cursor;
       // Use the term from the result
-      final iriTerm = iriResult.term;
-      if (iriTerm.value.hasScheme) {
-        return iriTerm;
+      final iriNode = iriResult.term;
+      if (iriNode.value.hasScheme) {
+        return iriNode;
       } else {
         throw ParseError(
-          'Relative IRI <${iriTerm.value}> not allowed as subject (absolute IRI required)',
+          'Relative IRI <${iriNode.value}> not allowed as subject (absolute IRI required)',
           lineNumber,
           startCol,
         );
@@ -297,7 +297,7 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
     }
   }
 
-  IRITerm _parsePredicate(String line, int lineNumber) {
+  IRINode _parsePredicate(String line, int lineNumber) {
     final startCol = _cursor + 1;
     NFormatsParserUtils.checkNotEof(
       line,
@@ -310,12 +310,12 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
       final iriResult = NFormatsParserUtils.parseIri(line, _cursor, lineNumber);
       // Update the sink's cursor from the result record
       _cursor = iriResult.cursor;
-      final iriTerm = iriResult.term;
-      if (iriTerm.value.hasScheme) {
-        return iriTerm;
+      final iriNode = iriResult.term;
+      if (iriNode.value.hasScheme) {
+        return iriNode;
       } else {
         throw ParseError(
-          'Relative IRI <${iriTerm.value}> not allowed as predicate (absolute IRI required)',
+          'Relative IRI <${iriNode.value}> not allowed as predicate (absolute IRI required)',
           lineNumber,
           startCol, // Error relates to the start of the term
         );
@@ -351,12 +351,12 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
         // Update the sink's cursor
         _cursor = iriResult.cursor;
         // Use the term from the result
-        final iriTerm = iriResult.term;
-        if (iriTerm.value.hasScheme) {
-          return iriTerm;
+        final iriNode = iriResult.term;
+        if (iriNode.value.hasScheme) {
+          return iriNode;
         } else {
           throw ParseError(
-            'Relative IRI <${iriTerm.value}> not allowed as object (absolute IRI required)',
+            'Relative IRI <${iriNode.value}> not allowed as object (absolute IRI required)',
             lineNumber,
             startCol, // Error relates to the start of the term
           );

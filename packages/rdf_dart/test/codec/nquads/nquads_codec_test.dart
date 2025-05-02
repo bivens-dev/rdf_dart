@@ -29,7 +29,7 @@ void main() {
             final quads = await _loadTestFile('nquads-star-syntax-2.nq');
             final result = nQuadsCodec.decoder.convert(quads);
             final namedGraph =
-                result.namedGraphs[IRITerm(IRI('http://example/g'))]!;
+                result.namedGraphs[IRINode(IRI('http://example/g'))]!;
             final parsedTriple = namedGraph.triples.first;
 
             expect(result, isA<Dataset>());
@@ -38,20 +38,20 @@ void main() {
             expect(result.namedGraphs.length, equals(1));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/x'))),
+              equals(IRINode(IRI('http://example/x'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(
               parsedTriple.object,
               equals(
                 TripleTerm(
                   Triple(
-                    IRITerm(IRI('http://example/s')),
-                    IRITerm(IRI('http://example/p')),
-                    IRITerm(IRI('http://example/o')),
+                    IRINode(IRI('http://example/s')),
+                    IRINode(IRI('http://example/p')),
+                    IRINode(IRI('http://example/o')),
                   ),
                 ),
               ),
@@ -104,7 +104,7 @@ void main() {
             final quads = await _loadTestFile('nq-syntax-uri-01.nq');
             final result = nQuadsCodec.decoder.convert(quads);
             final namedGraph =
-                result.namedGraphs[IRITerm(IRI('http://example/g'))]!;
+                result.namedGraphs[IRINode(IRI('http://example/g'))]!;
             final parsedTriple = namedGraph.triples.first;
 
             expect(result, isA<Dataset>());
@@ -113,15 +113,15 @@ void main() {
             expect(result.namedGraphs.length, equals(1));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/s'))),
+              equals(IRINode(IRI('http://example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(
               parsedTriple.object,
-              equals(IRITerm(IRI('http://example/o'))),
+              equals(IRINode(IRI('http://example/o'))),
             );
           });
 
@@ -130,7 +130,7 @@ void main() {
             final quads = await _loadTestFile('nq-syntax-uri-02.nq');
             final result = nQuadsCodec.decoder.convert(quads);
             final namedGraph =
-                result.namedGraphs[IRITerm(IRI('http://example/g'))]!;
+                result.namedGraphs[IRINode(IRI('http://example/g'))]!;
             final parsedTriple = namedGraph.triples.first;
 
             expect(result, isA<Dataset>());
@@ -140,11 +140,11 @@ void main() {
             expect(parsedTriple.subject, equals(BlankNode('s')));
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(
               parsedTriple.object,
-              equals(IRITerm(IRI('http://example/o'))),
+              equals(IRINode(IRI('http://example/o'))),
             );
           });
 
@@ -153,7 +153,7 @@ void main() {
             final quads = await _loadTestFile('nq-syntax-uri-03.nq');
             final result = nQuadsCodec.decoder.convert(quads);
             final namedGraph =
-                result.namedGraphs[IRITerm(IRI('http://example/g'))]!;
+                result.namedGraphs[IRINode(IRI('http://example/g'))]!;
             final parsedTriple = namedGraph.triples.first;
 
             expect(result, isA<Dataset>());
@@ -162,11 +162,11 @@ void main() {
             expect(result.namedGraphs.length, equals(1));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/s'))),
+              equals(IRINode(IRI('http://example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(parsedTriple.object, equals(BlankNode('o')));
           });
@@ -176,7 +176,7 @@ void main() {
             final quads = await _loadTestFile('nq-syntax-uri-04.nq');
             final result = nQuadsCodec.decoder.convert(quads);
             final namedGraph =
-                result.namedGraphs[IRITerm(IRI('http://example/g'))]!;
+                result.namedGraphs[IRINode(IRI('http://example/g'))]!;
             final parsedTriple = namedGraph.triples.first;
 
             expect(result, isA<Dataset>());
@@ -185,11 +185,11 @@ void main() {
             expect(result.namedGraphs.length, equals(1));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/s'))),
+              equals(IRINode(IRI('http://example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(parsedTriple.object, equals(Literal('o', XSD.string)));
           });
@@ -199,7 +199,7 @@ void main() {
             final quads = await _loadTestFile('nq-syntax-uri-05.nq');
             final result = nQuadsCodec.decoder.convert(quads);
             final namedGraph =
-                result.namedGraphs[IRITerm(IRI('http://example/g'))]!;
+                result.namedGraphs[IRINode(IRI('http://example/g'))]!;
             final parsedTriple = namedGraph.triples.first;
 
             expect(result, isA<Dataset>());
@@ -208,11 +208,11 @@ void main() {
             expect(result.namedGraphs.length, equals(1));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/s'))),
+              equals(IRINode(IRI('http://example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(
               parsedTriple.object,
@@ -225,7 +225,7 @@ void main() {
             final quads = await _loadTestFile('nq-syntax-uri-06.nq');
             final result = nQuadsCodec.decoder.convert(quads);
             final namedGraph =
-                result.namedGraphs[IRITerm(IRI('http://example/g'))]!;
+                result.namedGraphs[IRINode(IRI('http://example/g'))]!;
             final parsedTriple = namedGraph.triples.first;
 
             expect(result, isA<Dataset>());
@@ -234,11 +234,11 @@ void main() {
             expect(result.namedGraphs.length, equals(1));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/s'))),
+              equals(IRINode(IRI('http://example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(parsedTriple.object, equals(Literal('o', XSD.string)));
           });
@@ -256,15 +256,15 @@ void main() {
             expect(result.namedGraphs.length, equals(1));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/s'))),
+              equals(IRINode(IRI('http://example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(
               parsedTriple.object,
-              equals(IRITerm(IRI('http://example/o'))),
+              equals(IRINode(IRI('http://example/o'))),
             );
           });
 
@@ -282,11 +282,11 @@ void main() {
             expect(parsedTriple.subject, equals(BlankNode('s')));
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(
               parsedTriple.object,
-              equals(IRITerm(IRI('http://example/o'))),
+              equals(IRINode(IRI('http://example/o'))),
             );
           });
 
@@ -303,11 +303,11 @@ void main() {
             expect(result.namedGraphs.length, equals(1));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/s'))),
+              equals(IRINode(IRI('http://example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(parsedTriple.object, equals(BlankNode('o')));
           });
@@ -325,11 +325,11 @@ void main() {
             expect(result.namedGraphs.length, equals(1));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/s'))),
+              equals(IRINode(IRI('http://example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(parsedTriple.object, equals(Literal('o', XSD.string)));
           });
@@ -347,11 +347,11 @@ void main() {
             expect(result.namedGraphs.length, equals(1));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/s'))),
+              equals(IRINode(IRI('http://example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(
               parsedTriple.object,
@@ -372,11 +372,11 @@ void main() {
             expect(result.namedGraphs.length, equals(1));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/s'))),
+              equals(IRINode(IRI('http://example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(parsedTriple.object, equals(Literal('o', XSD.string)));
           });
@@ -423,15 +423,15 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/s'))),
+              equals(IRINode(IRI('http://example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(
               parsedTriple.object,
-              equals(IRITerm(IRI('http://example/o'))),
+              equals(IRINode(IRI('http://example/o'))),
             );
           });
 
@@ -447,15 +447,15 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/S'))),
+              equals(IRINode(IRI('http://example/S'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(
               parsedTriple.object,
-              equals(IRITerm(IRI('http://example/o'))),
+              equals(IRINode(IRI('http://example/o'))),
             );
           });
 
@@ -471,15 +471,15 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/S'))),
+              equals(IRINode(IRI('http://example/S'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(
               parsedTriple.object,
-              equals(IRITerm(IRI('http://example/o'))),
+              equals(IRINode(IRI('http://example/o'))),
             );
           });
 
@@ -496,16 +496,16 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/s'))),
+              equals(IRINode(IRI('http://example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(
               parsedTriple.object,
               equals(
-                IRITerm(
+                IRINode(
                   IRI(
                     r"scheme:!$%25&'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~?#",
                   ),
@@ -525,11 +525,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/s'))),
+              equals(IRINode(IRI('http://example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(parsedTriple.object, equals(Literal('string', XSD.string)));
           });
@@ -545,11 +545,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/s'))),
+              equals(IRINode(IRI('http://example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(
               parsedTriple.object,
@@ -568,11 +568,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/s'))),
+              equals(IRINode(IRI('http://example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(
               parsedTriple.object,
@@ -591,11 +591,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/s'))),
+              equals(IRINode(IRI('http://example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(parsedTriple.object, equals(Literal('a\n', XSD.string)));
           });
@@ -611,11 +611,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/s'))),
+              equals(IRINode(IRI('http://example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(parsedTriple.object, equals(Literal('a b', XSD.string)));
           });
@@ -631,11 +631,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/s'))),
+              equals(IRINode(IRI('http://example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(parsedTriple.object, equals(Literal('a b', XSD.string)));
           });
@@ -652,11 +652,11 @@ void main() {
             expect(parsedTriple.subject, equals(BlankNode('a')));
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(
               parsedTriple.object,
-              equals(IRITerm(IRI('http://example/o'))),
+              equals(IRINode(IRI('http://example/o'))),
             );
           });
 
@@ -673,21 +673,21 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               firstTriple.subject,
-              equals(IRITerm(IRI('http://example/s'))),
+              equals(IRINode(IRI('http://example/s'))),
             );
             expect(
               firstTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(firstTriple.object, equals(BlankNode('a')));
             expect(secondTriple.subject, equals(BlankNode('a')));
             expect(
               secondTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(
               secondTriple.object,
-              equals(IRITerm(IRI('http://example/o'))),
+              equals(IRINode(IRI('http://example/o'))),
             );
           });
 
@@ -704,21 +704,21 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               firstTriple.subject,
-              equals(IRITerm(IRI('http://example/s'))),
+              equals(IRINode(IRI('http://example/s'))),
             );
             expect(
               firstTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(firstTriple.object, equals(BlankNode('1a')));
             expect(secondTriple.subject, equals(BlankNode('1a')));
             expect(
               secondTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(
               secondTriple.object,
-              equals(IRITerm(IRI('http://example/o'))),
+              equals(IRINode(IRI('http://example/o'))),
             );
           });
 
@@ -733,11 +733,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/s'))),
+              equals(IRINode(IRI('http://example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(parsedTriple.object, equals(Literal('123', XSD.byte)));
           });
@@ -753,11 +753,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example/s'))),
+              equals(IRINode(IRI('http://example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example/p'))),
+              equals(IRINode(IRI('http://example/p'))),
             );
             expect(parsedTriple.object, equals(Literal('123', XSD.string)));
           });
@@ -810,11 +810,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://a.example/s'))),
+              equals(IRINode(IRI('http://a.example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://a.example/p'))),
+              equals(IRINode(IRI('http://a.example/p'))),
             );
             expect(parsedTriple.object, equals(Literal('x', XSD.string)));
           });
@@ -830,11 +830,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://a.example/s'))),
+              equals(IRINode(IRI('http://a.example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://a.example/p'))),
+              equals(IRINode(IRI('http://a.example/p'))),
             );
             expect(
               parsedTriple.object,
@@ -858,11 +858,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://a.example/s'))),
+              equals(IRINode(IRI('http://a.example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://a.example/p'))),
+              equals(IRINode(IRI('http://a.example/p'))),
             );
             expect(
               parsedTriple.object,
@@ -881,11 +881,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://a.example/s'))),
+              equals(IRINode(IRI('http://a.example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://a.example/p'))),
+              equals(IRINode(IRI('http://a.example/p'))),
             );
             expect(
               parsedTriple.object,
@@ -904,11 +904,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://a.example/s'))),
+              equals(IRINode(IRI('http://a.example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://a.example/p'))),
+              equals(IRINode(IRI('http://a.example/p'))),
             );
             expect(parsedTriple.object, equals(Literal('x""y', XSD.string)));
           });
@@ -925,11 +925,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://a.example/s'))),
+              equals(IRINode(IRI('http://a.example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://a.example/p'))),
+              equals(IRINode(IRI('http://a.example/p'))),
             );
             expect(parsedTriple.object, equals(Literal("x''y", XSD.string)));
           });
@@ -945,11 +945,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://a.example/s'))),
+              equals(IRINode(IRI('http://a.example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://a.example/p'))),
+              equals(IRINode(IRI('http://a.example/p'))),
             );
             expect(parsedTriple.object, equals(Literal('\b', XSD.string)));
           });
@@ -967,11 +967,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://a.example/s'))),
+              equals(IRINode(IRI('http://a.example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://a.example/p'))),
+              equals(IRINode(IRI('http://a.example/p'))),
             );
             expect(parsedTriple.object, equals(Literal('\r', XSD.string)));
           });
@@ -989,11 +989,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://a.example/s'))),
+              equals(IRINode(IRI('http://a.example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://a.example/p'))),
+              equals(IRINode(IRI('http://a.example/p'))),
             );
             expect(parsedTriple.object, equals(Literal('\t', XSD.string)));
           });
@@ -1009,11 +1009,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://a.example/s'))),
+              equals(IRINode(IRI('http://a.example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://a.example/p'))),
+              equals(IRINode(IRI('http://a.example/p'))),
             );
             expect(parsedTriple.object, equals(Literal('x"y', XSD.string)));
           });
@@ -1029,11 +1029,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://a.example/s'))),
+              equals(IRINode(IRI('http://a.example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://a.example/p'))),
+              equals(IRINode(IRI('http://a.example/p'))),
             );
             expect(parsedTriple.object, equals(Literal('\f', XSD.string)));
           });
@@ -1049,11 +1049,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://a.example/s'))),
+              equals(IRINode(IRI('http://a.example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://a.example/p'))),
+              equals(IRINode(IRI('http://a.example/p'))),
             );
             expect(parsedTriple.object, equals(Literal('\n', XSD.string)));
           });
@@ -1071,11 +1071,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://a.example/s'))),
+              equals(IRINode(IRI('http://a.example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://a.example/p'))),
+              equals(IRINode(IRI('http://a.example/p'))),
             );
             expect(parsedTriple.object, equals(Literal('\u006F', XSD.string)));
           });
@@ -1093,11 +1093,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://a.example/s'))),
+              equals(IRINode(IRI('http://a.example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://a.example/p'))),
+              equals(IRINode(IRI('http://a.example/p'))),
             );
             expect(parsedTriple.object, equals(Literal('\u006F', XSD.string)));
           });
@@ -1115,11 +1115,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://a.example/s'))),
+              equals(IRINode(IRI('http://a.example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://a.example/p'))),
+              equals(IRINode(IRI('http://a.example/p'))),
             );
             expect(parsedTriple.object, equals(Literal(r'\', XSD.string)));
           });
@@ -1137,11 +1137,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example.org/ns#s'))),
+              equals(IRINode(IRI('http://example.org/ns#s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example.org/ns#p1'))),
+              equals(IRINode(IRI('http://example.org/ns#p1'))),
             );
             expect(parsedTriple.object, equals(Literal(r'test-\', XSD.string)));
           });
@@ -1157,11 +1157,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://a.example/s'))),
+              equals(IRINode(IRI('http://a.example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://a.example/p'))),
+              equals(IRINode(IRI('http://a.example/p'))),
             );
             expect(parsedTriple.object, equals(Literal("x'y", XSD.string)));
           });
@@ -1179,11 +1179,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://a.example/s'))),
+              equals(IRINode(IRI('http://a.example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://a.example/p'))),
+              equals(IRINode(IRI('http://a.example/p'))),
             );
             expect(
               parsedTriple.object,
@@ -1202,11 +1202,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://a.example/s'))),
+              equals(IRINode(IRI('http://a.example/s'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://a.example/p'))),
+              equals(IRINode(IRI('http://a.example/p'))),
             );
             expect(
               parsedTriple.object,
@@ -1225,11 +1225,11 @@ void main() {
             expect(result.namedGraphs.length, equals(0));
             expect(
               parsedTriple.subject,
-              equals(IRITerm(IRI('http://example.org/ex#a'))),
+              equals(IRINode(IRI('http://example.org/ex#a'))),
             );
             expect(
               parsedTriple.predicate,
-              equals(IRITerm(IRI('http://example.org/ex#b'))),
+              equals(IRINode(IRI('http://example.org/ex#b'))),
             );
             expect(
               parsedTriple.object,
@@ -1485,12 +1485,12 @@ void main() {
         final graph = Graph();
         graph.add(
           Triple(
-            IRITerm(IRI('http://example/s')),
-            IRITerm(IRI('http://example/p')),
-            IRITerm(IRI('http://example/o')),
+            IRINode(IRI('http://example/s')),
+            IRINode(IRI('http://example/p')),
+            IRINode(IRI('http://example/o')),
           ),
         );
-        dataset.addNamedGraph(IRITerm(IRI('http://example/g')), graph);
+        dataset.addNamedGraph(IRINode(IRI('http://example/g')), graph);
         final encodedResult = nQuadsCodec.encoder.convert(dataset);
 
         expect(encodedResult, equals(expectedResult));
@@ -1505,11 +1505,11 @@ _:s <http://example/p> <http://example/o> <http://example/g> .
         graph.add(
           Triple(
             BlankNode('s'),
-            IRITerm(IRI('http://example/p')),
-            IRITerm(IRI('http://example/o')),
+            IRINode(IRI('http://example/p')),
+            IRINode(IRI('http://example/o')),
           ),
         );
-        dataset.addNamedGraph(IRITerm(IRI('http://example/g')), graph);
+        dataset.addNamedGraph(IRINode(IRI('http://example/g')), graph);
         final encodedResult = nQuadsCodec.encoder.convert(dataset);
 
         expect(encodedResult, equals(expectedResult));
@@ -1523,12 +1523,12 @@ _:s <http://example/p> <http://example/o> <http://example/g> .
         final graph = Graph();
         graph.add(
           Triple(
-            IRITerm(IRI('http://example/s')),
-            IRITerm(IRI('http://example/p')),
+            IRINode(IRI('http://example/s')),
+            IRINode(IRI('http://example/p')),
             BlankNode('o'),
           ),
         );
-        dataset.addNamedGraph(IRITerm(IRI('http://example/g')), graph);
+        dataset.addNamedGraph(IRINode(IRI('http://example/g')), graph);
         final encodedResult = nQuadsCodec.encoder.convert(dataset);
 
         expect(encodedResult, equals(expectedResult));
@@ -1542,12 +1542,12 @@ _:s <http://example/p> <http://example/o> <http://example/g> .
         final graph = Graph();
         graph.add(
           Triple(
-            IRITerm(IRI('http://example/s')),
-            IRITerm(IRI('http://example/p')),
+            IRINode(IRI('http://example/s')),
+            IRINode(IRI('http://example/p')),
             Literal('o', XSD.string),
           ),
         );
-        dataset.addNamedGraph(IRITerm(IRI('http://example/g')), graph);
+        dataset.addNamedGraph(IRINode(IRI('http://example/g')), graph);
         final encodedResult = nQuadsCodec.encoder.convert(dataset);
 
         expect(encodedResult, equals(expectedResult));
@@ -1561,12 +1561,12 @@ _:s <http://example/p> <http://example/o> <http://example/g> .
         final graph = Graph();
         graph.add(
           Triple(
-            IRITerm(IRI('http://example/s')),
-            IRITerm(IRI('http://example/p')),
+            IRINode(IRI('http://example/s')),
+            IRINode(IRI('http://example/p')),
             Literal('o', RDF.langString, 'en'),
           ),
         );
-        dataset.addNamedGraph(IRITerm(IRI('http://example/g')), graph);
+        dataset.addNamedGraph(IRINode(IRI('http://example/g')), graph);
         final encodedResult = nQuadsCodec.encoder.convert(dataset);
 
         expect(encodedResult, equals(expectedResult));
@@ -1580,9 +1580,9 @@ _:s <http://example/p> <http://example/o> <http://example/g> .
         final graph = Graph();
         graph.add(
           Triple(
-            IRITerm(IRI('http://example/s')),
-            IRITerm(IRI('http://example/p')),
-            IRITerm(IRI('http://example/o')),
+            IRINode(IRI('http://example/s')),
+            IRINode(IRI('http://example/p')),
+            IRINode(IRI('http://example/o')),
           ),
         );
         dataset.addNamedGraph(BlankNode('g'), graph);
@@ -1600,8 +1600,8 @@ _:s <http://example/p> <http://example/o> _:g .
         graph.add(
           Triple(
             BlankNode('s'),
-            IRITerm(IRI('http://example/p')),
-            IRITerm(IRI('http://example/o')),
+            IRINode(IRI('http://example/p')),
+            IRINode(IRI('http://example/o')),
           ),
         );
         dataset.addNamedGraph(BlankNode('g'), graph);
@@ -1618,8 +1618,8 @@ _:s <http://example/p> <http://example/o> _:g .
         final graph = Graph();
         graph.add(
           Triple(
-            IRITerm(IRI('http://example/s')),
-            IRITerm(IRI('http://example/p')),
+            IRINode(IRI('http://example/s')),
+            IRINode(IRI('http://example/p')),
             BlankNode('o'),
           ),
         );
@@ -1637,8 +1637,8 @@ _:s <http://example/p> <http://example/o> _:g .
         final graph = Graph();
         graph.add(
           Triple(
-            IRITerm(IRI('http://example/s')),
-            IRITerm(IRI('http://example/p')),
+            IRINode(IRI('http://example/s')),
+            IRINode(IRI('http://example/p')),
             Literal('o', RDF.langString, 'en'),
           ),
         );
@@ -1657,8 +1657,8 @@ _:s <http://example/p> <http://example/o> _:g .
         final graph = Graph();
         graph.add(
           Triple(
-            IRITerm(IRI('http://example/s')),
-            IRITerm(IRI('http://example/p')),
+            IRINode(IRI('http://example/s')),
+            IRINode(IRI('http://example/p')),
             Literal('o', XSD.string),
           ),
         );

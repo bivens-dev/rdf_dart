@@ -6,7 +6,7 @@ import 'package:rdf_dart/src/model/subject_type.dart';
 /// GraphLabel is null for quads in the default graph.
 typedef Quad = ({
   SubjectTerm subject,
-  IRITerm predicate,
+  IRINode predicate,
   RdfTerm object,
   SubjectTerm? graphLabel,
 });

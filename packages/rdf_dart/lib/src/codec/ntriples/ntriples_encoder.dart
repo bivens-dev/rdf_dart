@@ -60,7 +60,7 @@ class NTriplesEncoder extends Converter<List<Triple>, String> {
   String _formatTerm(RdfTerm term) {
     switch (term.termType) {
       case TermType.iri:
-        return NFormatsSerializerUtils.formatIri((term as IRITerm).value);
+        return NFormatsSerializerUtils.formatIri((term as IRINode).value);
       case TermType.blankNode:
         return NFormatsSerializerUtils.formatBlankNode(term as BlankNode);
       case TermType.literal:

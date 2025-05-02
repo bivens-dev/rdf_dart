@@ -56,7 +56,7 @@
       
 <span class="returntype"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/Iterable-class.html">Iterable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../rdf_dart/RdfTerm-class.html">RdfTerm</a></span>&gt;</span></span>
 <span class="name ">objects</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="objects-param-subject"><span class="type-annotation"><a href="../../rdf_dart/SubjectTerm-class.html">SubjectTerm</a>?</span> <span class="parameter-name">subject</span>, </span></li>
-<li><span class="parameter" id="objects-param-predicate"><span class="type-annotation"><a href="../../rdf_dart/IRITerm-class.html">IRITerm</a>?</span> <span class="parameter-name">predicate</span>, </span></li>
+<li><span class="parameter" id="objects-param-predicate"><span class="type-annotation"><a href="../../rdf_dart/IRINode-class.html">IRINode</a>?</span> <span class="parameter-name">predicate</span>, </span></li>
 </ol>})
 
       
@@ -72,7 +72,7 @@ Null subject or predicate acts as a wildcard.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Iterable&lt;RdfTerm&gt; objects({SubjectTerm? subject, IRITerm? predicate}) sync* {
+  <pre class="language-dart"><code class="language-dart">Iterable&lt;RdfTerm&gt; objects({SubjectTerm? subject, IRINode? predicate}) sync* {
   yield* match(subject, predicate, null).map((t) =&gt; t.object).toSet();
 }</code></pre>
 </section>

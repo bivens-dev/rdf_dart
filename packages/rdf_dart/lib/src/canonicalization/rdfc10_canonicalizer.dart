@@ -218,7 +218,7 @@ final class Rdfc10Canonicalizer extends Canonicalizer {
   String _serializeTermForHashing(RdfTerm term, String relatedBnodeId) {
     // (Implementation remains the same as the previous correct version)
     if (term.isIRI) {
-      return NFormatsSerializerUtils.formatIri((term as IRITerm).value);
+      return NFormatsSerializerUtils.formatIri((term as IRINode).value);
     } else if (term.isLiteral) {
       return NFormatsSerializerUtils.formatLiteral(term as Literal);
     } else if (term.isBlankNode) {
@@ -262,7 +262,7 @@ final class Rdfc10Canonicalizer extends Canonicalizer {
     if (position != 'g') {
       // Spec: append '<', the value of the predicate, and '>'
       inputBuffer.write('<');
-      // quad.predicate is IRITerm, its value is IRI
+      // quad.predicate is IRINode, its value is IRI
       inputBuffer.write(quad.predicate.value.toString());
       inputBuffer.write('>');
     }
@@ -454,7 +454,7 @@ final class Rdfc10Canonicalizer extends Canonicalizer {
     // Helper to get canonical ID or format other terms
     String formatTermCanonical(RdfTerm term) {
       if (term.isIRI) {
-        return NFormatsSerializerUtils.formatIri((term as IRITerm).value);
+        return NFormatsSerializerUtils.formatIri((term as IRINode).value);
       } else if (term.isLiteral) {
         return NFormatsSerializerUtils.formatLiteral(term as Literal);
       } else if (term.isBlankNode) {

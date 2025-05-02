@@ -14,7 +14,7 @@ import 'package:rdf_dart/src/model/term_type.dart';
 /// This class is immutable. Once an IRI object is created, its value cannot
 /// be changed.
 @immutable
-class IRITerm extends RdfTerm implements SubjectTerm {
+class IRINode extends RdfTerm implements SubjectTerm {
   /// The string value of this IRI.
   final IRI value;
 
@@ -38,7 +38,7 @@ class IRITerm extends RdfTerm implements SubjectTerm {
   ///   print(e); // Output: FormatException
   /// }
   /// ```
-  IRITerm(this.value);
+  IRINode(this.value);
 
   @override
   bool get isIRI => true;
@@ -64,6 +64,6 @@ class IRITerm extends RdfTerm implements SubjectTerm {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is IRITerm && value == other.value;
+    return other is IRINode && value == other.value;
   }
 }

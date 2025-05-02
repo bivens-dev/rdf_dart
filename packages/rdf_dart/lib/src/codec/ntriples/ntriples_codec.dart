@@ -15,8 +15,8 @@ import 'package:rdf_dart/src/model/triple.dart';
 /// ```dart
 /// final triples = [
 ///   Triple(
-///     IRITerm(IRI('http://example.org/subject')),
-///     IRITerm(IRI('http://example.org/predicate')),
+///     IRINode(IRI('http://example.org/subject')),
+///     IRINode(IRI('http://example.org/predicate')),
 ///     Literal('object value', XSD.string)
 ///   ),
 ///   // ... more triples

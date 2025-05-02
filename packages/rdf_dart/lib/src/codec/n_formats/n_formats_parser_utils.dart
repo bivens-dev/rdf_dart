@@ -280,10 +280,10 @@ class NFormatsParserUtils {
 
   /// Parses an N-Triples/N-Quads IRIREF at the given [cursor] position.
   /// Assumes the cursor points to the starting '<'.
-  /// Returns a record containing the parsed [IRITerm] and the cursor position
+  /// Returns a record containing the parsed [IRINode] and the cursor position
   /// *after* the closing '>'.
   /// Throws [ParseError] on syntax violations.
-  static ({IRITerm term, int cursor}) parseIri(
+  static ({IRINode term, int cursor}) parseIri(
     String line,
     int cursor, // Cursor starts at '<'
     int lineNumber,
@@ -311,7 +311,7 @@ class NFormatsParserUtils {
         try {
           final iriValue = IRI(iriBuffer.toString());
           return (
-            term: IRITerm(iriValue),
+            term: IRINode(iriValue),
             cursor: currentCursor,
           ); // Return record
         } catch (e) {

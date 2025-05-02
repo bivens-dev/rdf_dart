@@ -102,7 +102,7 @@ An <a href="https://pub.dev/documentation/collection/1.19.1/collection/Unmodifia
 
   &#47;&#47; Process named graph triples (graphLabel = graph name)
   namedGraphs.forEach((graphLabel, graph) {
-    &#47;&#47; Ensure graphLabel is SubjectTerm (IRITerm or BlankNode)
+    &#47;&#47; Ensure graphLabel is SubjectTerm (IRINode or BlankNode)
     &#47;&#47; This check is already done by the Dataset structure.
     for (final triple in graph.triples) {
       final quad = (

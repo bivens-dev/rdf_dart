@@ -25,7 +25,7 @@ class NQuadsEncoder extends Converter<Dataset, String> {
     switch (term.termType) {
       case TermType.iri:
         // Use static method for IRI formatting
-        return NFormatsSerializerUtils.formatIri((term as IRITerm).value);
+        return NFormatsSerializerUtils.formatIri((term as IRINode).value);
       case TermType.blankNode:
         // Use static method for BlankNode formatting
         return NFormatsSerializerUtils.formatBlankNode(term as BlankNode);
@@ -65,9 +65,9 @@ class NQuadsEncoder extends Converter<Dataset, String> {
     // 2. Serialize quads from named graphs (4 terms + dot + newline)
     input.namedGraphs.forEach((graphLabel, graph) {
       // Validate graphLabel type (must be IRI or BlankNode for N-Quads)
-      if (graphLabel is! IRITerm && graphLabel is! BlankNode) {
+      if (graphLabel is! IRINode && graphLabel is! BlankNode) {
         throw ArgumentError(
-          'Invalid graph label type for N-Quads serialization: ${graphLabel.runtimeType}. Must be IRITerm or BlankNode.',
+          'Invalid graph label type for N-Quads serialization: ${graphLabel.runtimeType}. Must be IRINode or BlankNode.',
         );
       }
       final graphLabelStr = _formatTerm(graphLabel);
@@ -114,11 +114,11 @@ class _NQuadsEncoderSink implements ChunkedConversionSink<Dataset> {
     // 2. Serialize quads from the chunk's named graphs
     chunk.namedGraphs.forEach((graphLabel, graph) {
       // Consistent validation as in the convert method
-      if (graphLabel is! IRITerm && graphLabel is! BlankNode) {
+      if (graphLabel is! IRINode && graphLabel is! BlankNode) {
         // Let the error propagate. Applications using chunked conversion
         // should handle potential errors from the stream/sink.
         throw ArgumentError(
-          'Invalid graph label type for N-Quads serialization: ${graphLabel.runtimeType}. Must be IRITerm or BlankNode.',
+          'Invalid graph label type for N-Quads serialization: ${graphLabel.runtimeType}. Must be IRINode or BlankNode.',
         );
       }
       final graphLabelStr = _encoder._formatTerm(graphLabel);

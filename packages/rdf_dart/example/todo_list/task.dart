@@ -2,15 +2,15 @@ import 'package:rdf_dart/rdf_dart.dart';
 import 'repository.dart'; // For Schema constants
 
 class Task {
-  // Use IRITerm for ID
-  final IRITerm id;
+  // Use IRINode for ID
+  final IRINode id;
   final String name;
   final String description;
 
   Task({required this.id, required this.name, required this.description});
 
   // Factory to create Task from Graph data
-  factory Task.fromGraph(Graph graph, IRITerm subject) {
+  factory Task.fromGraph(Graph graph, IRINode subject) {
     // Use graph.object to find the single name literal
     final nameLiteral = graph.object(subject, Schema.name);
     // Use graph.object to find the single description literal
@@ -39,7 +39,7 @@ class Task {
     );
   }
 
-  // Generate triples using the IRITerm ID as the subject
+  // Generate triples using the IRINode ID as the subject
   Set<Triple> toTriples() {
     final triples = <Triple>{};
     triples.addAll({
