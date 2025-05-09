@@ -14,9 +14,8 @@ dependencies:
   crypto: ^3.0.6
   decimal: ^3.2.1
   intl: ^0.20.2
-  iri: 0.1.0
+  iri: 0.1.1
   meta: ^1.16.0
-  # punycode_codec: ^0.1.0
   uuid: ^4.5.1
   xsd: ^0.1.0
   # path: ^1.8.0
