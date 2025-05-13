@@ -42,6 +42,9 @@ class TripleTerm extends RdfTerm {
   @override
   int get hashCode => triple.hashCode;
 
+  @override
+  bool get isGroundTerm => triple.isGroundTriple;
+
   /// Compares this [TripleTerm] to another object for equality.
   ///
   /// Two [TripleTerm] instances are considered equal if their wrapped [triple]
