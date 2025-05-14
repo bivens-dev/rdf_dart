@@ -108,6 +108,12 @@ class DatatypeRegistry {
       (value) => processWhiteSpace(value.toString(), Whitespace.preserve),
     );
     registerDatatype(
+      RDF.dirLangString,
+      String,
+      (lexicalForm) => processWhiteSpace(lexicalForm, Whitespace.preserve),
+      (value) => processWhiteSpace(value.toString(), Whitespace.preserve),
+    );
+    registerDatatype(
       XSD.nonNegativeInteger,
       int,
       nonNegativeInteger.encoder.convert,

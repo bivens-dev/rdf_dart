@@ -331,7 +331,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
-        complexityLimits: ComplexityLimits.medium
+        complexityLimits: ComplexityLimits.medium,
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -351,7 +351,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
-        complexityLimits: ComplexityLimits.medium
+        complexityLimits: ComplexityLimits.medium,
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -372,7 +372,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
-        complexityLimits: ComplexityLimits.medium
+        complexityLimits: ComplexityLimits.medium,
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -395,7 +395,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
-        complexityLimits: ComplexityLimits.medium
+        complexityLimits: ComplexityLimits.medium,
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -421,7 +421,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
-        complexityLimits: ComplexityLimits.medium
+        complexityLimits: ComplexityLimits.medium,
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -447,7 +447,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
-        complexityLimits: ComplexityLimits.medium
+        complexityLimits: ComplexityLimits.medium,
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -473,7 +473,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
-        complexityLimits: ComplexityLimits.medium
+        complexityLimits: ComplexityLimits.medium,
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -499,7 +499,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
-        complexityLimits: ComplexityLimits.medium
+        complexityLimits: ComplexityLimits.medium,
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -525,7 +525,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
-        complexityLimits: ComplexityLimits.medium
+        complexityLimits: ComplexityLimits.medium,
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -774,8 +774,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
-        complexityLimits: ComplexityLimits.low
-        
+        complexityLimits: ComplexityLimits.low,
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -862,7 +861,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
-        complexityLimits: ComplexityLimits.low
+        complexityLimits: ComplexityLimits.low,
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -949,7 +948,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
-        complexityLimits: ComplexityLimits.low
+        complexityLimits: ComplexityLimits.low,
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:
@@ -1282,7 +1281,7 @@ void main() {
       // <urn:ex:s:006> <urn:ex:039> "\u0009\u0020<>\"{}|^`\\" .
       // <urn:ex:s:007> <urn:ex:040> "\U00000000\U00000001\U00000002\U00000003\U00000004\U00000005\U00000006\U00000007\U00000008\U00000009\U0000000a\U0000000b\U0000000c\U0000000d\U0000000e\U0000000f" .
       final quads = await _loadTestFile('test060-in.nq');
-       // Add the custom datatypes to the registry so they can be parsed correctly
+      // Add the custom datatypes to the registry so they can be parsed correctly
       DatatypeRegistry().registerDatatype(
         IRI('urn:ex:ὃ'),
         String,
@@ -1422,161 +1421,179 @@ void main() {
       expect(canonicalDataset, equals(expectedQuads));
     });
 
-    test('test064c: blank node - double circle of 3 (0-1-2, reversed)', () async {
-      // Input File Contents:
-      // _:e0 <http://example.org/vocab#next> _:e2 .
-      // _:e0 <http://example.org/vocab#prev> _:e1 .
-      // _:e1 <http://example.org/vocab#next> _:e0 .
-      // _:e1 <http://example.org/vocab#prev> _:e2 .
-      // _:e2 <http://example.org/vocab#next> _:e1 .
-      // _:e2 <http://example.org/vocab#prev> _:e0 .
-      final quads = await _loadTestFile('test064-in.nq');
-      final inputDataset = nQuadsCodec.decode(quads);
-      final canonicalizer = Canonicalizer.create(
-        CanonicalizationAlgorithm.rdfc10,
-        complexityLimits: ComplexityLimits.medium
-      );
-      final canonicalDataset = canonicalizer.canonicalize(inputDataset);
-      // Expected Output File Contents:
-      // _:c14n0 <http://example.org/vocab#next> _:c14n2 .
-      // _:c14n0 <http://example.org/vocab#prev> _:c14n1 .
-      // _:c14n1 <http://example.org/vocab#next> _:c14n0 .
-      // _:c14n1 <http://example.org/vocab#prev> _:c14n2 .
-      // _:c14n2 <http://example.org/vocab#next> _:c14n1 .
-      // _:c14n2 <http://example.org/vocab#prev> _:c14n0 .
-      final expectedQuads = await _loadTestFile('test064-rdfc10.nq');
-      expect(canonicalDataset, equals(expectedQuads));
-    });
+    test(
+      'test064c: blank node - double circle of 3 (0-1-2, reversed)',
+      () async {
+        // Input File Contents:
+        // _:e0 <http://example.org/vocab#next> _:e2 .
+        // _:e0 <http://example.org/vocab#prev> _:e1 .
+        // _:e1 <http://example.org/vocab#next> _:e0 .
+        // _:e1 <http://example.org/vocab#prev> _:e2 .
+        // _:e2 <http://example.org/vocab#next> _:e1 .
+        // _:e2 <http://example.org/vocab#prev> _:e0 .
+        final quads = await _loadTestFile('test064-in.nq');
+        final inputDataset = nQuadsCodec.decode(quads);
+        final canonicalizer = Canonicalizer.create(
+          CanonicalizationAlgorithm.rdfc10,
+          complexityLimits: ComplexityLimits.medium,
+        );
+        final canonicalDataset = canonicalizer.canonicalize(inputDataset);
+        // Expected Output File Contents:
+        // _:c14n0 <http://example.org/vocab#next> _:c14n2 .
+        // _:c14n0 <http://example.org/vocab#prev> _:c14n1 .
+        // _:c14n1 <http://example.org/vocab#next> _:c14n0 .
+        // _:c14n1 <http://example.org/vocab#prev> _:c14n2 .
+        // _:c14n2 <http://example.org/vocab#next> _:c14n1 .
+        // _:c14n2 <http://example.org/vocab#prev> _:c14n0 .
+        final expectedQuads = await _loadTestFile('test064-rdfc10.nq');
+        expect(canonicalDataset, equals(expectedQuads));
+      },
+    );
 
-    test('test065c: blank node - double circle of 3 (0-2-1, reversed)', () async {
-      // Input File Contents:
-      // _:e0 <http://example.org/vocab#next> _:e2 .
-      // _:e0 <http://example.org/vocab#prev> _:e1 .
-      // _:e2 <http://example.org/vocab#next> _:e1 .
-      // _:e2 <http://example.org/vocab#prev> _:e0 .
-      // _:e1 <http://example.org/vocab#next> _:e0 .
-      // _:e1 <http://example.org/vocab#prev> _:e2 .
-      final quads = await _loadTestFile('test065-in.nq');
-      final inputDataset = nQuadsCodec.decode(quads);
-      final canonicalizer = Canonicalizer.create(
-        CanonicalizationAlgorithm.rdfc10,
-        complexityLimits: ComplexityLimits.medium
-      );
-      final canonicalDataset = canonicalizer.canonicalize(inputDataset);
-      // Expected Output File Contents:
-      // _:c14n0 <http://example.org/vocab#next> _:c14n2 .
-      // _:c14n0 <http://example.org/vocab#prev> _:c14n1 .
-      // _:c14n1 <http://example.org/vocab#next> _:c14n0 .
-      // _:c14n1 <http://example.org/vocab#prev> _:c14n2 .
-      // _:c14n2 <http://example.org/vocab#next> _:c14n1 .
-      // _:c14n2 <http://example.org/vocab#prev> _:c14n0 .
-      final expectedQuads = await _loadTestFile('test065-rdfc10.nq');
-      expect(canonicalDataset, equals(expectedQuads));
-    });
+    test(
+      'test065c: blank node - double circle of 3 (0-2-1, reversed)',
+      () async {
+        // Input File Contents:
+        // _:e0 <http://example.org/vocab#next> _:e2 .
+        // _:e0 <http://example.org/vocab#prev> _:e1 .
+        // _:e2 <http://example.org/vocab#next> _:e1 .
+        // _:e2 <http://example.org/vocab#prev> _:e0 .
+        // _:e1 <http://example.org/vocab#next> _:e0 .
+        // _:e1 <http://example.org/vocab#prev> _:e2 .
+        final quads = await _loadTestFile('test065-in.nq');
+        final inputDataset = nQuadsCodec.decode(quads);
+        final canonicalizer = Canonicalizer.create(
+          CanonicalizationAlgorithm.rdfc10,
+          complexityLimits: ComplexityLimits.medium,
+        );
+        final canonicalDataset = canonicalizer.canonicalize(inputDataset);
+        // Expected Output File Contents:
+        // _:c14n0 <http://example.org/vocab#next> _:c14n2 .
+        // _:c14n0 <http://example.org/vocab#prev> _:c14n1 .
+        // _:c14n1 <http://example.org/vocab#next> _:c14n0 .
+        // _:c14n1 <http://example.org/vocab#prev> _:c14n2 .
+        // _:c14n2 <http://example.org/vocab#next> _:c14n1 .
+        // _:c14n2 <http://example.org/vocab#prev> _:c14n0 .
+        final expectedQuads = await _loadTestFile('test065-rdfc10.nq');
+        expect(canonicalDataset, equals(expectedQuads));
+      },
+    );
 
-    test('test066c: blank node - double circle of 3 (1-0-2, reversed)', () async {
-      // Input File Contents:
-      // _:e1 <http://example.org/vocab#next> _:e0 .
-      // _:e1 <http://example.org/vocab#prev> _:e2 .
-      // _:e0 <http://example.org/vocab#next> _:e2 .
-      // _:e0 <http://example.org/vocab#prev> _:e1 .
-      // _:e2 <http://example.org/vocab#next> _:e1 .
-      // _:e2 <http://example.org/vocab#prev> _:e0 .
-      final quads = await _loadTestFile('test066-in.nq');
-      final inputDataset = nQuadsCodec.decode(quads);
-      final canonicalizer = Canonicalizer.create(
-        CanonicalizationAlgorithm.rdfc10,
-        complexityLimits: ComplexityLimits.medium
-      );
-      final canonicalDataset = canonicalizer.canonicalize(inputDataset);
-      // Expected Output File Contents:
-      // _:c14n0 <http://example.org/vocab#next> _:c14n2 .
-      // _:c14n0 <http://example.org/vocab#prev> _:c14n1 .
-      // _:c14n1 <http://example.org/vocab#next> _:c14n0 .
-      // _:c14n1 <http://example.org/vocab#prev> _:c14n2 .
-      // _:c14n2 <http://example.org/vocab#next> _:c14n1 .
-      // _:c14n2 <http://example.org/vocab#prev> _:c14n0 .
-      final expectedQuads = await _loadTestFile('test066-rdfc10.nq');
-      expect(canonicalDataset, equals(expectedQuads));
-    });
+    test(
+      'test066c: blank node - double circle of 3 (1-0-2, reversed)',
+      () async {
+        // Input File Contents:
+        // _:e1 <http://example.org/vocab#next> _:e0 .
+        // _:e1 <http://example.org/vocab#prev> _:e2 .
+        // _:e0 <http://example.org/vocab#next> _:e2 .
+        // _:e0 <http://example.org/vocab#prev> _:e1 .
+        // _:e2 <http://example.org/vocab#next> _:e1 .
+        // _:e2 <http://example.org/vocab#prev> _:e0 .
+        final quads = await _loadTestFile('test066-in.nq');
+        final inputDataset = nQuadsCodec.decode(quads);
+        final canonicalizer = Canonicalizer.create(
+          CanonicalizationAlgorithm.rdfc10,
+          complexityLimits: ComplexityLimits.medium,
+        );
+        final canonicalDataset = canonicalizer.canonicalize(inputDataset);
+        // Expected Output File Contents:
+        // _:c14n0 <http://example.org/vocab#next> _:c14n2 .
+        // _:c14n0 <http://example.org/vocab#prev> _:c14n1 .
+        // _:c14n1 <http://example.org/vocab#next> _:c14n0 .
+        // _:c14n1 <http://example.org/vocab#prev> _:c14n2 .
+        // _:c14n2 <http://example.org/vocab#next> _:c14n1 .
+        // _:c14n2 <http://example.org/vocab#prev> _:c14n0 .
+        final expectedQuads = await _loadTestFile('test066-rdfc10.nq');
+        expect(canonicalDataset, equals(expectedQuads));
+      },
+    );
 
-    test('test067c: blank node - double circle of 3 (1-2-0, reversed)', () async {
-      // Input File Contents:
-      // _:e1 <http://example.org/vocab#next> _:e0 .
-      // _:e1 <http://example.org/vocab#prev> _:e2 .
-      // _:e2 <http://example.org/vocab#next> _:e1 .
-      // _:e2 <http://example.org/vocab#prev> _:e0 .
-      // _:e0 <http://example.org/vocab#next> _:e2 .
-      // _:e0 <http://example.org/vocab#prev> _:e1 .
-      final quads = await _loadTestFile('test067-in.nq');
-      final inputDataset = nQuadsCodec.decode(quads);
-      final canonicalizer = Canonicalizer.create(
-        CanonicalizationAlgorithm.rdfc10,
-        complexityLimits: ComplexityLimits.medium
-      );
-      final canonicalDataset = canonicalizer.canonicalize(inputDataset);
-      // Expected Output File Contents:
-      // _:c14n0 <http://example.org/vocab#next> _:c14n2 .
-      // _:c14n0 <http://example.org/vocab#prev> _:c14n1 .
-      // _:c14n1 <http://example.org/vocab#next> _:c14n0 .
-      // _:c14n1 <http://example.org/vocab#prev> _:c14n2 .
-      // _:c14n2 <http://example.org/vocab#next> _:c14n1 .
-      // _:c14n2 <http://example.org/vocab#prev> _:c14n0 .
-      final expectedQuads = await _loadTestFile('test067-rdfc10.nq');
-      expect(canonicalDataset, equals(expectedQuads));
-    });
+    test(
+      'test067c: blank node - double circle of 3 (1-2-0, reversed)',
+      () async {
+        // Input File Contents:
+        // _:e1 <http://example.org/vocab#next> _:e0 .
+        // _:e1 <http://example.org/vocab#prev> _:e2 .
+        // _:e2 <http://example.org/vocab#next> _:e1 .
+        // _:e2 <http://example.org/vocab#prev> _:e0 .
+        // _:e0 <http://example.org/vocab#next> _:e2 .
+        // _:e0 <http://example.org/vocab#prev> _:e1 .
+        final quads = await _loadTestFile('test067-in.nq');
+        final inputDataset = nQuadsCodec.decode(quads);
+        final canonicalizer = Canonicalizer.create(
+          CanonicalizationAlgorithm.rdfc10,
+          complexityLimits: ComplexityLimits.medium,
+        );
+        final canonicalDataset = canonicalizer.canonicalize(inputDataset);
+        // Expected Output File Contents:
+        // _:c14n0 <http://example.org/vocab#next> _:c14n2 .
+        // _:c14n0 <http://example.org/vocab#prev> _:c14n1 .
+        // _:c14n1 <http://example.org/vocab#next> _:c14n0 .
+        // _:c14n1 <http://example.org/vocab#prev> _:c14n2 .
+        // _:c14n2 <http://example.org/vocab#next> _:c14n1 .
+        // _:c14n2 <http://example.org/vocab#prev> _:c14n0 .
+        final expectedQuads = await _loadTestFile('test067-rdfc10.nq');
+        expect(canonicalDataset, equals(expectedQuads));
+      },
+    );
 
-    test('test068c: blank node - double circle of 3 (2-1-0, reversed)', () async {
-      // Input File Contents:
-      // _:e2 <http://example.org/vocab#next> _:e1 .
-      // _:e2 <http://example.org/vocab#prev> _:e0 .
-      // _:e1 <http://example.org/vocab#next> _:e0 .
-      // _:e1 <http://example.org/vocab#prev> _:e2 .
-      // _:e0 <http://example.org/vocab#next> _:e2 .
-      // _:e0 <http://example.org/vocab#prev> _:e1 .
-      final quads = await _loadTestFile('test068-in.nq');
-      final inputDataset = nQuadsCodec.decode(quads);
-      final canonicalizer = Canonicalizer.create(
-        CanonicalizationAlgorithm.rdfc10,
-        complexityLimits: ComplexityLimits.medium
-      );
-      final canonicalDataset = canonicalizer.canonicalize(inputDataset);
-      // Expected Output File Contents:
-      // _:c14n0 <http://example.org/vocab#next> _:c14n2 .
-      // _:c14n0 <http://example.org/vocab#prev> _:c14n1 .
-      // _:c14n1 <http://example.org/vocab#next> _:c14n0 .
-      // _:c14n1 <http://example.org/vocab#prev> _:c14n2 .
-      // _:c14n2 <http://example.org/vocab#next> _:c14n1 .
-      // _:c14n2 <http://example.org/vocab#prev> _:c14n0 .
-      final expectedQuads = await _loadTestFile('test068-rdfc10.nq');
-      expect(canonicalDataset, equals(expectedQuads));
-    });
+    test(
+      'test068c: blank node - double circle of 3 (2-1-0, reversed)',
+      () async {
+        // Input File Contents:
+        // _:e2 <http://example.org/vocab#next> _:e1 .
+        // _:e2 <http://example.org/vocab#prev> _:e0 .
+        // _:e1 <http://example.org/vocab#next> _:e0 .
+        // _:e1 <http://example.org/vocab#prev> _:e2 .
+        // _:e0 <http://example.org/vocab#next> _:e2 .
+        // _:e0 <http://example.org/vocab#prev> _:e1 .
+        final quads = await _loadTestFile('test068-in.nq');
+        final inputDataset = nQuadsCodec.decode(quads);
+        final canonicalizer = Canonicalizer.create(
+          CanonicalizationAlgorithm.rdfc10,
+          complexityLimits: ComplexityLimits.medium,
+        );
+        final canonicalDataset = canonicalizer.canonicalize(inputDataset);
+        // Expected Output File Contents:
+        // _:c14n0 <http://example.org/vocab#next> _:c14n2 .
+        // _:c14n0 <http://example.org/vocab#prev> _:c14n1 .
+        // _:c14n1 <http://example.org/vocab#next> _:c14n0 .
+        // _:c14n1 <http://example.org/vocab#prev> _:c14n2 .
+        // _:c14n2 <http://example.org/vocab#next> _:c14n1 .
+        // _:c14n2 <http://example.org/vocab#prev> _:c14n0 .
+        final expectedQuads = await _loadTestFile('test068-rdfc10.nq');
+        expect(canonicalDataset, equals(expectedQuads));
+      },
+    );
 
-    test('test069c: blank node - double circle of 3 (2-0-1, reversed)', () async {
-      // Input File Contents:
-      // _:e2 <http://example.org/vocab#next> _:e1 .
-      // _:e2 <http://example.org/vocab#prev> _:e0 .
-      // _:e0 <http://example.org/vocab#next> _:e2 .
-      // _:e0 <http://example.org/vocab#prev> _:e1 .
-      // _:e1 <http://example.org/vocab#next> _:e0 .
-      // _:e1 <http://example.org/vocab#prev> _:e2 .
-      final quads = await _loadTestFile('test069-in.nq');
-      final inputDataset = nQuadsCodec.decode(quads);
-      final canonicalizer = Canonicalizer.create(
-        CanonicalizationAlgorithm.rdfc10,
-        complexityLimits: ComplexityLimits.medium
-      );
-      final canonicalDataset = canonicalizer.canonicalize(inputDataset);
-      // Expected Output File Contents:
-      // _:c14n0 <http://example.org/vocab#next> _:c14n2 .
-      // _:c14n0 <http://example.org/vocab#prev> _:c14n1 .
-      // _:c14n1 <http://example.org/vocab#next> _:c14n0 .
-      // _:c14n1 <http://example.org/vocab#prev> _:c14n2 .
-      // _:c14n2 <http://example.org/vocab#next> _:c14n1 .
-      // _:c14n2 <http://example.org/vocab#prev> _:c14n0 .
-      final expectedQuads = await _loadTestFile('test069-rdfc10.nq');
-      expect(canonicalDataset, equals(expectedQuads));
-    });
+    test(
+      'test069c: blank node - double circle of 3 (2-0-1, reversed)',
+      () async {
+        // Input File Contents:
+        // _:e2 <http://example.org/vocab#next> _:e1 .
+        // _:e2 <http://example.org/vocab#prev> _:e0 .
+        // _:e0 <http://example.org/vocab#next> _:e2 .
+        // _:e0 <http://example.org/vocab#prev> _:e1 .
+        // _:e1 <http://example.org/vocab#next> _:e0 .
+        // _:e1 <http://example.org/vocab#prev> _:e2 .
+        final quads = await _loadTestFile('test069-in.nq');
+        final inputDataset = nQuadsCodec.decode(quads);
+        final canonicalizer = Canonicalizer.create(
+          CanonicalizationAlgorithm.rdfc10,
+          complexityLimits: ComplexityLimits.medium,
+        );
+        final canonicalDataset = canonicalizer.canonicalize(inputDataset);
+        // Expected Output File Contents:
+        // _:c14n0 <http://example.org/vocab#next> _:c14n2 .
+        // _:c14n0 <http://example.org/vocab#prev> _:c14n1 .
+        // _:c14n1 <http://example.org/vocab#next> _:c14n0 .
+        // _:c14n1 <http://example.org/vocab#prev> _:c14n2 .
+        // _:c14n2 <http://example.org/vocab#next> _:c14n1 .
+        // _:c14n2 <http://example.org/vocab#prev> _:c14n0 .
+        final expectedQuads = await _loadTestFile('test069-rdfc10.nq');
+        expect(canonicalDataset, equals(expectedQuads));
+      },
+    );
 
     // Isomorphic graphs in default and IRI named graph
     test('test070c: dataset - isomorphic default and iri named', () async {
@@ -1689,7 +1706,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
-        complexityLimits: ComplexityLimits.low
+        complexityLimits: ComplexityLimits.low,
       );
       expect(() => canonicalizer.canonicalize(inputDataset), throwsException);
     });
@@ -1704,7 +1721,7 @@ void main() {
       final inputDataset = nQuadsCodec.decode(quads);
       final canonicalizer = Canonicalizer.create(
         CanonicalizationAlgorithm.rdfc10,
-        hashAlgorithm: sha384
+        hashAlgorithm: sha384,
       );
       final canonicalDataset = canonicalizer.canonicalize(inputDataset);
       // Expected Output File Contents:

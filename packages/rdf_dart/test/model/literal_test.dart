@@ -1283,31 +1283,34 @@ void main() {
       final hebrewLex = 'שָׁלוֹם'; // Example RTL text
       final englishLex = 'Hello';
 
-      test('Successful creation with langString, language, and direction', () {
-        final ltrLiteral = Literal(
-          englishLex,
-          RDF.langString,
-          'en',
-          TextDirection.ltr,
-        );
-        expect(ltrLiteral.lexicalForm, englishLex);
-        expect(ltrLiteral.datatype, RDF.langString);
-        expect(ltrLiteral.language, Locale.parse('en'));
-        expect(ltrLiteral.baseDirection, TextDirection.ltr);
-        expect(ltrLiteral.value, englishLex);
+      test(
+        'Successful creation with dirLangString, language, and direction',
+        () {
+          final ltrLiteral = Literal(
+            englishLex,
+            RDF.dirLangString,
+            'en',
+            TextDirection.ltr,
+          );
+          expect(ltrLiteral.lexicalForm, englishLex);
+          expect(ltrLiteral.datatype, RDF.dirLangString);
+          expect(ltrLiteral.language, Locale.parse('en'));
+          expect(ltrLiteral.baseDirection, TextDirection.ltr);
+          expect(ltrLiteral.value, englishLex);
 
-        final rtlLiteral = Literal(
-          hebrewLex,
-          RDF.langString,
-          'he',
-          TextDirection.rtl,
-        );
-        expect(rtlLiteral.lexicalForm, hebrewLex);
-        expect(rtlLiteral.datatype, RDF.langString);
-        expect(rtlLiteral.language, Locale.parse('he'));
-        expect(rtlLiteral.baseDirection, TextDirection.rtl);
-        expect(rtlLiteral.value, hebrewLex);
-      });
+          final rtlLiteral = Literal(
+            hebrewLex,
+            RDF.dirLangString,
+            'he',
+            TextDirection.rtl,
+          );
+          expect(rtlLiteral.lexicalForm, hebrewLex);
+          expect(rtlLiteral.datatype, RDF.dirLangString);
+          expect(rtlLiteral.language, Locale.parse('he'));
+          expect(rtlLiteral.baseDirection, TextDirection.rtl);
+          expect(rtlLiteral.value, hebrewLex);
+        },
+      );
 
       test(
         'Successful creation with langString and language (no direction)',
@@ -1328,7 +1331,8 @@ void main() {
           );
           // Also implicitly tested when datatype is langString but language is null
           expect(
-            () => Literal(englishLex, RDF.langString, null, TextDirection.ltr),
+            () =>
+                Literal(englishLex, RDF.dirLangString, null, TextDirection.ltr),
             throwsA(
               isA<LiteralConstraintException>().having(
                 (e) => e.message,
@@ -1352,29 +1356,60 @@ void main() {
         },
       );
 
+      test(
+        'Throws LiteralConstraintException for rdf:dirLangString without a language',
+        () {
+          expect(
+            () =>
+                Literal(englishLex, RDF.dirLangString, null, TextDirection.ltr),
+            throwsA(isA<LiteralConstraintException>()),
+          );
+        },
+      );
+
+      test(
+        'Throws LiteralConstraintException for rdf:langString without a language',
+        () {
+          expect(
+            () => Literal(englishLex, RDF.langString),
+            throwsA(isA<LiteralConstraintException>()),
+          );
+        },
+      );
+
+      test(
+        'Throws LiteralConstraintException for rdf:langString with a direction',
+        () {
+          expect(
+            () => Literal(englishLex, RDF.langString, 'en', TextDirection.ltr),
+            throwsA(isA<LiteralConstraintException>()),
+          );
+        },
+      );
+
       group('Equality and HashCode', () {
         final baseEn = Literal(englishLex, RDF.langString, 'en');
         final ltrEn = Literal(
           englishLex,
-          RDF.langString,
+          RDF.dirLangString,
           'en',
           TextDirection.ltr,
         );
         final rtlEn = Literal(
           englishLex,
-          RDF.langString,
+          RDF.dirLangString,
           'en',
           TextDirection.rtl,
         );
         final ltrEnCopy = Literal(
           englishLex,
-          RDF.langString,
+          RDF.dirLangString,
           'en',
           TextDirection.ltr,
         );
         final ltrHe = Literal(
           hebrewLex,
-          RDF.langString,
+          RDF.dirLangString,
           'he',
           TextDirection.ltr,
         );

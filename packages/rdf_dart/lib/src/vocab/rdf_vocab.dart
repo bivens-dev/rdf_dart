@@ -1,4 +1,3 @@
-
 import 'package:iri/iri.dart';
 
 /// Provides constants for the RDF vocabulary namespace (rdf:).
@@ -78,6 +77,9 @@ final class RDF {
 
   /// `rdf:langString` - The datatype of language-tagged string literals.
   static final IRI langString = IRI('${namespace}langString');
+
+  /// `rdf:dirLangString` - The datatype of language-tagged string literals with directionality.
+  static final IRI dirLangString = IRI('${namespace}dirLangString');
 
   /// `rdf:HTML` - The datatype for HTML content as a literal.
   static final IRI html = IRI('${namespace}HTML');

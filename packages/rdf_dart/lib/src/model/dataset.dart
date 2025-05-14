@@ -119,7 +119,7 @@ class Dataset {
         quads.add(quad);
       }
     });
-  
+
     return UnmodifiableSetView(quads);
   }
 }

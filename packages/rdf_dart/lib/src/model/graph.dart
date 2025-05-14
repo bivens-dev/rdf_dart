@@ -1,4 +1,3 @@
-
 import 'package:rdf_dart/src/model/blank_node.dart';
 import 'package:rdf_dart/src/model/iri_node.dart';
 import 'package:rdf_dart/src/model/rdf_term.dart';
@@ -25,6 +24,11 @@ class Graph {
   ///
   /// This getter provides read-only access to the triples in the graph.
   Set<Triple> get triples => Set.unmodifiable(_triples);
+
+  /// Return `true` if this graph is a ground graph, `false` otherwise.
+  ///
+  /// A ground RDF graph is an RDF graph in which no blank nodes appear.
+  bool get isGroundGraph => triples.every((t) => t.isGroundTriple);
 
   /// Takes a RDF Full graph and converts it to an RDF Classic graph
   static Graph classicize(Graph fullGraph) {

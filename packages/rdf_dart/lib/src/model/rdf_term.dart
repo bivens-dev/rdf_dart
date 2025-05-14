@@ -35,6 +35,11 @@ abstract class RdfTerm {
   /// A triple term is a term that represents a triple.
   bool get isTripleTerm;
 
+  /// Returns `true` if this term is a ground term, `false` otherwise.
+  ///
+  /// A ground RDF term is an RDF term in which no blank nodes appear.
+  bool get isGroundTerm => !isBlankNode;
+
   /// Returns the [TermType] of this term.
   ///
   /// The [TermType] enum indicates whether the term is an [IRINode], a

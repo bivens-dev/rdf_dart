@@ -31,6 +31,32 @@ void main() {
       });
     });
 
+    group('Ground Graphs', () {
+      test('Graphs with Unground Triples are Not Grounded', () {
+        final ungroundTriple = Triple(
+          BlankNode('subject'),
+          IRINode(IRI('http://example.com/predicate')),
+          IRINode(IRI('http://example.com/object')),
+        );
+        graph.add(ungroundTriple);
+        expect(graph.triples, contains(ungroundTriple));
+        expect(graph.isGroundGraph, isFalse);
+        expect(ungroundTriple.isGroundTriple, isFalse);
+      });
+
+      test('Graphs with Grounded Triples are Grounded', () {
+        final groundedTriple = Triple(
+          IRINode(IRI('http://example.com/subject')),
+          IRINode(IRI('http://example.com/predicate')),
+          IRINode(IRI('http://example.com/object')),
+        );
+        graph.add(groundedTriple);
+        expect(graph.triples, contains(groundedTriple));
+        expect(graph.isGroundGraph, isTrue);
+        expect(groundedTriple.isGroundTriple, isTrue);
+      });
+    });
+
     group('addAll', () {
       test('adds multiple triples to the graph', () {
         final triple2 = Triple(

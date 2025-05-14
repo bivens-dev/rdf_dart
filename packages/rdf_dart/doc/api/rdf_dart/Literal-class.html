@@ -58,7 +58,7 @@
 <p>A literal consists of:</p>
 <ul>
 <li>A <a href="../rdf_dart/Literal/lexicalForm.html">lexicalForm</a>: The string representation.</li>
-<li>A <a href="../rdf_dart/Literal/datatype.html">datatype</a>: An <code>IRI</code> specifying the data type (e.g., <code>xsd:string</code>, <code>xsd:integer</code>).</li>
+<li>A <a href="../rdf_dart/Literal/datatype.html">datatype</a>: An <a href="https://pub.dev/documentation/iri/0.1.1/iri/IRI-class.html">IRI</a> specifying the data type (e.g., <code>xsd:string</code>, <code>xsd:integer</code>).</li>
 <li>Optionally, a <a href="../rdf_dart/Literal/language.html">language</a> tag: A <a href="https://pub.dev/documentation/intl/0.20.2/locale/Locale-class.html">Locale</a> for language-tagged strings (datatype <code>rdf:langString</code>).</li>
 <li>Optionally, a <a href="../rdf_dart/Literal/baseDirection.html">baseDirection</a>: A <a href="../rdf_dart/TextDirection.html">TextDirection</a> (<code>ltr</code> or <code>rtl</code>) for
 language-tagged strings, indicating the base text direction (RDF 1.2 feature).</li>
@@ -123,7 +123,7 @@ final arabicLiteral = Literal(
     <h2>Constructors</h2>
     <dl class="constructor-summary-list">
         <dt id="Literal.new" class="callable">
-          <span class="name"><a href="../rdf_dart/Literal/Literal.html">Literal.new</a></span><span class="signature">(<span class="parameter" id="-param-lexicalForm"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a></span> <span class="parameter-name">lexicalForm</span>, </span><span class="parameter" id="-param-datatype"><span class="type-annotation">IRI</span> <span class="parameter-name">datatype</span>, [</span><span class="parameter" id="-param-languageTag"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">languageTag</span>, </span><span class="parameter" id="-param-baseDirection"><span class="type-annotation"><a href="../rdf_dart/TextDirection.html">TextDirection</a>?</span> <span class="parameter-name">baseDirection</span></span>])</span>
+          <span class="name"><a href="../rdf_dart/Literal/Literal.html">Literal.new</a></span><span class="signature">(<span class="parameter" id="-param-lexicalForm"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a></span> <span class="parameter-name">lexicalForm</span>, </span><span class="parameter" id="-param-datatype"><span class="type-annotation"><a href="https://pub.dev/documentation/iri/0.1.1/iri/IRI-class.html">IRI</a></span> <span class="parameter-name">datatype</span>, [</span><span class="parameter" id="-param-languageTag"><span class="type-annotation"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">languageTag</span>, </span><span class="parameter" id="-param-baseDirection"><span class="type-annotation"><a href="../rdf_dart/TextDirection.html">TextDirection</a>?</span> <span class="parameter-name">baseDirection</span></span>])</span>
         </dt>
         <dd>
           Creates a new Literal.
@@ -150,7 +150,7 @@ final arabicLiteral = Literal(
 
         <dt id="datatype" class="property">
   <span class="name"><a href="../rdf_dart/Literal/datatype.html">datatype</a></span>
-  <span class="signature">&#8594; IRI</span>
+  <span class="signature">&#8594; <a href="https://pub.dev/documentation/iri/0.1.1/iri/IRI-class.html">IRI</a></span>
   
 
 </dt>
@@ -184,6 +184,18 @@ should be case-insensitive appropriate for language tags.
 <dd>
   Returns <code>true</code> if this term is a blank node, <code>false</code> otherwise.
   <div class="features"><span class="feature">no setter</span><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="isGroundTerm" class="property inherited">
+  <span class="name"><a href="../rdf_dart/RdfTerm/isGroundTerm.html">isGroundTerm</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  Returns <code>true</code> if this term is a ground term, <code>false</code> otherwise.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
 
 </dd>
 

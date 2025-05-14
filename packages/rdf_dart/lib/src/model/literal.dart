@@ -2,7 +2,8 @@ import 'package:intl/locale.dart';
 import 'package:iri/iri.dart';
 import 'package:meta/meta.dart';
 import 'package:rdf_dart/src/data_types.dart';
-import 'package:rdf_dart/src/exceptions/datatype_not_found_exception.dart' show DatatypeNotFoundException;
+import 'package:rdf_dart/src/exceptions/datatype_not_found_exception.dart'
+    show DatatypeNotFoundException;
 import 'package:rdf_dart/src/exceptions/invalid_language_tag_exception.dart';
 import 'package:rdf_dart/src/exceptions/invalid_lexical_form_exception.dart';
 import 'package:rdf_dart/src/exceptions/literal_constraint_exception.dart';
@@ -167,38 +168,41 @@ class Literal extends RdfTerm {
     TextDirection? direction,
   ) {
     if (datatype == RDF.langString) {
-      // Datatype is rdf:langString
+      // Rule: For rdf:langString, language is MUST, direction is MUST NOT.
       if (language == null) {
         throw LiteralConstraintException(
           'Language tag MUST be present for datatype rdf:langString.',
         );
       }
-      // Direction is allowed only with langString, but not required
+      if (direction != null) {
+        throw LiteralConstraintException(
+          'Direction MUST NOT be present for datatype rdf:langString.',
+        );
+      }
+    } else if (datatype == RDF.dirLangString) {
+      // Rule: For rdf:dirLangString, language is MUST, direction is MUST.
+      if (language == null) {
+        throw LiteralConstraintException(
+          'Language tag MUST be present for datatype rdf:dirLangString.',
+        );
+      }
+      if (direction == null) {
+        throw LiteralConstraintException(
+          'Direction MUST be present for datatype rdf:dirLangString.',
+        );
+      }
     } else {
-      // Datatype is NOT rdf:langString
+      // Rule: For any OTHER datatype, language is MUST NOT, direction is MUST NOT.
       if (language != null) {
         throw LiteralConstraintException(
-          //
-          'Language tag MUST NOT be present if datatype is not rdf:langString.',
+          'Language tag MUST NOT be present if datatype is not rdf:langString or rdf:dirLangString (datatype is: $datatype).',
         );
       }
       if (direction != null) {
-        // This also covers the case where language is null but direction is not
         throw LiteralConstraintException(
-          //
-          'Direction MUST NOT be present if datatype is not rdf:langString.',
+          'Direction MUST NOT be present if datatype is not rdf:langString or rdf:dirLangString (datatype is: $datatype).',
         );
       }
-    }
-
-    // Additional constraint: Direction requires Language
-    if (direction != null && language == null) {
-      // This situation should ideally be caught by the logic above,
-      // but an explicit check adds clarity and robustness.
-      throw LiteralConstraintException(
-        //
-        'Direction MUST NOT be present if the language tag is absent.',
-      );
     }
   }
 
