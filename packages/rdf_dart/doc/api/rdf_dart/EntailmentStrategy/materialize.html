@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the isGroundTriple property from the Triple class, for the Dart programming language.">
-  <title>isGroundTriple property - Triple class - rdf_dart library - Dart API</title>
+  <meta name="description" content="API docs for the materialize method from the EntailmentStrategy class, for the Dart programming language.">
+  <title>materialize method - EntailmentStrategy class - rdf_dart library - Dart API</title>
 
 
   
@@ -26,10 +26,10 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">rdf_dart</a></li>
     <li><a href="../../rdf_dart/">rdf_dart.dart</a></li>
-    <li><a href="../../rdf_dart/Triple-class.html">Triple</a></li>
-    <li class="self-crumb">isGroundTriple property</li>
+    <li><a href="../../rdf_dart/EntailmentStrategy-class.html">EntailmentStrategy</a></li>
+    <li class="self-crumb">materialize abstract method</li>
   </ol>
-  <div class="self-name">isGroundTriple</div>
+  <div class="self-name">materialize</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -46,47 +46,45 @@
 <div
     id="dartdoc-main-content"
     class="main-content"
-    data-above-sidebar="rdf_dart&#47;Triple-class-sidebar.html"
+    data-above-sidebar="rdf_dart&#47;EntailmentStrategy-class-sidebar.html"
     data-below-sidebar="">
     <div>
-<h1><span class="kind-property">isGroundTriple</span> property 
+<h1><span class="kind-method">materialize</span> abstract method 
 </h1></div>
 
-    
-
-    
-        
-  <section id="getter">
     <section class="multi-line-signature">
       
-      <span class="returntype"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/bool-class.html">bool</a></span>
-      get
-      <span class="name ">isGroundTriple</span>
+<span class="returntype"><a href="../../rdf_dart/Graph-class.html">Graph</a></span>
+<span class="name ">materialize</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="materialize-param-graph1"><span class="type-annotation"><a href="../../rdf_dart/Graph-class.html">Graph</a></span> <span class="parameter-name">graph1</span>, {</span></li>
+<li><span class="parameter" id="materialize-param-options"><span class="type-annotation"><a href="../../rdf_dart/EntailmentOptions-class.html">EntailmentOptions</a>?</span> <span class="parameter-name">options</span>, </span></li>
+</ol>})
+
       
 
     </section>
     
 <section class="desc markdown">
-  <p>Returns <code>true</code> if this triple is a ground triple, <code>false</code> otherwise.</p>
-<p>A ground RDF triple is an RDF triple in which no blank nodes appear.</p>
+  <p>Returns a new graph containing <code>graph1</code> plus all triples entailed from <code>graph1</code>
+under this specific entailment regime.
+This process is also known as "forward chaining" or "saturation".</p>
+<ul>
+<li><code>graph1</code>: The RDF graph to materialize.</li>
+<li><code>options</code>: Optional <a href="../../rdf_dart/EntailmentOptions-class.html">EntailmentOptions</a> to customize the materialization process.</li>
+</ul>
+<p>Returns a new <a href="../../rdf_dart/Graph-class.html">Graph</a> instance with the entailed triples.</p>
 </section>
+
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">bool get isGroundTriple {
-  return subject.isGroundTerm &amp;&amp;
-      predicate.isGroundTerm &amp;&amp;
-      object.isGroundTerm;
-}</code></pre>
+  <pre class="language-dart"><code class="language-dart">Graph materialize(Graph graph1, {EntailmentOptions? options});</code></pre>
 </section>
 
-  </section>
 
-
-</div> <!-- /.main-content -->
-<div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
-  <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
 <header id="header-search-sidebar" class="hidden-l">
   <form class="search-sidebar" role="search">
     <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
@@ -95,14 +93,14 @@
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">rdf_dart</a></li>
     <li><a href="../../rdf_dart/">rdf_dart</a></li>
-    <li><a href="../../rdf_dart/Triple-class.html">Triple</a></li>
-    <li class="self-crumb">isGroundTriple property</li>
+    <li><a href="../../rdf_dart/EntailmentStrategy-class.html">EntailmentStrategy</a></li>
+    <li class="self-crumb">materialize abstract method</li>
 </ol>
 
-  <h5>Triple class</h5>
-  <div id="dartdoc-sidebar-left-content"></div>
-</div><!--/.sidebar-offcanvas-->
-<div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+    <h5>EntailmentStrategy class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
 </div><!--/.sidebar-offcanvas-->
 </main>
 <footer>
