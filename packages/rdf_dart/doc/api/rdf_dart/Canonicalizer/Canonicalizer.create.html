@@ -80,17 +80,22 @@ Defaults to <code>ComplexityLimits.high</code>.</li>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">factory Canonicalizer.create(CanonicalizationAlgorithm algorithm, {
+  <pre class="language-dart"><code class="language-dart">factory Canonicalizer.create(
+  CanonicalizationAlgorithm algorithm, {
   Hash hashAlgorithm = sha256,
-  ComplexityLimits complexityLimits = ComplexityLimits.high
+  ComplexityLimits complexityLimits = ComplexityLimits.high,
 }) {
   switch (algorithm) {
     case CanonicalizationAlgorithm.rdfc10:
       return Rdfc10Canonicalizer(hashAlgorithm, complexityLimits);
     case CanonicalizationAlgorithm.urdna2015:
-      throw UnimplementedError(&#39;URGNA2015 canonicalization is not implemented.&#39;);
+      throw UnimplementedError(
+        &#39;URGNA2015 canonicalization is not implemented.&#39;,
+      );
     case CanonicalizationAlgorithm.urgna2012:
-      throw UnimplementedError(&#39;URGNA2012 canonicalization is not implemented.&#39;);
+      throw UnimplementedError(
+        &#39;URGNA2012 canonicalization is not implemented.&#39;,
+      );
   }
 }</code></pre>
 </section>
