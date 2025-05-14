@@ -166,27 +166,25 @@ class Literal extends RdfTerm {
     IRI datatype,
     TextDirection? direction,
   ) {
-    if (datatype == RDF.langString) {
-      // Datatype is rdf:langString
+    if (datatype == RDF.langString || datatype == RDF.dirLangString) {
       if (language == null) {
         throw LiteralConstraintException(
           'Language tag MUST be present for datatype rdf:langString.',
         );
       }
-      // Direction is allowed only with langString, but not required
     } else {
-      // Datatype is NOT rdf:langString
+      // Datatype is NOT rdf:langString or rdf:dirLangString
       if (language != null) {
         throw LiteralConstraintException(
           //
-          'Language tag MUST NOT be present if datatype is not rdf:langString.',
+          'Language tag MUST NOT be present if datatype is not rdf:langString or rdf:dirLangString.',
         );
       }
-      if (direction != null) {
+      if (direction != null && datatype != RDF.dirLangString) {
         // This also covers the case where language is null but direction is not
         throw LiteralConstraintException(
           //
-          'Direction MUST NOT be present if datatype is not rdf:langString.',
+          'Direction MUST NOT be present if datatype is not rdf:dirLangString.',
         );
       }
     }

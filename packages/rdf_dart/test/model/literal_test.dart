@@ -1283,7 +1283,7 @@ void main() {
       final hebrewLex = 'שָׁלוֹם'; // Example RTL text
       final englishLex = 'Hello';
 
-      test('Successful creation with langString, language, and direction', () {
+      test('Successful creation with dirLangString, language, and direction', () {
         final ltrLiteral = Literal(
           englishLex,
           RDF.langString,
@@ -1298,12 +1298,12 @@ void main() {
 
         final rtlLiteral = Literal(
           hebrewLex,
-          RDF.langString,
+          RDF.dirLangString,
           'he',
           TextDirection.rtl,
         );
         expect(rtlLiteral.lexicalForm, hebrewLex);
-        expect(rtlLiteral.datatype, RDF.langString);
+        expect(rtlLiteral.datatype, RDF.dirLangString);
         expect(rtlLiteral.language, Locale.parse('he'));
         expect(rtlLiteral.baseDirection, TextDirection.rtl);
         expect(rtlLiteral.value, hebrewLex);
@@ -1328,7 +1328,7 @@ void main() {
           );
           // Also implicitly tested when datatype is langString but language is null
           expect(
-            () => Literal(englishLex, RDF.langString, null, TextDirection.ltr),
+            () => Literal(englishLex, RDF.dirLangString, null, TextDirection.ltr),
             throwsA(
               isA<LiteralConstraintException>().having(
                 (e) => e.message,
@@ -1347,6 +1347,26 @@ void main() {
         () {
           expect(
             () => Literal(englishLex, XSD.string, 'en', TextDirection.ltr),
+            throwsA(isA<LiteralConstraintException>()),
+          );
+        },
+      );
+
+      test(
+        'Throws LiteralConstraintException for rdf:dirLangString without a language',
+        () {
+          expect(
+            () => Literal(englishLex, RDF.dirLangString, null, TextDirection.ltr),
+            throwsA(isA<LiteralConstraintException>()),
+          );
+        },
+      );
+
+      test(
+        'Throws LiteralConstraintException for rdf:langString without a language',
+        () {
+          expect(
+            () => Literal(englishLex, RDF.langString),
             throwsA(isA<LiteralConstraintException>()),
           );
         },
