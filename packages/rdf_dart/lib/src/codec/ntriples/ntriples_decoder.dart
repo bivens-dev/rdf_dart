@@ -400,13 +400,13 @@ class _NTriplesDecoderSink implements ChunkedConversionSink<String> {
 
       // Determine the correct datatype for the constructor
       final IRI datatypeForConstructor;
-      if (literalResult.languageTag != null && literalResult.direction == null) {
+      if (literalResult.languageTag != null &&
+          literalResult.direction == null) {
         // If language tag is present and no direction, datatype MUST be rdf:langString
         datatypeForConstructor = RDF.langString;
-      } else if(literalResult.direction != null) {
+      } else if (literalResult.direction != null) {
         datatypeForConstructor = RDF.dirLangString;
-      } 
-      else {
+      } else {
         // Otherwise, use the parsed datatype, or default to xsd:string
         datatypeForConstructor = literalResult.datatypeIri ?? XSD.string;
       }

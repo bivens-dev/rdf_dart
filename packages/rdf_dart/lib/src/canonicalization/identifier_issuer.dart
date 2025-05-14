@@ -67,7 +67,9 @@ class IdentifierIssuer {
     final copy = IdentifierIssuer(_prefix);
     copy._counter = _counter;
     // Create a new LinkedHashMap from the existing one to ensure independence
-    copy._issuedIdentifiers.addAll(LinkedHashMap<String, String>.from(_issuedIdentifiers));
+    copy._issuedIdentifiers.addAll(
+      LinkedHashMap<String, String>.from(_issuedIdentifiers),
+    );
     return copy;
   }
 }

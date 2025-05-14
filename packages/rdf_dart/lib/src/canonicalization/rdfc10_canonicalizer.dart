@@ -17,13 +17,13 @@ import 'package:rdf_dart/src/model/rdf_term.dart';
 /// Implements the RDFC-1.0 canonicalization algorithm.
 /// Spec: https://www.w3.org/TR/rdf-canon/
 final class Rdfc10Canonicalizer extends Canonicalizer {
-
   /// The calculated maximum number of deep iterations allowed for this run.
   late num _effectiveMaxIterations;
+
   /// The remaining number of deep iterations allowed.
   late num _remainingIterations;
 
-  /// Creates an RDFC-1.0 canonicalizer instance using the specified 
+  /// Creates an RDFC-1.0 canonicalizer instance using the specified
   /// hash algorithm and complexity constraints.
   Rdfc10Canonicalizer(super.hashAlgorithm, super.complexityLimits);
 
@@ -60,14 +60,15 @@ final class Rdfc10Canonicalizer extends Canonicalizer {
         // Step ca.4.2: Issue canonical identifier using Algorithm 4.5
         // Only issue if not already issued (though unlikely at this stage)
         if (!state.canonicalIssuer.issued.containsKey(bnodeId)) {
-           state.canonicalIssuer.getId(bnodeId);
+          state.canonicalIssuer.getId(bnodeId);
         }
         // Step ca.4.3: Mark hash for removal
         hashesToRemove.add(hash);
       } else {
         // This hash group is non-unique
         nonUniqueLists.add(identifierList);
-        nonUniqueBNodeCount += identifierList.length; // <-- Count nodes for limit
+        nonUniqueBNodeCount +=
+            identifierList.length; // <-- Count nodes for limit
         // If list has more than one entry, continue (handled in Step ca.5)
       }
     }
@@ -447,7 +448,10 @@ final class Rdfc10Canonicalizer extends Canonicalizer {
   /// Serializes the canonicalized dataset into the final N-Quads string.
   /// Needs access to the final canonical issuer mapping.
   /// Spec Section: 5
-  String _serializeCanonicalNQuads(Dataset originalDataset, CanonicalizationState state) {
+  String _serializeCanonicalNQuads(
+    Dataset originalDataset,
+    CanonicalizationState state,
+  ) {
     final canonicalQuads = <String>[];
     final canonicalIdMap = state.canonicalIssuer.issued;
 
@@ -500,7 +504,7 @@ final class Rdfc10Canonicalizer extends Canonicalizer {
     return canonicalQuads.join();
   }
 
-  void _calculateComplexity(int nonUniqueBNodeCount){
+  void _calculateComplexity(int nonUniqueBNodeCount) {
     final factor = super.complexityLimits.maxWorkFactor;
 
     if (factor == 0) {
@@ -512,22 +516,22 @@ final class Rdfc10Canonicalizer extends Canonicalizer {
       _effectiveMaxIterations = pow(nonUniqueBNodeCount, factor);
       // Handle potential overflow to infinity
       if (!_effectiveMaxIterations.isFinite) {
-         _effectiveMaxIterations = double.infinity;
+        _effectiveMaxIterations = double.infinity;
       }
     }
     // Ensure it's not negative (e.g., pow(0, 3) is 0)
     _effectiveMaxIterations = max(0, _effectiveMaxIterations);
     _remainingIterations = _effectiveMaxIterations; // Initialize counter
   }
-  
+
   void _enforceComplexityLimitations() {
     if (_remainingIterations == 0) {
       // Throw the specific exception
       throw MaxIterationsExceededException(_effectiveMaxIterations);
     }
     if (_remainingIterations != double.infinity) {
-       // Decrement only if it's a finite limit
-       _remainingIterations--;
+      // Decrement only if it's a finite limit
+      _remainingIterations--;
     }
   }
 }

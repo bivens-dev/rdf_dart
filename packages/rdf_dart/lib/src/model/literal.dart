@@ -2,7 +2,8 @@ import 'package:intl/locale.dart';
 import 'package:iri/iri.dart';
 import 'package:meta/meta.dart';
 import 'package:rdf_dart/src/data_types.dart';
-import 'package:rdf_dart/src/exceptions/datatype_not_found_exception.dart' show DatatypeNotFoundException;
+import 'package:rdf_dart/src/exceptions/datatype_not_found_exception.dart'
+    show DatatypeNotFoundException;
 import 'package:rdf_dart/src/exceptions/invalid_language_tag_exception.dart';
 import 'package:rdf_dart/src/exceptions/invalid_lexical_form_exception.dart';
 import 'package:rdf_dart/src/exceptions/literal_constraint_exception.dart';

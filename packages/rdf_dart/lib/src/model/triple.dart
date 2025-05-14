@@ -72,10 +72,12 @@ class Triple {
   Triple(this.subject, this.predicate, this.object);
 
   /// Returns `true` if this triple is a ground triple, `false` otherwise.
-  /// 
+  ///
   /// A ground RDF triple is an RDF triple in which no blank nodes appear.
   bool get isGroundTriple {
-    return subject.isGroundTerm && predicate.isGroundTerm && object.isGroundTerm;
+    return subject.isGroundTerm &&
+        predicate.isGroundTerm &&
+        object.isGroundTerm;
   }
 
   @override

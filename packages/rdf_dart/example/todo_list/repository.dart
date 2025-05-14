@@ -36,7 +36,7 @@ class Schema {
 abstract class DataRepository {
   Future<List<TaskList>> loadData();
   Future<void> saveData(List<TaskList> taskLists);
-  Future<void> export(List<TaskList> taskLists); 
+  Future<void> export(List<TaskList> taskLists);
 
   // Rehydration logic using Graph querying
   static List<TaskList> createTaskListsFromGraph(Graph graph) {
@@ -154,7 +154,7 @@ class FilesystemRepository implements DataRepository {
       stderr.writeln('Error writing file $fileName: $e');
     }
   }
-  
+
   @override
   Future<void> export(List<TaskList> taskLists) async {
     final dataset = Dataset();
@@ -162,7 +162,9 @@ class FilesystemRepository implements DataRepository {
       // Add all triples for the list (including its tasks) to the default graph
       dataset.defaultGraph.addAll(taskList.toTriples());
     }
-    final canonicalizer = Canonicalizer.create(CanonicalizationAlgorithm.rdfc10);
+    final canonicalizer = Canonicalizer.create(
+      CanonicalizationAlgorithm.rdfc10,
+    );
     final canonicalDataset = canonicalizer.canonicalize(dataset);
     await _saveFile('todos.nq', canonicalDataset);
   }

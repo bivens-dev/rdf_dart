@@ -1,4 +1,3 @@
-
 import 'package:iri/iri.dart';
 
 /// Provides constants for the RDF vocabulary namespace (rdf:).

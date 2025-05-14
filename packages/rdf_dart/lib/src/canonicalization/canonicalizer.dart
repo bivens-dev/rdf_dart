@@ -1,7 +1,8 @@
 import 'package:crypto/crypto.dart';
 import 'package:rdf_dart/src/canonicalization/canonicalization_algorithm.dart';
 import 'package:rdf_dart/src/canonicalization/complexity_limits.dart';
-import 'package:rdf_dart/src/canonicalization/max_iterations_exception.dart' show MaxIterationsExceededException;
+import 'package:rdf_dart/src/canonicalization/max_iterations_exception.dart'
+    show MaxIterationsExceededException;
 import 'package:rdf_dart/src/canonicalization/rdfc10_canonicalizer.dart';
 import 'package:rdf_dart/src/model/dataset.dart';
 
@@ -65,17 +66,22 @@ abstract base class Canonicalizer {
   ///     Defaults to [ComplexityLimits.high].
   ///
   /// Returns: An instance of the requested [Canonicalizer] subclass.
-  factory Canonicalizer.create(CanonicalizationAlgorithm algorithm, {
+  factory Canonicalizer.create(
+    CanonicalizationAlgorithm algorithm, {
     Hash hashAlgorithm = sha256,
-    ComplexityLimits complexityLimits = ComplexityLimits.high
+    ComplexityLimits complexityLimits = ComplexityLimits.high,
   }) {
     switch (algorithm) {
       case CanonicalizationAlgorithm.rdfc10:
         return Rdfc10Canonicalizer(hashAlgorithm, complexityLimits);
       case CanonicalizationAlgorithm.urdna2015:
-        throw UnimplementedError('URGNA2015 canonicalization is not implemented.');
+        throw UnimplementedError(
+          'URGNA2015 canonicalization is not implemented.',
+        );
       case CanonicalizationAlgorithm.urgna2012:
-        throw UnimplementedError('URGNA2012 canonicalization is not implemented.');
+        throw UnimplementedError(
+          'URGNA2012 canonicalization is not implemented.',
+        );
     }
   }
 }

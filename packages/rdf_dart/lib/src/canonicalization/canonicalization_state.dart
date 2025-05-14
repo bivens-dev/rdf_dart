@@ -22,10 +22,10 @@ class CanonicalizationState {
   /// Sets up the canonical issuer and populates the [blankNodeToQuadsMap]
   /// by iterating through all quads in the dataset.
   CanonicalizationState(Dataset inputDataset)
-      : blankNodeToQuadsMap = {}, // Initialize empty, populate below
-        hashToBlankNodesMap = {}, // Starts empty
-        canonicalIssuer = IdentifierIssuer('c14n') // Use 'c14n' prefix
-  {
+    : blankNodeToQuadsMap = {}, // Initialize empty, populate below
+      hashToBlankNodesMap = {}, // Starts empty
+      canonicalIssuer = IdentifierIssuer('c14n') // Use 'c14n' prefix
+      {
     _initializeBlankNodeToQuadsMap(inputDataset);
   }
 
@@ -44,7 +44,10 @@ class CanonicalizationState {
       if (term != null && term.isBlankNode) {
         final bnodeId = (term as BlankNode).id;
         // Get the list for this bnode ID, or create it if it doesn't exist
-        final quadsForBnode = blankNodeToQuadsMap.putIfAbsent(bnodeId, () => []);
+        final quadsForBnode = blankNodeToQuadsMap.putIfAbsent(
+          bnodeId,
+          () => [],
+        );
         // Add the current quad to the list
         quadsForBnode.add(quad);
       }

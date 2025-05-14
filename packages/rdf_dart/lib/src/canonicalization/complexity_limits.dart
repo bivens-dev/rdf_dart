@@ -1,4 +1,5 @@
-import 'package:rdf_dart/src/canonicalization/max_iterations_exception.dart' show MaxIterationsExceededException;
+import 'package:rdf_dart/src/canonicalization/max_iterations_exception.dart'
+    show MaxIterationsExceededException;
 
 /// Controls the computational complexity allowed during the RDF canonicalization
 /// process, specifically related to the deep comparison of blank nodes.
@@ -38,7 +39,7 @@ enum ComplexityLimits implements Comparable<ComplexityLimits> {
   /// **Medium:** Limits deep iterations to quadratic complexity (O(n^2)).
   ///
   /// Allows significantly more iterations than `high`, suitable for more complex
-  /// graphs but with a higher potential processing time. 
+  /// graphs but with a higher potential processing time.
   medium(maxWorkFactor: 2),
 
   /// **Low:** Limits deep iterations to cubic complexity (O(n^3)).

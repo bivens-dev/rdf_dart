@@ -36,7 +36,7 @@ abstract class RdfTerm {
   bool get isTripleTerm;
 
   /// Returns `true` if this term is a ground term, `false` otherwise.
-  /// 
+  ///
   /// A ground RDF term is an RDF term in which no blank nodes appear.
   bool get isGroundTerm => !isBlankNode;
 
