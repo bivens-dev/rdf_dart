@@ -64,6 +64,73 @@ void main() {
       });
     });
 
+    group('Ground Triples', () {
+      test(
+        'A triple with a BlankNode for the subject is not a Ground Triple',
+        () {
+          final triple = Triple(
+            BlankNode('subject'),
+            IRINode(IRI('http://example.com/predicate')),
+            IRINode(IRI('http://example.com/object')),
+          );
+          expect(triple.isGroundTriple, isFalse);
+        },
+      );
+
+      test(
+        'A triple with a BlankNode for the object is not a Ground Triple',
+        () {
+          final triple = Triple(
+            IRINode(IRI('http://example.com/subject')),
+            IRINode(IRI('http://example.com/predicate')),
+            BlankNode('object'),
+          );
+          expect(triple.isGroundTriple, isFalse);
+        },
+      );
+
+      test(
+        'A triple with a BlankNode inside a TripleTerm for the object is not a Ground Triple',
+        () {
+          final triple = Triple(
+            IRINode(IRI('http://example.com/subject')),
+            IRINode(IRI('http://example.com/predicate')),
+            TripleTerm(
+              Triple(
+                IRINode(IRI('http://example.com/subject')),
+                IRINode(IRI('http://example.com/predicate')),
+                BlankNode('object'),
+              ),
+            ),
+          );
+          expect(triple.isGroundTriple, isFalse);
+        },
+      );
+
+      test('A triple without any BlankNodes is a Ground Triple', () {
+        final triple = Triple(
+          IRINode(IRI('http://example.com/subject')),
+          IRINode(IRI('http://example.com/predicate')),
+          IRINode(IRI('http://example.com/object')),
+        );
+
+        final triple2 = Triple(
+          IRINode(IRI('http://example.com/subject')),
+          IRINode(IRI('http://example.com/predicate')),
+          TripleTerm(
+            Triple(
+              IRINode(IRI('http://example.com/subject')),
+              IRINode(IRI('http://example.com/predicate')),
+              IRINode(IRI('http://example.com/object')),
+            ),
+          ),
+        );
+
+        expect(triple.isGroundTriple, isTrue);
+        expect(triple2.isGroundTriple, isTrue);
+      });
+    });
+
     group('toString', () {
       test('returns correct string representation', () {
         final subject = IRINode(IRI('http://example.com/subject'));
