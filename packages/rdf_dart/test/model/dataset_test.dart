@@ -13,6 +13,14 @@ void main() {
     late BlankNode blankNodeGraphName2; // A distinct blank node
     late BlankNode sameIdAsblankNodeGraphName1; // A different instance but with same ID
 
+    // Common RDF terms for various tests
+    final s1 = IRINode(IRI('http://example.com/s1'));
+    final p1 = IRINode(IRI('http://example.com/p1'));
+    final o1 = IRINode(IRI('http://example.com/o1'));
+    final p2 = IRINode(IRI('http://example.com/p2'));
+    // An IRI for a second named graph, if needed for sharing tests
+    final iriGraphName2 = IRINode(IRI('http://example.com/graph2'));
+
     setUp(() {
       dataset = Dataset();
       iriGraphName = IRINode(IRI('http://example.com/graph'));
@@ -70,8 +78,8 @@ void main() {
       test(
           'adds a new named graph if a BlankNode with the same ID but different instance is used as name',
           () {
-        final graph1 = Graph()..add(Triple(BlankNode(), IRINode(RDF.type), IRINode(XSD.string))); // Make graphs distinct for clarity
-        final graph2 = Graph()..add(Triple(BlankNode(), IRINode(RDF.type), IRINode(XSD.integer)));
+        final graph1 = Graph()..add(Triple(BlankNode('s'), p1, o1)); // Make graphs distinct for clarity
+        final graph2 = Graph()..add(Triple(BlankNode('s'), p2, o1));
 
         dataset.addNamedGraph(blankNodeGraphName1, graph1);
         // sameIdAsblankNodeGraphName1 has the same ID "bnode1" but is a different object
@@ -129,7 +137,7 @@ void main() {
         expect(dataset.namedGraphs.containsKey(blankNodeGraphName1), true);
         // sameIdAsblankNodeGraphName1 has the same ID as blankNodeGraphName1
         dataset.removeNamedGraph(sameIdAsblankNodeGraphName1);
-        expect(dataset.namedGraphs.containsKey(blankNodeGraphName1), false, reason: "Removal should be by ID equality for BlankNodes");
+        expect(dataset.namedGraphs.containsKey(blankNodeGraphName1), false, reason: 'Removal should be by ID equality for BlankNodes');
         expect(dataset.namedGraphs, isEmpty);
       });
 
@@ -143,10 +151,7 @@ void main() {
 
     group('defaultGraph', () {
       test('can add triple to the default graph', () {
-        final subject = IRINode(IRI('http://example.com/subject'));
-        final predicate = IRINode(IRI('http://example.com/predicate'));
-        final object = IRINode(IRI('http://example.com/object'));
-        final triple = Triple(subject, predicate, object);
+        final triple = Triple(s1, p1, o1);
         dataset.defaultGraph.add(triple);
         expect(dataset.defaultGraph.triples, contains(triple));
       });
@@ -168,6 +173,76 @@ void main() {
        test('does not retrieve graph using a BlankNode instance with a different ID', () {
         dataset.addNamedGraph(blankNodeGraphName1, graph);
         expect(dataset.namedGraphs[blankNodeGraphName2], isNull);
+      });
+    });
+
+    group('Blank Node Sharing', () {
+      test('BlankNode instance is shared between default graph and a named graph', () {
+        final sharedBNode = BlankNode('bShared1');
+        final tripleInDefault = Triple(sharedBNode, p1, o1);
+        dataset.defaultGraph.add(tripleInDefault);
+
+        final namedGraphContent = Graph();
+        final tripleInNamed = Triple(s1, p2, sharedBNode);
+        namedGraphContent.add(tripleInNamed);
+        dataset.addNamedGraph(iriGraphName, namedGraphContent);
+
+        // Retrieve the triples and check the BlankNode instances
+        final retrievedTripleFromDefault = dataset.defaultGraph.triples.firstWhere(
+          (t) => t.subject == sharedBNode,
+        );
+        final retrievedTripleFromNamed = dataset.namedGraphs[iriGraphName]!.triples.firstWhere(
+          (t) => t.object == sharedBNode,
+        );
+
+        expect(identical(retrievedTripleFromDefault.subject, retrievedTripleFromNamed.object), isTrue,
+            reason: 'The same BlankNode instance should be present in both graphs if the same object was used.');
+        // Equality check will also pass due to BlankNode ID equality
+        expect(retrievedTripleFromDefault.subject == retrievedTripleFromNamed.object, isTrue);
+      });
+
+      test('BlankNode instance is shared between two named graphs', () {
+        final sharedBNode = BlankNode('bShared2');
+        
+        final graphA = Graph();
+        final tripleInGraphA = Triple(sharedBNode, p1, o1);
+        graphA.add(tripleInGraphA);
+        dataset.addNamedGraph(iriGraphName, graphA); // Using iriGraphName for graphA
+
+        final graphB = Graph();
+        final tripleInGraphB = Triple(s1, p2, sharedBNode);
+        graphB.add(tripleInGraphB);
+        dataset.addNamedGraph(iriGraphName2, graphB); // Using distinct iriGraphName2 for graphB
+
+        final retrievedTripleFromGraphA = dataset.namedGraphs[iriGraphName]!.triples.first;
+        final retrievedTripleFromGraphB = dataset.namedGraphs[iriGraphName2]!.triples.first;
+        
+        expect(identical(retrievedTripleFromGraphA.subject, retrievedTripleFromGraphB.object), isTrue,
+            reason: 'The same BlankNode instance should be present in both named graphs.');
+        expect(retrievedTripleFromGraphA.subject == retrievedTripleFromGraphB.object, isTrue);
+      });
+
+      test('Different BlankNode instances (even with same ID) are not identical when added separately', () {
+        // This test highlights that if you don't use the *same instance*, they aren't identical,
+        // even if they are "==" due to ID. This is important for understanding instance sharing vs. value equality.
+        final bnodeId = 'bNotSharedInstance';
+        final bn1InDefault = BlankNode(bnodeId);
+        final tripleInDefault = Triple(bn1InDefault, p1, o1);
+        dataset.defaultGraph.add(tripleInDefault);
+
+        final namedGraphContent = Graph();
+        final bn2InNamed = BlankNode(bnodeId); // Different instance, same ID
+        final tripleInNamed = Triple(s1, p2, bn2InNamed);
+        namedGraphContent.add(tripleInNamed);
+        dataset.addNamedGraph(iriGraphName, namedGraphContent);
+
+        final retrievedTripleFromDefault = dataset.defaultGraph.triples.first;
+        final retrievedTripleFromNamed = dataset.namedGraphs[iriGraphName]!.triples.first;
+
+        expect(retrievedTripleFromDefault.subject == retrievedTripleFromNamed.object, isTrue, 
+            reason: 'BlankNodes with same ID should be equal.');
+        expect(identical(retrievedTripleFromDefault.subject, retrievedTripleFromNamed.object), isFalse,
+            reason: 'Different BlankNode instances were used, so they should not be identical.');
       });
     });
   });
