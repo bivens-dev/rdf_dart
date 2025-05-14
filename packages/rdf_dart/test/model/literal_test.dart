@@ -1286,12 +1286,12 @@ void main() {
       test('Successful creation with dirLangString, language, and direction', () {
         final ltrLiteral = Literal(
           englishLex,
-          RDF.langString,
+          RDF.dirLangString,
           'en',
           TextDirection.ltr,
         );
         expect(ltrLiteral.lexicalForm, englishLex);
-        expect(ltrLiteral.datatype, RDF.langString);
+        expect(ltrLiteral.datatype, RDF.dirLangString);
         expect(ltrLiteral.language, Locale.parse('en'));
         expect(ltrLiteral.baseDirection, TextDirection.ltr);
         expect(ltrLiteral.value, englishLex);
@@ -1372,29 +1372,39 @@ void main() {
         },
       );
 
+      test(
+        'Throws LiteralConstraintException for rdf:langString with a direction',
+        () {
+          expect(
+            () => Literal(englishLex, RDF.langString, 'en', TextDirection.ltr),
+            throwsA(isA<LiteralConstraintException>()),
+          );
+        },
+      );
+
       group('Equality and HashCode', () {
         final baseEn = Literal(englishLex, RDF.langString, 'en');
         final ltrEn = Literal(
           englishLex,
-          RDF.langString,
+          RDF.dirLangString,
           'en',
           TextDirection.ltr,
         );
         final rtlEn = Literal(
           englishLex,
-          RDF.langString,
+          RDF.dirLangString,
           'en',
           TextDirection.rtl,
         );
         final ltrEnCopy = Literal(
           englishLex,
-          RDF.langString,
+          RDF.dirLangString,
           'en',
           TextDirection.ltr,
         );
         final ltrHe = Literal(
           hebrewLex,
-          RDF.langString,
+          RDF.dirLangString,
           'he',
           TextDirection.ltr,
         );

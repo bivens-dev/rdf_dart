@@ -166,37 +166,42 @@ class Literal extends RdfTerm {
     IRI datatype,
     TextDirection? direction,
   ) {
-    if (datatype == RDF.langString || datatype == RDF.dirLangString) {
+    if (datatype == RDF.langString) {
+      // Rule: For rdf:langString, language is MUST, direction is MUST NOT.
       if (language == null) {
         throw LiteralConstraintException(
           'Language tag MUST be present for datatype rdf:langString.',
         );
       }
+      if (direction != null) {
+        throw LiteralConstraintException(
+          'Direction MUST NOT be present for datatype rdf:langString.',
+        );
+      }
+    } else if (datatype == RDF.dirLangString) {
+      // Rule: For rdf:dirLangString, language is MUST, direction is MUST.
+      if (language == null) {
+        throw LiteralConstraintException(
+          'Language tag MUST be present for datatype rdf:dirLangString.',
+        );
+      }
+      if (direction == null) {
+        throw LiteralConstraintException(
+          'Direction MUST be present for datatype rdf:dirLangString.',
+        );
+      }
     } else {
-      // Datatype is NOT rdf:langString or rdf:dirLangString
+      // Rule: For any OTHER datatype, language is MUST NOT, direction is MUST NOT.
       if (language != null) {
         throw LiteralConstraintException(
-          //
-          'Language tag MUST NOT be present if datatype is not rdf:langString or rdf:dirLangString.',
+          'Language tag MUST NOT be present if datatype is not rdf:langString or rdf:dirLangString (datatype is: $datatype).',
         );
       }
-      if (direction != null && datatype != RDF.dirLangString) {
-        // This also covers the case where language is null but direction is not
+      if (direction != null) {
         throw LiteralConstraintException(
-          //
-          'Direction MUST NOT be present if datatype is not rdf:dirLangString.',
+          'Direction MUST NOT be present if datatype is not rdf:langString or rdf:dirLangString (datatype is: $datatype).',
         );
       }
-    }
-
-    // Additional constraint: Direction requires Language
-    if (direction != null && language == null) {
-      // This situation should ideally be caught by the logic above,
-      // but an explicit check adds clarity and robustness.
-      throw LiteralConstraintException(
-        //
-        'Direction MUST NOT be present if the language tag is absent.',
-      );
     }
   }
 

@@ -329,7 +329,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           expect((decoded.first.object as Literal).value, equals('Hello'));
           expect(
             (decoded.first.object as Literal).datatype,
-            equals(RDF.langString),
+            equals(RDF.dirLangString),
           );
         });
 
@@ -359,7 +359,7 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
           expect((decoded.first.object as Literal).value, equals('Hello'));
           expect(
             (decoded.first.object as Literal).datatype,
-            equals(RDF.langString),
+            equals(RDF.dirLangString),
           );
         });
       });
