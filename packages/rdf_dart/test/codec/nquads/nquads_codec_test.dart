@@ -57,6 +57,223 @@ void main() {
               ),
             );
           });
+
+          test('nquads-star-01: N-Quads-star - object triple term', () async {
+            // <http://example/a> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( <http://example/s> <http://example/p> <http://example/o> )>> <http://example/g> .
+            final quads = await _loadTestFile('nquads-star-syntax-01.nq');
+            final result = nQuadsCodec.decoder.convert(quads);
+            final namedGraph =
+                result.namedGraphs[IRINode(IRI('http://example/g'))]!;
+            final parsedTriple = namedGraph.triples.first;
+
+            expect(result, isA<Dataset>());
+            expect(result.defaultGraph.triples.length, equals(0));
+            expect(namedGraph.triples.length, equals(1));
+            expect(result.namedGraphs.length, equals(1));
+            expect(
+              parsedTriple.subject,
+              equals(IRINode(IRI('http://example/a'))),
+            );
+            expect(parsedTriple.predicate, equals(IRINode(RDF.reifies)));
+            expect(
+              parsedTriple.object,
+              equals(
+                TripleTerm(
+                  Triple(
+                    IRINode(IRI('http://example/s')),
+                    IRINode(IRI('http://example/p')),
+                    IRINode(IRI('http://example/o')),
+                  ),
+                ),
+              ),
+            );
+          });
+
+          test(
+            'nquads-star-02: N-Quads-star - object triple term, no whitespace',
+            () async {
+              // <http://example/s><http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies><<(<http://example/s2><http://example/p2><http://example/o2>)>><http://example/g>.
+              final quads = await _loadTestFile('nquads-star-syntax-02.nq');
+              final result = nQuadsCodec.decoder.convert(quads);
+              final namedGraph =
+                  result.namedGraphs[IRINode(IRI('http://example/g'))]!;
+              final parsedTriple = namedGraph.triples.first;
+
+              expect(result, isA<Dataset>());
+              expect(result.defaultGraph.triples.length, equals(0));
+              expect(namedGraph.triples.length, equals(1));
+              expect(result.namedGraphs.length, equals(1));
+              expect(
+                parsedTriple.subject,
+                equals(IRINode(IRI('http://example/s'))),
+              );
+              expect(parsedTriple.predicate, equals(IRINode(RDF.reifies)));
+              expect(
+                parsedTriple.object,
+                equals(
+                  TripleTerm(
+                    Triple(
+                      IRINode(IRI('http://example/s2')),
+                      IRINode(IRI('http://example/p2')),
+                      IRINode(IRI('http://example/o2')),
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+
+          test('nquads-star-03: N-Quads-star - Nested, no whitespace', () async {
+            // <http://example/s><http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies><<(<http://example/s2><http://example/q2><<(<http://example/s3><http://example/p3><http://example/o3>)>>)>><http://example/g>.
+            final quads = await _loadTestFile('nquads-star-syntax-03.nq');
+            final result = nQuadsCodec.decoder.convert(quads);
+            final namedGraph =
+                result.namedGraphs[IRINode(IRI('http://example/g'))]!;
+            final parsedTriple = namedGraph.triples.first;
+
+            expect(result, isA<Dataset>());
+            expect(result.defaultGraph.triples.length, equals(0));
+            expect(namedGraph.triples.length, equals(1));
+            expect(result.namedGraphs.length, equals(1));
+            expect(
+              parsedTriple.subject,
+              equals(IRINode(IRI('http://example/s'))),
+            );
+            expect(parsedTriple.predicate, equals(IRINode(RDF.reifies)));
+            expect(
+              parsedTriple.object,
+              equals(
+                TripleTerm(
+                  Triple(
+                    IRINode(IRI('http://example/s2')),
+                    IRINode(IRI('http://example/q2')),
+                    TripleTerm(
+                      Triple(
+                        IRINode(IRI('http://example/s3')),
+                        IRINode(IRI('http://example/p3')),
+                        IRINode(IRI('http://example/o3')),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          });
+
+          test(
+            'nquads-star-bnode-1: N-Quads-star - Blank node subject',
+            () async {
+              // _:b0 <http://example/p> <http://example/o> .
+              // _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://example/p> <http://example/o> )>> <http://example/g>.
+              final quads = await _loadTestFile('nquads-star-bnode-1.nq');
+              final result = nQuadsCodec.decoder.convert(quads);
+              final namedGraph =
+                  result.namedGraphs[IRINode(IRI('http://example/g'))]!;
+              final parsedQuad = namedGraph.triples.first;
+              final parsedTriple = result.defaultGraph.triples.first;
+
+              expect(result, isA<Dataset>());
+              expect(result.defaultGraph.triples.length, equals(1));
+              expect(namedGraph.triples.length, equals(1));
+              expect(result.namedGraphs.length, equals(1));
+              expect(parsedTriple.subject, equals(BlankNode('b0')));
+              expect(
+                parsedTriple.predicate,
+                equals(IRINode(IRI('http://example/p'))),
+              );
+              expect(
+                parsedTriple.object,
+                equals(IRINode(IRI('http://example/o'))),
+              );
+              expect(parsedQuad.subject, equals(BlankNode('b1')));
+              expect(parsedQuad.predicate, equals(IRINode(RDF.reifies)));
+              expect(
+                parsedQuad.object,
+                equals(
+                  TripleTerm(
+                    Triple(
+                      BlankNode('b0'),
+                      IRINode(IRI('http://example/p')),
+                      IRINode(IRI('http://example/o')),
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+
+          test('nquads-star-nested-1: N-Quads-star - Nested object term', () async {
+            // <http://example/s> <http://example/p> <http://example/o> .
+            // <http://example/a> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( <http://example/s1> <http://example/p1> <http://example/o1> )>> .
+            // <http://example/r> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( <http://example/23> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( <http://example/s3> <http://example/p3> <http://example/o3> )>> )>> <http://example/g> .
+            final quads = await _loadTestFile('nquads-star-nested-1.nq');
+            final result = nQuadsCodec.decoder.convert(quads);
+            final namedGraph =
+                result.namedGraphs[IRINode(IRI('http://example/g'))]!;
+            final parsedQuad = namedGraph.triples.first;
+            final firstTriple = result.defaultGraph.triples.first;
+            final secondTriple = result.defaultGraph.triples.last;
+
+            expect(result, isA<Dataset>());
+            expect(result.defaultGraph.triples.length, equals(2));
+            expect(namedGraph.triples.length, equals(1));
+            expect(result.namedGraphs.length, equals(1));
+
+            expect(
+              firstTriple.subject,
+              equals(IRINode(IRI('http://example/s'))),
+            );
+            expect(
+              firstTriple.predicate,
+              equals(IRINode(IRI('http://example/p'))),
+            );
+            expect(
+              firstTriple.object,
+              equals(IRINode(IRI('http://example/o'))),
+            );
+
+            expect(
+              secondTriple.subject,
+              equals(IRINode(IRI('http://example/a'))),
+            );
+            expect(secondTriple.predicate, equals(IRINode(RDF.reifies)));
+            expect(
+              secondTriple.object,
+              equals(
+                TripleTerm(
+                  Triple(
+                    IRINode(IRI('http://example/s1')),
+                    IRINode(IRI('http://example/p1')),
+                    IRINode(IRI('http://example/o1')),
+                  ),
+                ),
+              ),
+            );
+
+            expect(
+              parsedQuad.subject,
+              equals(IRINode(IRI('http://example/r'))),
+            );
+            expect(parsedQuad.predicate, equals(IRINode(RDF.reifies)));
+            expect(
+              parsedQuad.object,
+              equals(
+                TripleTerm(
+                  Triple(
+                    IRINode(IRI('http://example/23')),
+                    IRINode(RDF.reifies),
+                    TripleTerm(
+                      Triple(
+                        IRINode(IRI('http://example/s3')),
+                        IRINode(IRI('http://example/p3')),
+                        IRINode(IRI('http://example/o3')),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          });
         });
 
         group('Negative', () {
@@ -84,14 +301,170 @@ void main() {
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
 
-          test('Triple Term with a Blank Node in Subject Position ', () async {
-            // _:b0 <http://example/p> <http://example/o> .
-            // <<( _:b0 <http://example/p> <http://example/o> )>> <http://example/q> "ABC" <http://example/g> .
-            final quads = await _loadTestFile('nquads-star-bnode-1.nq');
+          test('nquads-star-bad-01: N-Quads-star - Bad - reified triple as predicate', () async {
+            // <http://example/a> << <http://example/s> <http://example/p>  <http://example/o> >>  <http://example/z> <http://example/g> .
+            final quads = await _loadTestFile('nquads-star-bad-syntax-01.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+
+          test('nquads-star-bad-02: N-Quads-star - Bad - reified triple, literal subject', () async {
+            // <http://example/q> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( "XYZ" <http://example/p> <http://example/o> )>> <http://example/g> .
+            final quads = await _loadTestFile('nquads-star-bad-syntax-02.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+
+          test('nquads-star-bad-03: N-Quads-star - Bad - reified triple, literal predicate', () async {
+            // <http://example/q> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( <http://example/s> "XYZ" <http://example/o> )>> <http://example/g> .
+            final quads = await _loadTestFile('nquads-star-bad-syntax-03.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+
+          test('nquads-star-bad-04: N-Quads-star - Bad - reified triple, blank node predicate', () async {
+            // <http://example/q> <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> << <http://example/s> _:label <http://example/o> >> <http://example/g>> .
+            final quads = await _loadTestFile('nquads-star-bad-syntax-04.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+
+          test('nquads-star-bad-05: N-Quads-star - Bad - triple term as predicate', () async {
+            // <http://example/a> <<( <http://example/s> <http://example/p>  <http://example/o> )>> <http://example/z> <http://example/g> .
+            final quads = await _loadTestFile('nquads-star-bad-syntax-05.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+
+          test('nquads-star-bad-06: N-Quads-star - Bad - triple term, literal subject', () async {
+            // <<( "XYZ" <http://example/p> <http://example/o> )>> <http://example/q> <http://example/z> <http://example/g> .
+            final quads = await _loadTestFile('nquads-star-bad-syntax-06.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+
+          test('nquads-star-bad-07: N-Quads-star - Bad - triple term, literal predicate', () async {
+            // <<( <http://example/s> "XYZ" <http://example/o> )>> <http://example/q> <http://example/z> <http://example/g> .
+            final quads = await _loadTestFile('nquads-star-bad-syntax-07.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+
+          test('nquads-star-bad-08: N-Quads-star - Bad - triple term, blank node predicate', () async {
+            // <<( <http://example/s> _:label <http://example/o> )>> <http://example/q> <http://example/z> <http://example/g> .
+            final quads = await _loadTestFile('nquads-star-bad-syntax-08.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+
+          test('nquads-star-bad-09: N-Quads-star - Bad - reified triple object', () async {
+            // <http://example/a> <http://example/b> << <http://example/s> <http://example/p> <http://example/o> >> <http://example/g> .
+            final quads = await _loadTestFile('nquads-star-bad-syntax-09.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+
+          test('nquads-star-bad-10: N-Quads-star - Bad - triple term as subject', () async {
+            // <<( <http://example/s> <http://example/p> <http://example/o> )>> <http://example/a> <http://example/z> <http://example/g> .
+            final quads = await _loadTestFile('nquads-star-bad-syntax-10.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+
+          test('nquads-star-bad-reified-1: N-Quads-star - Bad - subject reified triple', () async {
+            // << <http://example/s> <http://example/p> <http://example/o> >> <http://example/q> <http://example/z> <http://example/g> .
+            final quads = await _loadTestFile('nquads-star-bad-reified-syntax-1.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+
+          test('nquads-star-bad-reified-2: N-Quads-star - Bad - object reified triple', () async {
+            // <http://example/x> <http://example/p> << <http://example/s> <http://example/p> <http://example/o> >> <http://example/g> .
+            final quads = await _loadTestFile('nquads-star-bad-reified-syntax-2.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+
+          test('nquads-star-bad-reified-3: N-Quads-star - Bad - subject and object reified triples', () async {
+            // << <http://example/s1> <http://example/p1> <http://example/o1> >> <http://example/q> << <http://example/s2> <http://example/p2> <http://example/o2> >> <http://example/g> .
+            final quads = await _loadTestFile('nquads-star-bad-reified-syntax-3.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+
+          test('nquads-star-bad-reified-4: N-Quads-star - Bad - predicate reified triple', () async {
+            // <http://example/x> << <http://example/s> <http://example/p> <http://example/o> >> <http://example/z> <http://example/g> .
+            final quads = await _loadTestFile('nquads-star-bad-reified-syntax-4.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+
+          test('nquads-star-bnode-bad-annotated-syntax-1: N-Quads-star - Bad - annotated triple, blank node subject', () async {
+            // _:b0 <http://example/p> <http://example/o> {| <http://example/q> "ABC" |} <http://example/g> .
+            final quads = await _loadTestFile('nquads-star-bnode-bad-annotated-syntax-1.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+
+          test('nquads-star-bnode-bad-annotated-syntax-2: N-Quads-star - Bad - annotated triple, blank node object', () async {
+            // <http://example/s> <http://example/p> _:b1 {| <http://example/q> "456"^^<http://www.w3.org/2001/XMLSchema#integer> |} <http://example/g> .
+            final quads = await _loadTestFile('nquads-star-bnode-bad-annotated-syntax-2.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+
+          test('nquads-star-nested-bad-annotated-syntax-1: N-Quads-star - Bad - annotated triple, nested subject term', () async {
+            // <http://example/s> <http://example/p> <http://example/o> {| <http://example/r> <http://example/z> {| <http://example/q> "1"^^<http://www.w3.org/2001/XMLSchema#integer> |} |} <http://example/g> .
+            final quads = await _loadTestFile('nquads-star-nested-bad-annotated-syntax-1.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+
+          test('nquads-star-nested-bad-annotated-syntax-2: N-Quads-star - Bad - annotated triple, nested object term', () async {
+            // <http://example/s> <http://example/p> <http://example/o> .
+            // <http://example/a> <http://example/q> << <http://example/s> <http://example/p> <http://example/o> >> {| <http://example/r> <http://example/z> |} <http://example/g> .
+            final quads = await _loadTestFile('nquads-star-nested-bad-annotated-syntax-2.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+
+          test('nquads-langdir-bad-1: N-Quads literal- Bad - undefined base direction', () async {
+            // <http://example/a> <http://example/b> "Hello"@en--unk <http://example/g> .
+            final quads = await _loadTestFile('nquads-langdir-bad-1.nq');
+            expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
+          });
+
+          test('nquads-langdir-bad-2: N-Quads literal- Bad - upper case LTR', () async {
+            // <http://example/a> <http://example/b> "Hello"@en--LTR <http://example/g> .
+            final quads = await _loadTestFile('nquads-langdir-bad-2.nq');
             expect(() => nQuadsCodec.decode(quads), throwsA(isA<ParseError>()));
           });
         });
       });
+
+      test('nquads-langdir-1: N-Quads literal with base direction ltr', () async {
+        // <http://example/a> <http://example/b> "Hello"@en--ltr <http://example/g> .
+        final quads = await _loadTestFile('nquads-langdir-1.nq');
+        final result = nQuadsCodec.decoder.convert(quads);
+        final namedGraph =
+            result.namedGraphs[IRINode(IRI('http://example/g'))]!;
+        final parsedTriple = namedGraph.triples.first;
+
+        expect(result, isA<Dataset>());
+        expect(result.defaultGraph.triples.length, equals(0));
+        expect(namedGraph.triples.length, equals(1));
+        expect(result.namedGraphs.length, equals(1));
+        expect(parsedTriple.subject, equals(IRINode(IRI('http://example/a'))));
+        expect(
+          parsedTriple.predicate,
+          equals(IRINode(IRI('http://example/b'))),
+        );
+        expect(
+          parsedTriple.object,
+          equals(Literal('Hello', RDF.dirLangString, 'en', TextDirection.ltr)),
+        );
+      });
+    });
+
+    test('nquads-langdir-2: N-Quads literal with base direction rtl', () async {
+      // <http://example/a> <http://example/b> "Hello"@en--rtl <http://example/g> .
+      final quads = await _loadTestFile('nquads-langdir-2.nq');
+      final result = nQuadsCodec.decoder.convert(quads);
+      final namedGraph = result.namedGraphs[IRINode(IRI('http://example/g'))]!;
+      final parsedTriple = namedGraph.triples.first;
+
+      expect(result, isA<Dataset>());
+      expect(result.defaultGraph.triples.length, equals(0));
+      expect(namedGraph.triples.length, equals(1));
+      expect(result.namedGraphs.length, equals(1));
+      expect(parsedTriple.subject, equals(IRINode(IRI('http://example/a'))));
+      expect(parsedTriple.predicate, equals(IRINode(IRI('http://example/b'))));
+      expect(
+        parsedTriple.object,
+        equals(Literal('Hello', RDF.dirLangString, 'en', TextDirection.rtl)),
+      );
     });
   });
 

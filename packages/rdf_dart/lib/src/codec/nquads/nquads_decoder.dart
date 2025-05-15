@@ -458,9 +458,12 @@ class _NQuadsDecoderSink implements ChunkedConversionSink<String> {
 
       // Construct Literal object here, handling defaults and exceptions
       final IRI datatypeForConstructor;
-      if (literalResult.languageTag != null) {
-        // If language tag is present, datatype MUST be rdf:langString
+      if (literalResult.languageTag != null &&
+          literalResult.direction == null) {
+        // If language tag is present and no direction, datatype MUST be rdf:langString
         datatypeForConstructor = RDF.langString;
+      } else if (literalResult.direction != null) {
+        datatypeForConstructor = RDF.dirLangString;
       } else {
         // Otherwise, use the parsed datatype, or default to xsd:string
         datatypeForConstructor = literalResult.datatypeIri ?? XSD.string;
