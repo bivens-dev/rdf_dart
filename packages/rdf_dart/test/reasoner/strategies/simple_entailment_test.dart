@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:rdf_dart/src/codec/ntriples/ntriples_codec.dart';
 import 'package:rdf_dart/src/model/graph.dart';
 import 'package:rdf_dart/src/reasoner/reasoner.dart';
-import 'package:rdf_dart/src/reasoner/strategies/simple/simple_entailment_strategy.dart';
+import 'package:rdf_dart/src/reasoner/strategies/simple_entailment_strategy.dart';
 import 'package:test/test.dart';
 
 void main() {

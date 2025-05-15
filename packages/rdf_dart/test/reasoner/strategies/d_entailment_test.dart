@@ -2,7 +2,7 @@
 import 'package:iri/iri.dart';
 import 'package:rdf_dart/rdf_dart.dart';
 // Assuming DEntailmentStrategy will be in a path like this:
-import 'package:rdf_dart/src/reasoner/strategies/data/data_entailment_strategy.dart';
+import 'package:rdf_dart/src/reasoner/strategies/d_entailment_strategy.dart';
 import 'package:test/test.dart';
 
 // Helper to create IRIs easily
