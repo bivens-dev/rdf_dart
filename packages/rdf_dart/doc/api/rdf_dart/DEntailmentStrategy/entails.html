@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the entails method from the DEntailmentStrategy class, for the Dart programming language.">
+  <title>entails method - DEntailmentStrategy class - rdf_dart library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">rdf_dart</a></li>
+    <li><a href="../../rdf_dart/">rdf_dart.dart</a></li>
+    <li><a href="../../rdf_dart/DEntailmentStrategy-class.html">DEntailmentStrategy</a></li>
+    <li class="self-crumb">entails method</li>
+  </ol>
+  <div class="self-name">entails</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="rdf_dart&#47;DEntailmentStrategy-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">entails</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/override-constant.html">override</a></li>
+    </ol>
+  </div>
+<span class="returntype"><a href="https://api.dart.dev/dev/3.8.0-171.0.dev/dart-core/bool-class.html">bool</a></span>
+<span class="name ">entails</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="entails-param-graph1"><span class="type-annotation"><a href="../../rdf_dart/Graph-class.html">Graph</a></span> <span class="parameter-name">graph1</span>, </span></li>
+<li><span class="parameter" id="entails-param-graph2"><span class="type-annotation"><a href="../../rdf_dart/Graph-class.html">Graph</a></span> <span class="parameter-name">graph2</span>, {</span></li>
+<li><span class="parameter" id="entails-param-options"><span class="type-annotation"><a href="../../rdf_dart/EntailmentOptions-class.html">EntailmentOptions</a>?</span> <span class="parameter-name">options</span>, </span></li>
+</ol>})
+
+      <div class="features"><span class="feature">override</span></div>
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Checks if graph <code>graph1</code> entails graph <code>graph2</code>.
+Entailment means that <code>graph2</code> logically follows from <code>graph1</code>
+according to the rules of this specific entailment strategy.</p>
+<ul>
+<li><code>graph1</code>: The first RDF graph.</li>
+<li><code>graph2</code>: The second RDF graph.</li>
+<li><code>options</code>: Optional <a href="../../rdf_dart/EntailmentOptions-class.html">EntailmentOptions</a> to customize the entailment check.</li>
+</ul>
+<p>Returns <code>true</code> if <code>graph1</code> entails <code>graph2</code>, <code>false</code> otherwise.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">@override
+bool entails(Graph graph1, Graph graph2, {EntailmentOptions? options}) {
+  &#47;&#47; Get the set of datatypes specifically recognized by D-entailment from options.
+  final recognizedDatatypesD = options?.recognizedDatatypes ?? const &lt;IRI&gt;{};
+
+  &#47;&#47; Optimization: If graph2 is ground (no blank nodes) and no datatypes are
+  &#47;&#47; specially recognized by D, this reduces to a simple subgraph check,
+  &#47;&#47; similar to simple entailment&#39;s ground graph case.
+  if (graph2.isGroundGraph &amp;&amp; recognizedDatatypesD.isEmpty) {
+    for (final tripleG2 in graph2.triples) {
+      &#47;&#47; If any triple in graph2 is not present in graph1, graph1 does not entail graph2.
+      if (!graph1.contains(tripleG2)) {
+        return false;
+      }
+    }
+    &#47;&#47; If all triples in graph2 are in graph1, graph1 entails graph2.
+    return true;
+  }
+  &#47;&#47; If graph2 is ground but recognizedDatatypesD is NOT empty, we still
+  &#47;&#47; need to perform the D-equivalence check for literals.
+
+  &#47;&#47; Collect all unique blank nodes in graph2. These are the terms we need to map.
+  final bNodesInG2List = _collectUniqueBlankNodes(graph2).toList();
+
+  &#47;&#47; If there are no blank nodes in graph2, it is a ground graph.
+  &#47;&#47; We just need to check if graph2 is a D-subgraph of graph1.
+  if (bNodesInG2List.isEmpty) {
+    final g2Instance = graph2; &#47;&#47; No substitution needed for a ground graph.
+    for (final tInstance in g2Instance.triples) {
+      &#47;&#47; Check if each triple in graph2 is D-satisfied by graph1.
+      if (!_isTripleDSatisfied(tInstance, graph1, recognizedDatatypesD)) {
+        return false; &#47;&#47; If any triple is not D-satisfied, graph1 does not entail graph2.
+      }
+    }
+    return true; &#47;&#47; All triples are D-satisfied.
+  }
+
+  &#47;&#47; If graph2 contains blank nodes, we need to find a mapping from the blank
+  &#47;&#47; nodes in graph2 to terms in graph1 such that the instantiated graph2 is
+  &#47;&#47; a D-subgraph of graph1.
+
+  &#47;&#47; Collect potential target terms in graph1 for the blank nodes in graph2.
+  &#47;&#47; These are all the terms (IRIs, BlankNodes, Literals, TripleTerms) in graph1.
+  final potentialTargetsInG1 =
+      _collectPotentialMappingTargets(graph1).toList();
+  &#47;&#47; Initialize an empty mapping.
+  final initialMapping = &lt;BlankNode, RdfTerm&gt;{};
+
+  &#47;&#47; Start the recursive search for a valid mapping and check for D-subgraph.
+  return _findValidMappingAndCheckDSubgraph(
+    graph1, &#47;&#47; The graph to check against (the entailing graph).
+    graph2, &#47;&#47; The graph to be entailed.
+    bNodesInG2List, &#47;&#47; List of blank nodes in graph2 to map.
+    0, &#47;&#47; Start mapping from the first blank node.
+    initialMapping, &#47;&#47; The current mapping being built.
+    potentialTargetsInG1, &#47;&#47; Possible terms in graph1 to map to.
+    recognizedDatatypesD, &#47;&#47; The set of datatypes recognized by D-entailment.
+  );
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">rdf_dart</a></li>
+    <li><a href="../../rdf_dart/">rdf_dart</a></li>
+    <li><a href="../../rdf_dart/DEntailmentStrategy-class.html">DEntailmentStrategy</a></li>
+    <li class="self-crumb">entails method</li>
+</ol>
+
+    <h5>DEntailmentStrategy class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    rdf_dart
+      1.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+
