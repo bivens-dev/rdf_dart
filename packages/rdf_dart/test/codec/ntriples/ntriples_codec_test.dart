@@ -1017,6 +1017,62 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
         },
       );
 
+      test('triple-term-01: C14N triple-term-01: Tests canonicalization of triple terms with iri subject and object', ()  {
+        final input = '''
+<http://example.com/s> <http://example.com/p> <<(<http://example.com/s1><http://example.com/p1><http://example.com/o1>)>>.
+''';
+        final expectedOutput = '''
+<http://example.com/s> <http://example.com/p> <<( <http://example.com/s1> <http://example.com/p1> <http://example.com/o1> )>> .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('triple-term-02: C14N triple-term-02: Tests canonicalization of triple terms with iri subject and bnode object', ()  {
+        final input = '''
+<http://example.com/s> <http://example.com/p> <<(<http://example.com/s1><http://example.com/p1>_:o1)>>.
+''';
+        final expectedOutput = '''
+<http://example.com/s> <http://example.com/p> <<( <http://example.com/s1> <http://example.com/p1> _:o1 )>> .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('triple-term-03: C14N triple-term-03: Tests canonicalization of triple terms with iri subject and literal object', ()  {
+        final input = '''
+<http://example.com/s> <http://example.com/p> <<(<http://example.com/s1><http://example.com/p1>"o1")>>.
+''';
+        final expectedOutput = '''
+<http://example.com/s> <http://example.com/p> <<( <http://example.com/s1> <http://example.com/p1> "o1" )>> .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
+      test('triple-term-04: C14N triple-term-03: Tests canonicalization of triple terms with triple term object', () {
+        final input = '''
+<http://example.com/s> <http://example.com/p> <<(<http://example.com/s1><http://example.com/p1><<(<http://example.com/s2><http://example.com/p2>"o2")>>)>>.
+''';
+        final expectedOutput = '''
+<http://example.com/s> <http://example.com/p> <<( <http://example.com/s1> <http://example.com/p1> <<( <http://example.com/s2> <http://example.com/p2> "o2" )>> )>> .
+''';
+
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
+
+        expect(reencoded, equals(expectedOutput));
+      });
+
       test('Tests canonicalization of triples with extra whitespace', () {
         final input = '''
 <http://example/s>  <http://example/p>  <http://example/o>  .  
