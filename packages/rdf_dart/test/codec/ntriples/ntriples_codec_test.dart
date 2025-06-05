@@ -1025,8 +1025,8 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
 <http://example.com/s> <http://example.com/p> <<( <http://example.com/s1> <http://example.com/p1> <http://example.com/o1> )>> .
 ''';
 
-        final decoded = nQuadsCodec.decode(input);
-        final reencoded = nQuadsCodec.encode(decoded);
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
 
         expect(reencoded, equals(expectedOutput));
       });
@@ -1039,8 +1039,8 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
 <http://example.com/s> <http://example.com/p> <<( <http://example.com/s1> <http://example.com/p1> _:o1 )>> .
 ''';
 
-        final decoded = nQuadsCodec.decode(input);
-        final reencoded = nQuadsCodec.encode(decoded);
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
 
         expect(reencoded, equals(expectedOutput));
       });
@@ -1053,8 +1053,8 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
 <http://example.com/s> <http://example.com/p> <<( <http://example.com/s1> <http://example.com/p1> "o1" )>> .
 ''';
 
-        final decoded = nQuadsCodec.decode(input);
-        final reencoded = nQuadsCodec.encode(decoded);
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
 
         expect(reencoded, equals(expectedOutput));
       });
@@ -1067,8 +1067,8 @@ _:b1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies> <<( _:b0 <http://examp
 <http://example.com/s> <http://example.com/p> <<( <http://example.com/s1> <http://example.com/p1> <<( <http://example.com/s2> <http://example.com/p2> "o2" )>> )>> .
 ''';
 
-        final decoded = nQuadsCodec.decode(input);
-        final reencoded = nQuadsCodec.encode(decoded);
+        final decoded = nTriplesCodec.decode(input);
+        final reencoded = nTriplesCodec.encode(decoded);
 
         expect(reencoded, equals(expectedOutput));
       });
